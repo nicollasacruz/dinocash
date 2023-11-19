@@ -1,0 +1,70 @@
+version: '3.8'
+services:
+  dinicash_web:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./volumes/dinocash:/var/www/html
+    container_name: dinicash_web
+    ports:
+      - "8080:8080"
+    depends_on:
+      - php_dino
+    networks:
+      - minha_rede
+
+  php_dino:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./volumes/dinocash:/var/www/html
+    networks:
+      - minha_rede
+
+  db_dino:
+    image: mariadb:latest
+    environment:
+      - TZ=${TZ:-America/Sao_Paulo}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-dinocash}
+      - MYSQL_USER=${MYSQL_USER:-dinocash}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-dinocash}
+    volumes:
+      - ./.docker/config/mysql:/etc/mysql/conf.d
+      - ./volumes/mysql/data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - minha_rede
+
+  mailhog:
+    image: blueimp/mailhog
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - minha_rede
+
+  redis_dino:
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - minha_rede
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: db_dino
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db_dino
+networks:
+  minha_rede:
+    external: true

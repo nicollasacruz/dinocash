@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  dinocash_web:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./volumes/dinocash:/var/www/html:rw
+    container_name: dinocash_web
+    environment:
+      - VIRTUAL_HOST=dinocash.io
+      - LETSENCRYPT_HOST=dinocash.io
+      - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
+      - VIRTUAL_PORT=8080
+    depends_on:
+      - php_dino
+    networks:
+      - minha_rede
+      - reverse-proxy
+
+  php_dino:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./volumes/dinocash:/var/www/html:rw
+    networks:
+      - minha_rede
+
+  db_dino:
+    image: mariadb:latest
+    environment:
+      - TZ=${TZ:-CET}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-dino}
+      - MYSQL_USER=${MYSQL_USER:-dino}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-dino}
+    volumes:
+      - ./.docker/config/mysql:/etc/mysql/conf.d
+      - ./volumes/mysql/data:/var/lib/mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    networks:
+      - minha_rede
+  
+  redis_dino:
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - minha_rede
+
+networks :
+  minha_rede:
+    external: true
+  reverse-proxy:
+    external: true
+    name: reverse-proxy
