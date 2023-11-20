@@ -32,7 +32,7 @@ services:
   db_dino:
     image: mariadb:latest
     environment:
-      - TZ=${TZ:-CET}
+      - TZ=${TZ:-America/Sao_Paulo}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
       - MYSQL_DATABASE=${MYSQL_DATABASE:-dino}
       - MYSQL_USER=${MYSQL_USER:-dino}
@@ -49,6 +49,24 @@ services:
     restart: unless-stopped
     networks:
       - rede_dino
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: db_dino
+      PMA_PORT: 3306
+      VIRTUAL_HOST: database.dinocash.io
+      LETSENCRYPT_HOST: database.dinocash.io
+      LETSENCRYPT_EMAIL: nicollasacruz@gmail.com
+      VIRTUAL_PORT: 9000
+    ports:
+      - "9000:80"
+    depends_on:
+      - db_dino
+    networks:
+      - minha_rede
+      - reverse-proxy
 
 networks :
   rede_dino:

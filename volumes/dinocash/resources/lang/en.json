@@ -1,6 +1,15 @@
 {
-  "messages": {
+  "auth": {
     "forgot_password": "Forgot your password?",
-    "remember": "Remember me"
+    "remember": "Remember me",
+    "register": "Register",
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "confirm-password": "Confirm password",
+    "name": "Name",
+    "contact": "Contact",
+    "document": "Document",
+    "already-registered": "Already registered?"
   }
 }

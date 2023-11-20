@@ -1,10 +1,15 @@
 {
-    "messages": {
+    "auth": {
         "forgot_password": "Esqueceu sua senha?",
         "remember": "Lembrar me",
         "register": "Registrar",
         "login": "Login",
         "email": "Email",
-        "password": "Senha"
+        "password": "Senha",
+        "confirm-password": "Repita a senha",
+        "name": "Nome",
+        "contact": "Telefone",
+        "document": "CPF",
+        "already-registered": "Já tem conta?"
     }
 }

@@ -57,14 +57,18 @@ services:
       - minha_rede
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin
     environment:
       PMA_ARBITRARY: 1
       PMA_HOST: db_dino
+      PMA_PORT: 3306
     ports:
-      - "9000:9000"
+      - "9000:80"
     depends_on:
       - db_dino
+    networks:
+      - minha_rede
+
 networks:
   minha_rede:
     external: true

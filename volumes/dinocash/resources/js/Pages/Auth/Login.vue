@@ -36,20 +36,20 @@ const submit = () => {
 
         <Head title="Log in" />
         <section id="section1" class="section1 w-screen h-screen mx-auto items-center">
-            <div class="content mx-auto max-w-[1920px] flex flex-col justify-end"
+            <div class="content mx-auto max-w-[1920px] flex flex-col justify-start"
                 :style="{ backgroundImage: `url('${Background1}')` }">
-                <img :src="DinoLogo" alt="dinoLogo" class="h-[22%] mb-[10vh]">
+                <img :src="DinoLogo" alt="dinoLogo" class="h-[22%] mb-[50px] mt-[150px]">
                 <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
                     {{ status }}
                 </div>
 
-                <form @submit.prevent="submit" class=" mx-auto w-[40%]">
+                <form @submit.prevent="submit" class="mx-auto w-[40%]">
                     <div>
                         <!-- <InputLabel for="email" value="Email" /> -->
 
                         <TextInput id="email" type="email"
-                            class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.email" required autofocus autocomplete="username" v-bind:placeholder="__('messages.email')" />
+                            class="mt-1 block w-full"
+                            v-model="form.email" required autofocus autocomplete="username" v-bind:placeholder="__('auth.email')" />
 
                         <InputError class="mt-2" :message="form.errors.email" />
                     </div>
@@ -58,8 +58,8 @@ const submit = () => {
                         <!-- <InputLabel for="password" value="Password" /> -->
 
                         <TextInput id="password" type="password"
-                            class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.password" required autocomplete="current-password" v-bind:placeholder="__('messages.password')" />
+                            class="mt-1 block w-full"
+                            v-model="form.password" required autocomplete="current-password" v-bind:placeholder="__('auth.password')" />
 
                         <InputError class="mt-2" :message="form.errors.password" />
                     </div>
@@ -68,21 +68,21 @@ const submit = () => {
                         <label class="flex items-center">
                             <Checkbox name="remember" v-model:checked="form.remember" />
                             <span class="ms-2 text-xl text-gray-900 font-menu">
-                                {{ __('messages.remember') }}
+                                {{ __('auth.remember') }}
                             </span>
                         </label>
                     </div>
 
-                    <div class="flex flex-col items-center justify-center mt-4 mx-auto">
+                    <div class="flex flex-col items-center justify-center mt-8 mx-auto">
 
                         <PrimaryButton
                             class="ms-4 mb-4 flex justify-center items-center w-[300px] h-[80px] bg-verde-claro rounded-lg font-menu text-2xl text-black boxShadow border-black border-4"
                             :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                            {{ __('messages.login') }}
+                            {{ __('auth.login') }}
                         </PrimaryButton>
                         <Link v-if="canResetPassword" :href="route('password.request')"
-                            class="mx-auto mb-[20%] font-menu underline text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        {{ __('messages.forgot_password') }}
+                            class="mx-auto font-menu underline text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        {{ __('auth.forgot_password') }}
                         </Link>
                     </div>
                 </form>

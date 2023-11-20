@@ -16,13 +16,13 @@ import { Link } from '@inertiajs/vue3';
           <div class="flex justify-center content-center">
             <Link
               class="flex justify-center items-center ml-3 my-auto w-[200px] h-[80%] font-menu text-3xl text-verde-claro"
-              :href="route('login')">{{ __('messages.login') }}</Link>
+              :href="route('login')">{{ __('auth.login') }}</Link>
           </div>
           <div class="flex content-center justify-center items-center">
             <Link
               class=" flex justify-center items-center mr-3 my-auto w-[200px] h-[80%] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-escuro"
               :href="route('register')">
-              {{ __('messages.register') }}
+              {{ __('auth.register') }}
             </Link>
           </div>
         </div>
