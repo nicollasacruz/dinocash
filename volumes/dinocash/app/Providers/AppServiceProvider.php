@@ -22,5 +22,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('locale', function () {
             return app()->getLocale();
         });
+        
+        if($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
