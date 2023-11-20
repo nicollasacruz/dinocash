@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import BaseLayout from '@/Layouts/BaseLayout.vue';
 import Background1 from '../../../storage/imgs/home-page/home-bg1.jpg';
 import Background2 from '../../../storage/imgs/home-page/home-bg2.jpg';
-import Background3 from '../../../storage/imgs/home-page/home-bg3.jpg';
+import Background3 from '../../../storage/imgs/home-page/bg-ranking.png';
 import Background4 from '../../../storage/imgs/home-page/home-bg3.jpg';
 import DinoLogo from '../../../storage/imgs/home-page/dino-logo.svg';
 import DinoInterrogacao from '../../../storage/imgs/home-page/dino-interrogacao-bg3.svg';
@@ -36,17 +36,39 @@ defineProps({
                 <img :src="DinoLogo" alt="dinoLogo" class="h-[45%] mb-[10vh]">
                 <Link
                     class="mx-auto mb-4 flex justify-center items-center w-[300px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
-                    :href="route('register')">
-                        JOGAR AGORA
+                    :href="route('login')">
+                {{ __('homepage.play-now') }}
                 </Link>
                 <span class="mx-auto mb-[10vh] text-xl font-menu text-white">
-                    CADASTRE-SE E OBTENHA RODADAS GRÁTIS
+                    {{ __('homepage.register-tip') }}
                 </span>
             </div>
         </section>
 
         <section id="section2" class="section2 h-screen mx-auto">
-            <div class="content mx-auto max-w-[1920px]" :style="{ backgroundImage: `url('${Background2}')` }"> teste</div>
+            <div class="content mx-auto max-w-[1920px] flex flex-col items-center justify-center"
+                :style="{ backgroundImage: `url('${Background2}')` }">
+                <div
+                    class="flex flex-col items-center justify-center h-[50%] w-[60%] bg-white rounded-3xl border-black border-[10px] boxShadow mt-6 p-6 relative">
+                    <img :src="DinoRoxo" alt="dinoLogo" class="h-[40%] absolute z-10 -top-[150px] ">
+                    <span class="text-[145px] font-menu text-gray-800">DINO CA$H</span>
+                    <span class="text-[25px] font-menu text-gray-800 text-center">Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit. Quo enim odit debitis ab voluptas, ullam commodi accusantium amet, aliquam
+                        doloribus magnam nam cum rerum. Aut excepturi qui a temporibus suscipit! Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Nulla aliquam sunt modi molestias alias, vel quam dolor omnis maxime
+                        numquam, maiores veniam, autem iste eaque. Ut velit id explicabo atque.</span>
+                </div>
+                <Link
+                    class="mx-auto my-14 flex justify-center items-center w-[400px] h-[100px] bg-verde-claro rounded-lg font-menu text-[50px] text-roxo-fundo boxShadow border-black border-4"
+                    :href="route('login')">
+                {{ __('homepage.play-now') }}
+                </Link>
+                <div class="h-[50px] bg-roxo-escuro flex items-center rounded-2xl p-[30px]">
+                    <span class="mx-auto text-2xl font-menu text-white text-center">
+                        {{ __('homepage.free-spin-before-register') }}
+                    </span>
+                </div>
+            </div>
         </section>
 
         <section id="section3" class="section3 h-screen mx-auto">
@@ -54,10 +76,13 @@ defineProps({
         </section>
 
         <section id="section4" class="section4 h-screen mx-auto">
-            <div class="content mx-auto max-w-[1920px]" :style="{ backgroundImage: `url('${Background4}')` }"> teste</div>
+            <div class="content mx-auto max-w-[1920px] " :style="{ backgroundImage: `url('${Background4}')` }"> teste</div>
         </section>
 
-        <footer></footer>
+        <footer>
+
+
+        </footer>
     </BaseLayout>
 </template>
 
@@ -73,9 +98,9 @@ defineProps({
 }
 
 .boxShadow {
-  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.85);
+    -webkit-box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.85);
+    -moz-box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.85);
 }
 
 .content {
@@ -100,5 +125,4 @@ defineProps({
 
 .section4 {
     background-color: rgb(240, 225, 168);
-}
-</style>
+}</style>

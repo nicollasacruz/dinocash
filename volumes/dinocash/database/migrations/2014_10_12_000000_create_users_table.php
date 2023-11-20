@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->decimal('wallet')->default(0);
+            $table->integer('wallet')->default(0);
             $table->string('contact');
             $table->string('document')->nullable();
             $table->string('role')->default('user');

@@ -12,7 +12,7 @@ import { Link } from '@inertiajs/vue3';
               </Link> -->
 
       <nav class="h-24 bg-roxo-escuro rounded-lg flex flex-row justify-center content-center">
-        <div :v-if="$page.props.auth.user" class="flex">
+        <div :v-if="!$page.props.auth.user" class="flex">
           <div class="flex justify-center content-center">
             <Link
               class="flex justify-center items-center ml-3 my-auto w-[200px] h-[80%] font-menu text-3xl text-verde-claro"
@@ -25,6 +25,9 @@ import { Link } from '@inertiajs/vue3';
               {{ __('auth.register') }}
             </Link>
           </div>
+        </div>
+        <div :v-if="$page.props.auth.user" class="flex">
+teset
         </div>
       </nav>
     </div>
