@@ -2,6 +2,31 @@
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
 import DinoLogo from '../../../storage/imgs/home-page/dino-logo.svg';
+
+function isMobile() {
+  if (screen.width <= 760) {
+    return true;
+  }
+  return false;
+}
+
+function isIpad() {
+  if (screen.width > 760 && screen.width < 1000) {
+    return true;
+  }
+  return false;
+}
+
+function isPc() {
+  if (!isIpad() && !isMobile()) {
+    return true;
+  }
+  return false;
+}
+const mobile = isMobile();
+const ipad = isIpad();
+const pc = isPc();
+
 </script>
 
 <template>
@@ -12,7 +37,7 @@ import DinoLogo from '../../../storage/imgs/home-page/dino-logo.svg';
                 <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
                 </Link> -->
 
-      <nav class="h-24 bg-roxo-escuro rounded-2xl flex flex-row justify-center content-center">
+      <nav v-if="isPc()" class="h-24 bg-roxo-escuro rounded-2xl flex flex-row justify-center content-center">
         <div v-if="!!!$page?.props?.auth?.user?.id" class="flex">
           <div class="flex justify-center content-center">
             <Link
@@ -60,6 +85,57 @@ import DinoLogo from '../../../storage/imgs/home-page/dino-logo.svg';
           <div class="flex content-center justify-center items-center p-4">
             <Link
               class="flex justify-center items-center mx-3 rounded-lg font-menu text-2xl text-verde-claro"
+              :href="route('logout')" method="post">
+            {{ __('nav.logout') }}
+            </Link>
+          </div>
+
+        </div>
+      </nav>
+
+      <nav v-if="isMobile()" class="h-20 bg-roxo-escuro rounded-2xl flex flex-row justify-center content-center">
+        
+        <div v-if="!!!$page?.props?.auth?.user?.id" class="flex">
+          <div class="flex justify-center content-center">
+            <Link
+              class="flex justify-center items-center ml-3 my-auto w-[150px] h-[80%] font-menu text-xl text-verde-claro"
+              :href="route('login')">{{ __('auth.login') }}</Link>
+          </div>
+          <div class="flex content-center justify-center items-center">
+            <Link
+              class=" flex justify-center items-center mr-3 my-auto w-[150px] h-[80%] bg-verde-claro rounded-lg font-menu text-xl text-roxo-escuro"
+              :href="route('register')">
+            {{ __('auth.register') }}
+            </Link>
+          </div>
+        </div>
+
+        <!--  LOGADO   -->
+        <div v-if="$page?.props?.auth?.user" class="flex divide-x divide-dashed ">
+          <div class="flex content-center justify-center items-center p-2">
+            <Link
+              class="flex justify-center items-center bg-verde-claro rounded-lg font-menu text-xl text-roxo-escuro p-2"
+              :href="route('login')">
+            {{ __('nav.play') }}
+            </Link>
+          </div>
+          <div class="flex content-center justify-center items-center p-2">
+            <Link
+              class="flex justify-center items-center  rounded-lg font-menu text-xl text-verde-claro"
+              :href="route('login')">
+            {{ __('nav.depositar') }}
+            </Link>
+          </div>
+          <div class="flex content-center justify-center items-center p-2">
+            <Link
+              class="flex justify-center items-center rounded-lg font-menu text-xl text-verde-claro"
+              :href="route('login')">
+            {{ __('nav.panel') }}
+            </Link>
+          </div>
+          <div class="flex content-center justify-center items-center p-2">
+            <Link
+              class="flex justify-center items-center rounded-lg font-menu text-lg text-verde-claro"
               :href="route('logout')" method="post">
             {{ __('nav.logout') }}
             </Link>
