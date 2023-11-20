@@ -60,7 +60,7 @@ import DinoLogo from '../../../storage/imgs/home-page/dino-logo.svg';
           <div class="flex content-center justify-center items-center p-4">
             <Link
               class="flex justify-center items-center mx-3 rounded-lg font-menu text-2xl text-verde-claro"
-              :href="route('login')">
+              :href="route('logout')" method="post">
             {{ __('nav.logout') }}
             </Link>
           </div>
