@@ -16,5 +16,10 @@
         "play-now": "JOGAR AGORA",
         "register-tip": " CADASTRE-SE E OBTENHA RODADAS GRÁTIS!",
         "free-spin-before-register": "JOGADAS GRÁTIS DISPONÍVEIS APÓS O CADASTRO"
+    },
+    "nav": {
+        "play": "JOGAR",
+        "panel": "PAINEL",
+        "logout": "SAIR"
     }
 }

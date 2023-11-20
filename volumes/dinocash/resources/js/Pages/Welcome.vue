@@ -46,13 +46,13 @@ defineProps({
         </section>
 
         <section id="section2" class="section2 h-screen mx-auto">
-            <div class="content mx-auto max-w-[1920px] flex flex-col items-center justify-center"
+            <div class="content mx-auto max-w-[1920px] flex flex-col items-center justify-center relative"
                 :style="{ backgroundImage: `url('${Background2}')` }">
                 <div
-                    class="flex flex-col items-center justify-center h-[50%] w-[60%] bg-white rounded-3xl border-black border-[10px] boxShadow mt-6 p-6 relative">
-                    <img :src="DinoRoxo" alt="dinoLogo" class="h-[40%] absolute z-10 -top-[150px] ">
-                    <span class="text-[145px] font-menu text-gray-800">DINO CA$H</span>
-                    <span class="text-[25px] font-menu text-gray-800 text-center">Lorem ipsum dolor sit amet consectetur
+                    class="flex flex-col items-center justify-center h-[50%] w-[60%] bg-white rounded-3xl border-black border-[10px] boxShadow mt-6 p-6 ">
+                    <img :src="DinoRoxo" alt="dinoLogo" class="h-[20%] absolute z-10 top-[2%] ">
+                    <span class="text-[130px] font-menu text-gray-800 m-0 p-0">DINO CA$H</span>
+                    <span class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0">Lorem ipsum dolor sit amet consectetur
                         adipisicing elit. Quo enim odit debitis ab voluptas, ullam commodi accusantium amet, aliquam
                         doloribus magnam nam cum rerum. Aut excepturi qui a temporibus suscipit! Lorem ipsum dolor sit amet
                         consectetur adipisicing elit. Nulla aliquam sunt modi molestias alias, vel quam dolor omnis maxime
