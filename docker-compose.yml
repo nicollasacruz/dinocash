@@ -65,7 +65,7 @@ services:
     depends_on:
       - db_dino
     networks:
-      - minha_rede
+      - rede_dino
       - reverse-proxy
 
 networks :
