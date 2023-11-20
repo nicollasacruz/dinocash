@@ -1,0 +1,10 @@
+{
+    "messages": {
+        "forgot_password": "Esqueceu sua senha?",
+        "remember": "Lembrar me",
+        "register": "Registrar",
+        "login": "Login",
+        "email": "Email",
+        "password": "Senha"
+    }
+}

@@ -49,7 +49,7 @@ const submit = () => {
 
                         <TextInput id="email" type="email"
                             class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.email" required autofocus autocomplete="username" placeholder="EMAIL" />
+                            v-model="form.email" required autofocus autocomplete="username" v-bind:placeholder="__('messages.email')" />
 
                         <InputError class="mt-2" :message="form.errors.email" />
                     </div>
@@ -59,7 +59,7 @@ const submit = () => {
 
                         <TextInput id="password" type="password"
                             class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.password" required autocomplete="current-password" placeholder="PASSWORD" />
+                            v-model="form.password" required autocomplete="current-password" v-bind:placeholder="__('messages.password')" />
 
                         <InputError class="mt-2" :message="form.errors.password" />
                     </div>
@@ -67,18 +67,22 @@ const submit = () => {
                     <div class="block mt-4">
                         <label class="flex items-center">
                             <Checkbox name="remember" v-model:checked="form.remember" />
-                            <span class="ms-2 text-xl text-gray-900 font-menu">Remember me</span>
+                            <span class="ms-2 text-xl text-gray-900 font-menu">
+                                {{ __('messages.remember') }}
+                            </span>
                         </label>
                     </div>
 
                     <div class="flex flex-col items-center justify-center mt-4 mx-auto">
 
-                        <PrimaryButton class="ms-4 mb-4 flex justify-center items-center w-[300px] h-[80px] bg-verde-claro rounded-lg font-menu text-4xl text-black boxShadow border-black border-4" :class="{ 'opacity-25': form.processing } " :disabled="form.processing">
-                            Log in
+                        <PrimaryButton
+                            class="ms-4 mb-4 flex justify-center items-center w-[300px] h-[80px] bg-verde-claro rounded-lg font-menu text-2xl text-black boxShadow border-black border-4"
+                            :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                            {{ __('messages.login') }}
                         </PrimaryButton>
                         <Link v-if="canResetPassword" :href="route('password.request')"
                             class="mx-auto mb-[20%] font-menu underline text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Forgot your password?
+                        {{ __('messages.forgot_password') }}
                         </Link>
                     </div>
                 </form>

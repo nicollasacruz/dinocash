@@ -25,6 +25,12 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('language/{language}', function ($language) {
+    session()->put('locale', $language);
+    dump(app()->getLocale());
+    return;
+})->name('language');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

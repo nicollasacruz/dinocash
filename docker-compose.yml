@@ -9,14 +9,16 @@ services:
       - ./volumes/dinocash:/var/www/html:rw
     container_name: dinocash_web
     environment:
-      - VIRTUAL_HOST=dinocash.io
-      - LETSENCRYPT_HOST=dinocash.io
+      - VIRTUAL_HOST=dev.dinocash.io
+      - LETSENCRYPT_HOST=dev.dinocash.io
       - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
       - VIRTUAL_PORT=8080
+    ports:
+      - "8080:8080"
     depends_on:
       - php_dino
     networks:
-      - minha_rede
+      - rede_dino
       - reverse-proxy
 
   php_dino:
@@ -29,7 +31,7 @@ services:
     volumes:
       - ./volumes/dinocash:/var/www/html:rw
     networks:
-      - minha_rede
+      - rede_dino
 
   db_dino:
     image: mariadb:latest
@@ -46,16 +48,16 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - minha_rede
+      - rede_dino
   
   redis_dino:
     image: redis:latest
     restart: unless-stopped
     networks:
-      - minha_rede
+      - rede_dino
 
 networks :
-  minha_rede:
+  rede_dino:
     external: true
   reverse-proxy:
     external: true
