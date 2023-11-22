@@ -13,7 +13,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./volumes/dinocash
+        working-directory: volumes/dinocash
         
     steps:
       - name: view files
