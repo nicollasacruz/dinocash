@@ -16,6 +16,9 @@ jobs:
         working-directory: ./volumes/dinocash
         
     steps:
+      - name: view files
+        run: ls -la
+        
       - name: Checkout repository
         uses: actions/checkout@v3
 
