@@ -64,4 +64,5 @@ jobs:
       - name: Execute Pest tests
         run: |
           cd volumes/dinocash
+          php artisan migrate
           ./vendor/bin/pest
