@@ -12,7 +12,7 @@ jobs:
         
     steps:
       - name: view files
-        run: ls
+        run: ls -lha runner
         
       - name: Checkout repository
         uses: actions/checkout@v3
