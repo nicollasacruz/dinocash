@@ -9,9 +9,19 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
-        
-    steps:
     
+    services:
+        db_dino:
+          image: mariadb
+          ports:
+            - 3306:3306/tcp
+          env:
+            MYSQL_HOST: localhost
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: dinocash
+          options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+          
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -39,22 +49,6 @@ jobs:
         run: |
           cd volumes/dinocash
           chmod -R 777 storage bootstrap/cache
-
-      - name: Create MariaDB Database
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mariadb-server
-          sudo mysql -e "CREATE DATABASE IF NOT EXISTS laravel;"
-          sudo mysql -e "GRANT ALL ON laravel.* TO 'laravel'@'%' IDENTIFIED BY 'password';"
-
-      - name: Update .env for MariaDB
-        run: |
-          echo "DB_CONNECTION=mysql" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_PORT=3306" >> .env
-          echo "DB_DATABASE=laravel" >> .env
-          echo "DB_USERNAME=laravel" >> .env
-          echo "DB_PASSWORD=password" >> .env
 
       - name: Install Pest
         run: |
