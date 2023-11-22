@@ -12,7 +12,7 @@ jobs:
         
     steps:
       - name: view files
-        run:  pwd
+        run: ls volumes
         
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,7 +28,7 @@ jobs:
       - name: Install Composer Dependencies
         run: |
           composer install --no-scripts --no-interaction --no-progress --prefer-dist
-        working-directory: ./volumes/dinocash
+        working-directory: volumes/dinocash
 
       - name: Copy .env
         run: |
