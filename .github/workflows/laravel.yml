@@ -11,9 +11,7 @@ jobs:
     runs-on: ubuntu-latest
         
     steps:
-      - name: view files
-        run: ls volumes
-        
+    
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,19 +25,23 @@ jobs:
 
       - name: Install Composer Dependencies
         run: |
+          cd volumes/dinocash
           composer install --no-scripts --no-interaction --no-progress --prefer-dist
         working-directory: volumes/dinocash
 
       - name: Copy .env
         run: |
+          cd volumes/dinocash
           php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Generate Application Key
         run: |
+          cd volumes/dinocash
           php artisan key:generate
 
       - name: Directory Permissions
         run: |
+          cd volumes/dinocash
           chmod -R 777 storage bootstrap/cache
 
       - name: Create MariaDB Database
@@ -60,8 +62,10 @@ jobs:
 
       - name: Install Pest
         run: |
+          cd volumes/dinocash
           composer require pestphp/pest --dev
 
       - name: Execute Pest tests
         run: |
+          cd volumes/dinocash
           ./vendor/bin/pest
