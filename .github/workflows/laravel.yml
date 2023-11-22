@@ -20,15 +20,11 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Install Composer
-        uses: php-actions/composer@v6
-
       - name: Install Composer Dependencies
         run: |
           cd volumes/dinocash
           composer install --no-scripts --no-interaction --no-progress --prefer-dist
-        working-directory: volumes/dinocash
-
+          
       - name: Copy .env
         run: |
           cd volumes/dinocash
