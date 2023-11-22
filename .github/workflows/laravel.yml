@@ -2,26 +2,26 @@ name: DinoCash
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
-    
+
     services:
-        db_dino:
-          image: mariadb:latest
-          ports:
-            - 3306:3306
-          env:
-            TZ: America/Sao_Paulo
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: dinocash
-            MYSQL_USER: dinocash
-            MYSQL_PASSWORD: dinocash
-          
+      db_dino:
+        image: mariadb:latest
+        ports:
+          - 3306:3306
+        env:
+          TZ: America/Sao_Paulo
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: dinocash
+          MYSQL_USER: dinocash
+          MYSQL_PASSWORD: dinocash
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -29,13 +29,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
-          php-version: '8.1'
+          php-version: "8.1"
 
       - name: Install Composer Dependencies
         run: |
           cd volumes/dinocash
           composer install --no-scripts --no-interaction --no-progress --prefer-dist
-          
+
       - name: Copy .env
         run: |
           cd volumes/dinocash
@@ -51,14 +51,29 @@ jobs:
           cd volumes/dinocash
           chmod -R 777 storage bootstrap/cache
 
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14"
+
+      - name: Install npm dependencies
+        run: |
+          cd volumes/dinocash
+          npm install
+
       - name: Install Pest
         run: |
           cd volumes/dinocash
           composer require pestphp/pest --dev
-      
+
       - name: Change DB_HOST in .env
         run: sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' volumes/dinocash/.env
-        
+
+      - name: NPM Run build
+        run: |
+          cd volumes/dinocash
+          npm run build
+
       - name: Execute Pest tests
         run: |
           cd volumes/dinocash
