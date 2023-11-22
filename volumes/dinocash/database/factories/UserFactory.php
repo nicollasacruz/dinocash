@@ -26,6 +26,8 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'contact' => '(22)22222-' . \random_int(1000, 9999),
+            'document' => '123.456.789-' . \random_int(10, 99),
         ];
     }
 
@@ -36,6 +38,17 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the model's email address should be unverified.
+     */
+    public function withInvitationLink($affiliate_link): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'invitation_link' => $affiliate_link,
+            'isAffiliate' => true,
         ]);
     }
 }

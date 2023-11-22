@@ -3,7 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 /*
@@ -24,6 +26,13 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+Route::get('/ref/{invitation_link}', function ($invitation_link) {
+    Session::put('invitation_link', $invitation_link);
+    Session::put('invitation_link_expires_at', Carbon::now()->addWeek());
+
+    return redirect()->route('register');
 });
 
 Route::get('language/{language}', function ($language) {

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,7 +26,12 @@ class User extends Authenticatable
         'document',
         'role',
         'wallet',
-        'password',
+        'isAffiliate',
+        'affiliateId',
+        'affiliatedAt',
+        'cpaCollected',
+        'cpaCollectedAt',
+        'invitation_link',
     ];
 
     /**
@@ -47,11 +52,48 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'isAffiliate' => 'boolean',
+        'referrals' => 'array',
+        'affiliatedAt' => 'datetime',
+        'cpaCollected' => 'boolean',
+        'cpaCollectedAt' => 'datetime',
     ];
+
+    // Relacionamento com o afiliado (referenciando outro usuário)
+    public function affiliate()
+    {
+        return $this->belongsTo(User::class, 'affiliateId');
+    }
+
+    // Relacionamento com os usuários afiliados
+    public function referredUsers()
+    {
+        return $this->hasMany(User::class, 'affiliateId');
+    }
+
+    // Adiciona um usuário à lista de afiliados
+    public function addReferral(User $affiliate)
+    {
+        $this->affiliateId = $affiliate->id;
+        $this->save();
+    }
+
+
+
+    public function setAffiliate(User $affiliate)
+    {
+        $this->affiliateId = $affiliate->id;
+        $this->save();
+    }
+
+    public function hasReferrals()
+    {
+        return count($this->referrals) > 0;
+    }
 
     public function getWallet(): float
     {
-        return $this->wallet/100;
+        return $this->wallet / 100;
     }
 
     public function setWallet($value): void
