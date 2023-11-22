@@ -55,10 +55,12 @@ jobs:
         run: |
           cd volumes/dinocash
           composer require pestphp/pest --dev
-
+      
+      - name: Change DB_HOST in .env
+        run: sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' volumes/dinocash/.env
+        
       - name: Execute Pest tests
         run: |
           cd volumes/dinocash
-          echo "DB_HOST=127.0.0.1" >> .env
           php artisan migrate
           ./vendor/bin/pest
