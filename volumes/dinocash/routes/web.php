@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -46,9 +48,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/financeiro', function () {
         return Inertia::render('Financeiro');
@@ -66,9 +66,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         return Inertia::render('Saque');
     })->name('admin.saque');
 
-    Route::get('/deposito', function () {
-        return Inertia::render('Deposito');
-    })->name('admin.deposito');
+    Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
 Route::middleware('auth')->group(function () {

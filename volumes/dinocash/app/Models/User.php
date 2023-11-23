@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Traits\Timestamp;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +14,7 @@ use Ramsey\Uuid\Type\Decimal;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Timestamp;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +35,8 @@ class User extends Authenticatable
         'cpaCollected',
         'cpaCollectedAt',
         'invitation_link',
+        'CPA',
+        'revShare'
     ];
 
     /**
@@ -59,26 +64,55 @@ class User extends Authenticatable
         'cpaCollectedAt' => 'datetime',
     ];
 
-    // Relacionamento com o afiliado (referenciando outro usuário)
-    public function affiliate()
+    /**
+     * Get the deposits that of the user.
+     */ 
+    public function deposits(): HasMany
     {
-        return $this->belongsTo(User::class, 'affiliateId');
+        return $this->hasMany(Deposit::class, 'userId');
+    }
+
+    /**
+     * Get the deposits that of the user.
+     */ 
+    public function withdraws(): HasMany
+    {
+        return $this->hasMany(Deposit::class, 'userId');
+    }
+
+    /**
+     * Get the games that of the user.
+     */ 
+    public function gamesHistory(): HasMany
+    {
+        return $this->hasMany(GameHistory::class, 'userId');
     }
 
     // Relacionamento com os usuários afiliados
-    public function referredUsers()
+    public function referredUsers(): HasMany
     {
         return $this->hasMany(User::class, 'affiliateId');
     }
+    
+    /**
+     * Get the affiliate that owns the user.
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'affiliateId', 'id');
+    }
 
-    // Adiciona um usuário à lista de afiliados
+    // Relacionamento com o histórico de afiliação
+    public function affiliateHistories()
+    {
+        return $this->hasMany(AffiliateHistory::class, 'affiliateId');
+    }
+
     public function addReferral(User $affiliate)
     {
         $this->affiliateId = $affiliate->id;
         $this->save();
     }
-
-
 
     public function setAffiliate(User $affiliate)
     {
@@ -99,5 +133,10 @@ class User extends Authenticatable
     public function setWallet($value): void
     {
         $this->wallet = $value * 100;
+    }
+
+    public function getInvitationLink(): string
+    {
+        return \env('APP_URL') . '/ref/' . $this->invitation_link;
     }
 }

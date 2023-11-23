@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProfileUpdateRequest extends FormRequest
+class ProfileAffiliateUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,6 +19,10 @@ class ProfileUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'invitation_link' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'wallet' => ['required', 'interger', 'max:30'],
+            'isAffiliate' => ['required', 'bool'],
+            'CPA' => ['required', 'interger', 'max:3'],
+            'revShare' => ['required', 'interger', 'max:2'],
         ];
     }
 }
