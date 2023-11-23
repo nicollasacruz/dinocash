@@ -45,10 +45,36 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/financeiro', function () {
+        return Inertia::render('Financeiro');
+    })->name('admin.financeiro');
+
+    Route::get('/usuarios', function () {
+        return Inertia::render('Usuarios');
+    })->name('admin.usuarios');
+
+    Route::get('/afiliados', function () {
+        return Inertia::render('Afiliados');
+    })->name('admin.afiliados');
+
+    Route::get('/saque', function () {
+        return Inertia::render('Saque');
+    })->name('admin.saque');
+
+    Route::get('/deposito', function () {
+        return Inertia::render('Deposito');
+    })->name('admin.deposito');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
