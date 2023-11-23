@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Deposit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Http;
+use Ramsey\Uuid\Uuid;
+
 
 class DepositController extends Controller
 {
@@ -12,8 +17,9 @@ class DepositController extends Controller
      */
     public function indexAdmin()
     {
+        $deposits = Deposit::all()->with('users')->sort(["updatedAt", 'desc'])->paginate(10);
         return Inertia::render('DepositsAdmin', [
-            
+            'deposits' => $deposits,
         ]);
     }
 
@@ -22,8 +28,9 @@ class DepositController extends Controller
      */
     public function indexUser()
     {
+        $deposits = Deposit::where('user', Auth::user()->id)->with('users')->sort(["updatedAt", 'desc'])->paginate(10);
         return Inertia::render('DepositsUser', [
-            
+            'deposits' => $deposits,
         ]);
     }
 
@@ -32,7 +39,35 @@ class DepositController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        if (!$user->document) {
+            $user->document = $request->document;
+        }
+        $user->save();
+        $uuid = Uuid::uuid4()->toString();
+        $response = Http::withHeaders([
+            'ci' => env('SUITPAY_CI'),
+            'cs' => env('SUITPAY_CS'),
+        ])->post('gateway/request-qrcode', [
+                    'requestNumber' => $uuid,
+                    'dueDate' => now()->addHours(2),
+                    'amount' => $request->amount,
+                    'callbackUrl' => env('APP_URL_API') . env('SUITPAY_URL_WEBHOOK'),
+                    'client' => [
+                        'name' => $user->name,
+                        'document' => $user->document,
+                        'phoneNumber' => $user->document,
+                        'email' => $user->document,
+                    ],
+                ]);
+
+        $result = $response->json();
+
+        var_dump($result);
+        $user->createDeposit($request->amount, $uuid);
+
+        return redirect()->route('homepage')->with('success', 'Deposit created with success!');
+
     }
 
     /**
@@ -40,23 +75,7 @@ class DepositController extends Controller
      */
     public function show(Deposit $deposit)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Deposit $deposit)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Deposit $deposit)
-    {
-        //
+        // a fazer
     }
 
     /**

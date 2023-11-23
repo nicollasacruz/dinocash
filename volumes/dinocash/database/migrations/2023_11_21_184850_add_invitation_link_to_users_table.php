@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('invitation_link')->nullable();
+            $table->string('invitation_link')->nullable()->unique();
         });
     }
 

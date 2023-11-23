@@ -44,6 +44,7 @@ Route::get('language/{language}', function ($language) {
 })->name('language');
 
 Route::get('/dashboard', function () {
+
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -69,10 +70,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth'])->prefix('user')->group(function () {
+    Route::get('/deposit', [DepositController::class, 'store'])->name('deposit.store');
+    Route::patch('/deposit', [DepositController::class, 'update'])->name('deposit.update');
+    Route::delete('/deposit', [DepositController::class, 'destroy'])->name('deposit.destroy');
 });
 
 require __DIR__ . '/auth.php';

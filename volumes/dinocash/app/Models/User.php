@@ -73,11 +73,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the deposits that of the user.
+     * Get the withdraws that of the user.
      */ 
     public function withdraws(): HasMany
     {
-        return $this->hasMany(Deposit::class, 'userId');
+        return $this->hasMany(Withdraw::class, 'userId');
+    }
+
+    /**
+     * Get the managedWithdraws that of the user.
+     */ 
+        public function managedWithdraws(): HasMany
+    {
+        return $this->hasMany(Withdraw::class, 'managerUserId');
     }
 
     /**
@@ -108,6 +116,16 @@ class User extends Authenticatable
         return $this->hasMany(AffiliateHistory::class, 'affiliateId');
     }
 
+    public function createDeposit($amount, $uuid): Deposit
+    {
+        return Deposit::create([
+            'userId' => $this->id,
+            'amount' => $amount,
+            'transactionId' => $uuid,
+        ]);
+        
+    }
+
     public function addReferral(User $affiliate)
     {
         $this->affiliateId = $affiliate->id;
@@ -133,6 +151,76 @@ class User extends Authenticatable
     public function setWallet($value): void
     {
         $this->wallet = $value * 100;
+    }
+
+    /**
+     * Approve a withdrawal for the given withdrawal ID.
+     *
+     * @param int $withdrawalId
+     * @return bool
+     */
+    public function approveWithdraw(int $withdrawalId): bool
+    {
+        $withdraw = Withdraw::findOrFail($withdrawalId);
+
+        // Verifica se o usuário tem a função 'admin' antes de aprovar
+        if ($this->role === 'admin') {
+            $withdraw->update([
+                'type' => 'paid',
+                'approvedAt' => now(),
+                'managerUserId' => $this->id,
+            ]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Reprove a withdrawal for the given withdrawal ID.
+     *
+     * @param int $withdrawalId
+     * @return bool
+     */
+    public function reproveWithdraw(int $withdrawalId): bool
+    {
+        $withdraw = Withdraw::findOrFail($withdrawalId);
+
+        // Verifica se o usuário tem a função 'admin' antes de reprovar
+        if ($this->role === 'admin') {
+            $withdraw->update([
+                'type' => 'reproved',
+                'reprovedAt' => now(),
+                'managerUserId' => $this->id,
+            ]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Reprove a withdrawal for the given withdrawal ID.
+     *
+     * @param int $withdrawalId
+     * @return bool
+     */
+    public function promoveToAdmin(int $userId): bool
+    {
+        $user = User::findOrFail($userId);
+
+        // Verifica se o usuário tem a função 'admin' antes de promover
+        if ($this->role === 'admin') {
+            $user->update([
+                'role' => 'admin',
+            ]);
+
+            return true;
+        }
+
+        return false;
     }
 
     public function getInvitationLink(): string
