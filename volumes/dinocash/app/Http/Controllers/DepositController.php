@@ -48,7 +48,7 @@ class DepositController extends Controller
         $response = Http::withHeaders([
             'ci' => env('SUITPAY_CI'),
             'cs' => env('SUITPAY_CS'),
-        ])->post('gateway/request-qrcode', [
+        ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', [
                     'requestNumber' => $uuid,
                     'dueDate' => now()->addHours(2),
                     'amount' => $request->amount,
@@ -63,8 +63,9 @@ class DepositController extends Controller
 
         $result = $response->json();
 
-        var_dump($result);
-        $user->createDeposit($request->amount, $uuid);
+        $paymentCode = $result['paymentCode'];
+
+        dd($user->createDeposit($request->amount * 100, $uuid, $paymentCode));
 
         return redirect()->route('homepage')->with('success', 'Deposit created with success!');
 

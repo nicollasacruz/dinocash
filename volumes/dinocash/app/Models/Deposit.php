@@ -15,6 +15,7 @@ class Deposit extends Model
         'transactionId',
         'amount',
         'type',
+        'paymentCode',
         'approvedAt',
     ];
 

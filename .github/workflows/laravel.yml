@@ -1,4 +1,4 @@
-name: DinoCash
+name: DinoCash CI/CD
 
 on:
   push:
@@ -79,3 +79,28 @@ jobs:
           cd volumes/dinocash
           php artisan migrate
           ./vendor/bin/pest
+  laravel-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+
+      - name: SSH into Server
+        run: ssh root@limbotecnologia.com.br
+
+      - name: CD into Project
+        run: cd projects/dinocash
+
+      - name: Switch to Main Branch and Pull
+        run: |
+          git switch main
+          git pull
+
+      - name: Run Artisan Migrate and NPM Build
+        run: |
+          docker-compose exec php_dino php artisan migrate
+          npm run build

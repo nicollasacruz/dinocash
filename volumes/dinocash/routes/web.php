@@ -77,7 +77,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
-    Route::get('/deposit', [DepositController::class, 'store'])->name('deposit.store');
+    Route::get('/deposit', [DepositController::class, 'indexUser'])->name('deposit.index');
+    Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
     Route::patch('/deposit', [DepositController::class, 'update'])->name('deposit.update');
     Route::delete('/deposit', [DepositController::class, 'destroy'])->name('deposit.destroy');
 });

@@ -116,14 +116,16 @@ class User extends Authenticatable
         return $this->hasMany(AffiliateHistory::class, 'affiliateId');
     }
 
-    public function createDeposit($amount, $uuid): Deposit
+    public function createDeposit($amount, $uuid, $paymentCode): Deposit
     {
-        return Deposit::create([
+        $deposit = Deposit::create([
             'userId' => $this->id,
             'amount' => $amount,
             'transactionId' => $uuid,
+            'paymentCode' => $paymentCode,
         ]);
-        
+        // $deposit->save();
+        return $deposit;
     }
 
     public function addReferral(User $affiliate)
