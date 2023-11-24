@@ -81,13 +81,15 @@ jobs:
           ./vendor/bin/pest
   laravel-deploy:
     runs-on: ubuntu-latest
+    
+    needs: laravel-tests
 
     steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+          # known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
 
       - name: SSH into Server
         run: ssh root@limbotecnologia.com.br
