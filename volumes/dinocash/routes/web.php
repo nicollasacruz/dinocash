@@ -35,6 +35,21 @@ Route::get('language/{language}', function ($language) {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/finance', function () {
+    return Inertia::render('Finances');
+})->middleware(['auth', 'verified'])->name('finance');
+Route::get('/users', function () {
+    return Inertia::render('Users');
+})->middleware(['auth', 'verified'])->name('users');
+Route::get('/affiliates', function () {
+    return Inertia::render('Affiliates');
+})->middleware(['auth', 'verified'])->name('affiliates');
+Route::get('/requests', function () {
+    return Inertia::render('Requests');
+})->middleware(['auth', 'verified'])->name('requests');
+Route::get('/deposits', function () {
+    return Inertia::render('Deposits');
+})->middleware(['auth', 'verified'])->name('deposits');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -5,7 +5,6 @@ import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
 import { ref } from "vue";
 
-
 const columns = [
     { label: "Nome", key: "name" },
     { label: "Email", key: "email" },
@@ -43,7 +42,8 @@ const showModal = ref(false);
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="text-4xl text-white font-bold mb-5">Dashboard</div>
+        <div class="text-4xl text-white font-bold mb-5">Financeiro</div>
+
         <BaseTable :columns="columns" :rows="rows">
             <template #actions="{ value }">
                 <td>

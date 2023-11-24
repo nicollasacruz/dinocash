@@ -1,26 +1,26 @@
 <script setup>
-import BaseLayout from '@/Layouts/BaseLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import Background1 from '../../../../storage/imgs/home-page/home-bg1.jpg';
-import DinoLogo from '../../../../storage/imgs/home-page/dino-logo.svg';
+import BaseLayout from "@/Layouts/BaseLayout.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import Background1 from "../../../../storage/imgs/home-page/home-bg1.jpg";
+import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";
 
 const form = useForm({
-    name: '',
-    email: '',
-    contact: '',
-    password: '',
-    password_confirmation: '',
-    document: '',
+    name: "",
+    email: "",
+    contact: "",
+    password: "",
+    password_confirmation: "",
+    document: "",
 });
 
 const submit = () => {
     if (isPhoneNumberValid(form.contact)) {
-        form.post(route('register'), {
-            onFinish: () => form.reset('password', 'password_confirmation'),
+        form.post(route("register"), {
+            onFinish: () => form.reset("password", "password_confirmation"),
         });
     }
 };
@@ -33,79 +33,156 @@ const isPhoneNumberValid = (phoneNumber) => {
 
 <template>
     <BaseLayout>
-
         <Head title="Register" />
-        <section id="section1" class="section1 w-screen h-screen mx-auto items-center">
-            <div class="content mx-auto max-w-[1920px] flex flex-col justify-start"
-                :style="{ backgroundImage: `url('${Background1}')` }">
-                <img :src="DinoLogo" alt="dinoLogo" class="h-[22%] mb-[50px] mt-[150px]">
-                <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <section class="">
+            <div
+                class="content mx-auto max-w-[1920px] flex flex-col justify-center my-auto"
+            >
+                <div
+                    v-if="status"
+                    class="mb-4 font-medium text-sm text-green-600"
+                >
                     {{ status }}
                 </div>
-                <form @submit.prevent="submit" class="mx-auto w-[40%]">
+                <form
+                    @submit.prevent="submit"
+                    class="mx-auto lg:w-[40%]"
+                >
                     <div>
-                        <TextInput id="name" type="text"
+                        <TextInput
+                            id="name"
+                            type="text"
                             class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.name" required autofocus autocomplete="name"
-                            v-bind:placeholder="__('auth.name')" />
+                            v-model="form.name"
+                            required
+                            autofocus
+                            autocomplete="name"
+                            v-bind:placeholder="__('auth.name')"
+                        />
 
                         <InputError class="mt-2" :message="form.errors.name" />
                     </div>
 
                     <div class="mt-4">
-                        <TextInput id="email" type="email"
+                        <TextInput
+                            id="email"
+                            type="email"
                             class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.email" required autocomplete="username" v-bind:placeholder="__('auth.email')" />
+                            v-model="form.email"
+                            required
+                            autocomplete="username"
+                            v-bind:placeholder="__('auth.email')"
+                        />
 
                         <InputError class="mt-2" :message="form.errors.email" />
                     </div>
 
                     <div class="mt-4">
-                        <TextInput id="contact" type="text" class="mt-1 block w-full" v-model="form.contact" required
-                            autocomplete="contact" v-mask="'(##)#####-####'" v-bind:placeholder="__('auth.contact')" />
+                        <TextInput
+                            id="contact"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.contact"
+                            required
+                            autocomplete="contact"
+                            v-mask="'(##)#####-####'"
+                            v-bind:placeholder="__('auth.contact')"
+                        />
 
-                        <InputError class="mt-2" :message="form.errors.contact" />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.contact"
+                        />
 
-                        <div v-if="form.contact && !isPhoneNumberValid(form.contact)" class="text-red-600 mt-2">
-                            O número de telefone deve estar no formato (xx)xxxxx-xxxx.
+                        <div
+                            v-if="
+                                form.contact &&
+                                !isPhoneNumberValid(form.contact)
+                            "
+                            class="text-red-600 mt-2"
+                        >
+                            O número de telefone deve estar no formato
+                            (xx)xxxxx-xxxx.
                         </div>
                     </div>
 
                     <div class="mt-4">
-                        <TextInput id="document" type="text" class="mt-1 block w-full" v-model="form.document" required
-                            autocomplete="document" v-mask="'###.###.###-##'" v-bind:placeholder="__('auth.document')" />
+                        <TextInput
+                            id="document"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.document"
+                            required
+                            autocomplete="document"
+                            v-mask="'###.###.###-##'"
+                            v-bind:placeholder="__('auth.document')"
+                        />
 
-                        <InputError class="mt-2" :message="form.errors.contact" />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.contact"
+                        />
 
-                        <div v-if="form.contact && !isPhoneNumberValid(form.contact)" class="text-red-600 mt-2">
+                        <div
+                            v-if="
+                                form.contact &&
+                                !isPhoneNumberValid(form.contact)
+                            "
+                            class="text-red-600 mt-2"
+                        >
                             O CPF deve estar no formato ###.###.###-##.
                         </div>
                     </div>
 
                     <div class="mt-4">
-                        <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required
-                            autocomplete="new-password" v-bind:placeholder="__('auth.password')" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password"
+                            required
+                            autocomplete="new-password"
+                            v-bind:placeholder="__('auth.password')"
+                        />
 
-                        <InputError class="mt-2" :message="form.errors.password" />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.password"
+                        />
                     </div>
 
                     <div class="mt-4">
-                        <TextInput id="password_confirmation" type="password" class="mt-1 block w-full"
-                            v-model="form.password_confirmation" required autocomplete="new-password"
-                            v-bind:placeholder="__('auth.confirm-password')" />
+                        <TextInput
+                            id="password_confirmation"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password_confirmation"
+                            required
+                            autocomplete="new-password"
+                            v-bind:placeholder="__('auth.confirm-password')"
+                        />
 
-                        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.password_confirmation"
+                        />
                     </div>
 
-                    <div class="flex flex-col items-center justify-center mt-8 mx-auto">
+                    <div
+                        class="flex flex-col items-center justify-center mt-3 md:mt-8 mx-auto"
+                    >
                         <PrimaryButton
-                            class="ms-4 mb-4 flex justify-center items-center w-[300px] h-[80px] bg-verde-claro rounded-lg font-menu text-2xl text-black boxShadow border-black border-4"
-                            :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                            {{ __('auth.register') }}
+                            class="mb-2 md:mb-4 flex justify-center items-center md:w-72 md:h-20 bg-verde-claro rounded-lg font-menu text-xl md:text-2xl text-black boxShadow border-black border-4"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            {{ __("auth.register") }}
                         </PrimaryButton>
-                        <Link :href="route('login')"
-                            class="mx-auto font-menu underline text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        {{ __('auth.already-registered') }}
+                        <Link
+                            :href="route('login')"
+                            class="mx-auto font-menu underline text-xl md:text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            {{ __("auth.already-registered") }}
                         </Link>
                     </div>
                 </form>
@@ -128,7 +205,4 @@ const isPhoneNumberValid = (phoneNumber) => {
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.section1 {
-    background-color: rgb(108, 86, 124);
-}</style>
+</style>
