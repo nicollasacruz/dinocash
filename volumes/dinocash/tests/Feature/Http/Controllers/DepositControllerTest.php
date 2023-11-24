@@ -20,5 +20,4 @@ test('create user and make a deposit', function () {
         'amount' => 15.00,
     ]);
     $deposit = Auth::user()->deposits();
-    dd($deposit);
 });

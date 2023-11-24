@@ -65,7 +65,7 @@ class DepositController extends Controller
 
         $paymentCode = $result['paymentCode'];
 
-        dd($user->createDeposit($request->amount * 100, $uuid, $paymentCode));
+        $user->createDeposit($request->amount * 100, $uuid, $paymentCode);
 
         return redirect()->route('homepage')->with('success', 'Deposit created with success!');
 
