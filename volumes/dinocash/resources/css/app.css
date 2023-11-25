@@ -7,3 +7,11 @@
   src: url("upheavtt.ttf") format("opentype");
 }
 
+@layer components {
+  .admin-input {
+    @apply bg-[#212121] input-sm py-0 select-sm border-[1px] border-gray-500 rounded-md px-2 text-white;
+  }
+  .box {
+    @apply bg-[#212121] border-[1px] border-gray-600 rounded-md text-xs text-white; 
+  }
+}

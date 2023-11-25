@@ -4,35 +4,43 @@ import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
 import { ref } from "vue";
-
+import TextBox from "@/Components/TextBox.vue";
 const columns = [
     { label: "Nome", key: "name" },
     { label: "Email", key: "email" },
+    { label: "Saldo", key: "saldo" },
+    { label: "Afiliado", key: "afiliado" },
 ];
 const rows = [
     {
         name: "John Doe",
         email: "email@teste.com",
+        saldo: 100,
+        afiliado: true,
     },
     {
         name: "John Doe",
         email: "email@teste.com",
+        saldo: 100,
+        afiliado: true,
     },
     {
         name: "John Doe",
         email: "email@teste.com",
+        saldo: 100,
+        afiliado: true,
     },
     {
         name: "John Doe",
         email: "email@teste.com",
+        saldo: 100,
+        afiliado: true,
     },
     {
         name: "John Doe",
         email: "email@teste.com",
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
+        saldo: 100,
+        afiliado: true,
     },
 ];
 const showModal = ref(false);
@@ -43,7 +51,7 @@ const selectedTab = ref(1);
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div role="tablist" class="tabs tabs-bordered  inline">
+        <div role="tablist" class="tabs tabs-bordered inline">
             <a
                 role="tab"
                 :class="selectedTab === 1 ? 'tab-active' : ''"
@@ -61,8 +69,31 @@ const selectedTab = ref(1);
                 Pagamentos
             </a>
         </div>
-
-        <BaseTable class="mt-5" :columns="columns" :rows="rows">
+        <div class="flex justify-between my-4">
+            <div class="">
+                <div class="font-bold text-white uppercase mb-1">
+                    Pesquisar afiliado
+                </div>
+                <input
+                    type="text"
+                    class="admin-input"
+                    placeholder="Digite o email do afiliado... "
+                />
+            </div>
+            <div class="flex gap-x-5">
+                <TextBox
+                    label="CAIXA DA CASA"
+                    value="R$ 10.000"
+                    value-text="text-center text-green-500"
+                />
+                <TextBox
+                    label="total de saques hoje"
+                    value="R$ 10.000"
+                    value-text="text-center text-red-500"
+                />
+            </div>
+        </div>
+        <BaseTable class="mt-7 table-xs" :columns="columns" :rows="rows">
             <template #actions="{ value }">
                 <td>
                     <div
@@ -71,6 +102,22 @@ const selectedTab = ref(1);
                     >
                         GERENCIAR AFILIADO
                     </div>
+                </td>
+            </template>
+            <template #saldo="{ value }">
+                <td>
+                    {{
+                        value.toLocaleString("pt-br", {
+                            style: "currency",
+                            currency: "BRL",
+                        })
+                    }}
+                </td>
+            </template>
+            <template #afiliado="{ value }">
+                <td>
+                    <div v-if="value">SIM</div>
+                    <div v-else>NÃO</div>
                 </td>
             </template>
         </BaseTable>
