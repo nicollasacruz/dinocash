@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
@@ -77,11 +78,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         ]);
     })->name('admin.usuarios');
 
-    Route::get('/afiliados', function () {
-        return Inertia::render('Affiliates', [
-            'affiliates' => User::where('isAffiliate', true)->get(),
-    ]);
-    })->name('admin.afiliados');
+    Route::get('/afiliados', [AffiliateController::class, 'index'])->name('admin.afiliados');
 
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
 

@@ -4,24 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileAffiliateUpdateRequest;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class AffiliateController extends Controller
 {
     public function index(Request $request)
-    {   
+    {
+        $today = Carbon::today();
+
         if ($email = $request->email) {
             $affiliates = User::where('email', 'LIKE', '%' . $email . '%')
                 ->where('isAffiliated', true)
+                ->with(['withdraws' => function ($query) use ($today) {
+                    $query
+                    ->where('type', '!=', 'rejected')
+                    ->whereDate('updated_at', $today);
+                }])
                 ->get();
         } else {
             $affiliates = User::where('isAffiliated', true)
-            ->get();
+                ->with(['withdraws' => function ($query) use ($today) {
+                    $query
+                    ->where('type', '!=', 'rejected')
+                    ->whereDate('updated_at', $today);
+                }])
+                ->get();
         }
+
+        $affiliatesWithdraws = $affiliates->flatMap->withdraws->sum('amount');
 
         return Inertia::render('Affiliates', [
             'affiliates' => $affiliates,
+            'affiliatesWithdraws' => $affiliatesWithdraws
         ]);
     }
 
