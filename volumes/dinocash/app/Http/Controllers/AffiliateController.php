@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Redirect;
 
 class AffiliateController extends Controller
 {
@@ -32,19 +33,21 @@ class AffiliateController extends Controller
                 }])
                 ->get();
         }
-
+        $affiliatesWithdrawsList = $affiliates->flatMap->withdraws->get();
         $affiliatesWithdraws = $affiliates->flatMap->withdraws->sum('amount');
 
         return Inertia::render('Affiliates', [
             'affiliates' => $affiliates,
-            'affiliatesWithdraws' => $affiliatesWithdraws
+            'affiliatesWithdraws' => $affiliatesWithdraws,
+            'affiliatesWithdrawsList' => $affiliatesWithdrawsList
+
         ]);
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileAffiliateUpdateRequest $request): RedirectResponse
+    public function update(ProfileAffiliateUpdateRequest $request)
     {
         $request->user()->fill($request->validated());
 
