@@ -3,22 +3,36 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref, defineProps } from "vue";
+import { ref, defineProps, computed } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
-const columns = [
-    { label: "Nome", key: "name" },
-    { label: "Email", key: "email" },
-    { label: "Saldo", key: "wallet" },
-    { label: "Afiliado", key: "isAffiliate" },
-];
-const showModal = ref(false);
+import AffiliatesTable from "@/Components/AffiliatesTable.vue";
+import PaymentsTable from "@/Components/PaymentsTable.vue";
+
 const selectedTab = ref(1);
-const { affiliates, affiliatesWithdraws } = defineProps([
-    "affiliates",
-    "affiliatesWithdraws",
-]);
-console.log(affiliatesWithdraws);
+const columns = computed(() =>
+    selectedTab.value === 1
+        ? [
+              { label: "Nome", key: "name" },
+              { label: "Email", key: "email" },
+              { label: "Saldo", key: "wallet" },
+              { label: "Afiliado", key: "isAffiliate" },
+          ]
+        : [
+              { label: "Nome", key: "name" },
+              { label: "Email", key: "email" },
+              { label: "Valor", key: "wallet" },
+              { label: "Data", key: "updated_at" },
+              { label: "Status", key: "type" },
+          ]
+);
+const { affiliates, affiliatesWithdraws, affiliatesWithdrawsList } =
+    defineProps([
+        "affiliates",
+        "affiliatesWithdraws",
+        "affiliatesWithdrawsList",
+    ]);
+console.log(affiliatesWithdrawsList);
 const toBRL = (value) => {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
@@ -68,37 +82,16 @@ const toBRL = (value) => {
                 />
             </div>
         </div>
-        <BaseTable class="mt-7 table-xs" :columns="columns" :rows="affiliates">
-            <template #actions="{ value }">
-                <td>
-                    <div
-                        @click="showModal = true"
-                        class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
-                    >
-                        GERENCIAR AFILIADO
-                    </div>
-                </td>
-            </template>
-            <template #wallet="{ value }">
-                <td>
-                    {{
-                        value.toLocaleString("pt-br", {
-                            style: "currency",
-                            currency: "BRL",
-                        })
-                    }}
-                </td>
-            </template>
-            <template #isAffiliate="{ value }">
-                <td>
-                    <div v-if="value">SIM</div>
-                    <div v-else>NÃO</div>
-                </td>
-            </template>
-        </BaseTable>
-        <BaseModal v-model="showModal" title="Gerenciar Afiliado">
-            teste
-        </BaseModal>
+        <affiliates-table
+            v-if="selectedTab === 1"
+            :columns="columns"
+            :rows="affiliates"
+        />
+        <payments-table
+            v-else
+            :columns="columns"
+            :rows="affiliatesWithdrawsList"
+        />
     </AuthenticatedLayout>
 </template>
 <style>

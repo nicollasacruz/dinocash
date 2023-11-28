@@ -11,19 +11,15 @@ const columns = [
     { label: "Chave Pix", key: "pix" },
     { label: "Valor", key: "amount" },
     { label: "Data", key: "updated_at" },
-    { label: "Status", key: "status" },
+    { label: "Status", key: "type" },
 ];
 const showModal = ref(false);
 const getStatus = (status) => {
     switch (status) {
-        case 1:
+        case 'paid':
             return "FINALIZADO";
-        case 2:
-            return "Reprovado";
-        case 3:
-            return "Pendente";
         default:
-            return "Pendente";
+            return "RECUSADO";
     }
 };
 const toBRL = (value) => {
@@ -82,12 +78,29 @@ const rows = withdraws.map((withdraw) => {
             :columns="columns"
             :rows="rows"
         >
-            <template #status="{ value }">
+            <template #type="{ value }">
                 <td>
                     <div
-                        class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
+                        class="no-wrap text-xs cursor-pointer"
                     >
-                        {{ getStatus(value) }}
+                        <div v-if="value !== 'paid'" class="flex gap-x-2">
+                            <div class="text-white">
+                                {{ value }}
+                            </div>
+                            <div
+                                class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
+                            >
+                                PAGAR
+                            </div>
+                            <div
+                                class="badge w-24 font-bold rounded-sm bg-red-600 border-0 no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
+                            >
+                                RECUSAR
+                            </div>
+                        </div>
+                        <div v-else class="badge w-24 rounded-sm bg-green-600 border-0 text-xs font-bold text-white">
+                            {{ getStatus(value) }}
+                        </div>
                     </div>
                 </td>
             </template>
