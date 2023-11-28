@@ -21,6 +21,7 @@ class ProfileAffiliateUpdateRequest extends FormRequest
             'invitation_link' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'wallet' => ['required', 'interger', 'max:30'],
             'isAffiliate' => ['required', 'bool'],
+            'role' => ['required', 'string'],
             'CPA' => ['required', 'interger', 'max:3'],
             'revShare' => ['required', 'interger', 'max:2'],
         ];
