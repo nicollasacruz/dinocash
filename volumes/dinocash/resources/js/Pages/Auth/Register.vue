@@ -29,6 +29,10 @@ const isPhoneNumberValid = (phoneNumber) => {
     const regex = /^\(\d{2}\)\d{5}-\d{4}$/;
     return regex.test(phoneNumber);
 };
+const isDocumentNumberValid = (document) => {
+    const regex = /^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$/;
+    return regex.test(document);
+};
 </script>
 
 <template>
@@ -125,8 +129,8 @@ const isPhoneNumberValid = (phoneNumber) => {
 
                         <div
                             v-if="
-                                form.contact &&
-                                !isPhoneNumberValid(form.contact)
+                                form.document &&
+                                !isDocumentNumberValid(form.document)
                             "
                             class="text-red-600 mt-2"
                         >

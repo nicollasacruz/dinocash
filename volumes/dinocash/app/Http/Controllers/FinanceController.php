@@ -51,7 +51,7 @@ class FinanceController extends Controller
                         ->where('isAffiliate', false);
                 }
             ])
-            ->sum('finalValue');
+            ->sum('finalAmount');
         $totalPaid = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
         })
@@ -62,7 +62,7 @@ class FinanceController extends Controller
                         ->where('isAffiliate', false);
                 }
             ])
-            ->sum('finalValue');
+            ->sum('finalAmount');
 
         $topWithdraws = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
