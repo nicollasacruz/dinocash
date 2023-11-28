@@ -17,7 +17,7 @@ class AffiliateController extends Controller
 
         if ($email = $request->email) {
             $affiliates = User::where('email', 'LIKE', '%' . $email . '%')
-                ->where('isAffiliated', true)
+                ->where('isAffiliate', true)
                 ->with(['withdraws' => function ($query) use ($today) {
                     $query
                     ->where('type', '!=', 'rejected')
@@ -25,7 +25,7 @@ class AffiliateController extends Controller
                 }])
                 ->get();
         } else {
-            $affiliates = User::where('isAffiliated', true)
+            $affiliates = User::where('isAffiliate', true)
                 ->with(['withdraws' => function ($query) use ($today) {
                     $query
                     ->where('type', '!=', 'rejected')
