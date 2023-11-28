@@ -14,9 +14,13 @@ class WithdrawController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexAdmin()
+    public function indexAdmin(Request $request)
     {
-        $withdraws = Withdraw::with([
+        $email = $request->email;
+        $withdraws = Withdraw::when($email, function ($query) use ($email) {
+            $query->where('email', 'LIKE', '%' . $email .'%');
+        })
+        ->with([
             'user' => function ($query) {
                 $query
                     ->where('isAffiliate', false);
