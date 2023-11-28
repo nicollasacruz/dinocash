@@ -3,51 +3,15 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
+import dayjs from "dayjs";
 const columns = [
     { label: "Email", key: "email" },
     { label: "Chave Pix", key: "pix" },
-    { label: "Valor", key: "valor" },
-    { label: "Data", key: "data" },
+    { label: "Valor", key: "amount" },
+    { label: "Data", key: "updated_at" },
     { label: "Status", key: "status" },
-];
-const rows = [
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
 ];
 const showModal = ref(false);
 const getStatus = (status) => {
@@ -62,6 +26,25 @@ const getStatus = (status) => {
             return "Pendente";
     }
 };
+const toBRL = (value) => {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+};
+const { withdraws, totalToday, totalAmount } = defineProps([
+    "withdraws",
+    "totalAmount",
+    "totalToday",
+]);
+console.log(withdraws);
+const rows = withdraws.map((withdraw) => {
+    return {
+        ...withdraw,
+        email: withdraw.user.email,
+        pix: withdraw.user.document,
+    };
+});
 </script>
 
 <template>
@@ -83,17 +66,22 @@ const getStatus = (status) => {
             <div class="flex gap-x-5">
                 <TextBox
                     label="CAIXA DA CASA"
-                    value="R$ 10.000"
+                    :value="toBRL(totalAmount)"
                     value-text="text-center text-green-500"
                 />
                 <TextBox
                     label="total de saques hoje"
-                    value="R$ 10.000"
+                    :value="toBRL(totalToday)"
                     value-text="text-center text-red-500"
                 />
             </div>
         </div>
-        <BaseTable hideActions class="table-xs mt-6" :columns="columns" :rows="rows">
+        <BaseTable
+            hideActions
+            class="table-xs mt-6"
+            :columns="columns"
+            :rows="rows"
+        >
             <template #status="{ value }">
                 <td>
                     <div
@@ -101,6 +89,16 @@ const getStatus = (status) => {
                     >
                         {{ getStatus(value) }}
                     </div>
+                </td>
+            </template>
+            <template #updated_at="{ value }">
+                <td>
+                    {{ dayjs(value).format("DD/MM/YYYY") }}
+                </td>
+            </template>
+            <template #amount="{ value }">
+                <td>
+                    {{ toBRL(value) }}
                 </td>
             </template>
         </BaseTable>

@@ -13,7 +13,7 @@ const columns = [
     { label: "Data", key: "updated_at" },
     { label: "Status", key: "type" },
 ];
-const {deposits} = defineProps(['deposits']);
+const { deposits, totalToday, totalAmount } = defineProps(["deposits", "totalToday", "totalAmount"]);
 const depositsRow = deposits.map((deposit) => {
     return {
         ...deposit,
@@ -21,19 +21,12 @@ const depositsRow = deposits.map((deposit) => {
         email: deposit.user.email,
     };
 });
-console.log(deposits)
 const showModal = ref(false);
-const getStatus = (status) => {
-    switch (status) {
-        case 1:
-            return "FINALIZADO";
-        case 2:
-            return "Reprovado";
-        case 3:
-            return "Pendente";
-        default:
-            return "Pendente";
-    }
+const toBRL = (value) => {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
 };
 </script>
 
@@ -57,18 +50,25 @@ const getStatus = (status) => {
                 <div class="flex gap-x-5">
                     <TextBox
                         label="CAIXA DA CASA"
-                        value="R$ 10.000"
+                        :value="toBRL(totalAmount)"
                         value-text="text-center text-green-500"
                     />
                     <TextBox
                         label="total de depósitos hoje"
-                        value="R$ 10.000"
+                        :value="
+                            toBRL(totalToday)
+                        "
                         value-text="text-center text-green-500"
                     />
                 </div>
             </div>
         </div>
-        <BaseTable hide-actions :columns="columns" :rows="depositsRow" class="table-xs mt-6">
+        <BaseTable
+            hide-actions
+            :columns="columns"
+            :rows="depositsRow"
+            class="table-xs mt-6"
+        >
             <template #updated_at="{ value }">
                 <td>
                     {{ dayjs(value).format("DD/MM/YYYY") }}

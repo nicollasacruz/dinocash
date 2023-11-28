@@ -3,48 +3,28 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
+import dayjs from "dayjs";
 const columns = [
     { label: "Nome", key: "name" },
     { label: "Email", key: "email" },
-    { label: "Saldo", key: "saldo" },
-    { label: "Afiliado", key: "afiliado" },
-];
-const rows = [
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
+    { label: "Saldo", key: "wallet" },
+    { label: "Afiliado", key: "isAffiliate" },
 ];
 const showModal = ref(false);
 const selectedTab = ref(1);
+const { affiliates, affiliatesWithdraws } = defineProps([
+    "affiliates",
+    "affiliatesWithdraws",
+]);
+console.log(affiliatesWithdraws);
+const toBRL = (value) => {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+};
 </script>
 
 <template>
@@ -82,18 +62,13 @@ const selectedTab = ref(1);
             </div>
             <div class="flex gap-x-5">
                 <TextBox
-                    label="CAIXA DA CASA"
-                    value="R$ 10.000"
-                    value-text="text-center text-green-500"
-                />
-                <TextBox
                     label="total de saques hoje"
-                    value="R$ 10.000"
+                    :value="toBRL(affiliatesWithdraws)"
                     value-text="text-center text-red-500"
                 />
             </div>
         </div>
-        <BaseTable class="mt-7 table-xs" :columns="columns" :rows="rows">
+        <BaseTable class="mt-7 table-xs" :columns="columns" :rows="affiliates">
             <template #actions="{ value }">
                 <td>
                     <div
@@ -104,7 +79,7 @@ const selectedTab = ref(1);
                     </div>
                 </td>
             </template>
-            <template #saldo="{ value }">
+            <template #wallet="{ value }">
                 <td>
                     {{
                         value.toLocaleString("pt-br", {
@@ -114,7 +89,7 @@ const selectedTab = ref(1);
                     }}
                 </td>
             </template>
-            <template #afiliado="{ value }">
+            <template #isAffiliate="{ value }">
                 <td>
                     <div v-if="value">SIM</div>
                     <div v-else>NÃO</div>
