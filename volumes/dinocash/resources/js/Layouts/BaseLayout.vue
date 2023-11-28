@@ -129,7 +129,7 @@ const props = defineProps({
             :src="DinoLogo"
             alt="dinoLogo"
             v-if="!homepage"
-            class="h-[16%] my-3 md:h-[20%] md:my-6 mx-auto"
+            class="h-[16%] my-3 md:my-4 mx-auto"
         />
 
         <slot class="" />
