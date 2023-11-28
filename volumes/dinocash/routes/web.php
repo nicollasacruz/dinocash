@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WithdrawController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Carbon;
@@ -80,9 +81,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         return Inertia::render('Affiliates');
     })->name('admin.afiliados');
 
-    Route::get('/saque', function () {
-        return Inertia::render('Requests');
-    })->name('admin.saque');
+    Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
 
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
