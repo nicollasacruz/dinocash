@@ -23,7 +23,7 @@ const routes = [
         route: "admin.afiliados",
     },
     {
-        label: "Solicitações e saques",
+        label: "Saques",
         route: "admin.saque",
     },
     {
