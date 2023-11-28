@@ -16,7 +16,12 @@ class WithdrawController extends Controller
      */
     public function indexAdmin()
     {
-        $withdraws = Withdraw::with('user')->where('isAffiliate', '!=', true)->get();
+        $withdraws = Withdraw::with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->get();
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
         $withdrawsAmount = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmount = Deposit::where('type', 'paid')->sum('amount');

@@ -33,8 +33,8 @@ class AffiliateController extends Controller
                 }])
                 ->get();
         }
-        $affiliatesWithdrawsList = $affiliates->flatMap->withdraws->get();
-        $affiliatesWithdraws = $affiliates->flatMap->withdraws->sum('amount');
+        $affiliatesWithdrawsList = $affiliates->flatMap->withdraws->get('*');
+        $affiliatesWithdraws = $affiliatesWithdrawsList ? $affiliatesWithdrawsList->sum('amount') : 0;
 
         return Inertia::render('Affiliates', [
             'affiliates' => $affiliates,
