@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Deposit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
@@ -18,8 +19,10 @@ class DepositController extends Controller
     public function indexAdmin()
     {
         $deposits = Deposit::with('user')->get();
+        $totalToday = Deposit::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
         return Inertia::render('Deposits', [
             'deposits' => $deposits,
+            'totalToday' => $totalToday
         ]);
     }
 
