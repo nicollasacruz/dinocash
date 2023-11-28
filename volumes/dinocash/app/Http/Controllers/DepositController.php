@@ -24,8 +24,9 @@ class DepositController extends Controller
         $totalToday = Deposit::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
         $withdrawsAmount = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmount = Deposit::where('type', 'paid')->sum('amount');
-        $walletsAmount = User::where('role','user')->sum('wallet');
-        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount) / 100;
+        $walletsAmount = User::where('role','user')->where('isAffiliate', '=', false)->sum('wallet');
+        $walletsAfilliateAmount = User::where('role','user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
+        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount);
         return Inertia::render('Deposits', [
             'deposits' => $deposits,
             'totalToday' => $totalToday,
@@ -75,10 +76,9 @@ class DepositController extends Controller
 
         $paymentCode = $result['paymentCode'];
 
-        $user->createDeposit($request->amount * 100, $uuid, $paymentCode);
+        $user->createDeposit($request->amount, $uuid, $paymentCode);
 
-        return redirect()->route('homepage')->with('success', 'Deposit created with success!');
-
+        return redirect()->route('homepage')->with('success', 'Deposit with success!');
     }
 
     /**

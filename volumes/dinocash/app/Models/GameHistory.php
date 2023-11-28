@@ -20,7 +20,7 @@ class GameHistory extends Model
         'userId',
         'value',
         'finalValue',
-        'pendent',
+        'type',
         'distance',
     ];
 
@@ -31,4 +31,49 @@ class GameHistory extends Model
     {
         return $this->belongsTo(User::class, 'userId', 'id');
     }
+
+    /**
+     * Accessor for the 'value' attribute.
+     *
+     * @param  mixed  $value
+     * @return float
+     */
+    public function getValueAttribute($value): float
+    {
+        return $value / 100;
+    }
+
+    /**
+     * Mutator for the 'value' attribute.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
+    public function setValueAttribute($value): void
+    {
+        $this->attributes['value'] = $value * 100;
+    }
+
+    /**
+     * Accessor for the 'finalValue' attribute.
+     *
+     * @param  mixed  $finalValue
+     * @return float
+     */
+    public function getFinalValueAttribute($finalValue): float
+    {
+        return $finalValue / 100;
+    }
+
+    /**
+     * Mutator for the 'finalValue' attribute.
+     *
+     * @param  mixed  $finalValue
+     * @return void
+     */
+    public function setFinalValueAttribute($finalValue): void
+    {
+        $this->attributes['finalValue'] = $finalValue * 100;
+    }
 }
+

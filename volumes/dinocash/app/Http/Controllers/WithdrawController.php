@@ -16,12 +16,13 @@ class WithdrawController extends Controller
      */
     public function indexAdmin()
     {
-        $withdraws = Withdraw::with('user')->get();
+        $withdraws = Withdraw::with('user')->where('isAffiliate', '!=', true)->get();
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
         $withdrawsAmount = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmount = Deposit::where('type', 'paid')->sum('amount');
-        $walletsAmount = User::where('role','user')->sum('wallet');
-        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount) / 100;
+        $walletsAmount = User::where('role','user')->where('isAffiliate', '=', false)->sum('wallet');
+        $walletsAfilliateAmount = User::where('role','user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
+        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount) / 100;
         return Inertia::render('Requests', [
             'withdraws' => $withdraws,
             'totalToday'=> $totalToday,

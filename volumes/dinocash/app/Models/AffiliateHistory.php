@@ -17,6 +17,7 @@ class AffiliateHistory extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'amount',
         'gameId',
         'affiliateId',
         'userId',
@@ -24,6 +25,28 @@ class AffiliateHistory extends Model
         'invoicedAt',
         'payedAt',
     ];
+
+    /**
+     * Accessor for the 'amount' attribute.
+     *
+     * @param  mixed  $value
+     * @return float
+     */
+    public function getAmountAttribute($value): float
+    {
+        return $value / 100;
+    }
+
+    /**
+     * Mutator for the 'amount' attribute.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
+    public function setAmountAttribute($value): void
+    {
+        $this->attributes['amount'] = $value * 100;
+    }
 
     /**
      * Define the "user" relationship.
@@ -45,3 +68,4 @@ class AffiliateHistory extends Model
         return $this->belongsTo(User::class, 'affiliateId', 'id');
     }
 }
+
