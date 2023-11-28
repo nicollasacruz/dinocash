@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Deposit;
+use App\Models\GameHistory;
 use App\Models\User;
+use App\Models\Withdraw;
+use App\Observers\DepositObserver;
+use App\Observers\GameHistoryObserver;
 use App\Observers\UserObserver;
+use App\Observers\WithdrawObserver;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,5 +39,8 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         User::observe(UserObserver::class);
+        GameHistory::observe(GameHistoryObserver::class);
+        Withdraw::observe(WithdrawObserver::class);
+        Deposit::observe(DepositObserver::class);
     }
 }

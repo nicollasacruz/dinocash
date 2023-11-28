@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AffiliateHistory;
 use App\Models\Deposit;
 use App\Models\GameHistory;
 use App\Models\User;
@@ -9,6 +10,7 @@ use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
@@ -89,6 +91,20 @@ class FinanceController extends Controller
                 }
             ])
             ->orderBy('amount', 'desc')
+            ->take(3)
+            ->get();
+
+        $topProfitableAffiliates = AffiliateHistory::where('type', 'win')
+            ->select('affiliateId', DB::raw('SUM(amount) as totalProfit'))
+            ->groupBy('affiliateId')
+            ->orderByDesc('totalProfit')
+            ->take(3)
+            ->get();
+        
+        $topLossAffiliates = AffiliateHistory::where('type', 'loss')
+            ->select('affiliateId', DB::raw('SUM(amount) as totalLoss'))
+            ->groupBy('affiliateId')
+            ->orderByDesc('totalLoss')
             ->take(3)
             ->get();
 

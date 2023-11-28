@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('affiliate_histories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('gameId');
+            $table->unsignedBigInteger('gameId')->nullable();
             $table->unsignedBigInteger('affiliateId');
             $table->unsignedBigInteger('userId');
             $table->string('type');

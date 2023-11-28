@@ -18,8 +18,8 @@ class GameHistory extends Model
      */
     protected $fillable = [
         'userId',
-        'value',
-        'finalValue',
+        'amount',
+        'finalAmount',
         'type',
         'distance',
     ];
@@ -33,47 +33,47 @@ class GameHistory extends Model
     }
 
     /**
-     * Accessor for the 'value' attribute.
+     * Accessor for the 'amount' attribute.
      *
-     * @param  mixed  $value
+     * @param  mixed  $amount
      * @return float
      */
-    public function getValueAttribute($value): float
+    public function getAmountAttribute($amount): float
     {
-        return $value / 100;
+        return $amount / 100;
     }
 
     /**
-     * Mutator for the 'value' attribute.
+     * Mutator for the 'amount' attribute.
      *
-     * @param  mixed  $value
+     * @param  mixed  $amount
      * @return void
      */
-    public function setValueAttribute($value): void
+    public function setAmountAttribute($amount): void
     {
-        $this->attributes['value'] = $value * 100;
+        $this->attributes['amount'] = $amount * 100;
     }
 
     /**
-     * Accessor for the 'finalValue' attribute.
+     * Accessor for the 'finalAmount' attribute.
      *
-     * @param  mixed  $finalValue
+     * @param  mixed  $finalAmount
      * @return float
      */
-    public function getFinalValueAttribute($finalValue): float
+    public function getFinalAmountAttribute($finalAmount): float
     {
-        return $finalValue / 100;
+        return $finalAmount / 100;
     }
 
     /**
-     * Mutator for the 'finalValue' attribute.
+     * Mutator for the 'finalAmount' attribute.
      *
-     * @param  mixed  $finalValue
+     * @param  mixed  $finalAmount
      * @return void
      */
-    public function setFinalValueAttribute($finalValue): void
+    public function setFinalAmountAttribute($finalAmount): void
     {
-        $this->attributes['finalValue'] = $finalValue * 100;
+        $this->attributes['finalAmount'] = $finalAmount * 100;
     }
 }
 
