@@ -54,7 +54,7 @@ jobs:
       - name: Install Node.js and npm
         uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "20"
 
       - name: Install npm dependencies
         run: |
@@ -72,7 +72,7 @@ jobs:
       - name: NPM Run build
         run: |
           cd volumes/dinocash
-          npm run build
+          npm install && npm run build
 
       - name: Execute Pest tests
         run: |
