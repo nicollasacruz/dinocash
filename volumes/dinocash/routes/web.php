@@ -78,7 +78,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     })->name('admin.usuarios');
 
     Route::get('/afiliados', function () {
-        return Inertia::render('Affiliates');
+        return Inertia::render('Affiliates', [
+            'affiliates' => User::where('isAffiliate', true)->get(),
+    ]);
     })->name('admin.afiliados');
 
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
