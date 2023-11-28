@@ -65,6 +65,12 @@ class User extends Authenticatable
         'cpaCollectedAt' => 'datetime',
     ];
 
+    public function setInvitationLink($value)
+    {
+        $this->attributes['invitation_link'] = $value;
+        $this->attributes['isAffiliate'] = true;
+    }
+
     /**
      * Accessor for the 'wallet' attribute.
      *
