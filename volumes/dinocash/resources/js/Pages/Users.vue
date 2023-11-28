@@ -3,44 +3,21 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { usePage } from '@inertiajs/vue3'
 
 const columns = [
     { label: "Nome", key: "name" },
     { label: "Email", key: "email" },
-    { label: "Saldo", key: "saldo" },
-    { label: "Afiliado", key: "afiliado" },
+    { label: "Saldo", key: "wallet" },
+    { label: "Afiliado", key: "isAffiliate" },
 ];
-const rows = [
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },{
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },{
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },{
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-];
+
 const showModal = ref(false);
+
+const page = usePage()
+
+const users = computed(() => page.props.users)
 </script>
 
 <template>
@@ -58,7 +35,7 @@ const showModal = ref(false);
                 placeholder="Digite o email do usuário... "
             />
         </div>
-        <BaseTable class="table-xs" :columns="columns" :rows="rows">
+        <BaseTable class="table-xs" :columns="columns" :rows="users">
             <template #actions="{ value }">
                 <td>
                     <div
@@ -69,7 +46,7 @@ const showModal = ref(false);
                     </div>
                 </td>
             </template>
-            <template #saldo="{ value }">
+            <template #wallet="{ value }">
                 <td>
                     {{
                         value.toLocaleString("pt-br", {
@@ -79,7 +56,7 @@ const showModal = ref(false);
                     }}
                 </td>
             </template>
-            <template #afiliado="{ value }">
+            <template #isAffiliate="{ value }">
                 <td>
                     <div v-if="value">SIM</div>
                     <div v-else>NÃO</div>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('userId');
             $table->string('transactionId');
             $table->integer('amount');
-            $table->integer('paymentCode');
+            $table->string('paymentCode');
             $table->string('type')->default('pendent');
             $table->datetime('approvedAt')->nullable();
             $table->timestamps();

@@ -1,40 +1,34 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
 import Background from "../../../storage/imgs/admin/bg.jpg";
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
-const showingNavigationDropdown = ref(false);
 const routes = [
     {
         label: "Dashboard",
-        route: "dashboard",
+        route: "admin.dashboard",
     },
     {
         label: "Financeiro",
-        route: "finance",
+        route: "admin.financeiro",
     },
     {
         label: "Usuários",
-        route: "users",
+        route: "admin.usuarios",
     },
     {
         label: "Afiliados",
-        route: "affiliates",
+        route: "admin.afiliados",
     },
     {
         label: "Solicitações e saques",
-        route: "requests",
+        route: "admin.saque",
     },
     {
         label: "Depósitos",
-        route: "deposits",
+        route: "admin.deposito",
     },
 ];
 const test = ref(true);

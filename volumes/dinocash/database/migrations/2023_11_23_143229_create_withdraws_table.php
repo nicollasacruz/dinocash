@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('type')->default('pendent');
             $table->datetime('approvedAt')->nullable();
             $table->datetime('reprovedAt')->nullable();
-            $table->unsignedBigInteger('managerUserId');
+            $table->unsignedBigInteger('managerUserId')->nullable();
             $table->timestamps();
 
             $table->foreign('userId')

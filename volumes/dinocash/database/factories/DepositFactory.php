@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class DepositFactory extends Factory
 {
 
-    protected $model = Deposit::class;
+    // protected $model = Deposit::class;
 
     /**
      * Define the model's default state.
@@ -26,6 +26,7 @@ class DepositFactory extends Factory
                 return User::factory()->create()->id;
             },
             'transactionId' => $this->faker->uuid,
+            'paymentCode' => $this->faker->uuid,
             'amount' => $this->faker->randomNumber(5),
             'type' => 'pendent',
         ];

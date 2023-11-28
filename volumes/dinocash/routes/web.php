@@ -67,19 +67,21 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/financeiro', function () {
-        return Inertia::render('Financeiro');
+        return Inertia::render('Finances');
     })->name('admin.financeiro');
 
     Route::get('/usuarios', function () {
-        return Inertia::render('Usuarios');
+        return Inertia::render('Users', [
+            'users' => User::all()
+        ]);
     })->name('admin.usuarios');
 
     Route::get('/afiliados', function () {
-        return Inertia::render('Afiliados');
+        return Inertia::render('Affiliates');
     })->name('admin.afiliados');
 
     Route::get('/saque', function () {
-        return Inertia::render('Saque');
+        return Inertia::render('Requests');
     })->name('admin.saque');
 
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');

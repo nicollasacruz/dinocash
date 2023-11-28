@@ -17,8 +17,8 @@ class DepositController extends Controller
      */
     public function indexAdmin()
     {
-        $deposits = Deposit::all()->with('users')->sort(["updatedAt", 'desc'])->paginate(10);
-        return Inertia::render('DepositsAdmin', [
+        $deposits = Deposit::with('user')->get();
+        return Inertia::render('Deposits', [
             'deposits' => $deposits,
         ]);
     }

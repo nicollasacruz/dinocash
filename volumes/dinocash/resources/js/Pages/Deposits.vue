@@ -3,53 +3,25 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
-
+import dayjs from "dayjs";
 const columns = [
     { label: "Email", key: "email" },
-    { label: "Chave Pix", key: "pix" },
-    { label: "Valor", key: "valor" },
-    { label: "Data", key: "data" },
-    { label: "Status", key: "status" },
+    { label: "Chave Pix", key: "document" },
+    { label: "Valor", key: "amount" },
+    { label: "Data", key: "updated_at" },
+    { label: "Status", key: "type" },
 ];
-const rows = [
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-    {
-        email: "email@teste.com",
-        pix: "teste",
-        valor: 'R$ 100,00',
-        data: "10/10/2021",
-        status: 1,
-    },
-];
+const {deposits} = defineProps(['deposits']);
+const depositsRow = deposits.map((deposit) => {
+    return {
+        ...deposit,
+        document: deposit.user.document,
+        email: deposit.user.email,
+    };
+});
+console.log(deposits)
 const showModal = ref(false);
 const getStatus = (status) => {
     switch (status) {
@@ -96,13 +68,28 @@ const getStatus = (status) => {
                 </div>
             </div>
         </div>
-        <BaseTable hide-actions :columns="columns" :rows="rows" class="table-xs mt-6">
+        <BaseTable hide-actions :columns="columns" :rows="depositsRow" class="table-xs mt-6">
+            <template #updated_at="{ value }">
+                <td>
+                    {{ dayjs(value).format("DD/MM/YYYY") }}
+                </td>
+            </template>
+            <template #amount="{ value }">
+                <td>
+                    {{
+                        value.toLocaleString("pt-br", {
+                            style: "currency",
+                            currency: "BRL",
+                        })
+                    }}
+                </td>
+            </template>
             <template #status="{ value }">
                 <td>
                     <div
                         class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
                     >
-                        {{ getStatus(value) }}
+                        {{ value }}
                     </div>
                 </td>
             </template>
