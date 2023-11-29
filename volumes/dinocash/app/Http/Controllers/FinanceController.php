@@ -65,35 +65,24 @@ class FinanceController extends Controller
             ])
             ->sum('finalAmount');
 
-        $topWithdraws = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
-        })
-            ->where('type', 'paid')
-            ->where('updated_at', $today)
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
-            ->orderBy('amount', 'desc')
+        $topWithdraws = Withdraw::where('type', 'paid')
+            ->where('withdraws.updated_at', '>=', now()->subDay())
+            ->join('users', 'withdraws.userId', '=', 'users.id')
+            ->select('users.email', 'withdraws.amount')
+            ->orderByDesc('amount')
             ->take(3)
             ->get();
 
-        $topDeposits = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
-        })
-            ->where('type', 'paid')
-            ->where('updated_at', $today)
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
-            ->orderBy('amount', 'desc')
+        $topDeposits = Deposit::where('type', 'paid')
+            ->where('deposits.updated_at', '>=', now()->subDay())
+            ->join('users', 'deposits.userId', '=', 'users.id')
+            ->select('users.email', 'deposits.amount')
+            ->orderByDesc('amount')
             ->take(3)
             ->get();
+
+
+        dd($topWithdraws, $topDeposits);
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
