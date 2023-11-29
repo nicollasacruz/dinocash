@@ -9,10 +9,10 @@ class ReferralService
 {
   public function getTopReferralsByProfit()
   {
-    return GameHistory::with('user.affiliate')
+    return GameHistory::with('user')
       ->where('type', 'win')
-      ->selectRaw('affiliateId, SUM(finalAmount) as totalProfit')
-      ->groupBy('affiliateId')
+      ->selectRaw('user.affiliateId, SUM(finalAmount) as totalProfit')
+      ->groupBy('user.affiliateId')
       ->orderByDesc('totalProfit')
       ->limit(3)
       ->get();
@@ -20,10 +20,10 @@ class ReferralService
 
   public function getTopReferralsByLoss()
   {
-    return GameHistory::with('user.affiliate')
+    return GameHistory::with('user')
       ->where('type', 'loss')
-      ->selectRaw('affiliateId, SUM(finalAmount) as totalLoss')
-      ->groupBy('affiliateId')
+      ->selectRaw('user.affiliateId, SUM(finalAmount) as totalLoss')
+      ->groupBy('user.affiliateId')
       ->orderByDesc('totalLoss')
       ->limit(3)
       ->get();
