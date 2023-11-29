@@ -1,25 +1,3 @@
-<script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
-import BaseTable from "@/Components/BaseTable.vue";
-import BaseModal from "@/Components/BaseModal.vue";
-import { ref, computed } from "vue";
-import { usePage } from '@inertiajs/vue3'
-
-const columns = [
-    { label: "Nome", key: "name" },
-    { label: "Email", key: "email" },
-    { label: "Saldo", key: "wallet" },
-    { label: "Afiliado", key: "isAffiliate" },
-];
-
-const showModal = ref(false);
-
-const page = usePage()
-
-const users = computed(() => page.props.users)
-</script>
-
 <template>
     <Head title="Dashboard" />
 
@@ -39,10 +17,10 @@ const users = computed(() => page.props.users)
             <template #actions="{ value }">
                 <td>
                     <div
-                        @click="showModal = true"
+                        @click="selectUser(value)"
                         class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
                     >
-                        GERENCIAR USUÁRIO
+                        GERENCIAR
                     </div>
                 </td>
             </template>
@@ -63,8 +41,37 @@ const users = computed(() => page.props.users)
                 </td>
             </template>
         </BaseTable>
-        <BaseModal v-model="showModal" title="Gerenciar Afiliado">
-            teste
+        <BaseModal v-if="showModal" v-model="showModal">
+            <UserForm :user="selectedUser" />
         </BaseModal>
     </AuthenticatedLayout>
 </template>
+<script setup lang="ts">
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+import BaseTable from "@/Components/BaseTable.vue";
+import BaseModal from "@/Components/BaseModal.vue";
+import { ref, computed } from "vue";
+import { usePage } from '@inertiajs/vue3'
+import UserForm from "@/Components/UserForm.vue";
+const columns = [
+    { label: "Nome", key: "name" },
+    { label: "Email", key: "email" },
+    { label: "Saldo", key: "wallet" },
+    { label: "Afiliado", key: "isAffiliate" },
+];
+
+const showModal = ref(false);
+const selectedUser = ref(null)
+const page = usePage()
+
+const users = computed(() => page.props.users) as any
+
+function selectUser(user){
+    console.log(user)
+    showModal.value = true
+    selectedUser.value = user
+}
+
+
+</script>

@@ -70,7 +70,7 @@ console.log(last5Users);
                 <td>
                     <div @click="showModal = true"
                         class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer">
-                        GERENCIAR AFILIADO
+                        GERENCIAR
                     </div>
                 </td>
             </template>

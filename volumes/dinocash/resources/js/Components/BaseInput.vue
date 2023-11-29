@@ -1,19 +1,19 @@
 <template>
-    <div :class="`form-control w-full`">
+    <div :class="`'form-control w-full`">
         <label
             :class="
                 error
-                    ? 'text-error'
-                    : `label-text text-base-content ${labelStyle} mb-1`
+                    ? `text-error ${labelStyle}`
+                    : ` ${labelStyle} mb-1`
             "
             class="text-sm z-10"
         >
             {{ label }}
         </label>
         <input
-            :value="modelValue"
+            :value="value"
             @input="($event) => emit('update:modelValue', $event)"
-            class="input w-full bordered"
+            class="input w-full input-sm bordered"
             :class="[
                 error ? 'input-error ' : `${color} ${bgColor}`,
                 bordered && 'input-bordered',
@@ -51,7 +51,7 @@ const props = defineProps({
     },
     bgColor: {
         type: String,
-        default: "base-100",
+        default: "bg-[#151515]",
     },
     bordered: {
         type: Boolean,
@@ -61,6 +61,9 @@ const props = defineProps({
         type: [String, Number],
     },
     max: {
+        type: [String, Number],
+    },
+    value: {
         type: [String, Number],
     },
     isCurrency: { type: Boolean },

@@ -112,7 +112,7 @@ const rows = withdraws.map((withdraw) => {
                 </td>
             </template>
         </BaseTable>
-        <BaseModal v-model="showModal" title="Gerenciar Afiliado">
+        <BaseModal v-model="showModal">
             teste
         </BaseModal>
     </AuthenticatedLayout>
