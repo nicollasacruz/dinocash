@@ -1,8 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import BaseTable from "@/Components/BaseTable.vue";
-import BaseModal from "@/Components/BaseModal.vue";
 import { ref } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";

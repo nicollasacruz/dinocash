@@ -40,4 +40,36 @@ class WithdrawFactory extends Factory
             'approvedAt' => now(),
         ]);
     }
+
+    /**
+     * Indicate that the model'swith status paid.
+     */
+    public function affiliatePaid(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => 'paid',
+            'approvedAt' => now(),
+            'userId' => function () {
+                return User::factory()->withInvitationLink($this->faker->userName)->create()->id;
+            },
+            'transactionId' => $this->faker->uuid,
+            'amount' => $this->faker->randomNumber(5),
+        ]);
+    }
+
+    /**
+     * Indicate that the model'swith status paid.
+     */
+    public function affiliate(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => 'pendent',
+            'approvedAt' => now(),
+            'userId' => function () {
+                return User::factory()->withInvitationLink($this->faker->userName)->create()->id;
+            },
+            'transactionId' => $this->faker->uuid,
+            'amount' => $this->faker->randomNumber(5),
+        ]);
+    }
 }

@@ -18,9 +18,9 @@ class GameHistory extends Model
      */
     protected $fillable = [
         'userId',
-        'value',
-        'finalValue',
-        'pendent',
+        'amount',
+        'finalAmount',
+        'type',
         'distance',
     ];
 
@@ -31,4 +31,49 @@ class GameHistory extends Model
     {
         return $this->belongsTo(User::class, 'userId', 'id');
     }
+
+    /**
+     * Accessor for the 'amount' attribute.
+     *
+     * @param  mixed  $amount
+     * @return float
+     */
+    public function getAmountAttribute($amount): float
+    {
+        return $amount / 100;
+    }
+
+    /**
+     * Mutator for the 'amount' attribute.
+     *
+     * @param  mixed  $amount
+     * @return void
+     */
+    public function setAmountAttribute($amount): void
+    {
+        $this->attributes['amount'] = $amount * 100;
+    }
+
+    /**
+     * Accessor for the 'finalAmount' attribute.
+     *
+     * @param  mixed  $finalAmount
+     * @return float
+     */
+    public function getFinalAmountAttribute($finalAmount): float
+    {
+        return $finalAmount / 100;
+    }
+
+    /**
+     * Mutator for the 'finalAmount' attribute.
+     *
+     * @param  mixed  $finalAmount
+     * @return void
+     */
+    public function setFinalAmountAttribute($finalAmount): void
+    {
+        $this->attributes['finalAmount'] = $finalAmount * 100;
+    }
 }
+

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WithdrawController;
 use App\Models\User;
@@ -30,7 +31,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('homepage');
 
 Route::get('/ref/{invitation_link}', function ($invitation_link) {
     Session::put('invitation_link', $invitation_link);
@@ -45,43 +46,30 @@ Route::get('language/{language}', function ($language) {
     return;
 })->name('language');
 
-Route::get('/dashboard', function () {
 
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/finance', function () {
-    return Inertia::render('Finances');
-})->middleware(['auth', 'verified'])->name('finance');
-Route::get('/users', function () {
-    return Inertia::render('Users');
-})->middleware(['auth', 'verified'])->name('users');
-Route::get('/affiliates', function () {
-    return Inertia::render('Affiliates');
-})->middleware(['auth', 'verified'])->name('affiliates');
-Route::get('/requests', function () {
+Route::get('/afiliado', function () {
+    return Inertia::render('Admin/Affiliates');
+})->middleware(['auth', 'verified'])->name('user.affiliate');
+Route::get('/saques', function () {
     return Inertia::render('Requests');
-})->middleware(['auth', 'verified'])->name('requests');
-Route::get('/deposits', function () {
+})->middleware(['auth', 'verified'])->name('user.requests');
+Route::get('/depositos', function () {
     return Inertia::render('Deposits');
-})->middleware(['auth', 'verified'])->name('deposits');
+})->middleware(['auth', 'verified'])->name('user.deposits');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-    Route::get('/financeiro', function () {
-        return Inertia::render('Finances');
-    })->name('admin.financeiro');
-
+    
+    
     Route::get('/usuarios', function () {
-        return Inertia::render('Users', [
+        return Inertia::render('Admin/Users', [
             'users' => User::all()
         ]);
     })->name('admin.usuarios');
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
+    Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');
     Route::get('/afiliados', [AffiliateController::class, 'index'])->name('admin.afiliados');
-
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
-
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 

@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $totalUsers = User::all()->count();
         $lastUsers = User::latest('created_at')->limit(50)->get();
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Admin/Dashboard', [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
             'lastUsers' => $lastUsers,

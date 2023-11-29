@@ -1,5 +1,5 @@
 <template>
-    <BaseTable class="mt-7 table-xs" :columns="columns" :rows="rows">
+    <BaseTable class="mt-7 table-xs h-3/4" :columns="columns" :rows="rows">
         <template #actions="{ value }">
             <td>
                 <div

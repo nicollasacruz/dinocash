@@ -67,7 +67,7 @@ const toBRL = (value) => {
             hide-actions
             :columns="columns"
             :rows="depositsRow"
-            class="table-xs mt-6"
+            class="table-xs mt-6 h-3/4"
         >
             <template #updated_at="{ value }">
                 <td>

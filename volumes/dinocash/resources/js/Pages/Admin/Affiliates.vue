@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import BaseTable from "@/Components/BaseTable.vue";
-import BaseModal from "@/Components/BaseModal.vue";
 import { ref, defineProps, computed } from "vue";
 import TextBox from "@/Components/TextBox.vue";
-import dayjs from "dayjs";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
 import PaymentsTable from "@/Components/PaymentsTable.vue";
 
@@ -32,7 +29,7 @@ const { affiliates, affiliatesWithdraws, affiliatesWithdrawsList } =
         "affiliatesWithdraws",
         "affiliatesWithdrawsList",
     ]);
-console.log(affiliatesWithdrawsList);
+console.log('af',affiliatesWithdrawsList);
 const toBRL = (value) => {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",

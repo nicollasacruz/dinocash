@@ -1,7 +1,7 @@
 <template>
     <BaseTable
         hideActions
-        class="mt-7 table-xs"
+        class="mt-7 table-xs h-3/4"
         :columns="columns"
         :rows="rows"
     >

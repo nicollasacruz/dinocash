@@ -35,7 +35,7 @@ const users = computed(() => page.props.users)
                 placeholder="Digite o email do usuário... "
             />
         </div>
-        <BaseTable class="table-xs" :columns="columns" :rows="users">
+        <BaseTable class="table-xs h-3/4" :columns="columns" :rows="users">
             <template #actions="{ value }">
                 <td>
                     <div

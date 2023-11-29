@@ -37,7 +37,7 @@ const test = ref(true);
 <template>
     <div>
         <div class="h-screen text-montserrat flex">
-            <div class="drawer col-auto md:w-80 z-10 absolute md:relative">
+            <div class="drawer col-auto lg:w-80 z-10 absolute lg:relative">
                 <input
                     v-model="test"
                     id="my-drawer"
@@ -45,17 +45,17 @@ const test = ref(true);
                     class="drawer-toggle"
                 />
 
-                <div class="drawer-side md:w-80">
+                <div class="drawer-side lg:w-80">
                     <label
                         for="my-drawer"
                         aria-label="close sidebar"
-                        class=""
+                        class="drawer-overlay"
                     ></label>
                     <ul
-                        class="menu py-4 md:w-80 min-h-full bg-[#212121] text-white relative"
+                        class="menu py-4 lg:w-80 min-h-full bg-[#212121] text-white relative"
                     >
                         <x-mark-icon
-                            class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 md:hidden fill-white"
+                            class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
                             @click="test = !test"
                         />
                         <img class="mb-3 ml-5" width="130" :src="logoDino" />
@@ -92,7 +92,7 @@ const test = ref(true);
                 </div>
             </div>
             <div
-                class="drawer-content relative flex-1 px-10 py-8"
+                class="drawer-content relative flex-1 px-4 py-2 lg:px-10 lg:py-8 overflow-auto"
                 :style="{
                     'background-image': `url('${Background}')`,
                     'background-size': 'cover',
@@ -102,7 +102,7 @@ const test = ref(true);
                 <!-- Page content here -->
                 <bars3-icon
                     @click="test = !test"
-                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer md:hidden block z-10 fill-white"
+                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-white"
                 />
 
                 <slot />

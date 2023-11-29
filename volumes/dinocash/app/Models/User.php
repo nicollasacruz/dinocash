@@ -36,7 +36,8 @@ class User extends Authenticatable
         'cpaCollectedAt',
         'invitation_link',
         'CPA',
-        'revShare'
+        'revShare',
+        'walletAffiliate',
     ];
 
     /**
@@ -63,6 +64,59 @@ class User extends Authenticatable
         'cpaCollected' => 'boolean',
         'cpaCollectedAt' => 'datetime',
     ];
+
+    public function setInvitationLink($value)
+    {
+        $this->attributes['invitation_link'] = $value;
+        $this->attributes['isAffiliate'] = true;
+    }
+
+    /**
+     * Accessor for the 'wallet' attribute.
+     *
+     * @param  mixed  $value
+     * @return float
+     */
+    public function getWalletAttribute($value): float
+    {
+        return $value / 100;
+    }
+
+    /**
+     * Mutator for the 'wallet' attribute.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
+    public function setWalletAttribute($value): void
+    {
+        $this->attributes['wallet'] = $value * 100;
+    }
+
+    /**
+     * Accessor for the 'walletAffiliate' attribute.
+     *
+     * @param  mixed  $value
+     * @return float
+     */
+    public function getWalletAffiliateAttribute($value): float
+    {
+        return $value / 100;
+    }
+
+    /**
+     * Mutator for the 'walletAffiliate' attribute.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
+    public function setWalletAffiliateAttribute($value): void
+    {
+        $this->attributes['walletAffiliate'] = $value * 100;
+    }
+
+
+    
 
     /**
      * Get the deposits that of the user.
@@ -124,7 +178,7 @@ class User extends Authenticatable
             'transactionId' => $uuid,
             'paymentCode' => $paymentCode,
         ]);
-        // $deposit->save();
+        
         return $deposit;
     }
 

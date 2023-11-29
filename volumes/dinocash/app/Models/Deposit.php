@@ -19,6 +19,28 @@ class Deposit extends Model
         'approvedAt',
     ];
 
+    /**
+     * Accessor for the 'amount' attribute.
+     *
+     * @param  mixed  $amount
+     * @return float
+     */
+    public function getAmountAttribute($amount): float
+    {
+        return $amount / 100;
+    }
+
+    /**
+     * Mutator for the 'amount' attribute.
+     *
+     * @param  mixed  $amount
+     * @return void
+     */
+    public function setAmountAttribute($amount): void
+    {
+        $this->attributes['amount'] = $amount * 100;
+    }
+
     // Relacionamento com o usuário
     public function user()
     {

@@ -1,29 +1,37 @@
 <template>
-    <table
-        class="table bg-[#212121] text-white border-gray-400 border-[1px] border-separate border-tools-table-outline rounded-lg"
-    >
-        <thead>
-            <tr class="text-white font-extrabold uppercase text-lg">
-                <th v-for="{ label } in columns" :key="label">{{ label }}</th>
-                <th v-if="!hideActions">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="border-b-0" v-for="(item, index) in rows" :key="index">
-                <slot
-                    v-for="({ key }, index) in columns"
-                    :value="item[key]"
-                    :name="key"
+    <div class="overflow-x-auto">
+        <table
+            class="table bg-[#212121] text-white border-gray-400 border-[1px] border-separate border-tools-table-outline rounded-lg"
+        >
+            <thead>
+                <tr class="text-white font-extrabold uppercase text-lg">
+                    <th v-for="{ label } in columns" :key="label">
+                        {{ label }}
+                    </th>
+                    <th v-if="!hideActions">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    class="border-b-0"
+                    v-for="(item, index) in rows"
                     :key="index"
                 >
-                    <td class="pb-0 pt-0">
-                        <span>{{ item[key] }}</span>
-                    </td>
-                </slot>
-                <slot name="actions" :value="item"> </slot>
-            </tr>
-        </tbody>
-    </table>
+                    <slot
+                        v-for="({ key }, index) in columns"
+                        :value="item[key]"
+                        :name="key"
+                        :key="index"
+                    >
+                        <td class="pb-0 pt-0">
+                            <span>{{ item[key] }}</span>
+                        </td>
+                    </slot>
+                    <slot name="actions" :value="item"> </slot>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, computed, watch } from "vue";
