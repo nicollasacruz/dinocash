@@ -18,7 +18,9 @@ class DashboardController extends Controller
         $lossesToday = GameHistory::lossesToday()->sum('finalAmount');
         $lossesLast30Days = GameHistory::lossesLast30Days()->sum('finalAmount');
         $lossesTotal = GameHistory::lossesTotal()->sum('finalAmount');
-
+        $groupedDateWin = GameHistory::dateGroupWin()->get();
+        $groupedDateLoss = GameHistory::dateGroupLoss()->get();
+        dd($groupedDateWin);
         $activeSessions = DB::table('sessions')
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
@@ -35,6 +37,8 @@ class DashboardController extends Controller
             'lossToday' => $lossesToday,
             'lossLast30' => $lossesLast30Days,
             'lossTotal' => $lossesTotal,
+            'groupedDateWin' => $groupedDateWin,
+            'groupedDateLoss' => $groupedDateLoss,
         ]);
     }
 }

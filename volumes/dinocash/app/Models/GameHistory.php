@@ -88,6 +88,24 @@ class GameHistory extends Model
         return $query->where('type', 'loss');
     }
 
+    // Adicionando um escopo local para agrupar os registros por data e obter a soma do finalAmount
+    public function scopeDateGroupWin($query)
+    {
+        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, SUM(finalAmount) as totalFinalAmount')
+            ->where('type', 'win')
+            ->groupBy('formatted_date')
+            ->orderBy('formatted_date', 'asc');
+    }
+
+    // Adicionando um escopo local para agrupar os registros por data
+    public function scopeDateGroupLoss($query)
+    {
+        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, SUM(finalAmount) as totalFinalAmount')
+            ->where('type', 'loss')
+            ->groupBy('formatted_date')
+            ->orderBy('formatted_date', 'asc');
+    }
+
     // Escopo para filtrar os registros do tipo 'win' nos últimos 30 dias
     public function scopeWinsLast30Days($query)
     {
