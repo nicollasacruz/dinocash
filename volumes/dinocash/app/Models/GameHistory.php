@@ -75,5 +75,17 @@ class GameHistory extends Model
     {
         $this->attributes['finalAmount'] = $finalAmount * 100;
     }
+
+    // Adicionando um escopo local para filtrar os registros do tipo 'win'
+    public function scopeWins($query)
+    {
+        return $query->where('type', 'win');
+    }
+
+    // Adicionando um escopo local para filtrar os registros do tipo 'loss'
+    public function scopeLosses($query)
+    {
+        return $query->where('type', 'loss');
+    }
 }
 

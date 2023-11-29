@@ -7,6 +7,7 @@ use App\Models\Deposit;
 use App\Models\GameHistory;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Services\ReferralService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, ReferralService $referralService)
     {
         $today = Carbon::today();
         $dateStart = $request->dateStart;
@@ -94,19 +95,8 @@ class FinanceController extends Controller
             ->take(3)
             ->get();
 
-        $topProfitableAffiliates = AffiliateHistory::where('type', 'win')
-            ->select('affiliateId', DB::raw('SUM(amount) as totalProfit'))
-            ->groupBy('affiliateId')
-            ->orderByDesc('totalProfit')
-            ->take(3)
-            ->get();
-        
-        $topLossAffiliates = AffiliateHistory::where('type', 'loss')
-            ->select('affiliateId', DB::raw('SUM(amount) as totalLoss'))
-            ->groupBy('affiliateId')
-            ->orderByDesc('totalLoss')
-            ->take(3)
-            ->get();
+        $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
+        $topLossAffiliates = $referralService->getTopReferralsByLoss();
 
         $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
@@ -122,6 +112,8 @@ class FinanceController extends Controller
             'totalPaid' => $totalPaid,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
+            'topProfitableAffiliates' => $topProfitableAffiliates,
+            'topLossAffiliates' => $topLossAffiliates,
         ]);
     }
 }
