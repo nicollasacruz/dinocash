@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileAffiliateUpdateRequest;
+use App\Models\AffiliateWithdraw;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
@@ -15,31 +16,28 @@ class AffiliateController extends Controller
     {
         $today = Carbon::today();
 
-        if ($email = $request->email) {
-            $affiliates = User::where('email', 'LIKE', '%' . $email . '%')
-                ->where('isAffiliate', true)
-                ->with(['withdraws' => function ($query) use ($today) {
-                    $query
-                    ->where('type', '!=', 'rejected')
-                    ->whereDate('updated_at', $today);
-                }])
-                ->get();
-        } else {
-            $affiliates = User::where('isAffiliate', true)
-                ->with(['withdraws' => function ($query) use ($today) {
-                    $query
-                    ->where('type', '!=', 'rejected')
-                    ->whereDate('updated_at', $today);
-                }])
-                ->get();
-        }
-        $affiliatesWithdrawsList = $affiliates->flatMap->withdraws->get('*');
-        $affiliatesWithdraws = $affiliatesWithdrawsList ? $affiliatesWithdrawsList->sum('amount') : 0;
+        $email = $request->email;
+        $affiliateWithdrawsList = AffiliateWithdraw::with([
+            'user' => function ($query) use ($email) {
+                $query
+                    ->where('isAffiliate', true)
+                    ->when($email, function ($query2) use ($email) {
+                        $query2->where('email', 'LIKE', '%' . $email . '%');
+                    });
+            }
+        ])->get();
+
+        $affiliates = User::when($email, function ($query) use ($email) {
+            $query->where('email', 'LIKE', '%' . $email . '%');
+        })
+        ->where('isAffiliate', true);
+
+        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
 
         return Inertia::render('Affiliates', [
             'affiliates' => $affiliates,
-            'affiliatesWithdraws' => $affiliatesWithdraws,
-            'affiliatesWithdrawsList' => $affiliatesWithdrawsList
+            'affiliatesWithdraws' => $affiliateWithdraws,
+            'affiliatesWithdrawsList' => $affiliateWithdrawsList
 
         ]);
     }
