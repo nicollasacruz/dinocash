@@ -87,5 +87,41 @@ class GameHistory extends Model
     {
         return $query->where('type', 'loss');
     }
+
+    // Escopo para filtrar os registros do tipo 'win' nos últimos 30 dias
+    public function scopeWinsLast30Days($query)
+    {
+        return $query->wins()->whereBetween('updated_at', [now()->subDays(30), now()]);
+    }
+
+    // Escopo para filtrar os registros do tipo 'loss' nos últimos 30 dias
+    public function scopeLossesLast30Days($query)
+    {
+        return $query->losses()->whereBetween('updated_at', [now()->subDays(30), now()]);
+    }
+
+    // Escopo para filtrar os registros do tipo 'win' hoje
+    public function scopeWinsToday($query)
+    {
+        return $query->wins()->whereDate('updated_at', now());
+    }
+
+    // Escopo para filtrar os registros do tipo 'loss' hoje
+    public function scopeLossesToday($query)
+    {
+        return $query->losses()->whereDate('updated_at', now());
+    }
+
+    // Escopo para filtrar todos os registros do tipo 'win'
+    public function scopeWinsTotal($query)
+    {
+        return $query->wins();
+    }
+
+    // Escopo para filtrar todos os registros do tipo 'loss'
+    public function scopeLossesTotal($query)
+    {
+        return $query->losses();
+    }
 }
 
