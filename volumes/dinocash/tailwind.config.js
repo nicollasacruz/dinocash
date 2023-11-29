@@ -9,6 +9,11 @@ export default {
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.vue",
     ],
+    daisyui: {
+        themes: [
+            'dark',
+        ]
+    },
     theme: {
         extend: {
             fontFamily: {

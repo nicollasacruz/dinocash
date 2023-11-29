@@ -26,7 +26,7 @@ const {
     "topProfitableAffiliates",
     "topLossAffiliates",
 ]);
-console.log(topDeposits);
+console.log(topProfitableAffiliates);
 
 const toBRL = (value) => {
     return Number(value).toLocaleString("pt-br", {
@@ -123,16 +123,30 @@ const toBRL = (value) => {
                 <div class="text-2xl text-white font-bold mb-2">
                     Viciosidade
                 </div>
-                <div class="flex gap-x-3 text-white">
-                    <div class="box px-6 py-3">Lucrar</div>
-                    <div class="box px-6 py-3">Pagar</div>
+                <div>
+                    <div class="flex justify-between text-white font-bold mb-1">
+                        <div>
+                            Lucrar
+                        </div>
+                        <div>
+                            Pagar
+                        </div>
+                    </div>
+                    <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="40"
+                        class="range range-success bg-white"
+                    />
                 </div>
-                <div class="py-3 px-5 text-xs mt-3 box">
+
+                <div class="py-3 px-5 text-xs mt-1 box">
                     Esta opção definirá se o jogo vai lucrar ou pagar
                 </div>
             </div>
             <div class="col-span-7">
-                <div class="text-2xl text-white font-bold mb-2">
+                <div class="text-2xl text-white font-bold mb-3">
                     Lucros e Prejuízos - Afiliados
                 </div>
                 <div class="grid grid-cols-2 gap-x-2">
