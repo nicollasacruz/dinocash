@@ -23,38 +23,11 @@ const showModal = ref(false);
 const columns = [
     { label: "Nome", key: "name" },
     { label: "Email", key: "email" },
-    { label: "Saldo", key: "saldo" },
-    { label: "Afiliado", key: "afiliado" },
+    { label: "Saldo", key: "wallet" },
+    { label: "Afiliado", key: "isAffiliate" },
 ];
-const rows = [
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-    {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    }, {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    }, {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    }, {
-        name: "John Doe",
-        email: "email@teste.com",
-        saldo: 100,
-        afiliado: true,
-    },
-];
+const last5Users = lastUsers.slice(0, 5);
+console.log(last5Users);
 </script>
 
 <template>
@@ -79,7 +52,7 @@ const rows = [
             </div>
 
         </div>
-        <div class="h-64 bg-black text-white text-center">Gráfico</div>
+        <div class="h-52 bg-black text-white text-center">Gráfico</div>
 
         <div class="grid grid-cols-5 gap-x-2 mt-4">
             <CurrencyBox label="Lucro em 30 dias" :value="payoutLast30" />
@@ -92,7 +65,7 @@ const rows = [
         <div class="text-2xl font-bold text-white mt-6 mb-2">
             Últimos Cadastros
         </div>
-        <BaseTable class="table-xs" :columns="columns" :rows="rows">
+        <BaseTable class="table-xs" :columns="columns" :rows="last5Users">
             <template #actions="{ value }">
                 <td>
                     <div @click="showModal = true"
@@ -101,12 +74,12 @@ const rows = [
                     </div>
                 </td>
             </template>
-            <template #saldo="{ value }">
+            <template #wallet="{ value }">
                 <td>
                     {{ value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }}
                 </td>
             </template>
-            <template #afiliado="{ value }">
+            <template #isAffiliate="{ value }">
                 <td>
                     <div v-if="value">
                         SIM

@@ -1,9 +1,39 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
+
+const {
+    totalAmount,
+    depositsAmount,
+    withdrawsAmount,
+    totalReceived,
+    totalPaid,
+    topWithdraws,
+    topDeposits,
+    topProfitableAffiliates,
+    topLossAffiliates,
+} = defineProps([
+    "totalAmount",
+    "depositsAmount",
+    "withdrawsAmount",
+    "totalReceived",
+    "totalPaid",
+    "topWithdraws",
+    "topDeposits",
+    "topProfitableAffiliates",
+    "topLossAffiliates",
+]);
+console.log(topDeposits);
+
+const toBRL = (value) => {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+};
 </script>
 
 <template>
@@ -32,19 +62,35 @@ import CurrencyBox from "@/Components/CurrencyBox.vue";
                 </TextBox>
             </div>
         </div>
-        <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
-        <div class="grid grid-cols-4 gap-x-4">
-            <CurrencyBox label="Lucro do dia" value="R$ 10.000" />
-            <CurrencyBox label="Lucro do mês" value="R$ 10.000" />
-            <CurrencyBox label="Lucro Total" value="R$ 10.000" />
-            <CurrencyBox label="Total de depósitos" value="R$ 10.000" />
-        </div>
-        <div class="text-2xl text-red-500 my-4 font-bold">Prejuízos</div>
-        <div class="grid grid-cols-4 gap-x-4">
-            <CurrencyBox label="Prejuizo do dia" value="-R$ 10.000" negative />
-            <CurrencyBox label="Prejuizo do mês" value="-R$ 10.000" negative />
-            <CurrencyBox label="Prejuizo Total" value="-R$ 10.000" negative />
-            <CurrencyBox label="Total de saques" value="-R$ 10.000" negative />
+        <div class="flex items-center gap-x-4 mt-2">
+            <div class="flex-1">
+                <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
+                <div class="grid grid-cols-2 gap-x-2">
+                    <CurrencyBox label="Lucro Total" :value="totalReceived" />
+                    <CurrencyBox
+                        label="Total de depósitos"
+                        :value="depositsAmount"
+                    />
+                </div>
+            </div>
+
+            <div class="flex-1">
+                <div class="text-2xl text-red-500 mb-4 font-bold">
+                    Prejuízos
+                </div>
+                <div class="grid grid-cols-2 gap-x-2">
+                    <CurrencyBox
+                        label="Prejuizo Total"
+                        :value="withdrawsAmount"
+                        negative
+                    />
+                    <CurrencyBox
+                        label="Total de saques"
+                        :value="totalPaid"
+                        negative
+                    />
+                </div>
+            </div>
         </div>
         <div class="grid grid-cols-2 mt-6 gap-x-7">
             <div

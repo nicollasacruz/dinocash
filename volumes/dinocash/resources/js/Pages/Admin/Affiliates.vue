@@ -18,7 +18,7 @@ const columns = computed(() =>
         : [
               { label: "Nome", key: "name" },
               { label: "Email", key: "email" },
-              { label: "Valor", key: "wallet" },
+              { label: "Valor", key: "amount" },
               { label: "Data", key: "updated_at" },
               { label: "Status", key: "type" },
           ]
@@ -29,7 +29,14 @@ const { affiliates, affiliatesWithdraws, affiliatesWithdrawsList } =
         "affiliatesWithdraws",
         "affiliatesWithdrawsList",
     ]);
-console.log('af',affiliatesWithdrawsList);
+const paymentsRow = affiliatesWithdrawsList.map((payment) => {
+    return {
+        ...payment,
+        name: payment.user.name,
+        email: payment.user.email,
+    };
+});
+console.log('af',affiliates);
 const toBRL = (value) => {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
@@ -87,7 +94,7 @@ const toBRL = (value) => {
         <payments-table
             v-else
             :columns="columns"
-            :rows="affiliatesWithdrawsList"
+            :rows="paymentsRow"
         />
     </AuthenticatedLayout>
 </template>

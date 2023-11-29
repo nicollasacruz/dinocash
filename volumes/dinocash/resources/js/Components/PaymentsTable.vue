@@ -9,9 +9,7 @@
             <td>
                 <div class="no-wrap text-xs cursor-pointer">
                     <div v-if="value !== 'paid'" class="flex gap-x-2">
-                        <div class="text-white">
-                            {{ value }}
-                        </div>
+                 
                         <div
                             class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
                         >
@@ -32,7 +30,12 @@
                 </div>
             </td>
         </template>
-        <template #wallet="{ value }">
+        <template #updated_at="{ value }">
+            <td>
+                {{ dayjs(value).format("DD/MM/YYYY") }}
+            </td>
+        </template>
+        <template #amount="{ value }">
             <td>
                 {{
                     value.toLocaleString("pt-br", {
@@ -53,6 +56,7 @@
 <script setup lang="ts">
 import BaseTable from "./BaseTable.vue";
 import { defineProps } from "vue";
+import dayjs from "dayjs";
 const { columns, rows } = defineProps(["columns", "rows"]);
 const getStatus = (status) => {
     switch (status) {

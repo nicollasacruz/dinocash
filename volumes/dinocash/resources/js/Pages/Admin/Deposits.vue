@@ -28,6 +28,14 @@ const toBRL = (value) => {
         currency: "BRL",
     });
 };
+const getStatus = (status) => {
+    switch (status) {
+        case 'paid':
+            return "FINALIZADO";
+        default:
+            return "RECUSADO";
+    }
+};
 </script>
 
 <template>
@@ -84,14 +92,30 @@ const toBRL = (value) => {
                     }}
                 </td>
             </template>
-            <template #status="{ value }">
+            <template #type="{ value }">
                 <td>
-                    <div
-                        class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
-                    >
-                        {{ value }}
+                <div class="no-wrap text-xs cursor-pointer">
+                    <div v-if="value !== 'paid'" class="flex gap-x-2">
+                 
+                        <div
+                            class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
+                        >
+                            PAGAR
+                        </div>
+                        <div
+                            class="badge w-24 font-bold rounded-sm bg-red-600 border-0 no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
+                        >
+                            RECUSAR
+                        </div>
                     </div>
-                </td>
+                    <div
+                        v-else
+                        class="badge w-24 rounded-sm bg-green-600 border-0 text-xs font-bold text-white"
+                    >
+                        {{ getStatus(value) }}
+                    </div>
+                </div>
+            </td>
             </template>
         </BaseTable>
         <BaseModal v-model="showModal" title="Gerenciar Afiliado">
