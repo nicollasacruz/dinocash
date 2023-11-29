@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AffiliateHistory;
+use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
 use App\Models\GameHistory;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\ReferralService;
@@ -42,6 +44,17 @@ class FinanceController extends Controller
                 }
             ])
             ->sum('amount');
+        $withdrawsAmountAffiliate = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+        })
+            ->where('type', 'paid')
+            ->with([
+                'user' => function ($query) {
+                    $query
+                        ->where('isAffiliate', false);
+                }
+            ])
+            ->sum('amount');
         $totalReceived = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
         })
@@ -65,35 +78,33 @@ class FinanceController extends Controller
             ])
             ->sum('finalAmount');
 
-        $topWithdraws = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
-        })
-            ->where('type', 'paid')
-            ->where('updated_at', $today)
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
-            ->orderBy('amount', 'desc')
+        $topWithdraws = Withdraw::where('type', 'paid')
+            ->where('withdraws.updated_at', '>=', now()->subDay())
+            ->join('users', 'withdraws.userId', '=', 'users.id')
+            ->select('users.email', 'withdraws.amount')
+            ->orderByDesc('amount')
             ->take(3)
-            ->get();
+            ->get()
+            ->map(function ($withdraw) {
+                return [
+                    'amount' => $withdraw->amount / 100,
+                    'user_email' => $withdraw->email,
+                ];
+            });
 
-        $topDeposits = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
-        })
-            ->where('type', 'paid')
-            ->where('updated_at', $today)
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
-            ->orderBy('amount', 'desc')
+        $topDeposits = Deposit::where('type', 'paid')
+            ->where('deposits.updated_at', '>=', now()->subDay())
+            ->join('users', 'deposits.userId', '=', 'users.id')
+            ->select('users.email', 'deposits.amount')
+            ->orderByDesc('amount')
             ->take(3)
-            ->get();
+            ->get()
+            ->map(function ($deposit) {
+                return [
+                    'amount' => $deposit->amount / 100,
+                    'user_email' => $deposit->email,
+                ];
+            });
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
@@ -102,18 +113,31 @@ class FinanceController extends Controller
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
-        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
+        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $withdrawsAmountAffiliate);
+        // dd($totalAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
 
         return Inertia::render("Admin/Finances", [
-            'totalAmount' => $totalAmount,
-            'depositsAmount' => $depositsAmount,
-            'withdrawsAmount' => $withdrawsAmount,
-            'totalReceived' => $totalReceived,
-            'totalPaid' => $totalPaid,
+            'totalAmount' => $totalAmount / 100,
+            'depositsAmount' => $depositsAmount / 100,
+            'withdrawsAmount' => $withdrawsAmount / 100 + $withdrawsAmountAffiliate / 100,
+            'totalReceived' => ($totalReceived * -1) / 100,
+            'totalPaid' => $totalPaid * -1 / 100,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,
             'topLossAffiliates' => $topLossAffiliates,
+            'payout' => Setting::first('payout'),
+        ]);
+    }
+
+    public function updatePayout(Request $request)
+    {
+        $request->validate([
+            'payout' => ['required', 'interger', 'max:100'],
+        ]);
+
+        Setting::update([
+            'payout' => $request->payout,
         ]);
     }
 }

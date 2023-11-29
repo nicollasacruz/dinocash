@@ -45,7 +45,7 @@ const toBRL = (value) => {
             <div class="flex gap-x-5">
                 <TextBox
                     label="CAIXA DA CASA"
-                    value="R$ 10.000"
+                    :value="totalAmount"
                     value-text="text-center text-green-500"
                 />
                 <TextBox label="Relatório detalhado">
@@ -66,7 +66,7 @@ const toBRL = (value) => {
             <div class="flex-1">
                 <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
                 <div class="grid grid-cols-2 gap-x-2">
-                    <CurrencyBox label="Lucro Total" :value="totalReceived" />
+                    <CurrencyBox label="Lucro Total" :value="totalReceived" :class="{ 'negative': totalReceived < 0 }" />
                     <CurrencyBox
                         label="Total de depósitos"
                         :value="depositsAmount"
@@ -81,12 +81,12 @@ const toBRL = (value) => {
                 <div class="grid grid-cols-2 gap-x-2">
                     <CurrencyBox
                         label="Prejuizo Total"
-                        :value="withdrawsAmount"
+                        :value="totalPaid"
                         negative
                     />
                     <CurrencyBox
                         label="Total de saques"
-                        :value="totalPaid"
+                        :value="withdrawsAmount"
                         negative
                     />
                 </div>

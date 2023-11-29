@@ -25,7 +25,7 @@ class WithdrawFactory extends Factory
                 return User::factory()->create()->id;
             },
             'transactionId' => $this->faker->uuid,
-            'amount' => $this->faker->randomNumber(5),
+            'amount' => $this->faker->randomNumber(3),
             'type' => 'pendent',
         ];
     }

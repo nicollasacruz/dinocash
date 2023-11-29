@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Traits\Timestamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Deposit extends Model
 {
@@ -40,11 +41,13 @@ class Deposit extends Model
     {
         $this->attributes['amount'] = $amount * 100;
     }
-
-    // Relacionamento com o usuário
-    public function user()
+    
+    /**
+     * Get the user that owns the deposit.
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 
     // Método para aprovar um depósito
