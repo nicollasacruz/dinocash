@@ -59,6 +59,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'isAffiliate' => 'boolean',
+        'wallet' => 'float',
+        'walletAffiliate' => 'float',
         'referrals' => 'array',
         'affiliatedAt' => 'datetime',
         'cpaCollected' => 'boolean',
@@ -71,50 +73,15 @@ class User extends Authenticatable
         $this->attributes['isAffiliate'] = true;
     }
 
-    /**
-     * Accessor for the 'wallet' attribute.
-     *
-     * @param  mixed  $value
-     * @return float
-     */
-    public function getWalletAttribute($value): float
+    public function changeWallet($value)
     {
-        return $value / 100;
+        $this->wallet = number_format($this->wallet + $value, 2, '.', ',');
     }
 
-    /**
-     * Mutator for the 'wallet' attribute.
-     *
-     * @param  mixed  $value
-     * @return void
-     */
-    public function setWalletAttribute($value): void
+    public function changeWalletAffiliate($value)
     {
-        $this->attributes['wallet'] = $value * 100;
+        $this->walletAffiliate = number_format($this->wallet + $value, 2, '.', ',');
     }
-
-    /**
-     * Accessor for the 'walletAffiliate' attribute.
-     *
-     * @param  mixed  $value
-     * @return float
-     */
-    public function getWalletAffiliateAttribute($value): float
-    {
-        return $value / 100;
-    }
-
-    /**
-     * Mutator for the 'walletAffiliate' attribute.
-     *
-     * @param  mixed  $value
-     * @return void
-     */
-    public function setWalletAffiliateAttribute($value): void
-    {
-        $this->attributes['walletAffiliate'] = $value * 100;
-    }
-
 
     /**
      * Get the walletTransactions that of the user.

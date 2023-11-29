@@ -19,7 +19,7 @@ class DepositObserver
     {
         $user = $deposit->user;
 
-        $user->wallet += $deposit->amount;
+        $user->changeWallet($deposit->amount);
 
         // Verifica se o userId tem um affiliateId e o CpaCollected é falso
         if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
