@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Deposit;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Services\DepositService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +26,8 @@ class DepositController extends Controller
         $totalToday = Deposit::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
         $withdrawsAmount = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmount = Deposit::where('type', 'paid')->sum('amount');
-        $walletsAmount = User::where('role','user')->where('isAffiliate', '=', false)->sum('wallet');
-        $walletsAfilliateAmount = User::where('role','user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
+        $walletsAmount = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
+        $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
         $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount);
         return Inertia::render('Admin/Deposits', [
             'deposits' => $deposits,
@@ -48,37 +50,15 @@ class DepositController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, DepositService $depositService)
     {
-        $user = Auth::user();
-        if (!$user->document) {
-            $user->document = $request->document;
-        }
-        $user->save();
-        $uuid = Uuid::uuid4()->toString();
-        $response = Http::withHeaders([
-            'ci' => env('SUITPAY_CI'),
-            'cs' => env('SUITPAY_CS'),
-        ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', [
-                    'requestNumber' => $uuid,
-                    'dueDate' => now()->addHours(2),
-                    'amount' => $request->amount,
-                    'callbackUrl' => env('APP_URL_API') . env('SUITPAY_URL_WEBHOOK'),
-                    'client' => [
-                        'name' => $user->name,
-                        'document' => $user->document,
-                        'phoneNumber' => $user->document,
-                        'email' => $user->document,
-                    ],
-                ]);
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        $deposit = $depositService->createDeposit($user, $request->amount);
 
-        $result = $response->json();
-
-        $paymentCode = $result['paymentCode'];
-
-        $user->createDeposit($request->amount, $uuid, $paymentCode);
-
-        return redirect()->route('homepage')->with('success', 'Deposit with success!');
+        return Inertia::render('DepositsUserQrCode', [
+            'deposit' => $deposit,
+        ]);
     }
 
     /**
@@ -94,6 +74,36 @@ class DepositController extends Controller
      */
     public function destroy(Deposit $deposit)
     {
-        $deposit->delete();
+        if ($deposit->type === 'pending') {
+            $deposit->delete();
+        }
+    }
+
+    public function webhook(Request $request, DepositService $depositService)
+    {
+        if ($request->isMethod('post')) {
+            $validatedData = $request->validate([
+                'idTransaction' => 'required|string',
+                'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
+                'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
+            ]);
+
+            $idTransaction = $validatedData['idTransaction'];
+            $typeTransaction = $validatedData['typeTransaction'];
+            $statusTransaction = $validatedData['statusTransaction'];
+            if ($typeTransaction === 'PIX' && $statusTransaction === 'PAYMENT_ACCEPT') {
+                $deposit = Deposit::where('$idTransaction', $idTransaction)->first();
+
+                if ($depositService->aproveDeposit($deposit)) {
+
+                    return response()->json(['status' => 'success']);
+                }
+
+                return response()->json(['status' => 'error'], 500);
+
+            }
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
     }
 }

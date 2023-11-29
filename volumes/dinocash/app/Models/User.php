@@ -116,7 +116,13 @@ class User extends Authenticatable
     }
 
 
-    
+    /**
+     * Get the walletTransactions that of the user.
+     */ 
+    public function walletTransactions(): HasMany
+    {
+        return $this->hasMany(WalletTransaction::class, 'userId');
+    }
 
     /**
      * Get the deposits that of the user.

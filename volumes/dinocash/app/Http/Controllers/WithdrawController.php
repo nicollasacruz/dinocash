@@ -17,25 +17,39 @@ class WithdrawController extends Controller
     public function indexAdmin(Request $request)
     {
         $email = $request->email;
-        $withdraws = Withdraw::when($email, function ($query) use ($email) {
-            $query->where('email', 'LIKE', '%' . $email .'%');
-        })
-        ->with([
-            'user' => function ($query) {
+        $withdraws = Withdraw::with([
+            'user' => function ($query) use ($email) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->when($email, function ($query2) use ($email) {
+                        $query2->where('email', 'LIKE', '%' . $email . '%');
+                    });
             }
         ])->get();
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
         $withdrawsAmount = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmount = Deposit::where('type', 'paid')->sum('amount');
-        $walletsAmount = User::where('role','user')->where('isAffiliate', '=', false)->sum('wallet');
-        $walletsAfilliateAmount = User::where('role','user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
+        $walletsAmount = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
+        $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
         $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount) / 100;
         return Inertia::render('Admin/Requests', [
             'withdraws' => $withdraws,
-            'totalToday'=> $totalToday,
+            'totalToday' => $totalToday,
             'totalAmount' => $totalAmount,
+        ]);
+    }
+
+    public function aprove(Withdraw $withdraw) {
+        $withdraw->update([
+            'type' => 'paid',
+            'approvedAt' => now(),
+        ]);
+    }
+
+    public function reject(Withdraw $withdraw) {
+        $withdraw->update([
+            'type' => 'rejected',
+            'reprovedAt' => now(),
         ]);
     }
 }

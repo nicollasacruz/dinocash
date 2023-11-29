@@ -169,6 +169,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
+        App\Providers\ReferralServiceProvider::class,
+        App\Providers\DepositServiceProvider::class,
+        App\Providers\WithdrawServiceProvider::class,
     ])->toArray(),
 
     /*

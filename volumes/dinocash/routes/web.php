@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -59,7 +60,6 @@ Route::get('/depositos', function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     
-    
     Route::get('/usuarios', function () {
         return Inertia::render('Admin/Users', [
             'users' => User::all()
@@ -67,6 +67,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     })->name('admin.usuarios');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
+    Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.edit');
     Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');
     Route::get('/afiliados', [AffiliateController::class, 'index'])->name('admin.afiliados');
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
@@ -85,5 +87,12 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::patch('/deposit', [DepositController::class, 'update'])->name('deposit.update');
     Route::delete('/deposit', [DepositController::class, 'destroy'])->name('deposit.destroy');
 });
+
+
+Route::domain(env('APP_URL_API'))->group(function () {
+    Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
+    Route::post(env('SUITPAY_URL_WEBHOOK_SEND'), [WithdrawController::class, 'webhook'])->name('webhook.withdraw');
+});
+
 
 require __DIR__ . '/auth.php';
