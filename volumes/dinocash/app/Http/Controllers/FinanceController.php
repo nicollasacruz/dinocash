@@ -81,9 +81,6 @@ class FinanceController extends Controller
             ->take(3)
             ->get();
 
-
-        dd($topWithdraws, $topDeposits);
-
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
 
