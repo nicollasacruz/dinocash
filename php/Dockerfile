@@ -1,3 +1,5 @@
+ARG XDEBUG_VERSION="xdebug-3.3"
+
 FROM php:8.1-fpm
 
 RUN useradd -ms /bin/bash appuser
@@ -5,6 +7,8 @@ RUN useradd -ms /bin/bash appuser
 RUN apt-get update && apt-get install libzip-dev ca-certificates curl gnupg wget -y
 
 RUN docker-php-ext-install pdo_mysql zip
+
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 RUN mkdir -p /etc/apt/keyrings
 
