@@ -20,7 +20,6 @@ class DashboardController extends Controller
         $lossesTotal = GameHistory::lossesTotal()->sum('finalAmount');
         $groupedDateWin = GameHistory::dateGroupWin()->get();
         $groupedDateLoss = GameHistory::dateGroupLoss()->get();
-        dd($groupedDateWin);
         $activeSessions = DB::table('sessions')
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
