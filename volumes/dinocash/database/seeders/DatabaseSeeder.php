@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             AffiliateWithdraw::factory()->paid()->create();
             AffiliateWithdraw::factory()->rejected()->create();
         }
-        foreach (range(1, 100) as $index) {
+        foreach (range(1, 50) as $index) {
             $user = User::factory()->create();
             $affiliateId = $faker->randomNumber(1);
             $user->addReferral($faker->randomElement(User::where('isAffiliate', true)->get()));

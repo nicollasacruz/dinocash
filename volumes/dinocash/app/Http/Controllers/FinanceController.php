@@ -6,6 +6,7 @@ use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
 use App\Models\GameHistory;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\ReferralService;
@@ -112,18 +113,31 @@ class FinanceController extends Controller
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
-        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
+        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $withdrawsAmountAffiliate);
+        // dd($totalAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
 
         return Inertia::render("Admin/Finances", [
             'totalAmount' => $totalAmount / 100,
             'depositsAmount' => $depositsAmount / 100,
             'withdrawsAmount' => $withdrawsAmount / 100 + $withdrawsAmountAffiliate / 100,
             'totalReceived' => ($totalReceived * -1) / 100,
-            'totalPaid' => $totalPaid / 100,
+            'totalPaid' => $totalPaid * -1 / 100,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,
             'topLossAffiliates' => $topLossAffiliates,
+            'payout' => Setting::first('payout'),
+        ]);
+    }
+
+    public function updatePayout(Request $request)
+    {
+        $request->validate([
+            'payout' => ['required', 'interger', 'max:100'],
+        ]);
+
+        Setting::update([
+            'payout' => $request->payout,
         ]);
     }
 }
