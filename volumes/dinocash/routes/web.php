@@ -88,4 +88,11 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::delete('/deposit', [DepositController::class, 'destroy'])->name('deposit.destroy');
 });
 
+
+Route::domain(env('APP_URL_API'))->group(function () {
+    Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
+    Route::post(env('SUITPAY_URL_WEBHOOK_SEND'), [WithdrawController::class, 'webhook'])->name('webhook.withdraw');
+});
+
+
 require __DIR__ . '/auth.php';
