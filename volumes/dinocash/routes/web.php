@@ -76,9 +76,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::get('/', [AffiliateController::class, 'index'])->name('admin.afiliados');
         Route::patch('/', [AffiliateController::class, 'update'])->name('admin.afiliados.update');
         Route::delete('/', [AffiliateController::class, 'delete'])->name('admin.afiliados.delete');
-        Route::get('/listAffiliateHistory', [AffiliateController::class, 'listAffiliateHistory'])->name('admin.afiliados.comissao');
-        Route::get('/listGameHistory', [AffiliateController::class, 'listGameHistory'])->name('admin.afiliados.jogadas');
-        Route::get('/listTransactions', [AffiliateController::class, 'listTransactions'])->name('admin.afiliados.saques');
+        Route::post('/listAffiliateHistory', [AffiliateController::class, 'listAffiliateHistory'])->name('admin.afiliados.comissao');
+        Route::post('/listGameHistory', [AffiliateController::class, 'listGameHistory'])->name('admin.afiliados.jogadas');
+        Route::post('/listTransactions', [AffiliateController::class, 'listTransactions'])->name('admin.afiliados.saques');
     });
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
     Route::post('/saque/aprovar', [WithdrawController::class, 'aprove'])->name('admin.saque.aprovar');

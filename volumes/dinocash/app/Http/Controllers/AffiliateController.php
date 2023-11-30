@@ -69,24 +69,24 @@ class AffiliateController extends Controller
 
     public function listAffiliateHistory(Request $request)
     {
-        $user = $request->user();
-        $transactions = AffiliateHistory::where('affiliateId', $user->id);
+        $userId = $request->affiliateId;
+        $transactions = AffiliateHistory::where('affiliateId', $userId);
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
     public function listGameHistory(Request $request)
     {
-        $user = $request->user();
-        $transactions = GameHistory::where('userId', $user->id);
+        $userId = $request->affiliateId;
+        $transactions = GameHistory::where('userId', $userId);
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
     public function listTransactions(Request $request)
     {
-        $user = $request->user();
-        $withdraws = AffiliateWithdraw::where('userId', $user->id);
+        $userId = $request->affiliateId;
+        $withdraws = AffiliateWithdraw::where('userId', $userId);
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }
