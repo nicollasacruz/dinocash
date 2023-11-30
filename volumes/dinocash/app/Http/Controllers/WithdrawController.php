@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Deposit;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Services\WithdrawService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
@@ -39,17 +40,17 @@ class WithdrawController extends Controller
         ]);
     }
 
-    public function aprove(Withdraw $withdraw) {
-        $withdraw->update([
-            'type' => 'paid',
-            'approvedAt' => now(),
-        ]);
+    public function aprove(Request $request, WithdrawService $withdrawService) {
+        $withdraw = $request->withdraw;
+        $withdrawService->aprove($withdraw);
+
+        return redirect()->route('admin.saque')->with('success','Saque aprovado com sucesso!');
     }
 
-    public function reject(Withdraw $withdraw) {
-        $withdraw->update([
-            'type' => 'rejected',
-            'reprovedAt' => now(),
-        ]);
+    public function reject(Request $request, WithdrawService $withdrawService) {
+        $withdraw = $request->withdraw;
+        $withdrawService->reject($withdraw);
+
+        return redirect()->route('admin.saque')->with('success','Saque rejeitado com sucesso!');
     }
 }
