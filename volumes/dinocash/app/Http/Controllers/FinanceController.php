@@ -108,7 +108,7 @@ class FinanceController extends Controller
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
-        dd($topProfitableAffiliates, $topLossAffiliates);
+        
         $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
