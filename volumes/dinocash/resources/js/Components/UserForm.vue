@@ -1,7 +1,7 @@
 <template>
     <!-- form que cadastra e edita usuarios -->
     <div class="text-lg text-white font-bold mb-2">
-        {{ user.name }}
+        {{ user?.name }}
     </div>
     <form @submit.prevent="submit">
         <div class="grid grid-cols-2 items-center gap-x-4 gap-y-2 text-white">
@@ -74,9 +74,7 @@ const validationSchema = yup.object().shape({
         .required("O email é obrigatório")
         .email("O email deve ser válido"),
     afiliado: yup.string().required("Campo obrigatório"),
-    wallet: yup
-        .string()
-        .required("Saldo é obrigatório"),
+    wallet: yup.string().required("Saldo é obrigatório"),
     revShare: yup.string().required("O campo Rev Share é obrigatório"),
     cpa: yup.string().required("O campo CPA é obrigatório"),
     linkCadastros: yup
@@ -87,16 +85,18 @@ const validationSchema = yup.object().shape({
         .string()
         .required("O campo Link de afiliados é obrigatório"),
 });
-const initialValues = {
-    email: user.email,
-    isAffiliate: user.isAffiliate ? 'Sim' : 'Não',
-    wallet: user.wallet,
-    revShare: user.revShare,
-    cpa: user.CPA,
-    linkCadastros: user.invitation_link,
-    comissao: user.walletAffiliate,
-    afiliadosLink: user.invitation_link,
-};
+const initialValues = user
+    ? {
+          email: user.email,
+          isAffiliate: user.isAffiliate ? "Sim" : "Não",
+          wallet: user.wallet,
+          revShare: user.revShare,
+          cpa: user.CPA,
+          linkCadastros: user.invitation_link,
+          comissao: user.walletAffiliate,
+          afiliadosLink: user.invitation_link,
+      }
+    : {};
 
 const { handleSubmit, defineInputBinds, errors } = useForm({
     validationSchema,

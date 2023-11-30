@@ -3,7 +3,7 @@
         <template #actions="{ value }">
             <td>
                 <div
-                    @click="showModal = true"
+                    @click="selectUser(value)"
                     class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
                 >
                     GERENCIAR
@@ -27,15 +27,20 @@
             </td>
         </template>
     </BaseTable>
-    <BaseModal v-model="showModal">
-        
+    <BaseModal v-if="showModal" v-model="showModal">
+        <UserForm :user="selectedUser" />
     </BaseModal>
 </template>
 <script setup lang="ts">
 import BaseTable from "./BaseTable.vue";
 import BaseModal from "./BaseModal.vue";
 import { ref, defineProps } from "vue";
-import dayjs from "dayjs";
+import UserForm from "./UserForm.vue";
 const { columns, rows } = defineProps(["columns", "rows"]);
 const showModal = ref(false);
+const selectedUser = ref(null);
+function selectUser(user) {
+    showModal.value = true;
+    selectedUser.value = user;
+}
 </script>

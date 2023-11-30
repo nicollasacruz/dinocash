@@ -26,14 +26,15 @@ const {
     "topProfitableAffiliates",
     "topLossAffiliates",
 ]);
-console.log(topProfitableAffiliates);
+console.log('aq',topProfitableAffiliates);
 
-const toBRL = (value) => {
+const addictRange = ref(5);
+function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL",
     });
-};
+}
 </script>
 
 <template>
@@ -45,7 +46,7 @@ const toBRL = (value) => {
             <div class="flex gap-x-5">
                 <TextBox
                     label="CAIXA DA CASA"
-                    :value="totalAmount"
+                    :value="toBRL(totalAmount)"
                     value-text="text-center text-green-500"
                 />
                 <TextBox label="Relatório detalhado">
@@ -124,7 +125,7 @@ const toBRL = (value) => {
                     Viciosidade
                 </div>
                 <div>
-                    <div class="flex justify-between text-white font-bold mb-1">
+                    <div class="flex justify-between text-white font-bold">
                         <div>
                             Lucrar
                         </div>
@@ -132,11 +133,14 @@ const toBRL = (value) => {
                             Pagar
                         </div>
                     </div>
+                    <div class="text-center text-white font-bold text-xl">
+                        {{ addictRange }}
+                    </div>
                     <input
                         type="range"
-                        min="0"
-                        max="100"
-                        value="40"
+                        :min="0"
+                        :max="10"
+                        v-model="addictRange"
                         class="range range-success bg-white"
                     />
                 </div>

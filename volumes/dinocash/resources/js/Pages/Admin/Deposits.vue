@@ -95,7 +95,7 @@ const getStatus = (status) => {
             <template #type="{ value }">
                 <td>
                 <div class="no-wrap text-xs cursor-pointer">
-                    <div v-if="value !== 'paid'" class="flex gap-x-2">
+                    <!-- <div v-if="value !== 'paid'" class="flex gap-x-2">
                  
                         <div
                             class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
@@ -107,9 +107,8 @@ const getStatus = (status) => {
                         >
                             RECUSAR
                         </div>
-                    </div>
+                    </div> -->
                     <div
-                        v-else
                         class="badge w-24 rounded-sm bg-green-600 border-0 text-xs font-bold text-white"
                     >
                         {{ getStatus(value) }}
