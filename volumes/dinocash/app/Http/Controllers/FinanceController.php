@@ -87,7 +87,7 @@ class FinanceController extends Controller
             ->get()
             ->map(function ($withdraw) {
                 return [
-                    'amount' => $withdraw->amount / 100,
+                    'amount' => $withdraw->amount,
                     'user_email' => $withdraw->email,
                 ];
             });
@@ -101,14 +101,14 @@ class FinanceController extends Controller
             ->get()
             ->map(function ($deposit) {
                 return [
-                    'amount' => $deposit->amount / 100,
+                    'amount' => $deposit->amount,
                     'user_email' => $deposit->email,
                 ];
             });
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
-
+        
         $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
@@ -117,11 +117,11 @@ class FinanceController extends Controller
         // dd($totalAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
 
         return Inertia::render("Admin/Finances", [
-            'totalAmount' => $totalAmount / 100,
-            'depositsAmount' => $depositsAmount / 100,
-            'withdrawsAmount' => $withdrawsAmount / 100 + $withdrawsAmountAffiliate / 100,
-            'totalReceived' => ($totalReceived * -1) / 100,
-            'totalPaid' => $totalPaid * -1 / 100,
+            'totalAmount' => $totalAmount,
+            'depositsAmount' => $depositsAmount,
+            'withdrawsAmount' => $withdrawsAmount + $withdrawsAmountAffiliate,
+            'totalReceived' => ($totalReceived * -1),
+            'totalPaid' => $totalPaid * -1,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,

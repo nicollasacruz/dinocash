@@ -31,7 +31,7 @@ class WithdrawController extends Controller
         $depositsAmount = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmount = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
         $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
-        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount) / 100;
+        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount);
         return Inertia::render('Admin/Requests', [
             'withdraws' => $withdraws,
             'totalToday' => $totalToday,

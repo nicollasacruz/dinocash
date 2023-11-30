@@ -35,7 +35,7 @@ class AffiliateController extends Controller
         })
         ->where('isAffiliate', true);
 
-        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') / 100 : 0;
+        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
 
         return Inertia::render('Admin/Affiliates', [
             'affiliates' => $affiliates,
@@ -67,22 +67,25 @@ class AffiliateController extends Controller
         }
     }
 
-    public function listAffiliateHistory(User $user)
+    public function listAffiliateHistory(Request $request)
     {
+        $user = $request->user();
         $transactions = AffiliateHistory::where('affiliateId', $user->id);
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
-    public function listGameHistory(User $user)
+    public function listGameHistory(Request $request)
     {
+        $user = $request->user();
         $transactions = GameHistory::where('userId', $user->id);
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
-    public function listTransactions(User $user)
+    public function listTransactions(Request $request)
     {
+        $user = $request->user();
         $withdraws = AffiliateWithdraw::where('userId', $user->id);
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);

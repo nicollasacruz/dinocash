@@ -27,28 +27,6 @@ class AffiliateHistory extends Model
     ];
 
     /**
-     * Accessor for the 'amount' attribute.
-     *
-     * @param  mixed  $value
-     * @return float
-     */
-    public function getAmountAttribute($value): float
-    {
-        return $value / 100;
-    }
-
-    /**
-     * Mutator for the 'amount' attribute.
-     *
-     * @param  mixed  $value
-     * @return void
-     */
-    public function setAmountAttribute($value): void
-    {
-        $this->attributes['amount'] = $value * 100;
-    }
-
-    /**
      * Define the "user" relationship.
      *
      * @return BelongsTo

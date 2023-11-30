@@ -60,4 +60,37 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function listAffiliateHistory(Request $request)
+    {
+        $user = $request->user();
+
+        $transactions = $user->affiliateHistories;
+
+        return response()->json(['status' => 'success', 'transactions' => $transactions]);
+    }
+
+    public function listGameHistory(Request $request)
+    {
+        $user = $request->user();
+        $transactions = $user->gamesHistory;
+
+        return response()->json(['status' => 'success', 'transactions' => $transactions]);
+    }
+
+    public function listWithdraws(Request $request)
+    {
+        $user = $request->user();
+        $withdraws = $user->withdraws;
+
+        return response()->json(['status' => 'success', 'withdraws' => $withdraws]);
+    }
+
+    public function listDeposits(Request $request)
+    {
+        $user = $request->user();
+        $deposits = $user->deposits;
+
+        return response()->json(['status' => 'success', 'deposits' => $deposits]);
+    }
 }

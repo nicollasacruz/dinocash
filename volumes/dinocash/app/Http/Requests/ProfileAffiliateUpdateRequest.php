@@ -22,8 +22,8 @@ class ProfileAffiliateUpdateRequest extends FormRequest
             'wallet' => ['required', 'interger', 'max:30'],
             'isAffiliate' => ['required', 'bool'],
             'role' => ['required', 'string'],
-            'CPA' => ['required', 'interger', 'max:3'],
-            'revShare' => ['required', 'interger', 'max:2'],
+            'CPA' => ['required', 'interger'],
+            'revShare' => ['required', 'interger'],
         ];
     }
 }
