@@ -12,14 +12,44 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $winsToday = GameHistory::winsToday()->sum('finalAmount');
-        $winsLast30Days = GameHistory::winsLast30Days()->sum('finalAmount');
-        $winsTotal = GameHistory::winsTotal()->sum('finalAmount');
-        $lossesToday = GameHistory::lossesToday()->sum('finalAmount');
-        $lossesLast30Days = GameHistory::lossesLast30Days()->sum('finalAmount');
-        $lossesTotal = GameHistory::lossesTotal()->sum('finalAmount');
-        $groupedDateWin = GameHistory::dateGroupWin()->get();
-        $groupedDateLoss = GameHistory::dateGroupLoss()->get();
+        $winsToday = GameHistory::winsToday()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->sum('finalAmount');
+        $winsLast30Days = GameHistory::winsLast30Days()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->sum('finalAmount');
+        $winsTotal = GameHistory::winsTotal()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->sum('finalAmount');
+        $lossesToday = GameHistory::lossesToday()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->sum('finalAmount');
+        $lossesLast30Days = GameHistory::lossesLast30Days()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->sum('finalAmount');
+        $lossesTotal = GameHistory::lossesTotal()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])->sum('finalAmount');
+        $groupedDateLoss = GameHistory::dateGroupWin()->get();
+        $groupedDateWin = GameHistory::dateGroupLoss()->get();
         $activeSessions = DB::table('sessions')
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
@@ -30,12 +60,12 @@ class DashboardController extends Controller
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
             'lastUsers' => $lastUsers,
-            'payoutToday' => $winsToday,
-            'payoutLast30' => $winsLast30Days,
-            'payoutTotal' => $winsTotal,
-            'lossToday' => $lossesToday,
-            'lossLast30' => $lossesLast30Days,
-            'lossTotal' => $lossesTotal,
+            'payoutToday' => $winsToday * -1,
+            'payoutLast30' => $winsLast30Days * -1,
+            'payoutTotal' => $winsTotal * -1,
+            'lossToday' => $lossesToday * -1,
+            'lossLast30' => $lossesLast30Days * -1,
+            'lossTotal' => $lossesTotal * -1,
             'groupedDateWin' => $groupedDateWin,
             'groupedDateLoss' => $groupedDateLoss,
         ]);

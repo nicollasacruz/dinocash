@@ -112,7 +112,7 @@ class FinanceController extends Controller
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
-        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $withdrawsAmountAffiliate);
+        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliate - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
         // dd($totalAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
 
         return Inertia::render("Admin/Finances", [
