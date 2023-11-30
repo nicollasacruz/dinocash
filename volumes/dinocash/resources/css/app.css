@@ -14,4 +14,7 @@
   .box {
     @apply bg-[#212121] border-[1px] border-gray-600 rounded-md text-xs text-white; 
   }
+  .modal-button {
+    @apply btn btn-xs mx-auto w-full text-[0.6rem]
+  }
 }

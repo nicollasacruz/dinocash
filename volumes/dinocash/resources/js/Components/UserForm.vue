@@ -55,7 +55,19 @@
                 class=""
             />
         </div>
-        <button class="btn btn-success w-full mt-4 mb-2 btn-sm">Salvar</button>
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+            <div class="flex flex-col col-span-1 uppercase gap-y-2">
+                <div class="modal-button bg-white text-black">Visualizar histórico de jogadas</div>
+                <div class="modal-button bg-white text-black ">Visualizar histórico de comissões</div>
+                <div class="modal-button bg-white text-black ">Visualizar movimentações</div>
+            </div>
+            <div class="flex flex-col uppercase gap-y-2">
+                <div class="modal-button bg-red-600 text-white">banir usuário por 30 dias</div>
+                <div class="modal-button bg-red-600 text-white">banir usuário permanentemente</div>
+                <div class="modal-button bg-red-600 text-white">excluir usuário</div>
+            </div>
+        </div>
+        <button class="btn btn-success text-white w-full mt-4 mb-2 btn-sm">Salvar</button>
     </form>
 </template>
 

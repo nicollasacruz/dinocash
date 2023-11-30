@@ -27,6 +27,7 @@ const {
     "topLossAffiliates",
 ]);
 console.log('aq',topProfitableAffiliates);
+console.log('ab',topLossAffiliates);
 
 const addictRange = ref(5);
 function toBRL(value) {
