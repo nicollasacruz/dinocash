@@ -40,6 +40,8 @@ const rows = withdraws.map((withdraw) => {
         pix: withdraw.user?.document,
     };
 });
+
+console.log('withdraws', withdraws);
 </script>
 
 <template>

@@ -5,7 +5,7 @@ import { ref, defineProps, computed } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
 import PaymentsTable from "@/Components/PaymentsTable.vue";
-
+import axios from "axios";
 const selectedTab = ref(1);
 const columns = computed(() =>
     selectedTab.value === 1
@@ -36,6 +36,7 @@ const paymentsRow = affiliatesWithdrawsList.map((payment) => {
         email: payment.user.email,
     };
 });
+
 console.log('af',affiliates);
 const toBRL = (value) => {
     return Number(value).toLocaleString("pt-br", {

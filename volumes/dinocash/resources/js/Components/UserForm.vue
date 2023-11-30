@@ -37,7 +37,7 @@
             />
             <base-input
                 label-style="font-bold text-xs"
-                :error="errors['invitation_link']"
+                :error="errors['linkCadastros']"
                 v-bind="linkCadastros"
                 label="Cadastros no link"
             />
@@ -57,17 +57,46 @@
         </div>
         <div class="grid grid-cols-2 gap-x-4 mt-2">
             <div class="flex flex-col col-span-1 uppercase gap-y-2">
-                <div class="modal-button bg-white text-black">Visualizar histórico de jogadas</div>
-                <div class="modal-button bg-white text-black ">Visualizar histórico de comissões</div>
-                <div class="modal-button bg-white text-black ">Visualizar movimentações</div>
+                <div
+                    @click="emit('get-histories', user.id)"
+                    class="modal-button bg-white text-black"
+                >
+                    Visualizar histórico de jogadas
+                </div>
+                <div
+                    @click="emit('get-commissions', user.id)"
+                    class="modal-button bg-white text-black"
+                >
+                    Visualizar histórico de comissões
+                </div>
+                <div
+                    @click="emit('get-movements', user.id)"
+                    class="modal-button bg-white text-black"
+                >
+                    Visualizar movimentações
+                </div>
             </div>
             <div class="flex flex-col uppercase gap-y-2">
-                <div class="modal-button bg-red-600 text-white">banir usuário por 30 dias</div>
-                <div class="modal-button bg-red-600 text-white">banir usuário permanentemente</div>
-                <div class="modal-button bg-red-600 text-white">excluir usuário</div>
+                <div class="modal-button bg-red-600 text-white">
+                    banir usuário por 30 dias
+                </div>
+                <div class="modal-button bg-red-600 text-white">
+                    banir usuário permanentemente
+                </div>
+                <div
+                    @click="emit('delete-user', user.id)"
+                    class="modal-button bg-red-600 text-white"
+                >
+                    excluir usuário
+                </div>
             </div>
         </div>
-        <button class="btn btn-success text-white w-full mt-4 mb-2 btn-sm">Salvar</button>
+        <button
+            @click="submit"
+            class="btn btn-success text-white w-full mt-4 mb-2 btn-sm"
+        >
+            Salvar
+        </button>
     </form>
 </template>
 
@@ -79,13 +108,19 @@ import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { defineProps, defineEmits } from "vue";
 const { user } = defineProps(["user"]);
-const emit = defineEmits(["submit"]);
+const emit = defineEmits([
+    "submit",
+    "get-histories",
+    "get-commissions",
+    "get-movements",
+    "delete-user",
+]);
 const validationSchema = yup.object().shape({
     email: yup
         .string()
         .required("O email é obrigatório")
         .email("O email deve ser válido"),
-    afiliado: yup.string().required("Campo obrigatório"),
+    isAffiliate: yup.string().required("Campo obrigatório"),
     wallet: yup.string().required("Saldo é obrigatório"),
     revShare: yup.string().required("O campo Rev Share é obrigatório"),
     cpa: yup.string().required("O campo CPA é obrigatório"),
@@ -119,10 +154,11 @@ const afiliado = defineInputBinds("isAffiliate");
 const wallet = defineInputBinds("wallet");
 const revShare = defineInputBinds("revShare");
 const cpa = defineInputBinds("cpa");
-const linkCadastros = defineInputBinds("invitation_link");
+const linkCadastros = defineInputBinds("linkCadastros");
 const comissao = defineInputBinds("comissao");
 const afiliadosLink = defineInputBinds("afiliadosLink");
 const submit = handleSubmit((values) => {
+    console.log(values);
     emit("submit", values);
 });
 console.log(email);

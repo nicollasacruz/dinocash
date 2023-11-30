@@ -60,33 +60,33 @@ class AffiliateController extends Controller
         /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function delete(User $user)
     {
-        if (Auth::user()->role === 'user') {
+        if ($user->role === 'user') {
             $user->delete();
         }
     }
 
     public function listAffiliateHistory(Request $request)
     {
-        $user = $request->user();
-        $transactions = AffiliateHistory::where('affiliateId', $user->id);
+        $user = $request->query('user');
+        $transactions = AffiliateHistory::where('userId', $user)->get();
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
     public function listGameHistory(Request $request)
     {
-        $user = $request->user();
-        $transactions = GameHistory::where('userId', $user->id);
+        $user = $request->query('user');
+        $transactions = GameHistory::where('userId', $user)->get();
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
     public function listTransactions(Request $request)
     {
-        $user = $request->user();
-        $withdraws = AffiliateWithdraw::where('userId', $user->id);
+        $user = $request->query('user');
+        $withdraws = AffiliateWithdraw::where('userId', $user)->get();
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }

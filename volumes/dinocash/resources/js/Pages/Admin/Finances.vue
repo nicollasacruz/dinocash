@@ -15,6 +15,7 @@ const {
     topDeposits,
     topProfitableAffiliates,
     topLossAffiliates,
+    payout,
 } = defineProps([
     "totalAmount",
     "depositsAmount",
@@ -25,11 +26,9 @@ const {
     "topDeposits",
     "topProfitableAffiliates",
     "topLossAffiliates",
+    "payout",
 ]);
-console.log('aq',topProfitableAffiliates);
-console.log('ab',topLossAffiliates);
-
-const addictRange = ref(5);
+const addictRange = ref(payout.payout);
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
@@ -68,7 +67,11 @@ function toBRL(value) {
             <div class="flex-1">
                 <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
                 <div class="grid grid-cols-2 gap-x-2">
-                    <CurrencyBox label="Lucro Total" :value="totalReceived" :class="{ 'negative': totalReceived < 0 }" />
+                    <CurrencyBox
+                        label="Lucro Total"
+                        :value="totalReceived"
+                        :class="{ negative: totalReceived < 0 }"
+                    />
                     <CurrencyBox
                         label="Total de depósitos"
                         :value="depositsAmount"
@@ -102,8 +105,13 @@ function toBRL(value) {
                     MAIORES SAQUES NAS ÚLTIMAS 24H
                 </div>
                 <div class="divide-y-[1px] divide-gray-600 gap-y-3">
-                    <div class="text-sm pb-1 pt-3" v-for="i in 3">
-                        <div class="text-white">José Teste - R$ 10.000</div>
+                    <div
+                        class="text-sm pb-1 pt-3"
+                        v-for="{ user_email, amount } in topWithdraws"
+                    >
+                        <div class="text-white">
+                            {{ user_email }} - {{ toBRL(amount) }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -114,8 +122,13 @@ function toBRL(value) {
                     MAIORES DEPÓSITOS NAS ÚLTIMAS 24H
                 </div>
                 <div class="divide-y-[1px] divide-gray-600 gap-y-3">
-                    <div class="text-sm pb-1 pt-3" v-for="i in 3">
-                        <div class="text-white">José Teste - R$ 10.000</div>
+                    <div
+                        class="text-sm pb-1 pt-3"
+                        v-for="{ amount, user_email } in topDeposits"
+                    >
+                        <div class="text-white">
+                            {{ user_email }} - {{ toBRL(amount) }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -127,12 +140,8 @@ function toBRL(value) {
                 </div>
                 <div>
                     <div class="flex justify-between text-white font-bold">
-                        <div>
-                            Lucrar
-                        </div>
-                        <div>
-                            Pagar
-                        </div>
+                        <div>Lucrar</div>
+                        <div>Pagar</div>
                     </div>
                     <div class="text-center text-white font-bold text-xl">
                         {{ addictRange }}
@@ -140,7 +149,7 @@ function toBRL(value) {
                     <input
                         type="range"
                         :min="0"
-                        :max="10"
+                        :max="100"
                         v-model="addictRange"
                         class="range range-success bg-white"
                     />
@@ -162,9 +171,15 @@ function toBRL(value) {
                             Afiliados que mais trouxeram lucros
                         </div>
                         <div class="">
-                            <div class="text-xs pt-1" v-for="i in 3">
+                            <div
+                                class="text-xs pt-1"
+                                v-for="{
+                                    email,
+                                    totalGain,
+                                } in topProfitableAffiliates"
+                            >
                                 <div class="text-white">
-                                    José Teste - R$ 10.000
+                                    {{ email }} - {{ toBRL(totalGain) }}
                                 </div>
                             </div>
                         </div>
@@ -176,9 +191,12 @@ function toBRL(value) {
                             Afiliados que mais trouxeram prejuízos
                         </div>
                         <div class="">
-                            <div class="text-xs pt-1" v-for="i in 3">
+                            <div
+                                class="text-xs pt-1"
+                                v-for="{ email, totalPayed } in topLossAffiliates"
+                            >
                                 <div class="text-white">
-                                    José Teste - R$ 10.000
+                                    {{email}} - {{ toBRL(totalPayed) }}
                                 </div>
                             </div>
                         </div>
