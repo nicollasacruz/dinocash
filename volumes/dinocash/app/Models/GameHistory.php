@@ -32,49 +32,6 @@ class GameHistory extends Model
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
-    /**
-     * Accessor for the 'amount' attribute.
-     *
-     * @param  mixed  $amount
-     * @return float
-     */
-    public function getAmountAttribute($amount): float
-    {
-        return $amount / 100;
-    }
-
-    /**
-     * Mutator for the 'amount' attribute.
-     *
-     * @param  mixed  $amount
-     * @return void
-     */
-    public function setAmountAttribute($amount): void
-    {
-        $this->attributes['amount'] = $amount * 100;
-    }
-
-    /**
-     * Accessor for the 'finalAmount' attribute.
-     *
-     * @param  mixed  $finalAmount
-     * @return float
-     */
-    public function getFinalAmountAttribute($finalAmount): float
-    {
-        return $finalAmount / 100;
-    }
-
-    /**
-     * Mutator for the 'finalAmount' attribute.
-     *
-     * @param  mixed  $finalAmount
-     * @return void
-     */
-    public function setFinalAmountAttribute($finalAmount): void
-    {
-        $this->attributes['finalAmount'] = $finalAmount * 100;
-    }
 
     // Adicionando um escopo local para filtrar os registros do tipo 'win'
     public function scopeWins($query)
@@ -91,7 +48,7 @@ class GameHistory extends Model
     // Adicionando um escopo local para agrupar os registros por data e obter a soma do finalAmount
     public function scopeDateGroupWin($query)
     {
-        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, (SUM(finalAmount) / 100) as totalFinalAmount')
+        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, (SUM(finalAmount)) as totalFinalAmount')
             ->where('type', 'win')
             ->groupBy('formatted_date')
             ->orderBy('formatted_date', 'asc');
@@ -100,7 +57,7 @@ class GameHistory extends Model
     // Adicionando um escopo local para agrupar os registros por data
     public function scopeDateGroupLoss($query)
     {
-        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, (SUM(finalAmount) / 100) as totalFinalAmount')
+        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, (SUM(finalAmount)) as totalFinalAmount')
             ->where('type', 'loss')
             ->groupBy('formatted_date')
             ->orderBy('formatted_date', 'asc');

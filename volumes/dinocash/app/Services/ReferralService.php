@@ -10,10 +10,11 @@ class ReferralService
     public function getTopReferralsByProfit()
     {
         return GameHistory::join('users', 'game_histories.userId', '=', 'users.id')
-            ->where('game_histories.type', 'win')
-            ->selectRaw('users.affiliateId, SUM(game_histories.finalAmount) as totalProfit')
-            ->groupBy('users.affiliateId')
-            ->orderByDesc('totalProfit')
+            ->join('users as affiliate', 'users.affiliateId', '=', 'affiliate.id')
+            ->where('game_histories.type', 'loss')
+            ->selectRaw('affiliate.email, SUM(game_histories.finalAmount) * -1 as totalGain')
+            ->groupBy('affiliate.email')
+            ->orderByDesc('totalGain')
             ->limit(3)
             ->get();
     }
@@ -21,11 +22,12 @@ class ReferralService
     public function getTopReferralsByLoss()
     {
         return GameHistory::join('users', 'game_histories.userId', '=', 'users.id')
-            ->where('game_histories.type', 'loss')
-            ->selectRaw('users.affiliateId, SUM(game_histories.finalAmount) as totalLoss')
-            ->groupBy('users.affiliateId')
-            ->orderByDesc('totalLoss')
-            ->limit(3)
-            ->get();
+        ->join('users as affiliate', 'users.affiliateId', '=', 'affiliate.id')
+        ->where('game_histories.type', 'win')
+        ->selectRaw('affiliate.email, SUM(game_histories.finalAmount) * -1 as totalPayed')
+        ->groupBy('affiliate.email')
+        ->orderBy('totalPayed', 'asc')
+        ->limit(3)
+        ->get();
     }
 }

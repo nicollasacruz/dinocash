@@ -174,7 +174,7 @@ class User extends Authenticatable
 
     public function getWallet(): float
     {
-        return $this->wallet / 100;
+        return $this->wallet;
     }
 
     public function setWallet($value): void
