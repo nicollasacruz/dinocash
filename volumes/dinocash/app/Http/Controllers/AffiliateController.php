@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileAffiliateUpdateRequest;
+use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
+use App\Models\GameHistory;
 use App\Models\User;
+use Auth;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -49,12 +52,39 @@ class AffiliateController extends Controller
     {
         $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
         $request->user()->save();
 
-        return Redirect::route('admin.affiliate.edit', );
+        return Redirect::route('admin.afiliados', );
+    }
+
+        /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user)
+    {
+        if (Auth::user()->role === 'user') {
+            $user->delete();
+        }
+    }
+
+    public function listAffiliateHistory(User $user)
+    {
+        $transactions = AffiliateHistory::where('affiliateId', $user->id);
+
+        return response()->json(['status' => 'success', 'transactions' => $transactions]);
+    }
+
+    public function listGameHistory(User $user)
+    {
+        $transactions = GameHistory::where('userId', $user->id);
+
+        return response()->json(['status' => 'success', 'transactions' => $transactions]);
+    }
+
+    public function listTransactions(User $user)
+    {
+        $withdraws = AffiliateWithdraw::where('userId', $user->id);
+
+        return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }
 }

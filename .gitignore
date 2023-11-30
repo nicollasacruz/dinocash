@@ -4,3 +4,4 @@ volumes/dinocash/composer.lock
 volumes/dinocash/package-lock.json
 volumes/dinocash/_ide_helper.php
 .vscode/*
+volumes/dinocash/*.lock
