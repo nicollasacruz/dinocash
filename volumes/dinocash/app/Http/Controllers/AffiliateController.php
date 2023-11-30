@@ -33,8 +33,8 @@ class AffiliateController extends Controller
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-        ->where('isAffiliate', true);
-
+        ->where('isAffiliate', true)->get();
+        
         $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
 
         return Inertia::render('Admin/Affiliates', [

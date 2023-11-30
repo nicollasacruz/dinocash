@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('game_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('userId');
-            $table->integer('amount');
-            $table->integer('finalAmount')->nullable();
+            $table->string('amount');
+            $table->string('finalAmount')->nullable();
             $table->string('type')->default('pendent');
             $table->unsignedBigInteger('distance')->default(0);
             $table->timestamps();

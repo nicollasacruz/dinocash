@@ -77,7 +77,6 @@ class FinanceController extends Controller
                 }
             ])
             ->sum('finalAmount');
-
         $topWithdraws = Withdraw::where('type', 'paid')
             ->where('withdraws.updated_at', '>=', now()->subDay())
             ->join('users', 'withdraws.userId', '=', 'users.id')
@@ -108,7 +107,7 @@ class FinanceController extends Controller
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
-        
+
         $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');

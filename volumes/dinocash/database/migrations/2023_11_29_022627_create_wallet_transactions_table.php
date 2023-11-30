@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('userId');
             $table->unsignedBigInteger('managerUserId')->nullable();
-            $table->integer('oldValue');
-            $table->integer('newValue');
+            $table->string('oldValue');
+            $table->string('newValue');
             $table->string('type');
             $table->timestamps();
 

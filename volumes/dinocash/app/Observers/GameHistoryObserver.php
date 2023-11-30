@@ -26,7 +26,7 @@ class GameHistoryObserver
 
         // Cria o AffiliateHistory
         AffiliateHistory::create([
-            'amount' => $amount * ($gameHistory->user->affiliate->revShare),
+            'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare)),
             'gameId' => $gameHistory->id,
             'affiliateId' => $gameHistory->user->affiliateId,
             'userId' => $gameHistory->userId,

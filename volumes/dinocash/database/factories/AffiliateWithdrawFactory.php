@@ -26,7 +26,7 @@ class AffiliateWithdrawFactory extends Factory
                 return User::factory()->withInvitationLink($this->faker->userName)->create()->id;
             },
             'transactionId' => $this->faker->uuid,
-            'amount' => $this->faker->randomNumber(3),
+            'amount' => $this->faker->randomNumber(2),
         ];
     }
 
@@ -42,7 +42,7 @@ class AffiliateWithdrawFactory extends Factory
                 return User::factory()->withInvitationLink($this->faker->userName)->create()->id;
             },
             'transactionId' => $this->faker->uuid,
-            'amount' => $this->faker->randomNumber(5),
+            'amount' => $this->faker->randomNumber(2),
         ]);
     }
 
@@ -58,7 +58,7 @@ class AffiliateWithdrawFactory extends Factory
                 return User::factory()->withInvitationLink($this->faker->userName)->create()->id;
             },
             'transactionId' => $this->faker->uuid,
-            'amount' => $this->faker->randomNumber(5),
+            'amount' => $this->faker->randomNumber(2),
         ]);
     }
 }
