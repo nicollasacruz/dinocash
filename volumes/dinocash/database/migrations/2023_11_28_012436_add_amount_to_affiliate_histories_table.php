@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('affiliate_histories', function (Blueprint $table) {
-            $table->integer('amount');
+            $table->string('amount');
         });
     }
 
