@@ -32,7 +32,7 @@ class AffiliateController extends Controller
         })
         ->where('isAffiliate', true);
 
-        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') / 100 : 0;
 
         return Inertia::render('Admin/Affiliates', [
             'affiliates' => $affiliates,

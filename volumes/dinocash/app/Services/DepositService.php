@@ -56,7 +56,7 @@ class DepositService
                 'type' => 'DEPOSIT',
             ]);
 
-            $user->wallet += $amount;
+            $user->changeWallet($amount);
             $user->save();
 
             return true;

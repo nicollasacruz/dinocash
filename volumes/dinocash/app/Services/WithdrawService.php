@@ -48,7 +48,7 @@ class WithdrawService
                 'type' => 'WITHDRAW',
             ]);
 
-            $user->wallet -= $amount;
+            $user->changeWallet($amount * -1);
             $user->save();
 
             return true;
@@ -89,7 +89,7 @@ class WithdrawService
                 'type' => 'WITHDRAW REJECTED',
             ]);
 
-            $user->wallet += $amount;
+            $user->changeWallet($amount);
             $user->save();
 
             return true;

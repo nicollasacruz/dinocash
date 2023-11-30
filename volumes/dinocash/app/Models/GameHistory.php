@@ -91,7 +91,7 @@ class GameHistory extends Model
     // Adicionando um escopo local para agrupar os registros por data e obter a soma do finalAmount
     public function scopeDateGroupWin($query)
     {
-        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, SUM(finalAmount) as totalFinalAmount')
+        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, (SUM(finalAmount) / 100) as totalFinalAmount')
             ->where('type', 'win')
             ->groupBy('formatted_date')
             ->orderBy('formatted_date', 'asc');
@@ -100,7 +100,7 @@ class GameHistory extends Model
     // Adicionando um escopo local para agrupar os registros por data
     public function scopeDateGroupLoss($query)
     {
-        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, SUM(finalAmount) as totalFinalAmount')
+        return $query->selectRaw('DATE_FORMAT(updated_at, "%d/%m/%Y") as formatted_date, (SUM(finalAmount) / 100) as totalFinalAmount')
             ->where('type', 'loss')
             ->groupBy('formatted_date')
             ->orderBy('formatted_date', 'asc');
