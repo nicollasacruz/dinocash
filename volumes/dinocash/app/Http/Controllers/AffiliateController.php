@@ -71,7 +71,7 @@ class AffiliateController extends Controller
     {
         $user = $request->query('user');
         $transactions = AffiliateHistory::where('userId', $user)->get();
-
+        
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 

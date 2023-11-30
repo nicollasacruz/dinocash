@@ -81,6 +81,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::get('/listTransactions', [AffiliateController::class, 'listTransactions'])->name('admin.afiliados.saques');
     });
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
+    Route::post('/saque/aprovar', [WithdrawController::class, 'aprove'])->name('admin.saque.aprovar');
+    Route::post('/saque/rejeitar', [WithdrawController::class, 'reject'])->name('admin.saque.rejeitar');
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
