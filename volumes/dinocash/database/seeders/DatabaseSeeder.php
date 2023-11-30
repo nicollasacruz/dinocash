@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             $user->addReferral($faker->randomElement(User::where('isAffiliate', true)->get()));
             $user->save();
             $type = $faker->randomElement(['win', 'loss']);
-            $amount = $faker->randomNumber(3) * ($type === 'win' ? 1 : -1);
+            $amount = $faker->randomNumber($type === 'win' ? 1 : 3) * ($type === 'win' ? 1 : -1);
             GameHistory::create([
                 'Amount' => $amount,
                 'finalAmount' => $amount < 0 ? $amount : $amount * 2 ,
