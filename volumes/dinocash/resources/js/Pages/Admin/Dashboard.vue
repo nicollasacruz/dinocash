@@ -114,7 +114,7 @@ function selectUser(user) {
             </template>
         </BaseTable>
         <BaseModal v-if="showModal" v-model="showModal">
-            <UserForm :user="selectedUser" />
+            <UserForm :user="selectedUser" typeForm="user" />
         </BaseModal>
     </AuthenticatedLayout>
 </template>

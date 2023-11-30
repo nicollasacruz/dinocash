@@ -28,7 +28,7 @@
         </template>
     </BaseTable>
     <BaseModal class="z-10" v-if="showModal" v-model="showModal">
-        <UserForm
+        <UserForm typeForm="affiliate"
             :user="selectedUser"
             @get-histories="getHistories"
             @get-commissions="getCommissions"

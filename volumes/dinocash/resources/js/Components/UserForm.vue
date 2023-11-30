@@ -1,103 +1,109 @@
 <template>
-    <!-- form que cadastra e edita usuarios -->
-    <div class="text-lg text-white font-bold mb-2">
-        {{ user?.name }}
+  <!-- form que cadastra e edita usuarios -->
+  <div class="text-lg text-white font-bold mb-2">
+    {{ user?.name }}
+  </div>
+  <form @submit.prevent="submit">
+    <div class="grid grid-cols-2 items-center gap-x-4 gap-y-2 text-white">
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['email']"
+        v-bind="email"
+        label="Email"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['isAffiliate']"
+        v-bind="afiliado"
+        label="Afiliado"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['wallet']"
+        v-bind="wallet"
+        label="Saldo"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['revShare']"
+        v-bind="revShare"
+        label="Rev Share%"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['cpa']"
+        v-bind="cpa"
+        label="CPA"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['linkCadastros']"
+        v-bind="linkCadastros"
+        label="Cadastros no link"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['comissao']"
+        v-bind="comissao"
+        label="Valor de comissão"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        :error="errors['afiliadosLink']"
+        v-bind="afiliadosLink"
+        label="Link de afiliados"
+        v-if="typeForm == 'affiliate'"
+        class=""
+      />
     </div>
-    <form @submit.prevent="submit">
-        <div class="grid grid-cols-2 items-center gap-x-4 gap-y-2 text-white">
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['email']"
-                v-bind="email"
-                label="Email"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['isAffiliate']"
-                v-bind="afiliado"
-                label="Afiliado"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['wallet']"
-                v-bind="wallet"
-                label="Saldo"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['revShare']"
-                v-bind="revShare"
-                label="Rev Share%"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['cpa']"
-                v-bind="cpa"
-                label="CPA"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['linkCadastros']"
-                v-bind="linkCadastros"
-                label="Cadastros no link"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['comissao']"
-                v-bind="comissao"
-                label="Valor de comissão"
-            />
-            <base-input
-                label-style="font-bold text-xs"
-                :error="errors['afiliadosLink']"
-                v-bind="afiliadosLink"
-                label="Link de afiliados"
-                class=""
-            />
-        </div>
-        <div class="grid grid-cols-2 gap-x-4 mt-2">
-            <div class="flex flex-col col-span-1 uppercase gap-y-2">
-                <div
-                    @click="emit('get-histories', user.id)"
-                    class="modal-button bg-white text-black"
-                >
-                    Visualizar histórico de jogadas
-                </div>
-                <div
-                    @click="emit('get-commissions', user.id)"
-                    class="modal-button bg-white text-black"
-                >
-                    Visualizar histórico de comissões
-                </div>
-                <div
-                    @click="emit('get-movements', user.id)"
-                    class="modal-button bg-white text-black"
-                >
-                    Visualizar movimentações
-                </div>
-            </div>
-            <div class="flex flex-col uppercase gap-y-2">
-                <div class="modal-button bg-red-600 text-white">
-                    banir usuário por 30 dias
-                </div>
-                <div class="modal-button bg-red-600 text-white">
-                    banir usuário permanentemente
-                </div>
-                <div
-                    @click="emit('delete-user', user.id)"
-                    class="modal-button bg-red-600 text-white"
-                >
-                    excluir usuário
-                </div>
-            </div>
-        </div>
-        <button
-            @click="submit"
-            class="btn btn-success text-white w-full mt-4 mb-2 btn-sm"
+    <div class="grid grid-cols-2 gap-x-4 mt-2">
+      <div class="flex flex-col col-span-1 uppercase gap-y-2">
+        <div
+          @click="emit('get-histories', user.id)"
+          class="modal-button bg-white text-black"
         >
-            Salvar
-        </button>
-    </form>
+          Visualizar histórico de jogadas
+        </div>
+        <div
+          @click="emit('get-commissions', user.id)"
+          class="modal-button bg-white text-black"
+          v-if="typeForm == 'affiliate'"
+        >
+          Visualizar histórico de comissões
+        </div>
+        <div
+          @click="emit('get-movements', user.id)"
+          class="modal-button bg-white text-black"
+        >
+          Visualizar movimentações
+        </div>
+      </div>
+      <div class="flex flex-col uppercase gap-y-2">
+        <div class="modal-button bg-red-600 text-white">
+          banir usuário por 30 dias
+        </div>
+        <div class="modal-button bg-red-600 text-white">
+          banir usuário permanentemente
+        </div>
+        <div
+          @click="emit('delete-user', user.id)"
+          class="modal-button bg-red-600 text-white"
+        >
+          excluir usuário
+        </div>
+      </div>
+    </div>
+    <button
+      @click="submit"
+      class="btn btn-success text-white w-full mt-4 mb-2 btn-sm"
+    >
+      Salvar
+    </button>
+  </form>
 </template>
 
 <script setup lang="ts">
@@ -107,47 +113,48 @@ import * as yup from "yup";
 // @ts-ignore
 import { useForm } from "vee-validate";
 import { defineProps, defineEmits } from "vue";
-const { user } = defineProps(["user"]);
+const { user, typeForm } = defineProps(["user", "typeForm"]);
+console.log('user', typeForm)
 const emit = defineEmits([
-    "submit",
-    "get-histories",
-    "get-commissions",
-    "get-movements",
-    "delete-user",
+  "submit",
+  "get-histories",
+  "get-commissions",
+  "get-movements",
+  "delete-user",
 ]);
 const validationSchema = yup.object().shape({
-    email: yup
-        .string()
-        .required("O email é obrigatório")
-        .email("O email deve ser válido"),
-    isAffiliate: yup.string().required("Campo obrigatório"),
-    wallet: yup.string().required("Saldo é obrigatório"),
-    revShare: yup.string().required("O campo Rev Share é obrigatório"),
-    cpa: yup.string().required("O campo CPA é obrigatório"),
-    linkCadastros: yup
-        .string()
-        .required("O campo Cadastros no link é obrigatório"),
-    comissao: yup.string().required("O campo Valor de comissão é obrigatório"),
-    afiliadosLink: yup
-        .string()
-        .required("O campo Link de afiliados é obrigatório"),
+  email: yup
+    .string()
+    .required("O email é obrigatório")
+    .email("O email deve ser válido"),
+  isAffiliate: yup.string().required("Campo obrigatório"),
+  wallet: yup.string().required("Saldo é obrigatório"),
+  revShare: yup.string().required("O campo Rev Share é obrigatório"),
+  cpa: yup.string().required("O campo CPA é obrigatório"),
+  linkCadastros: yup
+    .string()
+    .required("O campo Cadastros no link é obrigatório"),
+  comissao: yup.string().required("O campo Valor de comissão é obrigatório"),
+  afiliadosLink: yup
+    .string()
+    .required("O campo Link de afiliados é obrigatório"),
 });
 const initialValues = user
-    ? {
-          email: user.email,
-          isAffiliate: user.isAffiliate ? "Sim" : "Não",
-          wallet: user.wallet,
-          revShare: user.revShare,
-          cpa: user.CPA,
-          linkCadastros: user.invitation_link,
-          comissao: user.walletAffiliate,
-          afiliadosLink: user.invitation_link,
-      }
-    : {};
+  ? {
+      email: user.email,
+      isAffiliate: user.isAffiliate ? "Sim" : "Não",
+      wallet: user.wallet,
+      revShare: user.revShare,
+      cpa: user.CPA,
+      linkCadastros: user.invitation_link,
+      comissao: user.walletAffiliate,
+      afiliadosLink: user.invitation_link,
+    }
+  : {};
 
 const { handleSubmit, defineInputBinds, errors } = useForm({
-    validationSchema,
-    initialValues,
+  validationSchema,
+  initialValues,
 });
 const email = defineInputBinds("email");
 const afiliado = defineInputBinds("isAffiliate");
@@ -158,8 +165,8 @@ const linkCadastros = defineInputBinds("linkCadastros");
 const comissao = defineInputBinds("comissao");
 const afiliadosLink = defineInputBinds("afiliadosLink");
 const submit = handleSubmit((values) => {
-    console.log(values);
-    emit("submit", values);
+  console.log(values);
+  emit("submit", values);
 });
 console.log(email);
 </script>
