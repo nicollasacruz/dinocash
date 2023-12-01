@@ -6,7 +6,7 @@ import TextBox from "@/Components/TextBox.vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 
 const {
-    totalAmount,
+    balanceAmount,
     depositsAmount,
     withdrawsAmount,
     totalReceived,
@@ -17,7 +17,7 @@ const {
     topLossAffiliates,
     payout,
 } = defineProps([
-    "totalAmount",
+    "balanceAmount",
     "depositsAmount",
     "withdrawsAmount",
     "totalReceived",
@@ -46,7 +46,7 @@ function toBRL(value) {
             <div class="flex gap-x-5">
                 <TextBox
                     label="CAIXA DA CASA"
-                    :value="toBRL(totalAmount)"
+                    :value="toBRL(balanceAmount)"
                     value-text="text-center text-green-500"
                 />
                 <TextBox label="Relatório detalhado">

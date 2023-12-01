@@ -123,18 +123,18 @@ class FinanceController extends Controller
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
-        $totalAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliate - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
-        // dd($totalAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
+        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliate - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
+        // dd($balanceAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
 
         return Inertia::render("Admin/Finances", [
-            'totalAmount' => $totalAmount,
+            'balanceAmount' => $balanceAmount,
             'depositsAmount' => $depositsAmount,
             'withdrawsAmount' => $withdrawsAmount,
             'withdrawsAffiliateAmount' => $withdrawsAmountAffiliate,
+            'walletAmount' => $walletsAmount,
+            'walletAffiliateAmount' => $walletsAfilliateAmount,
             'totalReceived' => ($totalReceived * -1),
             'totalPaid' => $totalPaid * -1,
-            'totalWallet' => $walletsAmount,
-            'totalWalletAffiliate' => $walletsAfilliateAmount,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,
