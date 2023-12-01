@@ -92,10 +92,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('profile.comissao');
-    Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('profile.jogadas');
-    Route::get('/listDeposits', [ProfileController::class, 'listDeposits'])->name('profile.depositos');
-    Route::get('/listWithdraws', [ProfileController::class, 'listWithdraws'])->name('profile.saques');
+    Route::post('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('profile.comissao');
+    Route::post('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('profile.jogadas');
+    Route::post('/listDeposits', [ProfileController::class, 'listDeposits'])->name('profile.depositos');
+    Route::post('/listWithdraws', [ProfileController::class, 'listWithdraws'])->name('profile.saques');
 });
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
