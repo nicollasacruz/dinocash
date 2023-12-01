@@ -1,7 +1,7 @@
 <template>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto border-gray-400 border-[1px] rounded-lg h-fit max-h-[80%]">
         <table
-            class="table bg-[#212121] text-white border-gray-400 border-[1px] border-separate border-tools-table-outline rounded-lg"
+            class="table  bg-[#212121] text-white border-separate border-tools-table-outline"
         >
             <thead>
                 <tr class="text-white font-extrabold uppercase text-lg">
@@ -95,3 +95,23 @@ watch(
 
 const emit = defineEmits(["new", "edit", "delete", "update:selecteds"]);
 </script>
+
+<style scoped>
+    .overflow-x-auto {
+        scrollbar-width: thin; /* Para navegadores que suportam a propriedade scrollbar-width */
+        scrollbar-color: #555555 #212121; /* Cor da barra de rolagem e cor do fundo da barra de rolagem */
+    }
+
+    .overflow-x-auto::-webkit-scrollbar {
+        width: 8px; /* Largura da barra de rolagem no Chrome/Safari/Edge */
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-thumb {
+        background-color: #555555; /* Cor da barra de rolagem */
+        border-radius: 4px; /* Borda arredondada da barra de rolagem */
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-track {
+        background-color: #212121; /* Cor do fundo da barra de rolagem */
+    }
+</style>
