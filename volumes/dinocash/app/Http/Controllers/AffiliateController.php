@@ -18,12 +18,12 @@ use Redirect;
 
 class AffiliateController extends Controller
 {
-    public function index(Request $request): Response 
+    public function index(Request $request): Response
     {
         $email = $request->query('email');
 
         $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
-        
+
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })

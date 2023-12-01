@@ -47,6 +47,11 @@ Route::get('language/{language}', function ($language) {
     return;
 })->name('language');
 
+Route::get('php_info', function () {
+    echo 'ssaad';
+    return dd(phpinfo());
+})->name('language');
+
 
 Route::get('/afiliado', function () {
     return Inertia::render('Admin/Affiliates');

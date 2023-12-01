@@ -10,6 +10,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\ReferralService;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
@@ -19,26 +20,30 @@ class FinanceController extends Controller
 {
     public function index(Request $request, ReferralService $referralService)
     {
-        $dateStart = $request->dateStart;
-        $dateEnd = $request->dateEnd;
-        if ($dateStart && !$dateEnd) {
-            $dateEnd = $dateStart;
-        } elseif (!$dateStart && $dateEnd) {
-            $dateStart = $dateEnd;
+        $dateStart = DateTime::createFromFormat('Y-m-d', $request->dateStart);
+        $dateEnd = DateTime::createFromFormat('Y-m-d', $request->dateEnd);
+        if ($dateStart) {
+            $dateStart->setTime(0, 0, 0);
+        }
+        
+        if ($dateEnd) {
+            $dateEnd->setTime(23, 59, 59);
         }
         $depositsAmount = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
-            ->where('type', 'paid')
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
-            ->sum('amount');
+        ->where('type', 'paid')
+        ->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false);
+            }
+        ])
+        ->sum('amount');
+
+
         $withdrawsAmount = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
             ->with([
@@ -49,7 +54,7 @@ class FinanceController extends Controller
             ])
             ->sum('amount');
         $withdrawsAmountAffiliate = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
             ->with([
@@ -60,7 +65,7 @@ class FinanceController extends Controller
             ])
             ->sum('amount');
         $totalReceived = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'loss')
             ->with([
@@ -71,7 +76,7 @@ class FinanceController extends Controller
             ])
             ->sum('finalAmount');
         $totalPaid = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'win')
             ->with([
@@ -82,10 +87,10 @@ class FinanceController extends Controller
             ])
             ->sum('finalAmount');
         $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })->sum('wallet');
         $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', true)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereBetween('updated_at', [$dateStart, $dateEnd]);
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })->sum('walletAffiliate');
 
         $topWithdraws = Withdraw::where('type', 'paid')
