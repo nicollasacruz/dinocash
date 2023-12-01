@@ -25,6 +25,6 @@ class SettingController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('admin.settings');
+        return redirect(route('admin.settings'));
     }
 }
