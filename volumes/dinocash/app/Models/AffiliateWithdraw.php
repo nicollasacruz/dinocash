@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Traits\Timestamp;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -33,5 +34,14 @@ class AffiliateWithdraw extends Model
     public function manager()
     {
         return $this->belongsTo(User::class, 'managerUserId');
+    }
+    
+    public static function getAffiliateWithdrawLikeEmail($email): Collection
+    {
+        return static::with('user')
+            ->whereHas('user', function ($query) use ($email) {
+                $query->where('isAffiliate', true)->where('email', 'LIKE', '%' . $email . '%');
+            })
+            ->get();
     }
 }

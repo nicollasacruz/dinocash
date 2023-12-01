@@ -19,31 +19,23 @@ class AffiliateController extends Controller
     {
         $today = Carbon::today();
 
-        $email = $request->email;
-        $affiliateWithdrawsList = AffiliateWithdraw::with([
-            'user' => function ($query) use ($email) {
-                $query
-                    ->where('isAffiliate', true)
-                    ->when($email, function ($query2) use ($email) {
-                        $query2->where('email', 'LIKE', '%' . $email . '%');
-                    });
-            }
-        ])->get();
+        $email = $request->query('email');
 
+        $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-        ->where('isAffiliate', true)->get();
-        
+            ->where('isAffiliate', true)->get();
+
         $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
 
         return Inertia::render('Admin/Affiliates', [
             'affiliates' => $affiliates,
             'affiliatesWithdraws' => $affiliateWithdraws,
             'affiliatesWithdrawsList' => $affiliateWithdrawsList
-
         ]);
     }
+
 
     /**
      * Update the user's profile information.
@@ -57,7 +49,7 @@ class AffiliateController extends Controller
         return Redirect::route('admin.afiliados', );
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      */
     public function delete(User $user)
@@ -71,7 +63,7 @@ class AffiliateController extends Controller
     {
         $user = $request->query('user');
         $transactions = AffiliateHistory::where('userId', $user)->get();
-        
+
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
