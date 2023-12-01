@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
 use App\Models\User;
 use App\Models\Withdraw;
@@ -24,15 +25,17 @@ class DepositController extends Controller
     {
         $deposits = Deposit::with('user')->get();
         $totalToday = Deposit::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
-        $withdrawsAmount = Withdraw::where('type', 'paid')->sum('amount');
-        $depositsAmount = Deposit::where('type', 'paid')->sum('amount');
-        $walletsAmount = User::where('role', 'user')->where('isAffiliate', '=', false)->sum('wallet');
-        $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', '=', true)->sum('walletAffiliate');
-        $totalAmount = ($depositsAmount - $withdrawsAmount - $walletsAmount - $walletsAfilliateAmount);
+        
+        $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
+        $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
+        $withdrawsAmountAffiliateCaixa = AffiliateWithdraw::where('type', 'paid')->sum('amount');
+        $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
+        $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
+        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
         return Inertia::render('Admin/Deposits', [
             'deposits' => $deposits,
             'totalToday' => $totalToday,
-            'totalAmount' => $totalAmount,
+            'totalAmount' => $balanceAmount,
         ]);
     }
 

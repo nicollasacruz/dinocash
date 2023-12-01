@@ -119,11 +119,12 @@ class FinanceController extends Controller
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
 
-        $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
+        $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
+        $withdrawsAmountAffiliateCaixa = AffiliateWithdraw::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
-        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliate - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
+        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
         // dd($balanceAmount, $depositsAmountCaixa, $withdrawsAmountCaixa, $walletsAmountCaixa, $walletsAfilliateAmountCaixa, $withdrawsAmountAffiliate);
 
         return Inertia::render("Admin/Finances", [
