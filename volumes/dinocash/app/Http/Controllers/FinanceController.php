@@ -147,7 +147,7 @@ class FinanceController extends Controller
     public function updatePayout(Request $request)
     {
         $request->validate([
-            'payout' => ['required', 'interger', 'max:100'],
+            'payout' => ['required', 'integer', 'max:100'],
         ]);
 
         Setting::update([

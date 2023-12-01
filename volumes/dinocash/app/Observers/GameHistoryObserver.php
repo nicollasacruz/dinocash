@@ -14,7 +14,7 @@ class GameHistoryObserver
             $this->createAffiliateHistory($gameHistory);
         }
     }
-
+    
     private function createAffiliateHistory(GameHistory $gameHistory)
     {
         // Calcula o valor ajustado para AffiliateHistory
@@ -23,7 +23,6 @@ class GameHistoryObserver
         if ($amount === 0) {
             return;
         }
-
         // Cria o AffiliateHistory
         AffiliateHistory::create([
             'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare)),

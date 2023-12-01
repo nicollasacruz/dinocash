@@ -20,18 +20,16 @@ class AffiliateController extends Controller
 {
     public function index(Request $request): Response 
     {
-        $today = Carbon::today();
-
         $email = $request->query('email');
 
         $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+        
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
             ->where('isAffiliate', true)->get();
 
         $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
-
         return Inertia::render('Admin/Affiliates', [
             'affiliates' => $affiliates,
             'affiliatesWithdraws' => $affiliateWithdraws,
@@ -43,45 +41,47 @@ class AffiliateController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileAffiliateUpdateRequest $request): RedirectResponse|Redirector
+    public function update(ProfileAffiliateUpdateRequest $request)
     {
         $request->user()->fill($request->validated());
 
         $request->user()->save();
 
-        return redirect(route('admin.afiliados'));
+        return Redirect::route('admin.afiliados');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(User $user): void
+    public function destroy(Request $request): void
     {
-        if ($user->role === 'user') {
+        $user = User::find($request->query('user'));
+        $authUser = User::find(auth()->user()->id);
+        if ($authUser->role === 'user') {
             $user->delete();
         }
     }
 
-    public function listAffiliateHistory(Request $request): Response
+    public function listAffiliateHistory(Request $request)
     {
-        $user = $request->query('user');
-        $transactions = AffiliateHistory::where('userId', $user)->get();
+        $user = User::find($request->query('user'));
+        $transactions = $user->affiliateHistories;
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
-    public function listGameHistory(Request $request): Response
+    public function listGameHistory(Request $request)
     {
-        $user = $request->query('user');
-        $transactions = GameHistory::where('userId', $user)->get();
+        $user = User::find($request->query('user'));
+        $transactions = $user->gameHistories;
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
-    public function listTransactions(Request $request): Response
+    public function listTransactions(Request $request)
     {
-        $user = $request->query('user');
-        $withdraws = AffiliateWithdraw::where('userId', $user)->get();
+        $user = User::find($request->query('user'));
+        $withdraws = $user->affiliateWithdraws;
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }
