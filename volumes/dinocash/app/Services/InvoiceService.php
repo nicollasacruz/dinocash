@@ -9,42 +9,66 @@ use Carbon\Carbon;
 
 class InvoiceService
 {
-    public function createInvoice()
+    public function createInvoice(): Invoice|bool
     {
-        return Invoice::create([
-            'status' => 'Pending',
-        ]);
+        try {
+            return Invoice::create([
+                'status' => 'Pending',
+            ]);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
-    public function addPayment(Invoice $invoice)
+    public function addPayment(Invoice $invoice, $amount): GgrPayment|bool
     {
-        $payment = new GgrPayment([
-            'amount' => 0, // Defina o valor apropriado
-            'status' => 'Pending', // Ou qualquer outro status desejado
-        ]);
+        try {
+            $payment = new GgrPayment([
+                'amount' => $amount,
+                'status' => 'pending',
+                'invoice_id' => $invoice->id,
+            ]);
 
-        $invoice->ggrPayments()->save($payment);
+            $invoice->ggrPayments()->save($payment);
 
-        return $payment;
+            return $payment;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
-    public function addTransaction(Invoice $invoice)
+    public function addTransaction(Invoice $invoice, $amount): GgrTransaction|bool
     {
-        $transaction = new GgrTransaction([
-            'amount' => 0, // Defina o valor apropriado
-            'invoiced_at' => now(),
-        ]);
+        try {
+            $transaction = new GgrTransaction([
+                'invoice_id' => $invoice->id,
+                'amount' => $amount,
+            ]);
 
-        $invoice->ggrTransactions()->save($transaction);
+            $invoice->ggrTransactions()->save($transaction);
 
-        return $transaction;
+            return $transaction;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
-    public function closeInvoice(Invoice $invoice)
+    public function closeInvoice(Invoice $invoice): Invoice|bool
     {
-        $invoice->update([
-            'status' => 'Closed',
-            'invoiced_at' => now(),
-        ]);
+        try {
+            $invoice->update([
+                'status' => 'closed',
+                'invoiced_at' => now(),
+            ]);
+
+            foreach ($invoice->ggrTransactions as $transaction) {
+                $transaction->update([
+                    'invoiced_at' => now(),
+                ]);
+            }
+            return $invoice;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
