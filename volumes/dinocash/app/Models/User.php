@@ -68,6 +68,11 @@ class User extends Authenticatable
         'cpaCollectedAt' => 'datetime',
     ];
 
+    public function hasRole($value)
+    {
+        return $value === $this->role;
+    }
+
     public function setInvitationLink($value)
     {
         $this->attributes['invitation_link'] = $value;

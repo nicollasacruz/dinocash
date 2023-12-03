@@ -63,7 +63,7 @@ Route::get('/depositos', function () {
     return Inertia::render('Deposits');
 })->middleware(['auth', 'verified'])->name('user.deposits');
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return Redirect::route('admin.dashboard');
     })->name('admin');
