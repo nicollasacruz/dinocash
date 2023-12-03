@@ -1,5 +1,5 @@
 <template>
-    <div class="overflow-x-auto border-gray-400 border-[1px] rounded-lg h-fit max-h-[80%]">
+    <div class="overflow-x-auto border-gray-400 border-[1px] rounded-lg h-fit max-h-[71%]">
         <table
             class="table  bg-[#212121] text-white border-separate border-tools-table-outline"
         >
