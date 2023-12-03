@@ -15,6 +15,7 @@ class Invoice extends Model
         'amountPayed',
         'invoicedAt',
         'status',
+        'payedAt',
     ];
 
     public function ggrTransactions()

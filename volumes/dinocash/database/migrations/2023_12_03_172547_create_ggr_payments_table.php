@@ -12,7 +12,7 @@ class CreateGgrPaymentsTable extends Migration
             $table->id();
             $table->decimal('amount', 15, 2);
             $table->foreignId('invoice_id')->constrained('invoices');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->dateTime('payedAt')->nullable();
             $table->timestamps();
         });

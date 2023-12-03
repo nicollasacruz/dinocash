@@ -10,10 +10,11 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', 15, 2);
-            $table->decimal('amountPayed', 15, 2);
+            $table->decimal('amount', 15, 2)->default(0);
+            $table->decimal('amountPayed', 15, 2)->default(0);
             $table->string('status')->default('open');
-            $table->dateTime('invoicedAt');
+            $table->dateTime('invoicedAt')->nullable();
+            $table->dateTime('payedAt')->nullable();
             $table->timestamps();
         });
     }

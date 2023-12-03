@@ -10,9 +10,9 @@ class CreateGgrTransactionsTable extends Migration
     {
         Schema::create('ggr_transactions', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', 15, 2);
+            $table->decimal('amount', 15, 2)->default(0);
             $table->foreignId('invoice_id')->constrained('invoices');
-            $table->dateTime('invoicedAt');
+            $table->dateTime('invoicedAt')->nullable();
             $table->timestamps();
         });
     }
