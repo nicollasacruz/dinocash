@@ -13,7 +13,7 @@ class InvoiceService
     {
         try {
             return Invoice::create([
-                'status' => 'Pending',
+                'status' => 'pending',
             ]);
         } catch (\Exception $e) {
             return false;
