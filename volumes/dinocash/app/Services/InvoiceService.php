@@ -82,6 +82,7 @@ class InvoiceService
             }
             return $invoice;
         } catch (\Exception $e) {
+            Log::error("Erro ao fehcar invoice: " . $e->getMessage());
             return false;
         }
     }

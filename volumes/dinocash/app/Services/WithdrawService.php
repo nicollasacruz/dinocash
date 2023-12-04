@@ -8,6 +8,7 @@ use App\Models\WalletTransaction;
 use App\Models\Withdraw;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Log;
 use Ramsey\Uuid\Uuid;
 use App\Models\User;
 
@@ -54,21 +55,25 @@ class WithdrawService
             return true;
 
         } catch (Exception $e) {
+            Log::error("Erro ao criar Withdraw: " . $e->getMessage());
             return false;
         }
     }
 
     public function aprove(Withdraw $withdraw): bool
     {
-        if ($this->autoWithdraw($withdraw)) {
+        try {
+            $this->autoWithdraw($withdraw);
             $withdraw->update([
                 'type' => 'paid',
                 'approvedAt' => now(),
             ]);
 
             return true;
+        } catch (Exception $e) {
+            Log::error('Erro ao aprovar o saque: ' . $e->getMessage());
+            return false;
         }
-        return false;
     }
 
     public function reject(Withdraw $withdraw): bool
@@ -95,7 +100,7 @@ class WithdrawService
             return true;
 
         } catch (Exception $e) {
-
+            Log::error('Erro ao rejeitar o saque: ' . $e->getMessage());
             return false;
         }
     }
