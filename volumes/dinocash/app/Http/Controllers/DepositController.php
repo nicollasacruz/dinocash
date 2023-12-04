@@ -106,4 +106,8 @@ class DepositController extends Controller
 
         return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
     }
+    public function user(Request $request)
+    {
+        return Inertia::render('User/Withdraw');
+    }
 }

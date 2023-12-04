@@ -1,0 +1,65 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
+import Background from "../../../storage/imgs/home-page/home-bg2.jpg";
+import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
+import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
+import UserDrawer from "@/Components/UserDrawer.vue";
+
+const drawer = ref(true);
+</script>
+
+<template>
+    <div>
+        <div class="h-screen font-menu flex">
+            <div class="drawer col-auto lg:w-96 z-10 absolute lg:hidden">
+                <input
+                    v-model="drawer"
+                    id="my-drawer"
+                    type="checkbox"
+                    class="drawer-toggle"
+                />
+
+                <div class="drawer-side lg:w-96">
+                    <label
+                        for="my-drawer"
+                        aria-label="close sidebar"
+                        class="drawer-overlay"
+                    ></label>
+                    <ul
+                        class="menu py-4 lg:w-96 min-h-full bg-[#212121] text-white relative"
+                    >
+                        <x-mark-icon
+                            class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
+                            @click="drawer = !drawer"
+                        />
+                        <UserDrawer class="mt-3" />
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="drawer-content relative flex-1 px-4 py-2 lg:px-10 lg:py-8 overflow-auto"
+                :style="{
+                    'background-image': `url('${Background}')`,
+                    'background-size': 'cover',
+                    'background-position': 'center',
+                }"
+            >
+                <!-- Page content here -->
+                <bars3-icon
+                    @click="drawer = !drawer"
+                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-white"
+                />
+                <img :src="logoDinoRoxo" class="mx-auto mb-5 w-36 lg:w-64" alt="" />
+                <div class="flex gap-x-6">
+                    <UserDrawer class="hidden lg:block" />
+                    <div
+                        class="border-8 border-black bg-white rounded-xl flex-1"
+                    >
+                        <slot />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

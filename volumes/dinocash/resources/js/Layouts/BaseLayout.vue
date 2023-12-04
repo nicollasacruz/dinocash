@@ -24,9 +24,6 @@ function isPc() {
     }
     return false;
 }
-const mobile = isMobile();
-const ipad = isIpad();
-const pc = isPc();
 const props = defineProps({
     homepage: {
         type: Boolean,

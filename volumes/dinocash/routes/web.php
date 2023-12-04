@@ -7,6 +7,7 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\GameHistoryController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Carbon;
@@ -85,7 +86,21 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::post('/saque/rejeitar', [WithdrawController::class, 'reject'])->name('admin.saque.rejeitar');
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
-
+Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
+    Route::get('/', function () {
+        return Redirect::route('user.history');
+    })->name('user');
+    Route::get('/historico', [GameHistoryController::class, 'user'])->name('user.historico');
+    Route::get('/movimentacao', [WithdrawController::class, 'user'])->name('user.movimentacao');
+    Route::get('/deposito', [DepositController::class, 'user'])->name('user.deposito');
+    Route::get('/alterar-senha',function () {
+        return Inertia::render('User/ChangePassword');
+    })->name('user.alterar_senha');
+    Route::get('/suporte', function () {
+        return Inertia::render('User/Suport');
+    })->name('user.suporte');
+    Route::get('/afiliado', [AffiliateController::class, 'user'])->name('user.afiliado');
+});
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -53,4 +53,8 @@ class WithdrawController extends Controller
 
         return redirect()->route('admin.saque')->with('success','Saque rejeitado com sucesso!');
     }
+    public function user(Request $request)
+    {
+        return Inertia::render('User/Movement');
+    }
 }

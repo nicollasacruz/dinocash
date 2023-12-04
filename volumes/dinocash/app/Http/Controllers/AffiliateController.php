@@ -90,4 +90,8 @@ class AffiliateController extends Controller
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }
+    public function user(Request $request)
+    {
+        return Inertia::render('User/Affiliate');
+    }
 }

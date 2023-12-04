@@ -46,4 +46,8 @@ class AffiliateWithdrawController extends Controller
             'reprovedAt' => now(),
         ]);
     }
+    public function user(Request $request)
+    {
+        return Inertia::render('User/Movement');
+    }
 }
