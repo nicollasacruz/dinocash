@@ -6,9 +6,20 @@ use App\Models\Invoice;
 use App\Models\GgrPayment;
 use App\Models\GgrTransaction;
 use Carbon\Carbon;
+use Log;
 
 class InvoiceService
 {
+    public function getInvoice(): Invoice
+    {
+        $invoice = Invoice::where('status', 'open')->first();
+        if (!$invoice) {
+            $invoice = Invoice::create([
+                'status'=> 'open',
+            ]);
+        }
+        return $invoice;
+    }
     public function createInvoice(): Invoice|bool
     {
         try {
@@ -16,6 +27,7 @@ class InvoiceService
                 'status' => 'pending',
             ]);
         } catch (\Exception $e) {
+            Log::error("Erro ao criar Invoice: " . $e->getMessage());
             return false;
         }
     }
@@ -33,6 +45,7 @@ class InvoiceService
 
             return $payment;
         } catch (\Exception $e) {
+            Log::error("Erro ao adicionar pagamento à Invoice: " . $e->getMessage());
             return false;
         }
     }
@@ -49,6 +62,7 @@ class InvoiceService
 
             return $transaction;
         } catch (\Exception $e) {
+            Log::error("Erro ao adicionar transação à Invoice: " . $e->getMessage());
             return false;
         }
     }

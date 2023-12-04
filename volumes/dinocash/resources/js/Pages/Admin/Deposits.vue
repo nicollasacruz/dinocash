@@ -101,7 +101,7 @@ const getStatus = (status) => {
             <div
               class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
               :class="{
-                'bg-red-600': value === 'pendent',
+                'bg-red-600': value === 'pending',
                 'bg-green-600': value === 'paid',
               }"
             >

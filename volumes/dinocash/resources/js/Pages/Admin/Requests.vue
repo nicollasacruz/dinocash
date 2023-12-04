@@ -80,7 +80,7 @@ console.log("withdraws", withdraws);
       <template #type="{ value }">
         <td>
           <div class="no-wrap text-xs cursor-pointer">
-            <div v-if="value === 'pendent'" class="flex gap-x-2">
+            <div v-if="value === 'pending'" class="flex gap-x-2">
               <div
                 class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
               >

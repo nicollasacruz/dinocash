@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('userId');
             $table->string('transactionId');
             $table->string('amount');
-            $table->string('type')->default('pendent');
+            $table->string('type')->default('pending');
             $table->datetime('approvedAt')->nullable();
             $table->datetime('reprovedAt')->nullable();
             $table->unsignedBigInteger('managerUserId')->nullable();

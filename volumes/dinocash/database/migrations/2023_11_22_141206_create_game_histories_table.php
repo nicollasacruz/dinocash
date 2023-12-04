@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('userId');
             $table->string('amount');
             $table->string('finalAmount')->nullable();
-            $table->string('type')->default('pendent');
+            $table->string('type')->default('pending');
             $table->unsignedBigInteger('distance')->default(0);
             $table->timestamps();
 

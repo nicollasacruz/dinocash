@@ -6,6 +6,7 @@ use App\Models\Deposit;
 use App\Models\WalletTransaction;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Log;
 use Ramsey\Uuid\Uuid;
 use App\Models\User;
 
@@ -51,6 +52,7 @@ class DepositService
             return $deposit;
 
         } catch (Exception $e) {
+            Log::error("Erro ao criar Deposito: " . $e->getMessage());
             return null;
         }
 
@@ -74,6 +76,7 @@ class DepositService
 
             return true;
         } catch (Exception $e) {
+            Log::error("Erro ao aprovar depósito: " . $e->getMessage());
             return false;
         }
     }

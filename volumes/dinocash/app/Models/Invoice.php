@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\InvoiceService;
 use Carbon\Traits\Timestamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
@@ -18,13 +20,19 @@ class Invoice extends Model
         'payedAt',
     ];
 
-    public function ggrTransactions()
+    public function ggrTransactions(): HasMany
     {
         return $this->hasMany(GgrTransaction::class);
     }
 
-    public function ggrPayments()
+    public function ggrPayments(): HasMany
     {
         return $this->hasMany(GgrPayment::class);
+    }
+
+    public function getInvoice(): Invoice
+    {
+        $invoiceService = new InvoiceService();
+        return $invoiceService->getInvoice();
     }
 }
