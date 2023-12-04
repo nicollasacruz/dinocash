@@ -10,13 +10,7 @@ class WalletTransaction extends Model
 {
     use HasFactory, Timestamp;
 
-    protected $fillables = [
-        'userId',
-        'managerUserId',
-        'oldValue',
-        'newValue',
-        'type',
-    ];
+    protected $guarded = [];
 
     public function user()
     {

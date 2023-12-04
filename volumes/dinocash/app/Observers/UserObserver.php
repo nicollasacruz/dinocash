@@ -34,6 +34,8 @@ class UserObserver
                 $referral = User::where('invitation_link', $invitation_link)->first();
                 if ($referral && $referral->isAffiliate) {
                     $user->affiliateId = $referral->id;
+                    $referral->referralsCounter += 1;
+                    $referral->save();
                 }
             }
         }

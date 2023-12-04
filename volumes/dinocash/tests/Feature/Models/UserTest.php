@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\GameHistory;
 use App\Models\User;
 
 test('user confirm invitation link', function () {
@@ -44,12 +45,44 @@ test('change wallet of the user ', function () {
     $this->assertSame($wallet, 0.3);
 });
 
-test('change walletAffiliate of the user ', function () {
+test('change walletAffiliate of the affiliate ', function () {
     $invitation = 'claudinhoy';
     $affiliate = User::factory()->withInvitationLink($invitation)->create();
-    $affiliate->changeWalletAffiliate(50.50);
-    $walletAffiliate = $affiliate->walletAffiliate;
+    $user = User::factory()->create();
+    $user2 = User::factory()->create();
+    $user->setAffiliate($affiliate);
+    $user2->setAffiliate($affiliate);
+    $affiliate->updateOrFail([
+        'revShare'=> 10,
+    ]);
+    $affiliate->save();
+    $affiliate->refresh();
 
-    $this->assertSame($walletAffiliate, 50.50);
+    $user->save();
+    $user2->save();
+
+    $game1 = GameHistory::create([
+        'amount' => 100,
+        'finalAmount' => -100,
+        'userId' => $user2->id,
+        'type' => 'pendent',
+    ]);
+
+    $game2 = GameHistory::create([
+        'amount' => 100,
+        'finalAmount' => -100,
+        'userId' => $user->id,
+        'type' => 'pendent',
+    ]);
+
+    
+    $game1->type = 'loss';
+    $game2->type = 'loss';
+    $game1->save();
+    $game2->save();
+
+    $affiliate->refresh();
+    
+    $this->assertSame($affiliate->walletAffiliate, 20.0);
 });
 

@@ -8,42 +8,35 @@ use App\Models\AffiliateWithdraw;
 use App\Models\GameHistory;
 use App\Models\User;
 use Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Response;
 use Redirect;
 
 class AffiliateController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        $today = Carbon::today();
+        $email = $request->query('email');
 
-        $email = $request->email;
-        $affiliateWithdrawsList = AffiliateWithdraw::with([
-            'user' => function ($query) use ($email) {
-                $query
-                    ->where('isAffiliate', true)
-                    ->when($email, function ($query2) use ($email) {
-                        $query2->where('email', 'LIKE', '%' . $email . '%');
-                    });
-            }
-        ])->get();
+        $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
 
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-        ->where('isAffiliate', true)->get();
-        
-        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+            ->where('isAffiliate', true)->get();
 
+        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
         return Inertia::render('Admin/Affiliates', [
             'affiliates' => $affiliates,
             'affiliatesWithdraws' => $affiliateWithdraws,
             'affiliatesWithdrawsList' => $affiliateWithdrawsList
-
         ]);
     }
+
 
     /**
      * Update the user's profile information.
@@ -54,39 +47,41 @@ class AffiliateController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('admin.afiliados', );
+        return Redirect::route('admin.afiliados');
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      */
-    public function delete(User $user)
+    public function destroy(Request $request): void
     {
-        if ($user->role === 'user') {
+        $user = User::find($request->query('user'));
+        $authUser = User::find(auth()->user()->id);
+        if ($authUser->role === 'user') {
             $user->delete();
         }
     }
 
     public function listAffiliateHistory(Request $request)
     {
-        $user = $request->query('user');
-        $transactions = AffiliateHistory::where('userId', $user)->get();
-        
+        $user = User::find($request->query('user'));
+        $transactions = $user->affiliateHistories;
+
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
     public function listGameHistory(Request $request)
     {
-        $user = $request->query('user');
-        $transactions = GameHistory::where('userId', $user)->get();
+        $user = User::find($request->query('user'));
+        $transactions = $user->gameHistories;
 
         return response()->json(['status' => 'success', 'transactions' => $transactions]);
     }
 
     public function listTransactions(Request $request)
     {
-        $user = $request->query('user');
-        $withdraws = AffiliateWithdraw::where('userId', $user)->get();
+        $user = User::find($request->query('user'));
+        $withdraws = $user->affiliateWithdraws;
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }

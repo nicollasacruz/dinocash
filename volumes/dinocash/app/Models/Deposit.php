@@ -19,6 +19,8 @@ class Deposit extends Model
         'paymentCode',
         'approvedAt',
     ];
+    
+    protected $guarded = [];
 
     /**
      * Get the user that owns the deposit.

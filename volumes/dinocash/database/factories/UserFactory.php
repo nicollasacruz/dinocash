@@ -41,6 +41,13 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+        ]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */
@@ -49,6 +56,8 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'invitation_link' => $affiliate_link,
             'isAffiliate' => true,
+            'CPA' => 15,
+            'revShare' => 10,
         ]);
     }
 }

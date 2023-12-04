@@ -48,6 +48,11 @@ Route::get('language/{language}', function ($language) {
     return;
 })->name('language');
 
+Route::get('php_info', function () {
+    echo 'ssaad';
+    return dd(phpinfo());
+})->name('language');
+
 
 Route::get('/afiliado', function () {
     return Inertia::render('Admin/Affiliates');
@@ -59,7 +64,7 @@ Route::get('/depositos', function () {
     return Inertia::render('Deposits');
 })->middleware(['auth', 'verified'])->name('user.deposits');
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return Redirect::route('admin.dashboard');
     })->name('admin');
@@ -73,14 +78,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
     Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.edit');
     Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');
+
     Route::prefix('afiliados')->group(function () {
         Route::get('/', [AffiliateController::class, 'index'])->name('admin.afiliados');
         Route::patch('/', [AffiliateController::class, 'update'])->name('admin.afiliados.update');
-        Route::delete('/{user}', [AffiliateController::class, 'delete'])->name('admin.afiliados.delete');
-        Route::get('/listAffiliateHistory', [AffiliateController::class, 'listAffiliateHistory'])->name('admin.afiliados.comissao');
-        Route::get('/listGameHistory', [AffiliateController::class, 'listGameHistory'])->name('admin.afiliados.jogadas');
-        Route::get('/listTransactions', [AffiliateController::class, 'listTransactions'])->name('admin.afiliados.saques');
+        Route::delete('/', [AffiliateController::class, 'destroy'])->name('admin.afiliados.destroy');
+        Route::post('/listAffiliateHistory', [AffiliateController::class, 'listAffiliateHistory'])->name('admin.afiliados.comissao');
+        Route::post('/listGameHistory', [AffiliateController::class, 'listGameHistory'])->name('admin.afiliados.jogadas');
+        Route::post('/listTransactions', [AffiliateController::class, 'listTransactions'])->name('admin.afiliados.saques');
     });
+
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
     Route::post('/saque/aprovar', [WithdrawController::class, 'aprove'])->name('admin.saque.aprovar');
     Route::post('/saque/rejeitar', [WithdrawController::class, 'reject'])->name('admin.saque.rejeitar');
@@ -102,26 +109,26 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/afiliado', [AffiliateController::class, 'user'])->name('user.afiliado');
 });
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('profile.comissao');
-    Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('profile.jogadas');
-    Route::get('/listDeposits', [ProfileController::class, 'listDeposits'])->name('profile.depositos');
-    Route::get('/listWithdraws', [ProfileController::class, 'listWithdraws'])->name('profile.saques');
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('profile.comissao');
+    Route::post('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('profile.jogadas');
+    Route::post('/listDeposits', [ProfileController::class, 'listDeposits'])->name('profile.depositos');
+    Route::post('/listWithdraws', [ProfileController::class, 'listWithdraws'])->name('profile.saques');
 });
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
-    Route::get('/deposit', [DepositController::class, 'indexUser'])->name('deposit.index');
-    Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
-    Route::patch('/deposit', [DepositController::class, 'update'])->name('deposit.update');
-    Route::delete('/deposit', [DepositController::class, 'destroy'])->name('deposit.destroy');
+    Route::get('/deposito', [DepositController::class, 'indexUser'])->name('deposit.index');
+    Route::post('/deposito', [DepositController::class, 'store'])->name('deposit.store');
+    Route::patch('/deposito', [DepositController::class, 'update'])->name('deposit.update');
+    Route::delete('/deposito', [DepositController::class, 'destroy'])->name('deposit.destroy');
 });
 
+Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
 
-Route::domain(env('APP_URL_API'))->group(function () {
-    Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
-    Route::post(env('SUITPAY_URL_WEBHOOK_SEND'), [WithdrawController::class, 'webhook'])->name('webhook.withdraw');
+Route::domain(env('APP_URL_API'))->middleware([])->group(function () {
+    //
 });
 
 

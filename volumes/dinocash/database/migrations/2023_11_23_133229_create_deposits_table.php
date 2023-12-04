@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('transactionId');
             $table->string('amount');
             $table->string('paymentCode');
-            $table->string('type')->default('pendent');
+            $table->string('type')->default('pending');
             $table->datetime('approvedAt')->nullable();
             $table->timestamps();
 

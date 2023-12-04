@@ -28,7 +28,7 @@ class DepositFactory extends Factory
             'transactionId' => $this->faker->uuid,
             'paymentCode' => $this->faker->uuid,
             'amount' => $this->faker->randomNumber(3),
-            'type' => 'pendent',
+            'type' => 'pending',
         ];
     }
 

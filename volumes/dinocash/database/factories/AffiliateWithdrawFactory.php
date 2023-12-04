@@ -21,7 +21,7 @@ class AffiliateWithdrawFactory extends Factory
     public function definition(): array
     {
         return [
-            'type' => 'pendent',
+            'type' => 'pending',
             'userId' => function () {
                 return User::factory()->withInvitationLink($this->faker->userName)->create()->id;
             },

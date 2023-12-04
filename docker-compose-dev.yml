@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./volumes/dinocash:/var/www/html
-    container_name: dinicash_web
+    container_name: dinocash_web
     ports:
       - "8080:8080"
     depends_on:

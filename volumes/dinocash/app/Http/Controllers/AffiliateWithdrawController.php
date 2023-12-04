@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Services\WithdrawAffiliateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AffiliateWithdrawController extends Controller
@@ -30,6 +33,17 @@ class AffiliateWithdrawController extends Controller
 
         return Inertia::render('Requests', [
             'affiliateWithdraws' => $affiliateWithdraws,
+        ]);
+    }
+
+    public function store(Request $request, WithdrawAffiliateService $withdrawService)
+    {
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        $withdraw = $withdrawService->createWithdraw($user, $request->amount);
+        $setting = Setting::first();
+
+        return Inertia::render('User/Withdraw', [
         ]);
     }
 

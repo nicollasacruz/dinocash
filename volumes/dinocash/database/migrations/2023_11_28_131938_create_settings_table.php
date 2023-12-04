@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->string('emailFatura')->nullable();
             $table->integer('payout')->default(70);
             $table->integer('minWithdraw')->default(100);
             $table->integer('maxWithdraw')->default(1000);

@@ -26,7 +26,7 @@ class WithdrawFactory extends Factory
             },
             'transactionId' => $this->faker->uuid,
             'amount' => $this->faker->randomNumber(2),
-            'type' => 'pendent',
+            'type' => 'pending',
         ];
     }
 

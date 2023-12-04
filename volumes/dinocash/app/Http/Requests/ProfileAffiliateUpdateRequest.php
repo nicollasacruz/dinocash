@@ -19,11 +19,11 @@ class ProfileAffiliateUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'invitation_link' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'wallet' => ['required', 'interger', 'max:30'],
+            'wallet' => ['required', 'integer', 'min:0'],
             'isAffiliate' => ['required', 'bool'],
             'role' => ['required', 'string'],
-            'CPA' => ['required', 'interger'],
-            'revShare' => ['required', 'interger'],
+            'CPA' => ['required', 'integer', 'min:0'],
+            'revShare' => ['required', 'integer','max:100', 'min:0'],
         ];
     }
 }

@@ -54,7 +54,7 @@ class DashboardController extends Controller
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
         $totalUsers = User::all()->count();
-        $lastUsers = User::latest('created_at')->limit(30)->get();
+        $lastUsers = User::latest('created_at')->where('isAffiliate', false)->limit(30)->get();
 
         return Inertia::render('Admin/Dashboard', [
             'activeSessions' => $activeSessions,

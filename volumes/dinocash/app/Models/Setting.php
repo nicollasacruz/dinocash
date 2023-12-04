@@ -11,6 +11,7 @@ class Setting extends Model
     use HasFactory, Timestamp;
 
     protected $fillable = [
+        'emailFatura',
         'payout',
         'minWithdraw',
         'maxWithdraw',

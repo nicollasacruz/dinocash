@@ -35,6 +35,7 @@ class User extends Authenticatable
         'cpaCollected',
         'cpaCollectedAt',
         'invitation_link',
+        'referralsCounter',
         'CPA',
         'revShare',
         'walletAffiliate',
@@ -67,6 +68,18 @@ class User extends Authenticatable
         'cpaCollectedAt' => 'datetime',
     ];
 
+    public function hasRole($value)
+    {
+        return $value === $this->role;
+    }
+
+    public function changeRole($value): User
+    {
+        $this->role = $value;
+        $this->save();
+        return $this;
+    }
+
     public function setInvitationLink($value)
     {
         $this->attributes['invitation_link'] = $value;
@@ -75,17 +88,17 @@ class User extends Authenticatable
 
     public function changeWallet($value)
     {
-        $this->wallet = number_format($this->wallet + $value, 2, '.', ',');
+        return $this->wallet = number_format($this->wallet + $value, 2, '.', ',');
     }
 
     public function changeWalletAffiliate($value)
     {
-        $this->walletAffiliate = number_format($this->wallet + $value, 2, '.', ',');
+        $this->walletAffiliate = number_format($this->walletAffiliate + $value, 2, '.', ',');
     }
 
     /**
      * Get the walletTransactions that of the user.
-     */ 
+     */
     public function walletTransactions(): HasMany
     {
         return $this->hasMany(WalletTransaction::class, 'userId');
@@ -93,7 +106,7 @@ class User extends Authenticatable
 
     /**
      * Get the deposits that of the user.
-     */ 
+     */
     public function deposits(): HasMany
     {
         return $this->hasMany(Deposit::class, 'userId');
@@ -101,24 +114,32 @@ class User extends Authenticatable
 
     /**
      * Get the withdraws that of the user.
-     */ 
+     */
     public function withdraws(): HasMany
     {
         return $this->hasMany(Withdraw::class, 'userId');
     }
 
     /**
+     * Get the withdraws that of the user.
+     */
+    public function affiliateWithdraws(): HasMany
+    {
+        return $this->hasMany(AffiliateWithdraw::class, 'userId');
+    }
+
+    /**
      * Get the managedWithdraws that of the user.
-     */ 
-        public function managedWithdraws(): HasMany
+     */
+    public function managedWithdraws(): HasMany
     {
         return $this->hasMany(Withdraw::class, 'managerUserId');
     }
 
     /**
      * Get the games that of the user.
-     */ 
-    public function gamesHistory(): HasMany
+     */
+    public function gameHistories(): HasMany
     {
         return $this->hasMany(GameHistory::class, 'userId');
     }
@@ -128,7 +149,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'affiliateId');
     }
-    
+
     /**
      * Get the affiliate that owns the user.
      */
@@ -151,7 +172,7 @@ class User extends Authenticatable
             'transactionId' => $uuid,
             'paymentCode' => $paymentCode,
         ]);
-        
+
         return $deposit;
     }
 
@@ -170,16 +191,6 @@ class User extends Authenticatable
     public function hasReferrals()
     {
         return count($this->referrals) > 0;
-    }
-
-    public function getWallet(): float
-    {
-        return $this->wallet;
-    }
-
-    public function setWallet($value): void
-    {
-        $this->wallet = $value * 100;
     }
 
     /**
