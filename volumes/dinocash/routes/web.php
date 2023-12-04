@@ -113,7 +113,7 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
 Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
 
 Route::domain(env('APP_URL_API'))->middleware([])->group(function () {
-    Route::post(env('SUITPAY_URL_WEBHOOK_SEND'), [WithdrawController::class, 'webhook'])->name('webhook.withdraw');
+    //
 });
 
 

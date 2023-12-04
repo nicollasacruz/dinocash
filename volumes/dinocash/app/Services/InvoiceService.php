@@ -74,7 +74,6 @@ class InvoiceService
                 'status' => 'closed',
                 'invoiced_at' => now(),
             ]);
-
             foreach ($invoice->ggrTransactions as $transaction) {
                 $transaction->update([
                     'invoiced_at' => now(),

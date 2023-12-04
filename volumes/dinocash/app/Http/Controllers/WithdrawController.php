@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\WithdrawService;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
@@ -43,9 +45,23 @@ class WithdrawController extends Controller
         ]);
     }
 
+    public function store(Request $request, WithdrawService $withdrawService)
+    {
+        $userId = Auth::user()->id;
+        $user = User::find($userId);
+        $withdraw = $withdrawService->createWithdraw($user, $request->amount);
+        $setting = Setting::first();
+        if($withdraw &&  $setting->autoPayWithdraw && (float)$withdraw->amount <= $setting->maxAutoPayWithdraw) {
+            $withdrawService->aprove($withdraw, 'automatico');
+        }
+
+        return Inertia::render('User/Withdraw', [
+        ]);
+    }
+
     public function aprove(Request $request, WithdrawService $withdrawService) {
         $withdraw = $request->withdraw;
-        $withdrawService->aprove($withdraw);
+        $withdrawService->aprove($withdraw, 'manual');
 
         return redirect()->route('admin.saque')->with('success','Saque aprovado com sucesso!');
     }
