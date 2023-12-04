@@ -94,9 +94,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('profile.comissao');
     Route::post('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('profile.jogadas');
     Route::post('/listDeposits', [ProfileController::class, 'listDeposits'])->name('profile.depositos');
@@ -104,15 +104,15 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
-    Route::get('/deposit', [DepositController::class, 'indexUser'])->name('deposit.index');
-    Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
-    Route::patch('/deposit', [DepositController::class, 'update'])->name('deposit.update');
-    Route::delete('/deposit', [DepositController::class, 'destroy'])->name('deposit.destroy');
+    Route::get('/deposito', [DepositController::class, 'indexUser'])->name('deposit.index');
+    Route::post('/deposito', [DepositController::class, 'store'])->name('deposit.store');
+    Route::patch('/deposito', [DepositController::class, 'update'])->name('deposit.update');
+    Route::delete('/deposito', [DepositController::class, 'destroy'])->name('deposit.destroy');
 });
 
+Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
 
-Route::domain(env('APP_URL_API'))->group(function () {
-    Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
+Route::domain(env('APP_URL_API'))->middleware([])->group(function () {
     Route::post(env('SUITPAY_URL_WEBHOOK_SEND'), [WithdrawController::class, 'webhook'])->name('webhook.withdraw');
 });
 

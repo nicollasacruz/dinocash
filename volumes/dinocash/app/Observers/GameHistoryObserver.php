@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\AffiliateHistory;
 use App\Models\GameHistory;
-use App\Models\Invoice;
 use App\Services\InvoiceService;
 use Illuminate\Support\Facades\Log;
 
@@ -23,17 +22,19 @@ class GameHistoryObserver
             if (env('APP_GGR')) {
                 $this->createGgrHistory($gameHistory);
             } else {
-                Log::info("GGR não ativado.");
+                Log::info("GGR - não está ativado para esse cliente.");
             }
         }
     }
 
     private function createAffiliateHistory(GameHistory $gameHistory)
     {
+        Log::info("createAffiliateHistory - entrou.");
         try {
             $amount = $gameHistory->finalAmount * -1;
 
             if ($amount === 0) {
+                Log::info("AffiliateHistory não criou porque o amount é: {$amount}.");
                 return;
             }
 
@@ -44,7 +45,9 @@ class GameHistoryObserver
                 'userId' => $gameHistory->userId,
                 'type' => $amount > 0 ? 'win' : 'loss',
             ]);
-
+            $affiliate = $gameHistory->user->affiliate;
+            $affiliate->changeWalletAffiliate(((string)$amount * (string)$gameHistory->user->affiliate->revShare / 100));
+            $affiliate->save();
             Log::info("AffiliateHistory criado com sucesso.");
 
         } catch (\Exception $e) {
@@ -57,6 +60,7 @@ class GameHistoryObserver
         try {
             $amount = $gameHistory->finalAmount * -1;
             if ($amount === 0) {
+                Log::info("GGR - createGgrHistory não criou porque o amount é: {$amount}.");
                 return;
             }
 
@@ -66,9 +70,9 @@ class GameHistoryObserver
 
             $invoiceService->addTransaction($invoice, $amount);
 
-            Log::info("Transação adicionada com sucesso à Invoice {$invoice->id}.");
+            Log::info("GGR - Transação adicionada com sucesso à Invoice {$invoice->id}.");
         } catch (\Exception $e) {
-            Log::error("Erro ao processar função createGgrHistory da Invoice {$invoice->id}: " . $e->getMessage());
+            Log::error("GGR - Erro ao processar função createGgrHistory da Invoice {$invoice->id}: " . $e->getMessage());
         }
     }
 }

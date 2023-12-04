@@ -56,6 +56,8 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'invitation_link' => $affiliate_link,
             'isAffiliate' => true,
+            'CPA' => 15,
+            'revShare' => 10,
         ]);
     }
 }

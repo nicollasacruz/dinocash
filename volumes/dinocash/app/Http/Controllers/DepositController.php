@@ -94,8 +94,9 @@ class DepositController extends Controller
             $idTransaction = $validatedData['idTransaction'];
             $typeTransaction = $validatedData['typeTransaction'];
             $statusTransaction = $validatedData['statusTransaction'];
+            
             if ($typeTransaction === 'PIX' && $statusTransaction === 'PAYMENT_ACCEPT') {
-                $deposit = Deposit::where('$idTransaction', $idTransaction)->first();
+                $deposit = Deposit::where('transactionId', $idTransaction)->first();
 
                 if ($depositService->aproveDeposit($deposit)) {
 

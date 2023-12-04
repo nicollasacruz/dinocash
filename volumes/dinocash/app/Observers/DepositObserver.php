@@ -4,14 +4,15 @@ namespace App\Observers;
 
 use App\Models\AffiliateHistory;
 use App\Models\Deposit;
+use Log;
 
 class DepositObserver
 {
     public function updated(Deposit $deposit)
     {
-        // Verifica se o type mudou para 'paid' e era 'pending'
         if ($deposit->isDirty('type') && $deposit->type === 'paid' && $deposit->getOriginal('type') === 'pending') {
             $this->processPaidDeposit($deposit);
+            Log::info("DepositObserver - Deposito aprovado : ". number_format($deposit->amount) . " - " . $deposit->user->email . ".");
         }
     }
 
@@ -20,6 +21,7 @@ class DepositObserver
         $user = $deposit->user;
 
         $user->changeWallet($deposit->amount);
+        $user->save();
 
         // Verifica se o userId tem um affiliateId e o CpaCollected é falso
         if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
@@ -50,5 +52,7 @@ class DepositObserver
             'cpaCollected' => true,
             'cpaCollectedAt' => now(),
         ]);
+        $affiliate->changeWalletAffiliate($affiliate->CPA);    
+        $affiliate->save();
     }
 }

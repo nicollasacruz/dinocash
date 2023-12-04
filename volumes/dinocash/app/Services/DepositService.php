@@ -16,9 +16,7 @@ class DepositService
     {
         try {
             if (!$user->document) {
-                // Adicione a lógica para atualizar o documento, se necessário
-                // $user->document = ...;
-                // $user->save();
+                Log::error("Usuario não tem documento");
             }
 
             $uuid = Uuid::uuid4()->toString();
@@ -38,21 +36,21 @@ class DepositService
                         ],
                     ]);
 
-            $result = $response->json();
-
-            $paymentCode = $result['paymentCode'];
-
+            $result = $response->json('paymentCode');
+            Log::alert($result);
             $deposit = Deposit::create([
                 'userId' => $user->id,
                 'amount' => $amount,
                 'transactionId' => $uuid,
-                'paymentCode' => $paymentCode,
+                'type' => 'pending',
+                'paymentCode' => $result,
             ]);
 
+            Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
             return $deposit;
 
         } catch (Exception $e) {
-            Log::error("Erro ao criar Deposito: " . $e->getMessage());
+            Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - '. $e->getFile() .' - '. $e->getLine());
             return null;
         }
 
@@ -65,15 +63,16 @@ class DepositService
             $amount = $deposit->amount;
 
             WalletTransaction::create([
-                'userId' => $user->id,
+                'userId' => $deposit->userId,
                 'oldValue' => $user->wallet,
                 'newValue' => $user->wallet + $amount,
                 'type' => 'DEPOSIT',
             ]);
 
-            $user->changeWallet($amount);
-            $user->save();
+            $deposit->type = 'paid';
+            $deposit->save();
 
+            Log::info("Deposito aprovado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
             return true;
         } catch (Exception $e) {
             Log::error("Erro ao aprovar depósito: " . $e->getMessage());
