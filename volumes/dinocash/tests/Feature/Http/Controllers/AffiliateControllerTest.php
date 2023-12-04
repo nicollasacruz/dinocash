@@ -4,17 +4,15 @@ use App\Models\Deposit;
 use App\Models\GameHistory;
 use App\Models\Withdraw;
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\post;
 
 ini_set('memory_limit', '-1');
 use App\Models\User;
 
-// test('example', function () {
-//     $response = $this->get('/admin/afiliados');
-//     $response->assertStatus(200);
-// });
-
 test('affiliate information can be updated for admin', function () {
     $user = User::factory()->create();
+    $user->role = 'admin';
+    $user->save();
 
     $response = $this
         ->actingAs($user)
@@ -47,7 +45,10 @@ test('affiliate information can be updated for admin', function () {
 
 test('admin can view affiliate admin page', function () {
     $user = User::factory()->withInvitationLink('claudinhoy')->create();
-    auth()->login($user);
+    $user->role = 'admin';
+    $user->save();
+    $admin = User::factory()->admin()->create();
+    auth()->login($admin);
     $affiliateWithdraw = AffiliateWithdraw::factory()->paid()->create();
 
     $response = $this->get(route('admin.afiliados'));
@@ -66,7 +67,10 @@ test('admin can view affiliate admin page', function () {
 
 test('admin can view affiliate admin page with filter', function () {
     $user = User::factory()->withInvitationLink('claudinhoy')->create();
-    auth()->login($user);
+    $user->role = 'admin';
+    $user->save();
+    $admin = User::factory()->admin()->create();
+    auth()->login($admin);
     $affiliateWithdraw = AffiliateWithdraw::factory()->paid()->create();
 
     $response = $this->get(route('admin.afiliados') . '?email=yyyyy');
@@ -87,40 +91,46 @@ test('admin can see historys of the affiliate with button in affiliate page', fu
     $user = User::factory()->withInvitationLink('claudinhoy')->create();
     $user2 = User::factory()->create();
 
+    $user->role = 'admin';
+    $user->save();
     $user2->affiliateId = $user->id;
     $user2->save();
 
-    GameHistory::create([
+    $game1 = GameHistory::create([
         'amount' => 100,
         'finalAmount' => -100,
         'userId' => $user2->id,
-        'type' => 'loss',
+        'type' => 'pendent',
     ]);
 
-    GameHistory::create([
+    $game2 = GameHistory::create([
         'amount' => 100,
         'finalAmount' => -100,
         'userId' => $user->id,
-        'type' => 'loss',
+        'type' => 'pendent',
     ]);
+
+    $game1->type = 'loss';
+    $game2->type = 'loss';
+    $game1->save();
+    $game2->save();
 
     $withdraw = AffiliateWithdraw::factory()->paid()->create();
     $withdraw->userId = $user->id;
     $withdraw->save();
-
     auth()->login($user);
 
-    $responseComissao = actingAs($user)->post(route('admin.afiliados.comissao', ['user' => $user]));
-    $responseJogadas = actingAs($user)->post(route('admin.afiliados.jogadas', ['user' => $user]));
-    $responseSaques = actingAs($user)->post(route('admin.afiliados.saques', ['user' => $user]));
+    $responseComissao = post(route('admin.afiliados.comissao', ['user' => $user]));
+    $responseJogadas = post(route('admin.afiliados.jogadas', ['user' => $user]));
+    $responseSaques = post(route('admin.afiliados.saques', ['user' => $user]));
 
     $responseComissao->assertSessionHasNoErrors()
         ->assertStatus(200);
     $responseJogadas->assertSessionHasNoErrors()
-    ->assertStatus(200);
+        ->assertStatus(200);
     $responseSaques->assertSessionHasNoErrors()
         ->assertStatus(200);
-        
+
     expect(($responseComissao->json())['transactions'][0]['affiliateId'])->toBe($user->id);
     expect(count(($responseComissao->json())['transactions']))->toBe(1);
     expect(($responseJogadas->json())['transactions'][0]['userId'])->toBe($user->id);
@@ -131,11 +141,12 @@ test('admin can see historys of the affiliate with button in affiliate page', fu
 
 
 test('admin can delete affiliate with button in affiliate page', function () {
-    $user = User::factory()->withInvitationLink('claudinhoy')->create();
     $user2 = User::factory()->withInvitationLink('claudinho')->create();
-    auth()->login($user);
 
-    actingAs($user2)->delete(route('admin.afiliados.destroy', ['user' => $user2]));
+    $admin = User::factory()->admin()->create();
+    auth()->login($admin);
+
+    actingAs($admin)->delete(route('admin.afiliados.destroy', ['user' => $user2]));
 
     $response = $this->get(route('admin.afiliados'));
     $props = ($response->viewData('page'))['props'];

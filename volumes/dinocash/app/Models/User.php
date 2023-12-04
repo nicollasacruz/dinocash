@@ -73,6 +73,13 @@ class User extends Authenticatable
         return $value === $this->role;
     }
 
+    public function changeRole($value): User
+    {
+        $this->role = $value;
+        $this->save();
+        return $this;
+    }
+
     public function setInvitationLink($value)
     {
         $this->attributes['invitation_link'] = $value;
