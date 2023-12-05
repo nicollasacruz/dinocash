@@ -97,6 +97,9 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/', function () {
         return Redirect::route('user.history');
     })->name('user');
+    Route::get('/jogar',function () {
+        return Inertia::render('User/Play');
+    })->name('user.play');
     Route::get('/historico', [GameHistoryController::class, 'user'])->name('user.historico');
     Route::get('/movimentacao', [WithdrawController::class, 'user'])->name('user.movimentacao');
     Route::get('/deposito', [DepositController::class, 'user'])->name('user.deposito');
@@ -119,7 +122,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
-    Route::get('/deposito', [DepositController::class, 'indexUser'])->name('deposit.index');
+    // Route::get('/deposito', [DepositController::class, 'indexUser'])->name('deposit.index');
     Route::post('/deposito', [DepositController::class, 'store'])->name('deposit.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('deposit.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('deposit.destroy');

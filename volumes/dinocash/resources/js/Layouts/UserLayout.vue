@@ -10,7 +10,7 @@ const drawer = ref(true);
 </script>
 
 <template>
-    <div>
+    <div id="root">
         <div class="h-screen font-menu flex">
             <div class="drawer col-auto lg:w-96 z-10 absolute lg:hidden">
                 <input

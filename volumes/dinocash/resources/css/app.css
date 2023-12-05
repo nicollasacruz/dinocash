@@ -3,18 +3,21 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: Upheavtt;
-  src: url("upheavtt.ttf") format("opentype");
+    font-family: Upheavtt;
+    src: url("upheavtt.ttf") format("opentype");
 }
 
 @layer components {
-  .admin-input {
-    @apply bg-[#212121] input-sm py-0 select-sm border-[1px] border-gray-500 rounded-md px-2 text-white;
-  }
-  .box {
-    @apply bg-[#212121] border-[1px] border-gray-600 rounded-md text-xs text-white; 
-  }
-  .modal-button {
-    @apply btn btn-xs mx-auto w-full text-[0.6rem]
-  }
+    .admin-input {
+        @apply bg-[#212121] input-sm py-0 select-sm border-[1px] border-gray-500 rounded-md px-2 text-white;
+    }
+    .box {
+        @apply bg-[#212121] border-[1px] border-gray-600 rounded-md text-xs text-white;
+    }
+    .modal-button {
+        @apply btn btn-xs mx-auto w-full text-[0.6rem];
+    }
+    .drawer-button {
+        @apply text-lg bg-gray-700 px-4 rounded-md py-[6px];
+    }
 }

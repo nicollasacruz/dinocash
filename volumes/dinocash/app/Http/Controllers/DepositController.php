@@ -39,16 +39,6 @@ class DepositController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function indexUser()
-    {
-        $deposits = Deposit::where('user', Auth::user()->id)->with('users')->sort(["updatedAt", 'desc'])->paginate(10);
-        return Inertia::render('DepositsUser', [
-            'deposits' => $deposits,
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -112,6 +102,12 @@ class DepositController extends Controller
     }
     public function user(Request $request)
     {
-        return Inertia::render('User/Withdraw');
+        $deposits = Deposit::where('userId', Auth::user()->id)->with('users')->get();
+
+        return Inertia::render('User/Withdraw',
+            [
+                'deposits' => $deposits,
+            ]
+    );
     }
 }

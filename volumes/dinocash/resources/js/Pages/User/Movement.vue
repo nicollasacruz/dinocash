@@ -11,7 +11,7 @@
                         Distancia
                     </div>
                     <div>
-                        Resultado
+                        Status
                     </div>
                     <div>Valor</div>
                 </div>
@@ -41,42 +41,42 @@ const data = [
         id: 1,
         date: "2021-09-01",
         distance: 100,
-        result: "Ganhou",
+        result: "Pendente",
         amount: 100,
     },
     {
         id: 2,
         date: "2021-09-01",
         distance: 100,
-        result: "Ganhou",
+        result: "Pendente",
         amount: 100,
     },
     {
         id: 3,
         date: "2021-09-01",
         distance: 100,
-        result: "Ganhou",
+        result: "Pendente",
         amount: 100,
     },
     {
         id: 4,
         date: "2021-09-01",
         distance: 100,
-        result: "Ganhou",
+        result: "Pendente",
         amount: 100,
     },
     {
         id: 5,
         date: "2021-09-01",
         distance: 100,
-        result: "Ganhou",
+        result: "Pendente",
         amount: 100,
     },
     {
         id: 6,
         date: "2021-09-01",
         distance: 100,
-        result: "Ganhou",
+        result: "Pendente",
         amount: 100,
     },
 ];
