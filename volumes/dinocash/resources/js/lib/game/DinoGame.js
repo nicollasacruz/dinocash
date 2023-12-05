@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height) {
+    constructor(width, height, difficulty = false) {
         super();
 
         this.width = null;
@@ -28,15 +28,15 @@ export default class DinoGame extends GameRunner {
             birdSpeed: 7.2, // ppf
             birdSpawnRate: 240, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: 50, // fpa
+            cactiSpawnRate: difficulty ? 25 : randInteger(20,50), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: 0.5, // ppf
+            dinoGravity: difficulty ? 0.7 : randInteger(5,7) / 10, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa
-            dinoLift: 10, // ppf
+            dinoLift: difficulty ? 8 : randInteger(8,10), // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: 6, // fpa
+            scoreIncreaseRate: difficulty ? 8 : randInteger(6,8), // fpa
         };
 
         this.state = {
@@ -118,7 +118,7 @@ export default class DinoGame extends GameRunner {
         if (state.isRunning) {
             this.drawCacti();
 
-            if (state.level > 3) {
+            if (state.level > 5) {
                 this.drawBirds();
             }
 
@@ -229,7 +229,7 @@ export default class DinoGame extends GameRunner {
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
 
-        if (level > 4 && level < 8) {
+        if (level > 2 && level < 8) {
             settings.bgSpeed++;
             settings.birdSpeed = settings.bgSpeed * 0.8;
         } else if (level > 7) {
@@ -237,7 +237,7 @@ export default class DinoGame extends GameRunner {
             settings.birdSpeed = settings.bgSpeed * 0.9;
             settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
 
-            if (level > 7 && level % 2 === 0 && dinoLegsRate > 3) {
+            if (level > 7 && level % 2 === 0 && dinoLegsRate >= 3) {
                 settings.dinoLegsRate--;
             }
         }

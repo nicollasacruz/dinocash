@@ -29,7 +29,6 @@ class GameHistoryObserver
 
     private function createAffiliateHistory(GameHistory $gameHistory)
     {
-        Log::info("createAffiliateHistory - entrou.");
         try {
             $amount = $gameHistory->finalAmount * -1;
 

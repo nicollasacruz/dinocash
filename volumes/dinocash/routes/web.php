@@ -101,9 +101,9 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
         return Redirect::route('user.historico');
     })->name('user');
     Route::get('/jogar', function () {
-        return Inertia::render('User/Play');
+        return Inertia::render('User/Play', ['amount' => 10]);
     })->name('user.play');
-    
+
     Route::get('/historico', [GameHistoryController::class, 'user'])->name('user.historico');
     Route::get('/movimentacao', [WithdrawController::class, 'user'])->name('user.movimentacao');
 

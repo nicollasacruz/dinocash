@@ -60,20 +60,20 @@ const routes = [
   },
 ];
 
-const page = usePage();
+// const page = usePage();
 
-const user = computed(() => page.props.auth.user.wallet);
-const wallet = toRef(user, "wallet");
+// const user = computed(() => page.props.auth.user.wallet);
+// const wallet = toRef(user, "wallet");
 
-const echo = new Echo({
-  broadcaster: "pusher",
-  key: process.env.MIX_PUSHER_APP_KEY,
-  cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-});
+// const echo = new Echo({
+//   broadcaster: "pusher",
+//   key: process.env.MIX_PUSHER_APP_KEY,
+//   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+// });
 
-onMounted(() => {
-  echo.channel("user." + auth.user.id).listen("WalletUpdated", (event) => {
-    wallet.value = event.user.wallet;
-  });
-});
+// onMounted(() => {
+//   echo.channel("user." + auth.user.id).listen("WalletUpdated", (event) => {
+//     wallet.value = event.user.wallet;
+//   });
+// });
 </script>
