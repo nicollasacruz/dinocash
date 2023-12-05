@@ -29,9 +29,9 @@ class GameHistoryController extends Controller
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
-            $gameHistory = GameHistory::where('type', 'pending');
-            if ($gameHistory->count() > 0) {
-                foreach ($gameHistory as $gameHistoryItem) {
+            $gameHistory = GameHistory::where('type', 'pending')->count();
+            if ($gameHistory > 0) {
+                foreach ($gameHistory->get() as $gameHistoryItem) {
                     $gameHistoryItem->type = 'error';
                     $gameHistoryItem->finalAmount = 0;
                     $user = $gameHistoryItem->user;
@@ -52,11 +52,12 @@ class GameHistoryController extends Controller
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2),
                 'userId' => $request->user,
+                'type' => 'pending',
             ]);
 
             return response()->json([
                 'status' => 'success',
-                'amount' => $gameHistory->amount,
+                'amount' => $gameHistory,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
@@ -119,7 +120,7 @@ class GameHistoryController extends Controller
                 'status' => 'success',
                 'amount' => $gameHistory->finalAmount,
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error($e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
             return response()->json([
