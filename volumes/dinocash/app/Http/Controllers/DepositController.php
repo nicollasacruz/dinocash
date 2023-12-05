@@ -49,9 +49,9 @@ class DepositController extends Controller
         $user = User::find($userId);
         $deposit = $depositService->createDeposit($user, $request->amount);
 
-        return Inertia::render('DepositsUserQrCode', [
-            'deposit' => $deposit,
-        ]);
+        // return Inertia::render('DepositsUserQrCode', [
+        //     'deposit' => $deposit,
+        // ]);
     }
 
     /**

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if (User::count() == 0 || !User::where("email","admin@dinocash.io")->count() == 0) {
+        if (User::count() == 0 || User::where("email","admin@dinocash.io")->count() == 0) {
             $user = User::create([
                 'name' => 'admin',
                 'email' => 'admin@dinocash.io',
@@ -26,6 +26,13 @@ class DatabaseSeeder extends Seeder
                 'document' => '123.456.78-90',
                 'password' => Hash::make('admin'),
                 'role' => 'admin',
+            ]);
+            GameHistory::create([
+                'amount' => 50,
+                'finalAmount' => 100,
+                'distance' => 2,
+                'userId' => $user->id,
+                'type' => 'win',
             ]);
         }
 
@@ -49,8 +56,9 @@ class DatabaseSeeder extends Seeder
             $type = $faker->randomElement(['win', 'loss']);
             $amount = $faker->randomNumber($type === 'win' ? 1 : 3) * ($type === 'win' ? 1 : -1);
             GameHistory::create([
-                'Amount' => $amount,
+                'amount' => $amount,
                 'finalAmount' => $amount < 0 ? $amount : $amount * 2,
+                'distance' => random_int(10, 500),
                 'userId' => $user->id,
                 'type' => $type,
             ]);

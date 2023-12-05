@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\GameHistoryController;
+use App\Models\GameHistory;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Carbon;
@@ -27,11 +28,63 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
+    $userIdLogado = Auth::id();
+
+    $rankedUsers = [];
+    $position = 1;
+    $usuarioLogadoInserido = false;
+
+    $rankings = GameHistory::select(['userId', 'distance'])
+        ->where('type', 'win')
+        ->orderBy('distance', 'desc')
+        ->limit(10)
+        ->get();
+
+    foreach ($rankings as $ranking) {
+        $user = User::find($ranking->userId);
+        $email = $user->email;
+
+        if ($ranking->userId == $userIdLogado) {
+            $usuarioLogadoInserido = true;
+        }
+
+        $rankedUsers[] = [
+            'posicao' => $position,
+            'email' => $email,
+            'distancia' => $ranking->distance,
+        ];
+
+        $position++;
+    }
+
+    if (!$usuarioLogadoInserido && $userIdLogado) {
+        $userLogado = User::find($userIdLogado);
+        $emailLogado = $userLogado->email;
+        
+        $posicaoUsuarioLogado = GameHistory::where('type', 'win')
+        ->orderBy('distance', 'desc')
+        ->pluck('userId')
+        ->search($userLogado->id);
+
+        $distance = GameHistory::select(['distance'])
+        ->where('type', 'win')
+        ->where('userId', $userLogado->id)
+        ->orderBy('distance', 'desc')
+        ->first();
+
+        $rankedUsers[9] = [
+            'posicao' => $posicaoUsuarioLogado + 1,
+            'email' => $emailLogado,
+            'distancia' => $distance->distance,
+        ];
+    }
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'rankedUsers' => $rankedUsers,
     ]);
 })->name('homepage');
 

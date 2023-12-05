@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GameHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -128,7 +129,14 @@ class GameHistoryController extends Controller
                 'message' => $e->getMessage(),
             ]);
         }
+    }
 
+    public function ranking()
+    {
+        $user = User::find(Auth::user()->id);
 
+        $ranking = GameHistory::orderBy('distance', 'desc')->limit(10)->get();
+
+        dd($ranking);
     }
 }
