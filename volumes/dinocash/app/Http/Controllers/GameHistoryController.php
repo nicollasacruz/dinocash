@@ -35,9 +35,10 @@ class GameHistoryController extends Controller
                 ]);
             }
             $this->validate($request, [
-                $request->amount => ['required', 'float', 'min:1', 'max:1000'],
-                $request->user => ['required', 'integer', 'min:1'],
+                'amount' => ['required', 'decimal:2', 'min:1', 'max:1000'],
+                'user' => ['required', 'integer', 'min:1'],
             ]);
+
             $user = User::find($request->user);
             $user->changeWallet($request->amount * -1);
             $user->save();
@@ -78,10 +79,10 @@ class GameHistoryController extends Controller
                 ]);
             }
             $this->validate($request, [
-                $request->amount => ['required', 'float', 'min:1', 'max:100000'],
-                $request->user => ['required', 'integer', 'min:1'],
-                $request->distance => ['required', 'integer', 'min:0'],
-                $request->type => ['required', 'string', 'in:win,loss'],
+                'amount' => ['required', 'decimal:2', 'min:1', 'max:100000'],
+                'user' => ['required', 'integer', 'min:1'],
+                'distance' => ['required', 'integer', 'min:0'],
+                'type' => ['required', 'string', 'in:win,loss'],
             ]);
 
             if($request->type === 'win') {
@@ -107,6 +108,6 @@ class GameHistoryController extends Controller
             ]);
         }
 
-        
+
     }
 }
