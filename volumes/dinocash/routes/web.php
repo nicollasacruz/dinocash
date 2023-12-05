@@ -95,14 +95,17 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/jogar', [GameHistoryController::class, 'play'])->name('user.play');
+    Route::post('/jogar', [GameHistoryController::class, 'store'])->name('user.play.store');
+    Route::patch('/jogar', [GameHistoryController::class, 'update'])->name('user.play.update');
+});
+
 //       USER GROUP
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/', function () {
         return Redirect::route('user.historico');
     })->name('user');
-    Route::get('/jogar', function () {
-        return Inertia::render('User/Play', ['amount' => 10]);
-    })->name('user.play');
 
     Route::get('/historico', [GameHistoryController::class, 'user'])->name('user.historico');
     Route::get('/movimentacao', [WithdrawController::class, 'user'])->name('user.movimentacao');
