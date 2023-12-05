@@ -64,6 +64,7 @@ Route::get('/depositos', function () {
     return Inertia::render('Deposits');
 })->middleware(['auth', 'verified'])->name('user.deposits');
 
+//       ADMIN GROUP
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return Redirect::route('admin.dashboard');
@@ -93,17 +94,24 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::post('/saque/rejeitar', [WithdrawController::class, 'reject'])->name('admin.saque.rejeitar');
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
+
+//       USER GROUP
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/', function () {
-        return Redirect::route('user.history');
+        return Redirect::route('user.historico');
     })->name('user');
-    Route::get('/jogar',function () {
+    Route::get('/jogar', function () {
         return Inertia::render('User/Play');
     })->name('user.play');
+    
     Route::get('/historico', [GameHistoryController::class, 'user'])->name('user.historico');
     Route::get('/movimentacao', [WithdrawController::class, 'user'])->name('user.movimentacao');
+
     Route::get('/deposito', [DepositController::class, 'user'])->name('user.deposito');
-    Route::get('/alterar-senha',function () {
+    Route::post('/deposito', [DepositController::class, 'store'])->name('deposit.store');
+    Route::patch('/deposito', [DepositController::class, 'update'])->name('deposit.update');
+    Route::delete('/deposito', [DepositController::class, 'destroy'])->name('deposit.destroy');
+    Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
     Route::get('/suporte', function () {
@@ -111,6 +119,7 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     })->name('user.suporte');
     Route::get('/afiliado', [AffiliateController::class, 'user'])->name('user.afiliado');
 });
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
@@ -123,9 +132,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->prefix('user')->group(function () {
     // Route::get('/deposito', [DepositController::class, 'indexUser'])->name('deposit.index');
-    Route::post('/deposito', [DepositController::class, 'store'])->name('deposit.store');
-    Route::patch('/deposito', [DepositController::class, 'update'])->name('deposit.update');
-    Route::delete('/deposito', [DepositController::class, 'destroy'])->name('deposit.destroy');
+
 });
 
 Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
