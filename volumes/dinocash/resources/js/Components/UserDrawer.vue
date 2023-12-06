@@ -16,7 +16,7 @@
 
     <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
       <div class="drawer-button">
-        <a>Saldo: {{ wallet }}</a>
+        <a>Saldo: {{ toBRL(wallet) }}</a>
       </div>
       <Link
         v-for="link in routes"
@@ -47,7 +47,11 @@ const routes = [
     route: "user.movimentacao",
   },
   {
-    label: "Depositar / Sacar",
+    label: "Depositar",
+    route: "user.deposito",
+  },
+  {
+    label: "Sacar",
     route: "user.deposito",
   },
   {
@@ -60,20 +64,16 @@ const routes = [
   },
 ];
 
-// const page = usePage();
+const page = usePage();
 
-// const user = computed(() => page.props.auth.user.wallet);
-// const wallet = toRef(user, "wallet");
+const user = computed(() => page.props.auth.user);
+const userWallet = computed(() => page.props.auth.user.wallet);
+const wallet = toRef(userWallet, "wallet");
 
-// const echo = new Echo({
-//   broadcaster: "pusher",
-//   key: process.env.MIX_PUSHER_APP_KEY,
-//   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-// });
-
-// onMounted(() => {
-//   echo.channel("user." + auth.user.id).listen("WalletUpdated", (event) => {
-//     wallet.value = event.user.wallet;
-//   });
-// });
+function toBRL(value) {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+}
 </script>
