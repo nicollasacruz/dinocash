@@ -15,7 +15,10 @@ class GameHistoryController extends Controller
     {
         return Inertia::render('User/Play');
     }
-
+    public function user(Request $request)
+    {
+        return Inertia::render('User/History');
+    }
     public function store(Request $request)
     {
         try {
