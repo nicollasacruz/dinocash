@@ -29,7 +29,7 @@ class GameHistoryController extends Controller
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
-            $gameHistory = $user->gameHistory->where('type', 'pending')->count();
+            $gameHistory = $user->gameHistories->where('type', 'pending')->count();
             if ($gameHistory > 0) {
                 foreach ($gameHistory->get() as $gameHistoryItem) {
                     $gameHistoryItem->type = 'loss';
@@ -87,7 +87,7 @@ class GameHistoryController extends Controller
             }
 
             $user = User::find(Auth::user()->id);
-            $gameHistory = $user->gameHistory->where('type', 'pending')
+            $gameHistory = $user->gameHistories->where('type', 'pending')
                 ->where('id', $request->gameId);
 
             if (!$gameHistory->count()) {

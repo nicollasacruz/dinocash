@@ -127,6 +127,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
             'users' => User::all()
         ]);
     })->name('admin.usuarios');
+    Route::post('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
+    Route::post('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
+    Route::post('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
@@ -160,36 +164,28 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
         return Redirect::route('user.historico');
     })->name('user');
 
-    Route::get('/historico', [GameHistoryController::class, 'user'])->name('user.historico');
-    Route::get('/movimentacao', [WithdrawController::class, 'user'])->name('user.movimentacao');
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('user.edit');
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('user.update');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('user.destroy');
 
+    Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
+    Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
+    
     Route::get('/deposito', [DepositController::class, 'user'])->name('user.deposito');
-    Route::post('/deposito', [DepositController::class, 'store'])->name('deposit.store');
-    Route::patch('/deposito', [DepositController::class, 'update'])->name('deposit.update');
-    Route::delete('/deposito', [DepositController::class, 'destroy'])->name('deposit.destroy');
+    Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposit.store');
+    Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposit.update');
+    Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposit.destroy');
+    
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
     Route::get('/suporte', function () {
         return Inertia::render('User/Suport');
     })->name('user.suporte');
+
     Route::get('/afiliado', [AffiliateController::class, 'user'])->name('user.afiliado');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('profile.comissao');
-    Route::post('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('profile.jogadas');
-    Route::post('/listDeposits', [ProfileController::class, 'listDeposits'])->name('profile.depositos');
-    Route::post('/listWithdraws', [ProfileController::class, 'listWithdraws'])->name('profile.saques');
-});
-
-Route::middleware(['auth'])->prefix('user')->group(function () {
-    // Route::get('/deposito', [DepositController::class, 'indexUser'])->name('deposit.index');
-
-});
 
 Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
 
