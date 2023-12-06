@@ -17,12 +17,6 @@ class GameHistoryController extends Controller {
             "viciosidade" => $viciosidade
         ]);
     }
-    public function user(Request $request)
-    {
-        return Inertia::render('User/History');
-    }
-    // public function store(Request $request)
-    // {
 
     public function store(Request $request) {
         try {
@@ -78,14 +72,14 @@ class GameHistoryController extends Controller {
                 'token' => ['required', 'string'],
             ]);
 
-            // $hashString = hash('sha256', $request->gameId.Auth::user()->id.'dinocash');
-            // if(!hash_equals($request->token, $hashString)) {
-            //     Log::error('Token não confirmado.');
-            //     return response()->json([
-            //         'status' => 'error',
-            //         'message' => 'Token não confirmado.',
-            //     ]);
-            // }
+            $hashString = hash('sha256', $request->gameId.Auth::user()->id.'dinocash');
+            if(!hash_equals($request->token, $hashString)) {
+                Log::error('Token não confirmado.');
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token não confirmado.',
+                ]);
+            }
 
             $user = User::find(Auth::user()->id);
             $gameHistory = $user->gameHistories->where('type', 'pending')
@@ -98,7 +92,6 @@ class GameHistoryController extends Controller {
                     'message' => 'Partida não encontrada.',
                 ]);
             }
-            // (amount / 500) * pontos
 
             $finalAmount = $gameHistory->amount * -1;
             if($request->type === 'win') {
