@@ -92,7 +92,7 @@ function getPremio(i) {
     <div class="w-full mx-auto mt-auto">
       <Link
         class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
-        :href="route('login')"
+        :href="route('user.play')"
       >
         {{ __("homepage.play-now") }}
       </Link>

@@ -9,10 +9,24 @@ use App\Models\GgrPayment;
 use App\Models\GgrTransaction;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Log;
 
 class AffiliateInvoiceService
 {
+    public function getAllInvoices(): Collection|bool
+    {
+        try {
+            $invoices = AffiliateInvoice::where('status', 'open')->get();
+    
+            return $invoices;
+
+        } catch (\Exception $e) {
+            Log::error("Erro ao pegar todas as AffiliateInvoices: " . $e->getMessage());
+            return false;
+        }
+    }
     public function getInvoice(User $affiliate): AffiliateInvoice|bool
     {
         try {
@@ -34,7 +48,7 @@ class AffiliateInvoiceService
     {
         try {
             return AffiliateInvoice::create([
-                'status' => 'pending',
+                'status' => 'open',
                 'affiliateId' => $affiliate->id,
             ]);
         } catch (\Exception $e) {
@@ -66,13 +80,18 @@ class AffiliateInvoiceService
         try {
             $invoice->update([
                 'status' => 'closed',
-                'invoiced_at' => now(),
+                'invoicedAt' => now(),
+                'amount' => $invoice->affiliateHistories->sum('amount'),
             ]);
+            $affiliate = User::where('id', $invoice->affiliateId)->first();
+            $affiliate->resetWalletAffiliate();
+
             foreach ($invoice->affiliateHistories as $transaction) {
                 $transaction->update([
-                    'invoiced_at' => now(),
+                    'invoicedAt' => now(),
                 ]);
             }
+
             return $invoice;
         } catch (\Exception $e) {
             Log::error("Erro ao fehcar invoice: " . $e->getMessage());
