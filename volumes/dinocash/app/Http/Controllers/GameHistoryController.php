@@ -39,10 +39,10 @@ class GameHistoryController extends Controller {
                     Log::error('Partida já iniciada. - '.$user->email);
                 }
             }
-
+            
             $user->changeWallet($request->amount * -1);
             $user->save();
-
+            
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2),
                 'userId' => $user->id,
@@ -56,7 +56,7 @@ class GameHistoryController extends Controller {
                 // 'token' => $hashString,
             ]);
         } catch (\Exception $e) {
-            Log::error($e->getMessage().' - '.$e->getFile().' - '.$e->getLine());
+            Log::error('STORE GAME HISTORY    -    ' . $e->getMessage().' - '.$e->getFile() .' - ' . $e->getLine() .' - ' . $e->getTraceAsString());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
@@ -85,7 +85,7 @@ class GameHistoryController extends Controller {
             $gameHistory = $user->gameHistories->where('type', 'pending')
                 ->where('id', $request->gameId)->first();
 
-            if(!$gameHistory->count()) {
+            if(!$gameHistory) {
                 Log::error('Partida não encontrada.');
                 return response()->json([
                     'status' => 'error',
@@ -112,7 +112,7 @@ class GameHistoryController extends Controller {
             ]);
 
         } catch (\Exception $e) {
-            Log::error($e->getMessage().' - '.$e->getFile().' - '.$e->getLine());
+            Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage().' - '.$e->getFile().' - '.$e->getLine() .' - ' . $e->getTraceAsString());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

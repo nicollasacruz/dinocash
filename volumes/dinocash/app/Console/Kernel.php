@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\CloseAffiliateInvoice;
 use App\Jobs\CloseInvoiceGgr;
 use App\Jobs\ProcessAutoWithdraw;
 use Illuminate\Console\Scheduling\Schedule;
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->job(new CloseInvoiceGgr())->mondays()->at('03:30');
+        $schedule->job(new CloseAffiliateInvoice())->mondays()->at('00:00');
     }
 
     /**

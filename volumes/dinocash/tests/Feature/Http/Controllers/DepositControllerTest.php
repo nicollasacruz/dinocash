@@ -18,7 +18,7 @@ test('create user and make a deposit', function () {
     $response->assertRedirect(RouteServiceProvider::HOME);
 
 
-    $responseDeposit = $this->post(route('deposit.store'), [
+    $responseDeposit = $this->post(route('user.deposit.store'), [
         'document' => '156.201.067-05',
         'amount' => 15.00,
     ]);
@@ -48,7 +48,7 @@ test('create user and make a deposit and aprove deposit', function () {
     $response->assertRedirect(RouteServiceProvider::HOME);
 
 
-    $this->post(route('deposit.store'), [
+    $this->post(route('user.deposit.store'), [
         'document' => '156.201.067-05',
         'amount' => 15.00,
     ]);
@@ -90,7 +90,7 @@ test('create user and make a deposit and aprove deposit and check affiliate hist
     $response->assertRedirect(RouteServiceProvider::HOME);
 
 
-    $this->post(route('deposit.store'), [
+    $this->post(route('user.deposit.store'), [
         'document' => '156.201.067-05',
         'amount' => 100.00,
     ]);

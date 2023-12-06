@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\AffiliateHistory;
 use App\Models\Deposit;
+use App\Services\AffiliateInvoiceService;
 use Log;
 
 class DepositObserver
@@ -41,9 +42,11 @@ class DepositObserver
 
     private function createAffiliateHistory(Deposit $deposit, $affiliate)
     {
+        $affiliateInvoiceService = new AffiliateInvoiceService();
         AffiliateHistory::create([
             'amount' => $affiliate->CPA,
             'affiliateId' => $affiliate->id,
+            'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($affiliate))->id,
             'userId' => $deposit->userId,
             'type' => 'CPA',
         ]);

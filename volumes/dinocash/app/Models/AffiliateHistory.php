@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AffiliateHistory extends Model
-{
+class AffiliateHistory extends Model {
     use HasFactory, Timestamp;
 
     /**
@@ -20,6 +19,7 @@ class AffiliateHistory extends Model
         'amount',
         'gameId',
         'affiliateId',
+        'affiliateInvoiceId',
         'userId',
         'type',
         'invoicedAt',
@@ -31,8 +31,7 @@ class AffiliateHistory extends Model
      *
      * @return BelongsTo
      */
-    public function user(): BelongsTo
-    {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
@@ -41,9 +40,12 @@ class AffiliateHistory extends Model
      *
      * @return BelongsTo
      */
-    public function affiliate(): BelongsTo
-    {
+    public function affiliate(): BelongsTo {
         return $this->belongsTo(User::class, 'affiliateId', 'id');
+    }
+
+    public function afilliateInvoice(): BelongsTo {
+        return $this->belongsTo(AffiliateInvoice::class, 'affiliateInvoiceId', 'id');
     }
 }
 

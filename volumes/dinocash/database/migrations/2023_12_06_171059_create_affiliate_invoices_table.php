@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('affiliate_histories', function (Blueprint $table) {
+        Schema::create('affiliate_invoices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('gameId')->nullable();
+            $table->decimal('amount', 15, 2)->default(0);
             $table->unsignedBigInteger('affiliateId');
-            $table->unsignedBigInteger('userId');
-            $table->string('type');
+            $table->string('status')->default('open');
             $table->dateTime('invoicedAt')->nullable();
             $table->dateTime('payedAt')->nullable();
             $table->timestamps();
 
-            $table->foreign('gameId')->references('id')->on('game_histories')->onDelete('cascade');
             $table->foreign('affiliateId')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('userId')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('affiliate_histories');
+        Schema::dropIfExists('affiliate_invoices');
     }
 };
