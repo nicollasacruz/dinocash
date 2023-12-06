@@ -161,6 +161,7 @@ function getPremio(i) {
         <div
           class="flex-1 grid grid-cols-5 gap-x-1 md:gap-x-0 font-menu md:text-[25px] mt-5"
         >
+          <div class="">Posição</div>
           <div class="col-span-2">Usuário</div>
           <div class="text-center">Distância</div>
           <div class="mb-3 text-center">Prêmio</div>
