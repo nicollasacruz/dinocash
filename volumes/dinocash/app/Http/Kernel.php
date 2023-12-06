@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'session.check' => \App\Http\Middleware\UpdateUserActivity::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'isAffiliate' => \App\Http\Middleware\IsAffiliateMiddleware::class,
+        'singleSession' => \App\Http\Middleware\SingleSession::class,
     ];
 }

@@ -10,8 +10,8 @@ import { defineProps, defineEmits, watch } from "vue";
 const props = defineProps({
     active: Boolean,
 });
-const emit = defineEmits(["endGame"]);
-const game = new DinoGame(600, 300);
+const emit = defineEmits(["endGame", "finishGame"]);
+const game = new DinoGame(700, 400);
 const isTouchDevice =
     "ontouchstart" in window ||
     navigator.maxTouchPoints > 0 ||
@@ -21,7 +21,12 @@ const isTouchDevice =
 // @ts-ignore
 document.addEventListener("endGame", ({ detail }) => {
     emit("endGame", detail);
-    console.log(detail);
+    console.log(detail, 'endGame');
+    // destroy game instance
+});
+document.addEventListener("finishGame", ({ detail }) => {
+    emit("finishGame", detail);
+    console.log(detail, 'finishGame');
     // destroy game instance
 });
 game.start().catch(console.error);
@@ -42,12 +47,15 @@ const keydownCallback = ({ keyCode }) => {
     const keycodes = {
         JUMP: { 38: 1, 32: 1 },
         DUCK: { 40: 1 },
+        FINISH: { 13: 1 },
     };
 
     if (keycodes.JUMP[keyCode]) {
         game.onInput("jump");
     } else if (keycodes.DUCK[keyCode]) {
         game.onInput("duck");
+    } else if (keycodes.FINISH[keyCode]) {
+        game.onInput("finish");
     }
 };
 

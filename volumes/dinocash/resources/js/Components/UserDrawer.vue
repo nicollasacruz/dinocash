@@ -35,33 +35,37 @@
 <script setup lang="ts">
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineProps } from "vue";
+import { defineProps, computed  } from "vue";
 
 const routes = [
-    {
-        label: "Jogar",
-        route: "user.play",
-    },
-    {
-        label: "Histórico",
-        route: "user.historico",
-    },
-    {
-        label: "Movimentação",
-        route: "user.movimentacao",
-    },
-    {
-        label: "Depositar / Sacar",
-        route: "user.deposito",
-    },
-    {
-        label: "Alterar Senha",
-        route: "user.alterar_senha",
-    },
-    {
-        label: "Suporte",
-        route: "user.suporte",
-    },
+  {
+    label: "Jogar",
+    route: "user.play",
+  },
+  {
+    label: "Histórico",
+    route: "user.historico",
+  },
+  {
+    label: "Movimentação",
+    route: "user.movimentacao",
+  },
+  {
+    label: "Depositar",
+    route: "user.deposito",
+  },
+  {
+    label: "Sacar",
+    route: "user.deposito",
+  },
+  {
+    label: "Alterar Senha",
+    route: "user.alterar_senha",
+  },
+  {
+    label: "Suporte",
+    route: "user.suporte",
+  },
 ];
 const { wallet } = defineProps({
     wallet: {
@@ -70,27 +74,23 @@ const { wallet } = defineProps({
     },
 });
 
+// function toBRL(value) {
+//     return value.toLocaleString("pt-br", {
+//         style: "currency",
+//         currency: "BRL",
+//     });
+// }
+
+const page = usePage();
+
+const user = computed(() => page.props.auth.user);
+const userWallet = computed(() => page.props.auth.user.wallet);
+// const wallet = toRef(userWallet, "wallet");
+
 function toBRL(value) {
-    return value.toLocaleString("pt-br", {
+    return Number(value).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL",
     });
 }
-
-// const page = usePage();
-
-// const user = computed(() => page.props.auth.user.wallet);
-// const wallet = toRef(user, "wallet");
-
-// const echo = new Echo({
-//   broadcaster: "pusher",
-//   key: process.env.MIX_PUSHER_APP_KEY,
-//   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-// });
-
-// onMounted(() => {
-//   echo.channel("user." + auth.user.id).listen("WalletUpdated", (event) => {
-//     wallet.value = event.user.wallet;
-//   });
-// });
 </script>

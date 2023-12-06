@@ -9,137 +9,121 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class GameHistoryController extends Controller
-{
-    public function play(Request $request)
-    {
-        return Inertia::render('User/Play');
+class GameHistoryController extends Controller {
+    public function play(Request $request) {
+        $viciosidade = true;
+
+        return Inertia::render('User/Play', [
+            "viciosidade" => $viciosidade
+        ]);
     }
     public function user(Request $request)
     {
         return Inertia::render('User/History');
     }
-    public function store(Request $request)
-    {
+    // public function store(Request $request)
+    // {
+
+    public function store(Request $request) {
         try {
             $this->validate($request, [
                 'amount' => ['required', 'numeric', 'min:1', 'max:1000'],
-                'user' => ['required', 'integer', 'min:1'],
             ]);
-
-            if ((User::find($request->user)->wallet < $request->amount)) {
+            $user = User::find(Auth::user()->id);
+            if(($user->wallet < $request->amount)) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
-            $gameHistory = GameHistory::where('type', 'pending')->count();
-            if ($gameHistory > 0) {
-                foreach ($gameHistory->get() as $gameHistoryItem) {
-                    $gameHistoryItem->type = 'error';
-                    $gameHistoryItem->finalAmount = 0;
-                    $user = $gameHistoryItem->user;
-                    $user->changeWallet($gameHistoryItem->amount);
-                    $user->save();
+            $gameHistory = $user->gameHistories->where('type', 'pending');
+            if($gameHistory->count() > 0) {
+                foreach($gameHistory as $gameHistoryItem) {
+                    $gameHistoryItem->type = 'loss';
+                    $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
                     $gameHistoryItem->save();
-                    Log::error('Partida já iniciada. - ' . $user->email);
+                    Log::error('Partida já iniciada. - '.$user->email);
                 }
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Partida já iniciada.',
-                ]);
             }
 
-            $user = User::find($request->user);
             $user->changeWallet($request->amount * -1);
             $user->save();
+
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2),
-                'userId' => $request->user,
+                'userId' => $user->id,
                 'type' => 'pending',
             ]);
+            $hashString = hash('sha256', $gameHistory->id.$user->id.'dinocash');
 
             return response()->json([
                 'status' => 'success',
-                'amount' => $gameHistory,
+                'gameHistory' => $gameHistory,
+                // 'token' => $hashString,
             ]);
         } catch (\Exception $e) {
-            Log::error($e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
+            Log::error($e->getMessage().' - '.$e->getFile().' - '.$e->getLine());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ]);
         }
     }
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         try {
-            $request->amount = number_format($request->amount, 2, '.', ',');
-            $validated = $request->validate([
-                'amount' => ['required', 'numeric', 'min:1', 'max:100000'],
-                'user' => ['required', 'integer', 'min:1'],
+            $request->validate([
                 'distance' => ['required', 'integer', 'min:0'],
+                'gameId' => ['required', 'integer', 'min:0'],
                 'type' => ['required', 'string', 'in:win,loss'],
+                'token' => ['required', 'string'],
             ]);
-            $user = User::find($request->user);
-            $gameHistory = GameHistory::where('type', 'pending')
-                ->where('userId', $user->id);
 
-            if (!$gameHistory->count()) {
+            // $hashString = hash('sha256', $request->gameId.Auth::user()->id.'dinocash');
+            // if(!hash_equals($request->token, $hashString)) {
+            //     Log::error('Token não confirmado.');
+            //     return response()->json([
+            //         'status' => 'error',
+            //         'message' => 'Token não confirmado.',
+            //     ]);
+            // }
+
+            $user = User::find(Auth::user()->id);
+            $gameHistory = $user->gameHistories->where('type', 'pending')
+                ->where('id', $request->gameId)->first();
+
+            if(!$gameHistory->count()) {
                 Log::error('Partida não encontrada.');
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Partida não encontrada.',
                 ]);
             }
-            if ($gameHistory->count() !== 1) {
-                foreach ($gameHistory as $gameHistoryItem) {
-                    $gameHistoryItem->type = 'error';
-                    $gameHistoryItem->finalAmount = 0;
-                    $user = $gameHistoryItem->user;
-                    $user->changeWallet($gameHistoryItem->amount);
-                    $user->save();
-                    $gameHistoryItem->save();
-                    Log::error('Partida já iniciada. - ' . $user->email);
-                }
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Partida já iniciada.',
-                ]);
-            }
+            // (amount / 500) * pontos
 
-            if ($request->type === 'win') {
-                $user = User::find($request->user);
-                $user->changeWallet($request->amount);
+            $finalAmount = $gameHistory->amount * -1;
+            if($request->type === 'win') {
+                $finalAmount = (($gameHistory->amount / 500) * $request->distance);
+                $user->changeWallet((($gameHistory->amount / 500) * $request->distance));
                 $user->save();
             }
-            $gameHistory = GameHistory::find($gameHistory->first()->id);
+
             $gameHistory->update([
-                'finalAmount' => number_format($request->type === 'win' ? $request->amount : $request->amount * -1, 2),
+                'finalAmount' => number_format($request->type === 'win' ? $finalAmount - $gameHistory->amount : $finalAmount, 2),
                 'type' => $request->type,
                 'distance' => $request->distance,
             ]);
 
             return response()->json([
                 'status' => 'success',
-                'amount' => $gameHistory->finalAmount,
+                'message' => 'Game finalizado com sucesso.',
             ]);
 
         } catch (\Exception $e) {
-            Log::error($e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
+            Log::error($e->getMessage().' - '.$e->getFile().' - '.$e->getLine());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ]);
         }
-    }
-
-    public function ranking()
-    {
-        $user = User::find(Auth::user()->id);
-
-        $ranking = GameHistory::orderBy('distance', 'desc')->limit(10)->get();
-
-        dd($ranking);
     }
 }

@@ -101,6 +101,7 @@ import BaseModal from "./BaseModal.vue";
 import { ref, defineProps } from "vue";
 import UserForm from "./UserForm.vue";
 import axios from "axios";
+
 const { columns, rows } = defineProps(["columns", "rows"]);
 const showModal = ref(false);
 const showData = ref(false);
