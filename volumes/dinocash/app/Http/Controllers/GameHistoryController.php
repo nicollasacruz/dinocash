@@ -21,21 +21,19 @@ class GameHistoryController extends Controller
         try {
             $this->validate($request, [
                 'amount' => ['required', 'numeric', 'min:1', 'max:1000'],
-                'user' => ['required', 'integer', 'min:1'],
             ]);
-
-            if ((User::find($request->user)->wallet < $request->amount)) {
+            $user = User::find(Auth::user()->id);
+            if (($user->wallet < $request->amount)) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
-            $gameHistory = User::find($request->user)->gameHistory->where('type', 'pending')->count();
+            $gameHistory = $user->gameHistory->where('type', 'pending')->count();
             if ($gameHistory > 0) {
                 foreach ($gameHistory->get() as $gameHistoryItem) {
                     $gameHistoryItem->type = 'loss';
                     $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
-                    $user = $gameHistoryItem->user;
                     $gameHistoryItem->save();
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
@@ -45,15 +43,15 @@ class GameHistoryController extends Controller
                 ]);
             }
 
-            $user = User::find($request->user);
             $user->changeWallet($request->amount * -1);
             $user->save();
+
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2),
-                'userId' => $request->user,
+                'userId' => $user->id,
                 'type' => 'pending',
             ]);
-            $hashString = hash('sha256', $gameHistory->id . Auth::user()->id . 'dinocash');
+            $hashString = hash('sha256', $gameHistory->id . $user->id . 'dinocash');
 
             return response()->json([
                 'status' => 'success',
@@ -88,7 +86,7 @@ class GameHistoryController extends Controller
                 ]);
             }
 
-            $user = User::find($request->user);
+            $user = User::find(Auth::user()->id);
             $gameHistory = $user->gameHistory->where('type', 'pending')
                 ->where('id', $request->gameId);
 
@@ -101,7 +99,6 @@ class GameHistoryController extends Controller
             }
 
             if ($request->type === 'win') {
-                $user = User::find($request->user);
                 $user->changeWallet($request->amount);
                 $user->save();
             }
