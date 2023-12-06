@@ -16,13 +16,15 @@
       </div>
       <GameCluster
         @end-game="handleEndGame"
+        @finish-game="handleFinishGame"
         :active="isRunning"
         :height="clientHeight"
         :width="clientWidth"
       />
     </div>
-    <BaseModal v-if="endGame" :score="score" v-model="endGame">
-      <div class="text-center text-2xl">Você fez {{ score }} pontos</div>
+    <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
+      <div v-if="endGame" class="text-center text-2xl">Game Over! Você andou {{ score }} metros</div>
+      <div v-else class="text-center text-2xl">Parabéns! Você andou {{ score }} metros</div>
       <div class="flex justify-center">
         <button
           class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
@@ -58,6 +60,7 @@ const clientHeight = ref(0);
 const clientWidth = ref(0);
 const difficulty = ref(false);
 const score = ref(0);
+const type = ref('loss');
 
 async function fetchStore() {
   try {
@@ -82,19 +85,19 @@ async function generateSHA256Hash(input) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-  console.log(hashHex, 'hash value');
+
   return hashHex;
 }
 
 
 async function fetchUpdate() {
+  // console.log(type.value, 'value');
   try {
-    console.log(`${gameId.value}${userId.value}dinocash`, 'value');
     const hash = await generateSHA256Hash(`${gameId.value}${userId.value}dinocash`)
     const response = await axios.patch(route("user.play.update"), {
       distance: score.value,
       gameId: gameId.value,
-      type: 'loss',
+      type: type.value,
       token: hash,
     });
 
@@ -120,9 +123,22 @@ async function startGame() {
   div.style.display = "none";
 }
 const handleEndGame = (pontuation) => {
+  console.log(pontuation, 'value handle')
     isRunning.value = false;
     endGame.value = true;
     score.value = pontuation;
+    type.value = 'loss';
+    const div = document.getElementById("root") as HTMLDivElement;
+    div.style.display = "block";
+    fetchUpdate();
+};
+
+const handleFinishGame = (pontuation) => {
+  console.log(pontuation, 'value handle')
+    isRunning.value = false;
+    endGame.value = true;
+    score.value = pontuation;
+    type.value = 'win';
     const div = document.getElementById("root") as HTMLDivElement;
     div.style.display = "block";
     fetchUpdate();

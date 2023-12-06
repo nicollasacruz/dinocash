@@ -92,14 +92,17 @@ class GameHistoryController extends Controller
                     'message' => 'Partida não encontrada.',
                 ]);
             }
+            // (amount / 500) * pontos
 
+            $finalAmount = $gameHistory->amount * -1;
             if ($request->type === 'win') {
-                $user->changeWallet($request->amount);
+                $finalAmount = (($gameHistory->amount / 500) * $request->distance);
+                $user->changeWallet((($gameHistory->amount / 500) * $request->distance));
                 $user->save();
             }
 
             $gameHistory->update([
-                'finalAmount' => number_format($request->type === 'win' ? $request->amount : $request->amount * -1, 2),
+                'finalAmount' => number_format($request->type === 'win' ? $finalAmount - $gameHistory->amount : $finalAmount, 2),
                 'type' => $request->type,
                 'distance' => $request->distance,
             ]);

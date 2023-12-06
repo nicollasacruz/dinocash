@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, difficulty = false) {
+    constructor(width, height, difficulty = randInteger(0,1)) {
         super();
 
         this.width = null;
@@ -34,7 +34,7 @@ export default class DinoGame extends GameRunner {
             dinoGravity: difficulty ? 0.7 : randInteger(5,7) / 10, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa
-            dinoLift: difficulty ? 8 : randInteger(8,10), // ppf
+            dinoLift: difficulty ? 8 : randInteger(8,9), // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: difficulty ? 8 : randInteger(6,8), // fpa
         };
@@ -136,6 +136,16 @@ export default class DinoGame extends GameRunner {
             } else {
                 this.updateScore();
             }
+
+            if (state.finishGame) {
+                this.endGame();
+                const eventoModificacao = new CustomEvent("finishGame", {
+                    detail: this.state.score.value,
+                });
+                document.dispatchEvent(eventoModificacao);
+            } else {
+                this.updateScore();
+            }
         }
     }
 
@@ -166,6 +176,13 @@ export default class DinoGame extends GameRunner {
             case "stop-duck": {
                 if (state.isRunning) {
                     state.dino.duck(false);
+                }
+                break;
+            }
+
+            case "finish": {
+                if (state.isRunning) {
+                    state.finishGame = true;
                 }
                 break;
             }
