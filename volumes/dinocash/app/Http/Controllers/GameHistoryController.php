@@ -29,18 +29,14 @@ class GameHistoryController extends Controller
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
-            $gameHistory = $user->gameHistories->where('type', 'pending')->count();
-            if ($gameHistory > 0) {
-                foreach ($gameHistory->get() as $gameHistoryItem) {
+            $gameHistory = $user->gameHistories->where('type', 'pending');
+            if ($gameHistory->count() > 0) {
+                foreach ($gameHistory as $gameHistoryItem) {
                     $gameHistoryItem->type = 'loss';
                     $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
                     $gameHistoryItem->save();
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
-                return response()->json([
-                    'status' => 'loss',
-                    'message' => 'Partida já iniciada.',
-                ]);
             }
 
             $user->changeWallet($request->amount * -1);
