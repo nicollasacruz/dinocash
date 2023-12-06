@@ -65,7 +65,6 @@ class GameHistoryController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->amount = number_format($request->amount, 2, '.', ',');
             $request->validate([
                 'distance' => ['required', 'integer', 'min:0'],
                 'gameId' => ['required', 'integer', 'min:0'],
@@ -84,7 +83,7 @@ class GameHistoryController extends Controller
 
             $user = User::find(Auth::user()->id);
             $gameHistory = $user->gameHistories->where('type', 'pending')
-                ->where('id', $request->gameId);
+                ->where('id', $request->gameId)->first();
 
             if (!$gameHistory->count()) {
                 Log::error('Partida não encontrada.');
