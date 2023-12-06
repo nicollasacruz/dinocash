@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, difficulty = randInteger(0,2)) {
+    constructor(width, height, difficulty = randInteger(0, 2)) {
         super();
 
         this.width = null;
@@ -28,15 +28,15 @@ export default class DinoGame extends GameRunner {
             birdSpeed: 7.2, // ppf
             birdSpawnRate: 240, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: difficulty ? 25 : randInteger(20,50), // fpa
+            cactiSpawnRate: difficulty ? 25 : randInteger(20, 50), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: difficulty ? 0.7 : randInteger(5,7) / 10, // ppf
+            dinoGravity: difficulty ? 0.7 : randInteger(5, 7) / 10, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa
-            dinoLift: difficulty ? 8 : randInteger(8,9), // ppf
+            dinoLift: difficulty ? 8 : randInteger(8, 9), // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: difficulty ? 8 : randInteger(6,8), // fpa
+            scoreIncreaseRate: difficulty ? 8 : randInteger(6, 8), // fpa
         };
 
         this.state = {
@@ -81,6 +81,7 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.alignItems = "center";
         canvasContainer.style.width = "100%";
         canvasContainer.style.height = "100vh";
+        canvasContainer.style.position = "relative";
         canvasContainer.append(canvas);
         app.prepend(canvasContainer);
         return canvas;
@@ -95,16 +96,20 @@ export default class DinoGame extends GameRunner {
         buttonContainer.style.justifyContent = "center";
 
         const finishButton = document.createElement("button");
-        finishButton.textContent = "Finish Game";
+        // finishButton.textContent = "Finish Game";
         finishButton.style.padding = "10px";
         finishButton.style.fontSize = "16px";
+        finishButton.style.backgroundColor = "#fff";
+        finishButton.style.width = '100px';
+        finishButton.style.border = "1px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.addEventListener("click", () => {
             this.onInput("finish");
         });
-
+        const canvasContainer = document.querySelector("canvas").parentElement;
         buttonContainer.appendChild(finishButton);
-        document.body.appendChild(buttonContainer);
+        canvasContainer.appendChild(buttonContainer);
+        // document.body.appendChild(buttonContainer);
     }
 
     async preload() {
@@ -139,7 +144,7 @@ export default class DinoGame extends GameRunner {
         if (state.isRunning) {
             this.drawCacti();
 
-            if (state.level > randInteger(3,5)) {
+            if (state.level > randInteger(3, 5)) {
                 this.drawBirds();
             }
 
@@ -228,7 +233,7 @@ export default class DinoGame extends GameRunner {
         });
 
         this.start();
-        // this.setupUI();
+        this.setupUI();
         const canvasContainer = document.querySelector("canvas").parentElement;
         canvasContainer.style.display = "flex";
     }
@@ -304,7 +309,8 @@ export default class DinoGame extends GameRunner {
 
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
-
+            const button = document.querySelector("button");
+            button.textContent = this.state.score.value / 5;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();

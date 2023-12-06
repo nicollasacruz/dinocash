@@ -12,7 +12,7 @@
           <div>Valor</div>
         </div>
         <div
-          v-for="({ updated_at, distance, type, finalAmount }, i) in transactions"
+          v-for="({ updated_at, distance, type, finalAmount }, i) in listTransactions"
           class="grid grid-cols-4 bg-gray-200 py-2 text-sm lg:text-xl text-center"
         >
           <div>
@@ -37,7 +37,7 @@ import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import dayjs from "dayjs";
 
 const { transactions } = defineProps(['transactions', ]);
-
+const listTransactions = transactions.reverse();
 function toBRL(value) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
