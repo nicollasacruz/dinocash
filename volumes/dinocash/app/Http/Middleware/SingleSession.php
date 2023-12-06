@@ -22,8 +22,8 @@ class SingleSession extends Middleware
 
             foreach ($userSessions as $session) {
                 // Destroy all sessions except the current one
-                if ($session['id'] !== $currentSessionId) {
-                    $this->destroySession($session['id']);
+                if ($session->id !== $currentSessionId) {
+                    $this->destroySession($session->id);
                 }
             }
         }
