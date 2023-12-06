@@ -148,7 +148,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'singleSession'])->group(function () {
     Route::get('/jogar', [GameHistoryController::class, 'play'])->name('user.play');
     Route::post('/jogar', [GameHistoryController::class, 'store'])->name('user.play.store');
     Route::patch('/jogar', [GameHistoryController::class, 'update'])->name('user.play.update');
