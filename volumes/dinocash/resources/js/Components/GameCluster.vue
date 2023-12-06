@@ -11,7 +11,7 @@ const props = defineProps({
     active: Boolean,
 });
 const emit = defineEmits(["endGame", "finishGame"]);
-const game = new DinoGame(600, 300);
+const game = new DinoGame(700, 400);
 const isTouchDevice =
     "ontouchstart" in window ||
     navigator.maxTouchPoints > 0 ||

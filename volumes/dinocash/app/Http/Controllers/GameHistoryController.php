@@ -9,33 +9,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class GameHistoryController extends Controller
-{
-    public function play(Request $request)
-    {
-        return Inertia::render('User/Play');
+class GameHistoryController extends Controller {
+    public function play(Request $request) {
+        $viciosidade = true;
+
+        return Inertia::render('User/Play', [
+            "viciosidade" => $viciosidade
+        ]);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         try {
             $this->validate($request, [
                 'amount' => ['required', 'numeric', 'min:1', 'max:1000'],
             ]);
             $user = User::find(Auth::user()->id);
-            if (($user->wallet < $request->amount)) {
+            if(($user->wallet < $request->amount)) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
             $gameHistory = $user->gameHistories->where('type', 'pending');
-            if ($gameHistory->count() > 0) {
-                foreach ($gameHistory as $gameHistoryItem) {
+            if($gameHistory->count() > 0) {
+                foreach($gameHistory as $gameHistoryItem) {
                     $gameHistoryItem->type = 'loss';
                     $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
                     $gameHistoryItem->save();
-                    Log::error('Partida já iniciada. - ' . $user->email);
+                    Log::error('Partida já iniciada. - '.$user->email);
                 }
             }
 
@@ -47,7 +48,7 @@ class GameHistoryController extends Controller
                 'userId' => $user->id,
                 'type' => 'pending',
             ]);
-            $hashString = hash('sha256', $gameHistory->id . $user->id . 'dinocash');
+            $hashString = hash('sha256', $gameHistory->id.$user->id.'dinocash');
 
             return response()->json([
                 'status' => 'success',
@@ -55,15 +56,14 @@ class GameHistoryController extends Controller
                 // 'token' => $hashString,
             ]);
         } catch (\Exception $e) {
-            Log::error($e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
+            Log::error($e->getMessage().' - '.$e->getFile().' - '.$e->getLine());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ]);
         }
     }
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         try {
             $request->validate([
                 'distance' => ['required', 'integer', 'min:0'],
@@ -72,7 +72,7 @@ class GameHistoryController extends Controller
                 'token' => ['required', 'string'],
             ]);
 
-            $hashString = hash('sha256', $request->gameId . Auth::user()->id . 'dinocash');
+            $hashString = hash('sha256', $request->gameId.Auth::user()->id.'dinocash');
             if(!hash_equals($request->token, $hashString)) {
                 Log::error('Token não confirmado.');
                 return response()->json([
@@ -85,7 +85,7 @@ class GameHistoryController extends Controller
             $gameHistory = $user->gameHistories->where('type', 'pending')
                 ->where('id', $request->gameId)->first();
 
-            if (!$gameHistory->count()) {
+            if(!$gameHistory->count()) {
                 Log::error('Partida não encontrada.');
                 return response()->json([
                     'status' => 'error',
@@ -95,7 +95,7 @@ class GameHistoryController extends Controller
             // (amount / 500) * pontos
 
             $finalAmount = $gameHistory->amount * -1;
-            if ($request->type === 'win') {
+            if($request->type === 'win') {
                 $finalAmount = (($gameHistory->amount / 500) * $request->distance);
                 $user->changeWallet((($gameHistory->amount / 500) * $request->distance));
                 $user->save();
@@ -113,7 +113,7 @@ class GameHistoryController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error($e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
+            Log::error($e->getMessage().' - '.$e->getFile().' - '.$e->getLine());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

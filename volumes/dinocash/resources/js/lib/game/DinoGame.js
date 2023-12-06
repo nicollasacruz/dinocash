@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, difficulty = randInteger(0,1)) {
+    constructor(width, height, difficulty = randInteger(0,2)) {
         super();
 
         this.width = null;
@@ -86,6 +86,27 @@ export default class DinoGame extends GameRunner {
         return canvas;
     }
 
+    setupUI() {
+        const buttonContainer = document.createElement("div");
+        buttonContainer.style.position = "absolute";
+        buttonContainer.style.top = "20px";
+        buttonContainer.style.width = "100%";
+        buttonContainer.style.display = "flex";
+        buttonContainer.style.justifyContent = "center";
+
+        const finishButton = document.createElement("button");
+        finishButton.textContent = "Finish Game";
+        finishButton.style.padding = "10px";
+        finishButton.style.fontSize = "16px";
+        finishButton.style.cursor = "pointer";
+        finishButton.addEventListener("click", () => {
+            this.onInput("finish");
+        });
+
+        buttonContainer.appendChild(finishButton);
+        document.body.appendChild(buttonContainer);
+    }
+
     async preload() {
         const { settings } = this.state;
         const [spriteImage] = await Promise.all([
@@ -118,7 +139,7 @@ export default class DinoGame extends GameRunner {
         if (state.isRunning) {
             this.drawCacti();
 
-            if (state.level > 5) {
+            if (state.level > randInteger(3,5)) {
                 this.drawBirds();
             }
 
@@ -207,6 +228,7 @@ export default class DinoGame extends GameRunner {
         });
 
         this.start();
+        // this.setupUI();
         const canvasContainer = document.querySelector("canvas").parentElement;
         canvasContainer.style.display = "flex";
     }

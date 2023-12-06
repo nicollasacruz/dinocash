@@ -20,15 +20,33 @@
         :active="isRunning"
         :height="clientHeight"
         :width="clientWidth"
+        :viciosidade="true"
       />
     </div>
     <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
       <div v-if="endGame" class="text-center text-2xl">Game Over! Você andou {{ score }} metros</div>
       <div v-else class="text-center text-2xl">Parabéns! Você andou {{ score }} metros</div>
       <div class="flex justify-center">
-        <button
+        <button v-if="endGame"
           class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
           @click="endGame = false"
+        >
+          OK
+        </button>
+        <button v-if="finishGame"
+          class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+          @click="finishGame = false"
+        >
+          OK
+        </button>
+      </div>
+    </BaseModal>
+    <BaseModal v-if="finishGame" :score="score" v-model="finishGame">
+      <div class="text-center text-2xl">Parabéns! Você andou {{ score }} metros</div>
+      <div class="flex justify-center">
+        <button
+          class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+          @click="finishGame = false"
         >
           OK
         </button>
@@ -46,13 +64,15 @@ import { computed, onMounted, ref, toRef } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import axios from "axios";
 
+const { viciosidade } = defineProps(["viciosidade"]);
+
 const page = usePage();
 
 const user = computed(() => page.props.auth.user.id);
 const userId = toRef(user, "userId");
-const props = computed(() => page.props);
-const propsList = toRef(props, "propsList");
-
+// const props = computed(() => page.props.viciosidade);
+// const viciosidade = toRef(props, "viciosidade");
+console.log(page.props, 'props')
 const isRunning = ref(false);
 const gameId = ref(0);
 const endGame = ref(false);
