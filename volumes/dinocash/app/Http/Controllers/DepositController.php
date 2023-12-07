@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\DepositService;
@@ -59,10 +60,14 @@ class DepositController extends Controller
     /**
      * Display the specified resource.
      */
-    public function index(Deposit $deposit)
+    public function index()
     {
-        return Inertia::render('User/Deposit',
-        );
+        $settings = Setting::first();
+
+        return Inertia::render('User/Deposit', [
+            'maxDeposit' => $settings->maxDeposit,
+            'minDeposit' => $settings->minDeposit,
+        ]);
     }
 
     /**
@@ -111,6 +116,6 @@ class DepositController extends Controller
             // [
             //     'deposits' => $deposits,
             // ]
-    );
+        );
     }
 }
