@@ -72,6 +72,13 @@ class User extends Authenticatable
     {
         return $value === $this->role;
     }
+    public function resetWalletAffiliate()
+    {
+        $this->walletAffiliate = 0;
+        $this->save();
+
+        return $this->walletAffiliate;
+    }
 
     public function changeRole($value): User
     {

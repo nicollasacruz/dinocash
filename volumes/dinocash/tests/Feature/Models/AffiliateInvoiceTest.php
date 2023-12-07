@@ -1,7 +1,11 @@
 <?php
 
-test('example', function () {
-    $response = $this->get('/');
+use App\Jobs\CloseAffiliateInvoice;
+use App\Models\Invoice;
+use Illuminate\Support\Facades\Queue;
 
-    $response->assertStatus(200);
+test('close AffiliateInvoice', function () {
+    // Dispatch the job to the queue
+    
 });
+

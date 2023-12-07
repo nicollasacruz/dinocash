@@ -24,7 +24,7 @@ class InvoiceService
     {
         try {
             return Invoice::create([
-                'status' => 'pending',
+                'status' => 'open',
             ]);
         } catch (\Exception $e) {
             Log::error("Erro ao criar Invoice: " . $e->getMessage());

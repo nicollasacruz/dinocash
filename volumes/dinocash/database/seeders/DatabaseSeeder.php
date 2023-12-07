@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
                 'document' => '123.456.78-90',
                 'password' => Hash::make('admin'),
                 'role' => 'admin',
+                'wallet' => 500
             ]);
             GameHistory::create([
                 'amount' => 50,
@@ -55,11 +56,13 @@ class DatabaseSeeder extends Seeder
             $user->save();
             $type = $faker->randomElement(['win', 'loss']);
             $amount = $faker->randomNumber($type === 'win' ? 1 : 3) * ($type === 'win' ? 1 : -1);
-            GameHistory::create([
+            $game = GameHistory::create([
                 'amount' => $amount,
                 'finalAmount' => $amount < 0 ? $amount : $amount * 2,
                 'distance' => random_int(10, 500),
                 'userId' => $user->id,
+            ]);
+            $game->update([
                 'type' => $type,
             ]);
         }

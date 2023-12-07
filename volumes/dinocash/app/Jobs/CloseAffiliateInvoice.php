@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\AffiliateInvoice;
+use App\Services\AffiliateInvoiceService;
 use App\Services\InvoiceService;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -27,15 +29,23 @@ class CloseAffiliateInvoice implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(InvoiceService $invoiceService): void
+    public function handle(AffiliateInvoiceService $invoiceService): void
     {
         try {
-            $invoice = $invoiceService->getInvoice();
-            Log::info("Começando a fechar a invoice {$invoice->id} as " . now() . " com o total de {$invoice->count} transações e {$invoice->ggrTransactions->sum('amount')}");
+            $invoices = $invoiceService->getAllInvoices();
+
+            if (!$invoices) {
+                Log::error('Não há AffiliateInvoice para fechar');
+                return;
+            }
+            foreach ($invoices as $invoice) {
+            Log::info("Começando a fechar a AffiliateInvoice {$invoice->id} as " . now() . " com o total de {$invoice->count} transações e {$invoice->gameHistories->sum('amount')}");
+            
             $invoiceService->closeInvoice($invoice);
+        }
 
         } catch (Exception $exception) {
-            Log::error('Erro ao fechar a invoice: ' . $invoiceService->getInvoice()->id . ' | ERRO: ' . $exception->getMessage());
+            Log::error('Erro ao fechar as AffiliateInvoice | ERRO: ' . $exception->getMessage());
         }
     }
 }
