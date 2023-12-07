@@ -45,6 +45,12 @@ class WithdrawController extends Controller
         ]);
     }
 
+    public function indexUser(Request $request)
+    {
+        return Inertia::render('User/Withdraw', [
+        ]);
+    }
+
     public function store(Request $request, WithdrawService $withdrawService)
     {
         $userId = Auth::user()->id;
@@ -55,7 +61,10 @@ class WithdrawController extends Controller
             $withdrawService->aprove($withdraw, 'automatico');
         }
 
-        return true;
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Saque realizado com sucesso.',
+        ]);
     }
 
     public function aprove(Request $request, WithdrawService $withdrawService) {

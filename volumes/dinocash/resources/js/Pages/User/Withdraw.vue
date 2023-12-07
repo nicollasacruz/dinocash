@@ -42,6 +42,7 @@ import Loading from "../../Components/Loading.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 const loading = ref(false);
+const amount = ref(0);
 async function withdraw() {
     loading.value = true;
     try {
@@ -55,7 +56,7 @@ async function withdraw() {
         loading.value = false;
     }
 }
-const amount = ref(0);
+
 function toBRL(value) {
     return new Intl.NumberFormat("pt-BR", {
         style: "currency",
