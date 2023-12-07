@@ -35,7 +35,6 @@ class DepositService
                             'email' => $user->document,
                         ],
                     ]);
-
             $result = $response->json('paymentCode');
             Log::alert($result);
             $deposit = Deposit::create([

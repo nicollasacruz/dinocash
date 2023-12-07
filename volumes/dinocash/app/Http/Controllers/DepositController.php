@@ -25,7 +25,7 @@ class DepositController extends Controller
     {
         $deposits = Deposit::with('user')->get();
         $totalToday = Deposit::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
-        
+
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
         $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
         $withdrawsAmountAffiliateCaixa = AffiliateWithdraw::where('type', 'paid')->sum('amount');
@@ -49,17 +49,20 @@ class DepositController extends Controller
         $user = User::find($userId);
         $deposit = $depositService->createDeposit($user, $request->amount);
 
-        // return Inertia::render('DepositsUserQrCode', [
-        //     'deposit' => $deposit,
-        // ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Deposito gerado com sucesso.',
+            'qrCode' => $deposit->paymentCode,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Deposit $deposit)
+    public function index(Deposit $deposit)
     {
-        // a fazer
+        return Inertia::render('User/Deposit',
+        );
     }
 
     /**
@@ -84,7 +87,7 @@ class DepositController extends Controller
             $idTransaction = $validatedData['idTransaction'];
             $typeTransaction = $validatedData['typeTransaction'];
             $statusTransaction = $validatedData['statusTransaction'];
-            
+
             if ($typeTransaction === 'PIX' && $statusTransaction === 'PAYMENT_ACCEPT') {
                 $deposit = Deposit::where('transactionId', $idTransaction)->first();
 
@@ -108,6 +111,6 @@ class DepositController extends Controller
             [
                 'deposits' => $deposits,
             ]
-    );
+        );
     }
 }
