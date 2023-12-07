@@ -93,7 +93,7 @@ class DepositController extends Controller
         $statusTransaction = $validatedData['statusTransaction'];
 
         if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
-            $deposit = Deposit::where('transactionId', $idTransaction)->where('type', 'pending')->first();
+            $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
             if ($deposit) {
                 if ($depositService->aproveDeposit($deposit)) {
 
