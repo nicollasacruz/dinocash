@@ -60,6 +60,11 @@ class WithdrawController extends Controller
         if($withdraw &&  $setting->autoPayWithdraw && (float)$withdraw->amount <= $setting->maxAutoPayWithdraw) {
             $withdrawService->aprove($withdraw, 'automatico');
         }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Saque realizado com sucesso.',
+        ]);
     }
 
     public function aprove(Request $request, WithdrawService $withdrawService) {

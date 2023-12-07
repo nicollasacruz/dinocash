@@ -15,6 +15,7 @@
                 />
                 <img :src="pixLogo" class="mx-auto mb-5 w-32 max-w-sm" alt="" />
                 <button
+                @click="withdrawHandle()"
                     class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
                 >
                     Sacar
@@ -35,7 +36,25 @@ import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import dayjs from "dayjs";
 import { ref } from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
+
 const amount = ref(0);
+
+async function withdrawHandle() {
+    try {
+        const response = await axios.post(route("user.saque.store"), {
+            amount: amount.value,
+        });
+        const result = response.data;
+        console.log(result);
+
+        return result;
+    } catch (error) {
+        console.error("Erro na pesquisa:", error);
+
+        throw error;
+    }
+}
+
 function toBRL(value) {
     return new Intl.NumberFormat("pt-BR", {
         style: "currency",
