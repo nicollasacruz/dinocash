@@ -45,6 +45,12 @@ class WithdrawController extends Controller
         ]);
     }
 
+    public function indexUser(Request $request)
+    {
+        return Inertia::render('User/Withdraw', [
+        ]);
+    }
+
     public function store(Request $request, WithdrawService $withdrawService)
     {
         $userId = Auth::user()->id;
@@ -54,9 +60,6 @@ class WithdrawController extends Controller
         if($withdraw &&  $setting->autoPayWithdraw && (float)$withdraw->amount <= $setting->maxAutoPayWithdraw) {
             $withdrawService->aprove($withdraw, 'automatico');
         }
-
-        return Inertia::render('User/Withdraw', [
-        ]);
     }
 
     public function aprove(Request $request, WithdrawService $withdrawService) {

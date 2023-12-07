@@ -171,11 +171,10 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
     
+    Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
+    Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
+    
     Route::get('/deposito', [DepositController::class, 'user'])->name('user.deposito');
-    Route::get('/saque', function () {
-        return Inertia::render('User/Withdraw');
-    })->name('user.saque');
-
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposit.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposit.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposit.destroy');
