@@ -58,7 +58,7 @@ class DepositService
     public function aproveDeposit(Deposit $deposit): bool
     {
         try {
-            $user = $deposit->user;
+            $user = User::find($deposit->user->id);
             $amount = $deposit->amount;
 
             WalletTransaction::create([
@@ -70,7 +70,8 @@ class DepositService
 
             $deposit->type = 'paid';
             $deposit->save();
-
+            $user->wallet += $amount;
+            $user->save();
             Log::info("Deposito aprovado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
             return true;
         } catch (Exception $e) {
