@@ -85,7 +85,6 @@ const page = usePage();
 
 const user = computed(() => page.props.auth.user);
 const userWallet = computed(() => page.props.auth.user.wallet);
-// const wallet = toRef(userWallet, "wallet");
 
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
