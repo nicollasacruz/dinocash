@@ -74,7 +74,7 @@ Route::get('/', function () {
         $rankedUsers[9] = [
             'posicao' => $posicaoUsuarioLogado + 1,
             'email' => $emailLogado,
-            'distancia' => $distance->distance,
+            'distancia' =>$distance ? $distance->distance : 0,
         ];
     }
 
