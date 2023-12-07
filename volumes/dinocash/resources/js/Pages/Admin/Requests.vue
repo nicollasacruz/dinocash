@@ -33,6 +33,11 @@ async function approveWithdraw(withdrawId) {
     const { data } = await axios.post(route('admin.saque.aprovar'), {
         withdraw: withdrawId,
     });
+    console.log(data);
+    if (data.success === 'error') {
+      toast.error(data.message);
+      return;
+    }
     toast.success("Saque aprovado com sucesso!");
   } catch (error) {
     alert(error);
@@ -124,7 +129,7 @@ const rows = withdraws.map((withdraw) => {
       </template>
       <template #updated_at="{ value }">
         <td>
-          {{ dayjs(value).format("DD/MM/YYYY") }}
+          {{ dayjs(value).format("DD/MM/YYYY hh:mm:ss") }}
         </td>
       </template>
       <template #amount="{ value }">

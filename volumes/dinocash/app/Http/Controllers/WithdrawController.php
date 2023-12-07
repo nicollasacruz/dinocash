@@ -72,13 +72,21 @@ class WithdrawController extends Controller
             }
             $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2));
             $setting = Setting::first();
-            if ($withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
-                $withdrawService->aprove($withdraw, 'automatico');
+            if (!!$withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
+                Log::info('entrou no auto saque');
+                $response = $withdrawService->aprove($withdraw);
+                if (!$response['success']) {
+                    Log::info('Criado mas não foi pago');
+                    Log::info($response['message']);
+                }
             }
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Saque realizado com sucesso.',
+                'withdraw' => !!$withdraw,
+                'autoPayWithdraw' => $setting->autoPayWithdraw,
+                'maxAutoPay' => (float) $withdraw->amount <= $setting->maxAutoPayWithdraw,
             ]);
         } catch (Exception $e) {
             Log::error('ERROR CRIAR WITHDRAW   - ' . Auth::user()->getAuthIdentifierName() . $e->getMessage());
@@ -93,11 +101,17 @@ class WithdrawController extends Controller
     {
         try {
             $withdraw = Withdraw::find($request->withdraw);
-            $withdrawService->aprove($withdraw, 'manual');
-
-
-
-            return redirect()->route('admin.saque')->with('success', 'Saque aprovado com sucesso!');
+            $response = $withdrawService->aprove($withdraw);
+            if ($response['success']) {
+                return response()->json([
+                    'success'=> 'success',
+                    'message' => 'Saque aprovado com sucesso!'
+                ]);
+            }
+            return response()->json([
+                'success'=> 'error',
+                'message' => $response['message']
+            ]);
         } catch (Exception $e) {
             return redirect()->route('admin.saque')->with('error', $e->getMessage());
         }
