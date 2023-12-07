@@ -189,9 +189,9 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 });
 
 
-Route::post(env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
 
-Route::domain(env('APP_URL_API'))->middleware([])->group(function () {
+Route::domain(env('APP_URL_API').env('SUITPAY_URL_WEBHOOK'))->middleware([])->group(function () {
+    Route::post('/', [DepositController::class, 'webhook'])->name('webhook.deposit');
     //
 });
 
