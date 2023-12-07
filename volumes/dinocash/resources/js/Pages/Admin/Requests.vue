@@ -6,6 +6,10 @@ import BaseModal from "@/Components/BaseModal.vue";
 import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
+import axios from "axios";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 const columns = [
   { label: "Email", key: "email" },
   { label: "Chave Pix", key: "pix" },
@@ -22,6 +26,19 @@ const getStatus = (status) => {
       return "RECUSADO";
   }
 };
+
+async function approveWithdraw(withdrawId) {
+  try {
+    console.log(withdrawId, `withdraw`);
+    const { data } = await axios.post(route('admin.saque.aprovar'), {
+        withdraw: withdrawId,
+    });
+    toast.success("Saque aprovado com sucesso!");
+  } catch (error) {
+    alert(error);
+  }
+}
+
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
     style: "currency",
@@ -41,7 +58,6 @@ const rows = withdraws.map((withdraw) => {
   };
 });
 
-console.log("withdraws", withdraws);
 </script>
 
 <template>
@@ -77,30 +93,31 @@ console.log("withdraws", withdraws);
       :columns="columns"
       :rows="rows"
     >
-      <template #type="{ value }">
+      <template #actions="{ value }">
         <td>
           <div class="no-wrap text-xs cursor-pointer">
-            <div v-if="value === 'pending'" class="flex gap-x-2">
-              <div
+            <div v-if="value.type === 'pending'" class="flex gap-x-2">
+              <button
+                @click="approveWithdraw(value.id)"
                 class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
               >
                 PAGAR
-              </div>
-              <div
+              </button>
+              <button
                 class="badge w-24 font-bold rounded-sm bg-red-600 border-0 no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
               >
                 RECUSAR
-              </div>
+              </button>
             </div>
             <div
               v-else
               class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
               :class="{
-                'bg-red-600': value === 'rejected',
-                'bg-green-600': value === 'paid',
+                'bg-red-600': value.type === 'rejected',
+                'bg-green-600': value.type === 'paid',
               }"
             >
-              {{ getStatus(value) }}
+              {{ getStatus(value.type) }}
             </div>
           </div>
         </td>

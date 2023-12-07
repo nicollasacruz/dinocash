@@ -58,8 +58,9 @@ class WithdrawService
         if ($data['response'] === 'OK') {
             return true;
         }
+        Log::error('RESULTADO AUTOPAY WITHDRAW - ' . json_encode($data));
 
-        return $data['response'];
+        return false;
     }
 
     public function aprove(Withdraw $withdraw, $type): bool
@@ -71,6 +72,8 @@ class WithdrawService
                         'type' => 'paid',
                         'approvedAt' => now(),
                     ]);
+                } else {
+                    return false;
                 }
 
                 return true;

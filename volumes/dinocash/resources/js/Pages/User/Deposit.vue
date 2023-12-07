@@ -64,13 +64,14 @@ async function startDeposit() {
         const { data } = await axios.post("/user/deposito", {
             amount: amount.value,
         });
-        qrCode.value = data.deposit.paymentCode;
-        modal.value = true;
         console.log(data);
+        qrCode.value = data.qrCode;
+        modal.value = true;
     } catch (error) {
         console.log(error);
     } finally {
         loading.value = false;
+        amount.value = 0;
     }
 }
 function copy() {

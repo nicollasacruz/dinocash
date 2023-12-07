@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\WithdrawService;
 use Auth;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
@@ -57,7 +58,7 @@ class WithdrawController extends Controller
         $user = User::find($userId);
         $withdraw = $withdrawService->createWithdraw($user, $request->amount);
         $setting = Setting::first();
-        if($withdraw &&  $setting->autoPayWithdraw && (float)$withdraw->amount <= $setting->maxAutoPayWithdraw) {
+        if ($withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
             $withdrawService->aprove($withdraw, 'automatico');
         }
 
@@ -67,18 +68,26 @@ class WithdrawController extends Controller
         ]);
     }
 
-    public function aprove(Request $request, WithdrawService $withdrawService) {
-        $withdraw = $request->withdraw;
-        $withdrawService->aprove($withdraw, 'manual');
+    public function aprove(Request $request, WithdrawService $withdrawService)
+    {
+        try {
+            $withdraw = Withdraw::find($request->withdraw);
+            $withdrawService->aprove($withdraw, 'manual');
 
-        return redirect()->route('admin.saque')->with('success','Saque aprovado com sucesso!');
+
+
+            return redirect()->route('admin.saque')->with('success', 'Saque aprovado com sucesso!');
+        } catch (Exception $e) {
+            return redirect()->route('admin.saque')->with('error', $e->getMessage());
+        }
     }
 
-    public function reject(Request $request, WithdrawService $withdrawService) {
-        $withdraw = $request->withdraw;
+    public function reject(Request $request, WithdrawService $withdrawService)
+    {
+        $withdraw = Withdraw::find($request->withdraw);
         $withdrawService->reject($withdraw);
 
-        return redirect()->route('admin.saque')->with('success','Saque rejeitado com sucesso!');
+        return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
     }
     public function user(Request $request)
     {

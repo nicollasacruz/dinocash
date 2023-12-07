@@ -103,7 +103,7 @@ Route::get('language/{language}', function ($language) {
 Route::get('php_info', function () {
     echo 'ssaad';
     return dd(phpinfo());
-})->name('language');
+})->name('info');
 
 
 Route::get('/afiliado', function () {

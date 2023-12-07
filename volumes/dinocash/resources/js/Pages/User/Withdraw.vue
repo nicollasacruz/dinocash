@@ -41,8 +41,10 @@ import axios from "axios";
 import Loading from "../../Components/Loading.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+
 const loading = ref(false);
 const amount = ref(0);
+
 async function withdraw() {
     loading.value = true;
     try {
@@ -54,6 +56,7 @@ async function withdraw() {
         alert(error.response.data.message);
     } finally {
         loading.value = false;
+        amount.value = 0;
     }
 }
 

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'admin',
                 'email' => 'admin@dinocash.io',
                 'contact' => '(22)22222-2221',
-                'document' => '123.456.78-90',
+                'document' => '156.201.067-05',
                 'password' => Hash::make('admin'),
                 'role' => 'admin',
                 'wallet' => 500
