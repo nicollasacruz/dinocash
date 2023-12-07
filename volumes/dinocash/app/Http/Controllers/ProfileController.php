@@ -91,7 +91,7 @@ class ProfileController extends Controller {
     public function gameHistory(Request $request) {
         $user = User::find(Auth::user()->id);
         $transactions = $user->gameHistories;
-
+        
         return Inertia::render('User/History', ['transactions' => $transactions]);
     }
 

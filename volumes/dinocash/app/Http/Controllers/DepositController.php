@@ -48,7 +48,7 @@ class DepositController extends Controller
         $userId = Auth::user()->id;
         $user = User::find($userId);
         $deposit = $depositService->createDeposit($user, $request->amount);
-
+        return response()->json(['status' => 'success', 'deposit' => $deposit]);
         // return Inertia::render('DepositsUserQrCode', [
         //     'deposit' => $deposit,
         // ]);
@@ -102,12 +102,12 @@ class DepositController extends Controller
     }
     public function user(Request $request)
     {
-        $deposits = Deposit::where('userId', Auth::user()->id)->with('users')->get();
+        // $deposits = Deposit::where('userId', Auth::user()->id)->with('users')->get();
 
         return Inertia::render('User/Deposit',
-            [
-                'deposits' => $deposits,
-            ]
+            // [
+            //     'deposits' => $deposits,
+            // ]
     );
     }
 }

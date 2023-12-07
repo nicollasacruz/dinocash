@@ -55,8 +55,7 @@ class WithdrawController extends Controller
             $withdrawService->aprove($withdraw, 'automatico');
         }
 
-        return Inertia::render('User/Withdraw', [
-        ]);
+        return true;
     }
 
     public function aprove(Request $request, WithdrawService $withdrawService) {

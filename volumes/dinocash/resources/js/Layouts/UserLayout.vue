@@ -38,7 +38,7 @@ const drawer = ref(true);
                 </div>
             </div>
             <div
-                class="drawer-content relative flex-1 px-4 py-2 lg:px-10 lg:py-8 overflow-auto"
+                class="drawer-content h-screen flex flex-col relative flex-1 px-4 py-2 lg:px-10 lg:py-8"
                 :style="{
                     'background-image': `url('${Background}')`,
                     'background-size': 'cover',
@@ -51,7 +51,7 @@ const drawer = ref(true);
                     class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-white"
                 />
                 <img :src="logoDinoRoxo" class="mx-auto mb-5 w-36 lg:w-64" alt="" />
-                <div class="flex gap-x-6">
+                <div class="flex gap-x-6 force-height">
                     <UserDrawer class="hidden lg:block" />
                     <div
                         class="border-8 border-black bg-white rounded-xl flex-1"
@@ -63,3 +63,8 @@ const drawer = ref(true);
         </div>
     </div>
 </template>
+<style>
+.force-height {
+    height: calc(100vh - 200px);
+}
+</style>

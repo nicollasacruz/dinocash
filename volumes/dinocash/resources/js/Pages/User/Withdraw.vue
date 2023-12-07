@@ -15,6 +15,7 @@
                 />
                 <img :src="pixLogo" class="mx-auto mb-5 w-32 max-w-sm" alt="" />
                 <button
+                    @click="withdraw"
                     class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
                 >
                     Sacar
@@ -28,6 +29,7 @@
                 </div>
             </div>
         </div>
+        <Loading :loading="loading" />
     </UserLayouyt>
 </template>
 <script setup lang="ts">
@@ -35,6 +37,24 @@ import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import dayjs from "dayjs";
 import { ref } from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
+import axios from "axios";
+import Loading from "../../Components/Loading.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+const loading = ref(false);
+async function withdraw() {
+    loading.value = true;
+    try {
+        const { data } = await axios.post("/user/saque", {
+            amount: amount.value,
+        });
+        toast.success("Saque pendente de aprovação!");
+    } catch (error) {
+        alert(error.response.data.message);
+    } finally {
+        loading.value = false;
+    }
+}
 const amount = ref(0);
 function toBRL(value) {
     return new Intl.NumberFormat("pt-BR", {

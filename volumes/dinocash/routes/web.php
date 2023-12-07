@@ -148,7 +148,6 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
     Route::post('/saque/aprovar', [WithdrawController::class, 'aprove'])->name('admin.saque.aprovar');
     Route::post('/saque/rejeitar', [WithdrawController::class, 'reject'])->name('admin.saque.rejeitar');
-
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
@@ -179,7 +178,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposit.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposit.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposit.destroy');
-    
+    Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
+
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
