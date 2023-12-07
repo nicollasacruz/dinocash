@@ -65,7 +65,7 @@ function getPremio(i) {
   <section
     id="section1"
     class="section1 h-screen mx-auto items-center p-2 flex flex-col"
-    :style="{ backgroundImage: `url('${Background1}')` }"
+    :style="{ backgroundImage: `url('${Background1}')`, backgroundSize: 'auto auto' }"
   >
     <div
       v-if="!!!$page?.props?.auth?.user?.id"
@@ -96,6 +96,12 @@ function getPremio(i) {
       >
         {{ __("homepage.play-now") }}
       </Link>
+      <Link
+        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
+        :href="route('user')"
+      >
+        PERFIL
+      </Link>
       <div class="mx-auto mb-[10vh] text-xl font-menu text-white text-center">
         {{ __("homepage.register-tip") }}
       </div>
@@ -125,7 +131,7 @@ function getPremio(i) {
     </div>
     <Link
       class="mx-auto mt-4 p-3 flex justify-center items-center md:w-[360px] md:h-[100px] bg-verde-claro rounded-lg font-menu text-4xl md:text-[50px] text-roxo-fundo boxShadow border-black border-4"
-      :href="route('login')"
+      :href="route('user.play')"
     >
       {{ __("homepage.play-now") }}
     </Link>
