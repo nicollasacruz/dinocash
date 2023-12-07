@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GameHistory;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,14 @@ use Inertia\Inertia;
 
 class GameHistoryController extends Controller {
     public function play(Request $request) {
-        $viciosidade = true;
+        $viciosidade = false;
+        $settings = Setting::first();
+        $balance = (GameHistory::all()->sum("finalAmount")) * -1;
+        $pay = (GameHistory::where('type', 'win')->sum('finalAmount'));
+        $payLimit = (100 - $settings->payout) * $balance / 100;
+        if ($payLimit <= $pay) {
+            $viciosidade = true;
+        }
 
         return Inertia::render('User/Play', [
             "viciosidade" => $viciosidade
