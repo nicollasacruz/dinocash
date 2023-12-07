@@ -52,7 +52,7 @@ class GameHistoryController extends Controller {
             $user->save();
             
             $gameHistory = GameHistory::create([
-                'amount' => number_format($request->amount, 2),
+                'amount' => number_format($request->amount, 2,'.',''),
                 'userId' => $user->id,
                 'type' => 'pending',
             ]);
@@ -109,7 +109,7 @@ class GameHistoryController extends Controller {
             }
 
             $gameHistory->update([
-                'finalAmount' => number_format($request->type === 'win' ? $finalAmount - $gameHistory->amount : $finalAmount, 2),
+                'finalAmount' => number_format($request->type === 'win' ? $finalAmount - $gameHistory->amount : $finalAmount, 2,'.',''),
                 'type' => $request->type,
                 'distance' => $request->distance,
             ]);

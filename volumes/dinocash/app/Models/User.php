@@ -95,12 +95,12 @@ class User extends Authenticatable
 
     public function changeWallet($value)
     {
-        return $this->wallet = number_format($this->wallet + $value, 2, '.', ',');
+        return $this->wallet = number_format($this->wallet + $value, 2, '.', '');
     }
 
     public function changeWalletAffiliate($value)
     {
-        $this->walletAffiliate = number_format($this->walletAffiliate + $value, 2, '.', ',');
+        $this->walletAffiliate = number_format($this->walletAffiliate + $value, 2, '.', '');
     }
 
     /**

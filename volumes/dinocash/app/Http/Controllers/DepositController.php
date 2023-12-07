@@ -88,7 +88,7 @@ class DepositController extends Controller
             'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
         ]);
 
-        $idTransaction = $validatedData['idTransaction'];
+        $idTransaction = $request->idTransaction;
         $typeTransaction = $validatedData['typeTransaction'];
         $statusTransaction = $validatedData['statusTransaction'];
 

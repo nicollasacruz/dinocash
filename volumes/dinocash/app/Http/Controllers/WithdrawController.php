@@ -54,7 +54,7 @@ class WithdrawController extends Controller
         return Inertia::render('User/Withdraw', [
             'minWithdraw' => $settings->minWithdraw,
             'maxWithdraw' => $settings->maxWithdraw,
-            'walletUser' => number_format($user->wallet, 2, ',', '.'),
+            'walletUser' => number_format($user->wallet, 2,'.',''),
         ]);
     }
 
