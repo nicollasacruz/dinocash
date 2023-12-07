@@ -15,7 +15,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -149,6 +148,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
     Route::post('/saque/aprovar', [WithdrawController::class, 'aprove'])->name('admin.saque.aprovar');
     Route::post('/saque/rejeitar', [WithdrawController::class, 'reject'])->name('admin.saque.rejeitar');
+
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
@@ -172,6 +172,10 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
     
     Route::get('/deposito', [DepositController::class, 'user'])->name('user.deposito');
+    Route::get('/saque', function () {
+        return Inertia::render('User/Withdraw');
+    })->name('user.saque');
+
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposit.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposit.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposit.destroy');

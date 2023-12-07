@@ -104,7 +104,7 @@ class DepositController extends Controller
     {
         $deposits = Deposit::where('userId', Auth::user()->id)->with('users')->get();
 
-        return Inertia::render('User/Withdraw',
+        return Inertia::render('User/Deposit',
             [
                 'deposits' => $deposits,
             ]

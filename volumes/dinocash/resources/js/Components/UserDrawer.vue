@@ -56,16 +56,16 @@ const routes = [
   },
   {
     label: "Sacar",
-    route: "user.deposito",
+    route: "user.saque",
   },
   {
     label: "Alterar Senha",
     route: "user.alterar_senha",
   },
-  {
-    label: "Suporte",
-    route: "user.suporte",
-  },
+  // {
+  //   label: "Suporte",
+  //   route: "user.suporte",
+  // },
 ];
 const { wallet } = defineProps({
     wallet: {

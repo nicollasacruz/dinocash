@@ -4,9 +4,9 @@
             <div
                 class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4"
             >
-                Sacar
+                Depósito
             </div>
-            <div class="w-full text-center flex-col flex gap-y-4 text-gray-800">
+            <div class="w-full flex-col flex gap-y-4 text-gray-800">
                 <input
                     type="number"
                     class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
@@ -17,15 +17,8 @@
                 <button
                     class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
                 >
-                    Sacar
+                    Depositar
                 </button>
-                <div class="mt-10 text-lg">
-                    <div>Saldo disponível:</div>
-                    <div>{{ toBRL(100) }}</div>
-                </div>
-                <div class="mt-10">
-                    Saques serão enviados em até 24 horas úteis após a retirada.
-                </div>
             </div>
         </div>
     </UserLayouyt>
