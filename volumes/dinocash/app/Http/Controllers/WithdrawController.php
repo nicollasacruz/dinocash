@@ -12,6 +12,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class WithdrawController extends Controller
@@ -48,24 +49,44 @@ class WithdrawController extends Controller
 
     public function indexUser(Request $request)
     {
+        $user = User::find(Auth::user()->id);
+        $settings = Setting::first();
         return Inertia::render('User/Withdraw', [
+            'minWithdraw' => $settings->minWithdraw,
+            'maxWithdraw' => $settings->maxWithdraw,
+            'walletUser' => number_format($user->wallet, 2, ',', '.'),
         ]);
     }
 
     public function store(Request $request, WithdrawService $withdrawService)
     {
-        $userId = Auth::user()->id;
-        $user = User::find($userId);
-        $withdraw = $withdrawService->createWithdraw($user, $request->amount);
-        $setting = Setting::first();
-        if ($withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
-            $withdrawService->aprove($withdraw, 'automatico');
-        }
+        try {
+            $userId = Auth::user()->id;
+            $user = User::find($userId);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Saque realizado com sucesso.',
-        ]);
+            if ($user->wallet < $request->amount || $request->amount < 0) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Valor não disponivel para saque.',
+                ]);
+            }
+            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2));
+            $setting = Setting::first();
+            if ($withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
+                $withdrawService->aprove($withdraw, 'automatico');
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Saque realizado com sucesso.',
+            ]);
+        } catch (Exception $e) {
+            Log::error('ERROR CRIAR WITHDRAW   - ' . Auth::user()->getAuthIdentifierName() . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao realizar o saque.',
+            ]);
+        }
     }
 
     public function aprove(Request $request, WithdrawService $withdrawService)
