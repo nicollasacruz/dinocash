@@ -82,31 +82,28 @@ class DepositController extends Controller
 
     public function webhook(Request $request, DepositService $depositService)
     {
-        if ($request->isMethod('post')) {
-            $validatedData = $request->validate([
-                'idTransaction' => 'required|string',
-                'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
-                'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
-            ]);
+        $validatedData = $request->validate([
+            'idTransaction' => 'required|string',
+            'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
+            'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
+        ]);
 
-            $idTransaction = $validatedData['idTransaction'];
-            $typeTransaction = $validatedData['typeTransaction'];
-            $statusTransaction = $validatedData['statusTransaction'];
+        $idTransaction = $validatedData['idTransaction'];
+        $typeTransaction = $validatedData['typeTransaction'];
+        $statusTransaction = $validatedData['statusTransaction'];
 
-            if ($typeTransaction === 'PIX' && $statusTransaction === 'PAYMENT_ACCEPT') {
-                $deposit = Deposit::where('transactionId', $idTransaction)->first();
-
+        if ($typeTransaction === 'PIX' && $statusTransaction === 'PAYMENT_ACCEPT') {
+            $deposit = Deposit::where('transactionId', $idTransaction)->first();
+            if ($deposit) {
                 if ($depositService->aproveDeposit($deposit)) {
 
                     return response()->json(['status' => 'success']);
                 }
-
-                return response()->json(['status' => 'error'], 500);
-
             }
+            return response()->json(['status' => 'error'], 500);
+
         }
 
-        return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 401);
     }
     public function user(Request $request)
     {

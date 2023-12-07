@@ -27,7 +27,7 @@ class DepositService
                         'requestNumber' => $uuid,
                         'dueDate' => now()->addHours(2),
                         'amount' => $amount,
-                        'callbackUrl' => env('APP_URL') . env('SUITPAY_URL_WEBHOOK'),
+                        'callbackUrl' => env('APP_URL') . '/callback',
                         'client' => [
                             'name' => $user->name,
                             'document' => $user->document,
