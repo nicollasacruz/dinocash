@@ -156,7 +156,6 @@ async function fetchUpdate() {
 }
 
 async function startGame() {
-    // axios.post('/')
     gameId.value = await fetchStore();
     if (gameId.value) {
         const { height, width } = document.body.getBoundingClientRect();

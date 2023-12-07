@@ -96,20 +96,22 @@ export default class DinoGame extends GameRunner {
         buttonContainer.style.justifyContent = "center";
 
         const finishButton = document.createElement("button");
-        // finishButton.textContent = "Finish Game";
         finishButton.style.padding = "10px";
         finishButton.style.fontSize = "16px";
         finishButton.style.backgroundColor = "#fff";
-        finishButton.style.width = '100px';
+        finishButton.style.width = "100px";
         finishButton.style.border = "1px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.addEventListener("click", () => {
-            this.onInput("finish");
+            const eventoModificacao = new CustomEvent("finishGame", {
+                detail: this.state.score.value,
+            });
+            document.dispatchEvent(eventoModificacao);
+            this.endGame()
         });
         const canvasContainer = document.querySelector("canvas").parentElement;
         buttonContainer.appendChild(finishButton);
         canvasContainer.appendChild(buttonContainer);
-        // document.body.appendChild(buttonContainer);
     }
 
     async preload() {
@@ -139,8 +141,8 @@ export default class DinoGame extends GameRunner {
         this.drawGround();
         this.drawClouds();
         this.drawDino();
-        this.drawScore();
 
+        this.drawScore();
         if (state.isRunning) {
             this.drawCacti();
 
@@ -165,10 +167,6 @@ export default class DinoGame extends GameRunner {
 
             if (state.finishGame) {
                 this.endGame();
-                const eventoModificacao = new CustomEvent("finishGame", {
-                    detail: this.state.score.value,
-                });
-                document.dispatchEvent(eventoModificacao);
             } else {
                 this.updateScore();
             }
@@ -206,12 +204,12 @@ export default class DinoGame extends GameRunner {
                 break;
             }
 
-            case "finish": {
-                if (state.isRunning) {
-                    state.finishGame = true;
-                }
-                break;
-            }
+            // case "finish": {
+            //     if (state.isRunning) {
+            //         state.finishGame = true;
+            //     }
+            //     break;
+            // }
         }
     }
 
