@@ -103,7 +103,7 @@ const clientHeight = ref(0);
 const clientWidth = ref(0);
 const difficulty = ref(false);
 const score = ref(0);
-const type = computed(() => (score.value > 500 ? "win" : "loss"));
+const type = ref('loss');
 
 async function fetchStore() {
     try {
