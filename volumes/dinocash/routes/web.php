@@ -188,10 +188,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/afiliado', [AffiliateController::class, 'user'])->name('user.afiliado');
 });
 
-
-
+Route::post(env('APP_URL').env('SUITPAY_URL_WEBHOOK'), [DepositController::class, 'webhook'])->name('webhook.deposit');
 Route::domain(env('APP_URL_API').env('SUITPAY_URL_WEBHOOK'))->middleware([])->group(function () {
-    Route::post('/', [DepositController::class, 'webhook'])->name('webhook.deposit');
     //
 });
 
