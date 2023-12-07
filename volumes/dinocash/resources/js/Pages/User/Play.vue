@@ -8,7 +8,7 @@
                 class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
             >
                 <input
-                    type="number"
+                    type="text"
                     class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
                     placeholder="Digite o valor da aposta"
                     v-model="amount"
@@ -82,7 +82,7 @@ import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import BaseModal from "../../Components/BaseModal.vue";
 import dayjs from "dayjs";
 import GameCluster from "../../Components/GameCluster.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, toRef } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import axios from "axios";
 
@@ -90,8 +90,8 @@ const { viciosidade } = defineProps(["viciosidade"]);
 const finishGame = ref(false);
 const page = usePage();
 
-// const user = computed(() => page.props.auth.user.id);
-// const userId = toRef(user, "userId");
+const user = computed(() => page.props.auth.user.id);
+const userId = toRef(user, "userId");
 // const props = computed(() => page.props.viciosidade);
 // const viciosidade = toRef(props, "viciosidade");
 console.log(page.props, "props");
@@ -137,7 +137,7 @@ async function generateSHA256Hash(input) {
 async function fetchUpdate() {
     // console.log(type.value, 'value');
     try {
-        const hash = await generateSHA256Hash(`${gameId.value}dinocash`);
+        const hash = await generateSHA256Hash(`${gameId.value}${userId.value}dinocash`);
         const response = await axios.patch(route("user.play.update"), {
             distance: score.value,
             gameId: gameId.value,

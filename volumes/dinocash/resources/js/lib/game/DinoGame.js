@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, difficulty = randInteger(0, 2)) {
+    constructor(width, height, difficulty = randInteger(0, 1)) {
         super();
 
         this.width = null;
@@ -34,7 +34,7 @@ export default class DinoGame extends GameRunner {
             dinoGravity: difficulty ? 0.7 : randInteger(5, 7) / 10, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa
-            dinoLift: difficulty ? 8 : randInteger(8, 9), // ppf
+            dinoLift: difficulty ? 8 : randInteger(9), // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: difficulty ? 8 : randInteger(6, 8), // fpa
         };
