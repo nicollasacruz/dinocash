@@ -92,27 +92,18 @@ class DepositController extends Controller
         $typeTransaction = $validatedData['typeTransaction'];
         $statusTransaction = $validatedData['statusTransaction'];
 
-        if ($typeTransaction === 'PIX' && $statusTransaction === 'PAYMENT_ACCEPT') {
+        if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
             $deposit = Deposit::where('transactionId', $idTransaction)->first();
             if ($deposit) {
                 if ($depositService->aproveDeposit($deposit)) {
 
-                    return response()->json(['status' => 'success']);
+                    return response()->json(['status' => 'success', 'message' => 'Deposito aprovado']);
                 }
             }
-            return response()->json(['status' => 'error'], 500);
-
+            return response()->json(['status' => 'error', 'message' => 'Deposito não encontrado'], 500);
+            
         }
+        return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
 
-    }
-    public function user(Request $request)
-    {
-        // $deposits = Deposit::where('userId', Auth::user()->id)->with('users')->get();
-
-        return Inertia::render('User/Deposit',
-            // [
-            //     'deposits' => $deposits,
-            // ]
-        );
     }
 }
