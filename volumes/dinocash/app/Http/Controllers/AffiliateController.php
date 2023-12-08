@@ -20,9 +20,12 @@ class AffiliateController extends Controller
 {
     public function index(Request $request): Response
     {
+        $user = User::find(Auth::user()->id);
         $email = $request->query('email');
 
         $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+
+        $affiliateInvoiceList = $user->invoices;
 
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
@@ -33,7 +36,8 @@ class AffiliateController extends Controller
         return Inertia::render('Admin/Affiliates', [
             'affiliates' => $affiliates,
             'affiliatesWithdraws' => $affiliateWithdraws,
-            'affiliatesWithdrawsList' => $affiliateWithdrawsList
+            'affiliatesWithdrawsList' => $affiliateWithdrawsList,
+            'affiliateInvoiceList' => $affiliateInvoiceList,
         ]);
     }
 

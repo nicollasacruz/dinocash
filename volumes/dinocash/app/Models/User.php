@@ -157,6 +157,11 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'affiliateId');
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(AffiliateInvoice::class, 'affiliateId', 'id');
+    }
+
     /**
      * Get the affiliate that owns the user.
      */
