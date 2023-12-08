@@ -78,6 +78,10 @@ Route::get('/', function () {
             'distancia' => $distance ? $distance->distance : 0,
         ];
     }
+    if (Auth::check()) {
+        $userLogado = User::find($userIdLogado);
+        $wallet = $userLogado->wallet;
+    }
 
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -85,6 +89,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
         'rankedUsers' => $rankedUsers,
+        'wallet' => $wallet,
     ]);
 })->name('homepage');
 
