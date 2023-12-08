@@ -194,8 +194,13 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->prefix('afiliados')->group(function () {
-    Route::get('/', [AffiliateController::class, 'affiliateIndex'])->name('afiliado');
-    // Route::get('/', [AffiliateController::class, 'affiliateIndex'])->name('afiliado');
+    Route::get('/', [AffiliateController::class, 'affiliateIndex'])->name('afiliado.dashboard');
+    Route::get('/saques', function(){
+        return  Inertia::render('Affiliates/Withdraws');
+    })->name('afiliado.saque');
+    Route::get('/historico', function(){
+        return  Inertia::render('Affiliates/History');
+    })->name('afiliado.historico');
 });
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');
