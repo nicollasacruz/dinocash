@@ -33,6 +33,7 @@ class AffiliatePanelController extends Controller
             'walletAffiliate' => $user->walletAffiliate,
             'revShare' => $user->revShare,
             'CPA' => $user->invitation_link,
+            'paymentPending' => $paymentPending,
         ]);
     }
 
