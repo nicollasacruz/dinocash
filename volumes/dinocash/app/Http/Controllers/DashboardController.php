@@ -70,4 +70,10 @@ class DashboardController extends Controller
             'groupedDateLoss' => $groupedDateLoss,
         ]);
     }
+    public function ggr()
+    {
+        return Inertia::render('Admin/GGR', [
+           
+        ]);
+    }
 }

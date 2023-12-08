@@ -116,7 +116,7 @@ function toBRL(value) {
     <div class="flex items-center gap-x-4 mt-2">
       <div class="flex-1">
         <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
-        <div class="grid grid-cols-2 gap-x-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2">
           <CurrencyBox
             label="Lucro Total"
             :value="totalReceived"
@@ -128,7 +128,7 @@ function toBRL(value) {
 
       <div class="flex-1">
         <div class="text-2xl text-red-500 mb-4 font-bold">Prejuízos</div>
-        <div class="grid grid-cols-2 gap-x-2">
+        <div class="grid grid-cols-1 md:grid-cols-2  gap-x-2">
           <CurrencyBox label="Prejuizo Total" :value="totalPaid" negative />
           <CurrencyBox
             label="Total de saques"
@@ -138,7 +138,7 @@ function toBRL(value) {
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-2 mt-6 gap-x-7">
+    <div class="grid sm:grid-cols-2 mt-6 gap-x-7 gap-y-2">
       <div
         class="bg-[#212121] py-3 px-5 border-[1px] border-gray-600 rounded-md"
       >
@@ -171,7 +171,7 @@ function toBRL(value) {
       </div>
     </div>
     <div class="mt-4 grid grid-cols-12 gap-x-5">
-      <div class="col-span-5">
+      <div class="col-span-12 md:col-span-5">
         <div class="text-2xl text-white font-bold mb-2">Viciosidade</div>
         <div>
           <div class="flex justify-between text-white font-bold">
@@ -194,11 +194,11 @@ function toBRL(value) {
           Esta opção definirá se o jogo vai lucrar ou pagar
         </div>
       </div>
-      <div class="col-span-7">
+      <div class="col-span-12 md:col-span-7">
         <div class="text-2xl text-white font-bold mb-3">
           Lucros e Prejuízos - Afiliados
         </div>
-        <div class="grid grid-cols-2 gap-x-2">
+        <div class="grid md:grid-cols-2 gap-x-2">
           <div class="box p-2">
             <div
               class="text-green-500 text-center font-bold text-xs uppercase mb-2"
@@ -228,7 +228,7 @@ function toBRL(value) {
                 v-for="{ email, totalPayed } in topLossAffiliates"
               >
                 <div class="text-white">
-                  {{ email }} - {{ toBRL(totalPayed) }}
+                  {{ email }} - {{ toBRL(totalPayed * -1) }}
                 </div>
               </div>
             </div>

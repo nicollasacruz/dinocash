@@ -50,7 +50,11 @@ const drawer = ref(true);
                     @click="drawer = !drawer"
                     class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-white"
                 />
-                <img :src="logoDinoRoxo" class="mx-auto mb-5 w-36 lg:w-64" alt="" />
+                <img
+                    :src="logoDinoRoxo"
+                    class="mx-auto mb-5 w-36 lg:w-64"
+                    alt=""
+                />
                 <div class="flex gap-x-6 force-height">
                     <UserDrawer class="hidden lg:block" />
                     <div
@@ -65,6 +69,9 @@ const drawer = ref(true);
 </template>
 <style>
 .force-height {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 110px);
+    @media (min-width: 1024px) {
+        height: calc(100vh - 200px);
+    }
 }
 </style>

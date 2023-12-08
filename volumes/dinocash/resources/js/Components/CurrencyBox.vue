@@ -4,7 +4,7 @@
             {{ label }}
         </div>
         <div
-            class="rounded-md border-[1px] border-gray-500 bg-[#212121] w-full text-white px-3 py-2 font-bold"
+            class="rounded-md border-[1px] whitespace-nowrap border-gray-500 bg-[#212121] w-full text-white px-3 py-2 font-bold"
         >
             <span
                 class="mr-2"
