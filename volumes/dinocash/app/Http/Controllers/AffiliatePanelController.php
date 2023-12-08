@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -40,23 +41,22 @@ class AffiliatePanelController extends Controller
     public function withdrawsAffiliate(Request $request)
     {
         $user = User::find(Auth::user()->id);
-        $email = $request->query('email');
+        $dateStart = DateTime::createFromFormat('Y-m-d', $request->dateStart);
+        $dateEnd = DateTime::createFromFormat('Y-m-d', $request->dateEnd);
+        if ($dateStart) {
+            $dateStart->setTime(0, 0, 0);
+        }
+        
+        if ($dateEnd) {
+            $dateEnd->setTime(23, 59, 59);
+        }
 
-        $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+        $affiliateWithdrawsList = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+        })->where('userId', $user->id)->get();
 
-        $affiliateInvoiceList = $user->invoices;
-
-        $affiliates = User::when($email, function ($query) use ($email) {
-            $query->where('email', 'LIKE', '%' . $email . '%');
-        })
-            ->where('isAffiliate', true)->get();
-
-        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
         return Inertia::render('Affiliates/Dashboard', [
-            'affiliates' => $affiliates,
-            'affiliatesWithdraws' => $affiliateWithdraws,
             'affiliatesWithdrawsList' => $affiliateWithdrawsList,
-            'affiliateInvoiceList' => $affiliateInvoiceList,
         ]);
     }
 
