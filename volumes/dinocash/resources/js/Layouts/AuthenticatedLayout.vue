@@ -19,10 +19,6 @@ const routes = [
     route: "admin.usuarios",
   },
   {
-    label: "ggr",
-    route: "admin.ggr",
-  },
-  {
     label: "Afiliados",
     route: "admin.afiliados",
   },
@@ -33,6 +29,10 @@ const routes = [
   {
     label: "Depósitos",
     route: "admin.deposito",
+  },
+  {
+    label: "GGR",
+    route: "admin.ggr",
   },
 ];
 const test = ref(true);

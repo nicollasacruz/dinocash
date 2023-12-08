@@ -10,7 +10,9 @@
       <div>
         <div class="text-xs lg:text-sm text-gray-400">Seja bem-vindo(a)</div>
         <div class="text-xl lg:text-2xl text-gray-700 -mt-2">{{ email }}</div>
-        <div class="tex-lg lg:text-xl text-gray-700">NÍVEL 100</div>
+        <!-- <div class="tex-lg lg:text-xl text-gray-700">NÍVEL 100</div> -->
+        <Link class="tex-lg lg:text-sm text-red-700" 
+        :href="route('logout')" method="post"> Encerrar sessão </Link>
       </div>
     </div>
 
@@ -68,16 +70,15 @@ const page = usePage();
 
 const user = computed(() => page.props.auth.user);
 const userId = computed(() => page.props.auth.user.id);
-const email = page.props.auth.user.email
+const email = page.props.auth.user.email;
 const userIdref = ref(userId);
 const userWallet = page.props.auth.user.wallet * 1;
-const wallet = ref(userWallet)
+const wallet = ref(userWallet);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
   console.log(e.user.wallet);
   wallet.value = e.user.wallet;
 });
-
 
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {

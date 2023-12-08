@@ -24,41 +24,41 @@ class AffiliateController extends Controller
 
         $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
 
-
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
             ->where('isAffiliate', true)->get();
 
         $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
-        return Inertia::render('Admin/Affiliates', [
+
+        return Inertia::render('Admin/Affiliate', [
             'affiliates' => $affiliates,
             'affiliatesWithdraws' => $affiliateWithdraws,
             'affiliatesWithdrawsList' => $affiliateWithdrawsList,
         ]);
     }
 
-    public function affiliateIndex(Request $request): Response
+    public function affiliateIndex(Request $request)
     {
-        $user = User::find(Auth::user()->id);
-        $email = $request->query('email');
+        // $user = User::find(Auth::user()->id);
+        // $email = $request->query('email');
 
-        $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+        // $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
 
-        $affiliateInvoiceList = $user->invoices;
+        // $affiliateInvoiceList = $user->invoices;
 
-        $affiliates = User::when($email, function ($query) use ($email) {
-            $query->where('email', 'LIKE', '%' . $email . '%');
-        })
-            ->where('isAffiliate', true)->get();
+        // $affiliates = User::when($email, function ($query) use ($email) {
+        //     $query->where('email', 'LIKE', '%' . $email . '%');
+        // })
+        //     ->where('isAffiliate', true)->get();
 
-        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
-        return Inertia::render('Admin/Affiliates', [
-            'affiliates' => $affiliates,
-            'affiliatesWithdraws' => $affiliateWithdraws,
-            'affiliatesWithdrawsList' => $affiliateWithdrawsList,
-            'affiliateInvoiceList' => $affiliateInvoiceList,
-        ]);
+        // $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+        // return Inertia::render('User/Affiliates', [
+        //     'affiliates' => $affiliates,
+        //     'affiliatesWithdraws' => $affiliateWithdraws,
+        //     'affiliatesWithdrawsList' => $affiliateWithdrawsList,
+        //     'affiliateInvoiceList' => $affiliateInvoiceList,
+        // ]);
     }
 
 

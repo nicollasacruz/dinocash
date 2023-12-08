@@ -115,10 +115,8 @@ function selectUser(user) {
 const data = ref(null);
 function getHistories(user) {
     axios
-        .get("/admin/afiliados/listGameHistory", {
-            params: {
-                user,
-            },
+        .post("/admin/afiliados/listGameHistory", {
+            user: user,
         })
         .then((response) => {
             data.value = response.data.transactions;
