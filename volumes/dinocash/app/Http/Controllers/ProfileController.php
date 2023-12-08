@@ -60,27 +60,31 @@ class ProfileController extends Controller {
     }
 
     public function listAffiliateHistory(Request $request) {
-        $user = $request->user();
+        $userId = $request->query('user');
+        $history = User::find($userId)->join('affiliate_histories', 'users.id', '=', 'affiliate_histories.affiliateId')->where(
+            'affiliate_histories.affiliateId', '=', $userId
+        )->get();
 
-        $transactions = $user->affiliateHistories;
-
-        return response()->json(['status' => 'success', 'transactions' => $transactions]);
+        return response()->json(['status' => 'success', 'transactions' => $history]);
     }
 
     public function listGameHistory(Request $request) {
-        $user = $request->user();
-        $transactions = $user->gamesHistory;
-
-        return response()->json(['status' => 'success', 'transactions' => $transactions]);
+        $userId = $request->query('user');
+        $history = User::find($userId)->join('game_histories', 'users.id', '=', 'game_histories.userId')->where(
+            'users.id', '=', $userId
+        )->get();
+        return response()->json(['status' => 'success', 'history' => $history]);
     }
 
-    public function listWithdraws(Request $request) {
-        $user = $request->user();
-        $withdraws = $user->withdraws;
-
-        return response()->json(['status' => 'success', 'withdraws' => $withdraws]);
+    public function listTransactions(Request $request) {
+        $userId = $request->query('user');
+        $withdraws = User::find($userId)->join('withdraws', 'users.id', '=', 'withdraws.userId')->where(
+            'users.id', '=', $userId
+        )->get();
+        
+        return response()->json(['status' => 'success', 'history' => $withdraws]);
     }
-
+    
     public function listDeposits(Request $request) {
         $user = $request->user();
         $deposits = $user->deposits;

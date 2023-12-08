@@ -127,9 +127,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
             'users' => User::all()
         ]);
     })->name('admin.usuarios');
-    Route::post('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
-    Route::post('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
-    Route::post('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
+    Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
+    Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
+    Route::get('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/ggr', [DashboardController::class, 'ggr'])->name('admin.ggr');

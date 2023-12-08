@@ -29,71 +29,11 @@
     </BaseTable>
     <BaseModal class="z-10" v-if="showModal" v-model="showModal">
         <UserForm typeForm="affiliate"
-            :user="selectedUser"
-            @get-histories="getHistories"
-            @get-commissions="getCommissions"
-            @get-movements="getMovements"
-            @delete-user="deleteUser"
+            :user="selectedUser"          
             @submit="submit"
         />
     </BaseModal>
-    <BaseModal v-if="showData" v-model="showData" class="z-30">
-        <div class="text-white text-xl font-bold mb-3 text-center">
-            <span v-if="type === 'history'"> Histórico de Jogos </span>
-            <span v-else-if="type === 'commissions'">
-                Histórico de Comissões
-            </span>
-            <span v-else> Histórico de Movimentações </span>
-        </div>
-        <table v-if="type === 'history'" class="table table-xs">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Valor</th>
-                    <th>Distancia</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in data" :key="item.id">
-                    <td>{{ item.type }}</td>
-                    <td>{{ item.amount }}</td>
-                    <td>{{ item.distance }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <table v-else-if="type === 'commissions'" class="table table-xs">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Valor</th>
-                    <th>Distancia</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in data" :key="item.id">
-                    <td>{{ item.type }}</td>
-                    <td>{{ item.amount }}</td>
-                    <td>{{ item.distance }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <table v-else class="table table-xs">
-            <thead>
-                <tr>
-                    <th>Status</th>
-                    <th>Valor</th>
-                    <th>Data Aprovação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in data" :key="item.id">
-                    <td>{{ item.type }}</td>
-                    <td>{{ toBRL(item.amount) }}</td>
-                    <td>{{ dayjs(item.updated_at).format("DD/MM/YYYY") }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </BaseModal>
+    
 </template>
 <script setup lang="ts">
 import BaseTable from "./BaseTable.vue";
@@ -113,67 +53,7 @@ function selectUser(user) {
     selectedUser.value = user;
 }
 const data = ref(null);
-function getHistories(user) {
-    axios
-        .post("/admin/afiliados/listGameHistory", {
-            user: user,
-        })
-        .then((response) => {
-            data.value = response.data.transactions;
-            showData.value = true;
-            type.value = "history";
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
-function getCommissions(user) {
-    axios
-        .get("/admin/afiliados/listAffiliateHistory", {
-            params: {
-                user,
-            },
-        })
-        .then((response) => {
-            data.value = response.data.transactions;
-            showData.value = true;
-            type.value = "commissions";
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
-function getMovements(user) {
-    axios
-        .get("/admin/afiliados/listTransactions", {
-            params: {
-                user,
-            },
-        })
-        .then((response) => {
-            data.value = response.data.transactions;
-            showData.value = true;
-            type.value = "movements";
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
-function deleteUser(user) {
-    console.log(user);
-    axios
-        .delete("/admin/afiliados/" + user)
-        .then((response) => {
-            console.log(response.data);
-            showModal.value = false;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
+
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",

@@ -73,8 +73,6 @@ const getStatus = (status) => {
     }
 };
 async function pay(id: number) {
-  console.log(id);
-  return
   try {
     const { data } = await axios.post("admin.saque.aprovar", {
       withdraw: id,
