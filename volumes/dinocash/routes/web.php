@@ -184,9 +184,9 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 //       AFFILIATE PANEL
 Route::middleware(['auth', 'verified'])->prefix('afiliados')->group(function () {
     Route::get('/dashboard', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
-    Route::get('/saques', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
-    Route::get('/historico', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
-    Route::get('/faturas', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
+    Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.withdraws');
+    Route::get('/historicos', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.history');
+    Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.invoices');
 });
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');
