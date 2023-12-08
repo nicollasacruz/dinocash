@@ -131,7 +131,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::post('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
+    Route::get('ggr', [DashboardController::class, 'ggr'])->name('admin.ggr');
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
     Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.edit');
     Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');

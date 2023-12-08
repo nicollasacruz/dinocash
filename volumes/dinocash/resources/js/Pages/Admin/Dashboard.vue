@@ -72,11 +72,9 @@ function selectUser(user) {
           </template>
         </TextBox>
       </div>
-    </div>
-        <div class="h-52 bg-black text-white text-center">Gráfico</div>
+    </div>             
 
-
-    <div class="grid grid-cols-5 gap-x-2 mt-4">
+    <div class="grid xs:  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-2 mt-4">
       <CurrencyBox label="Lucro em 30 dias" :value="payoutLast30" />
       <CurrencyBox label="Prejuizo em 30 dias" :value="lossLast30" negative />
       <CurrencyBox label="Lucro Total" :value="payoutTotal" />

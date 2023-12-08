@@ -19,6 +19,10 @@ const routes = [
     route: "admin.usuarios",
   },
   {
+    label: "ggr",
+    route: "admin.ggr",
+  },
+  {
     label: "Afiliados",
     route: "admin.afiliados",
   },
