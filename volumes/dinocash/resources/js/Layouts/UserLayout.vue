@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
 import Background from "../../../storage/imgs/home-page/home-bg2.jpg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
 
-const drawer = ref(true);
+const drawer = ref(false);
 </script>
 
 <template>
@@ -56,7 +56,10 @@ const drawer = ref(true);
                     alt=""
                 />
                 <div class="flex gap-x-6 force-height">
-                    <UserDrawer class="hidden lg:block" />
+                    <UserDrawer
+                        @close="drawer = false"
+                        class="hidden lg:block"
+                    />
                     <div
                         class="border-8 border-black bg-white rounded-xl flex-1"
                     >

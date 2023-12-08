@@ -24,8 +24,9 @@
         v-for="link in routes"
         class="drawer-button"
         :href="route(link.route)"
+        @click="emit('close')"
       >
-        <a>{{ link.label }}</a>
+        <a >{{ link.label }}</a>
       </Link>
     </div>
   </div>
@@ -33,8 +34,8 @@
 <script setup lang="ts">
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineProps, computed, ref, toRef } from "vue";
-
+import { defineEmits, computed, ref, toRef } from "vue";
+const emit = defineEmits(["close"]);
 const routes = [
   {
     label: "Jogar",

@@ -39,6 +39,23 @@ async function approveWithdraw(withdrawId) {
       return;
     }
     toast.success("Saque aprovado com sucesso!");
+    window.location.reload();
+  } catch (error) {
+    alert(error);
+  }
+}
+
+async function reject(withdrawId) {
+  try {
+    const { data } = await axios.post(route('admin.saque.rejeitar'), {
+        withdraw: withdrawId,
+    });
+    if (data.success === 'error') {
+      toast.error(data.message);
+      return;
+    }
+    toast.success("Saque recusado com sucesso!");
+    window.location.reload();
   } catch (error) {
     alert(error);
   }
@@ -109,6 +126,7 @@ const rows = withdraws.map((withdraw) => {
                 PAGAR
               </button>
               <button
+                @click="reject(value.id)"
                 class="badge w-24 font-bold rounded-sm bg-red-600 border-0 no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
               >
                 RECUSAR

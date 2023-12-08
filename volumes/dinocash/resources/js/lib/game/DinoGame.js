@@ -16,7 +16,6 @@ import GameRunner from "./GameRunner.js";
 export default class DinoGame extends GameRunner {
     constructor(width, height, difficulty = randInteger(0, 1)) {
         super();
-
         this.width = null;
         this.height = null;
         this.canvas = this.createCanvas(width, height);
@@ -141,7 +140,6 @@ export default class DinoGame extends GameRunner {
         this.drawGround();
         this.drawClouds();
         this.drawDino();
-
         this.drawScore();
         if (state.isRunning) {
             this.drawCacti();
@@ -178,6 +176,7 @@ export default class DinoGame extends GameRunner {
 
         switch (type) {
             case "jump": {
+                console.log('teste')
                 if (state.isRunning) {
                     if (state.dino.jump()) {
                         playSound("jump");
@@ -229,7 +228,7 @@ export default class DinoGame extends GameRunner {
                 value: 0,
             },
         });
-
+        this.preload()
         this.start();
         this.setupUI();
         const canvasContainer = document.querySelector("canvas").parentElement;

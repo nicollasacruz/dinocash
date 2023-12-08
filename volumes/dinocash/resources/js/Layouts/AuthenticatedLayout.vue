@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
 import Background from "../../../storage/imgs/admin/bg.jpg";
@@ -35,7 +35,17 @@ const routes = [
     route: "admin.ggr",
   },
 ];
-const test = ref(true);
+const test = ref(false);
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 1024) {
+    test.value = true;
+  }
+})
+onMounted(() => {
+  if (window.innerWidth > 1024) {
+    test.value = true;
+  }
+})
 </script>
 
 <template>

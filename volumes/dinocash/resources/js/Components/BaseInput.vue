@@ -19,6 +19,7 @@
                 bordered && 'input-bordered',
                 inputStyle,
             ]"
+            :placeholder="placeholder"
         />
         <div class="text-error text-xs" v-if="error">
             {{ error }}
