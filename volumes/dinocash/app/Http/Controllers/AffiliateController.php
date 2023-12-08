@@ -20,6 +20,26 @@ class AffiliateController extends Controller
 {
     public function index(Request $request): Response
     {
+        $email = $request->query('email');
+
+        $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+
+
+        $affiliates = User::when($email, function ($query) use ($email) {
+            $query->where('email', 'LIKE', '%' . $email . '%');
+        })
+            ->where('isAffiliate', true)->get();
+
+        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+        return Inertia::render('Admin/Affiliates', [
+            'affiliates' => $affiliates,
+            'affiliatesWithdraws' => $affiliateWithdraws,
+            'affiliatesWithdrawsList' => $affiliateWithdrawsList,
+        ]);
+    }
+
+    public function affiliateIndex(Request $request): Response
+    {
         $user = User::find(Auth::user()->id);
         $email = $request->query('email');
 
@@ -40,6 +60,7 @@ class AffiliateController extends Controller
             'affiliateInvoiceList' => $affiliateInvoiceList,
         ]);
     }
+
 
 
     /**

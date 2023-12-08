@@ -188,8 +188,9 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 
 });
 
-Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
-    Route::get('/afiliado', [AffiliateController::class, 'user'])->name('afiliado');
+Route::middleware(['auth', 'verified'])->prefix('afiliados')->group(function () {
+    Route::get('/', [AffiliateController::class, 'affiliateIndex'])->name('afiliado');
+    // Route::get('/', [AffiliateController::class, 'affiliateIndex'])->name('afiliado');
 });
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');
