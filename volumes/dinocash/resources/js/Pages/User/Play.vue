@@ -92,8 +92,7 @@ const page = usePage();
 
 const user = computed(() => page.props.auth.user.id);
 const userId = toRef(user, "userId");
-// const props = computed(() => page.props.viciosidade);
-// const viciosidade = toRef(props, "viciosidade");
+
 console.log(page.props, "props");
 const amount = ref(0);
 const isRunning = ref(false);

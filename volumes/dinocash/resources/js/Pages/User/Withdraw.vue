@@ -22,7 +22,7 @@
         </button>
         <div class="mt-10 text-lg">
           <div>Saldo disponível:</div>
-          <div>{{ toBRL(walletUser) }}</div>
+          <div>{{ toBRL(wallet) }}</div>
         </div>
         <div class="mt-10">
           Saques serão enviados em até 24 horas úteis após a retirada.
@@ -32,16 +32,18 @@
     <Loading :loading="loading" />
   </UserLayouyt>
 </template>
+
 <script setup lang="ts">
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import dayjs from "dayjs";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { number } from "yup";
+import { usePage } from "@inertiajs/vue3";
 
 const { minWithdraw, maxWithdraw, walletUser } = defineProps([
   "minWithdraw",
@@ -49,8 +51,19 @@ const { minWithdraw, maxWithdraw, walletUser } = defineProps([
   "walletUser",
 ]);
 
+const page = usePage();
+
+const userId = computed(() => page.props.auth.user.id);
+const userIdref = ref(userId);
 const loading = ref(false);
-const amount = ref(walletUser);
+
+const amount = ref(0);
+const wallet = ref(walletUser);
+
+window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
+  console.log(e.user.wallet, "withdraw");
+  wallet.value = e.user.wallet;
+});
 
 async function withdraw() {
   try {
@@ -65,7 +78,6 @@ async function withdraw() {
       return;
     }
     if (valor > wallet) {
-      console.log(valor, wallet, valor > wallet)
       toast.error("Saldo indsponivel.");
       return;
     }
@@ -81,7 +93,7 @@ async function withdraw() {
   } catch (error) {
     alert("Erro na solicitação");
   } finally {
-    amount.value = walletUser;
+    amount.value = 0.0;
   }
 }
 

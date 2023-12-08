@@ -2,8 +2,11 @@
 
 namespace App\Observers;
 
+use App\Events\WalletChanged;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class UserObserver
@@ -25,6 +28,24 @@ class UserObserver
         if ($user->isDirty('affiliateId') && $user->affiliateId) {
             $user->affiliatedAt = Carbon::now();
         }
+    
+    }
+    public function updated(User $user)
+    {
+        try {
+            if ($user->isDirty('wallet')) {
+                $message = [
+                    "id" => $user->id,
+                    "wallet" => $user->wallet
+                ];
+
+                event(new WalletChanged($user));
+
+            }
+        } catch (\Exception $e) {
+            Log::error('UserObserver   -   ' . $e->getMessage() . '    -   ' . $e->getFile() . '  -   '. $e->getLine());
+        }
+
     }
 
     public function creating(User $user)
@@ -39,5 +60,5 @@ class UserObserver
                 }
             }
         }
-    }    
+    }
 }

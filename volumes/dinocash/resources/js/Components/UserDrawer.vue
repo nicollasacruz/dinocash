@@ -1,41 +1,37 @@
 <template>
-    <div class="border-8 border-black bg-white rounded-xl py-2 lg:pb-6 p-2">
-        <div class="flex items-center mb-8 lg:ml-5">
-            <img
-                class="mr-1 lg:mr-3 rounded"
-                width="50"
-                height="50"
-                :src="fotoPerfil"
-            />
-            <div>
-                <div class="text-xs lg:text-sm text-gray-300">
-                    Seja bem-vindo(a)
-                </div>
-                <div class="text-xl lg:text-2xl text-gray-700 -mt-3">
-                    HIGORMUNIZ
-                </div>
-                <div class="tex-lg lg:text-xl text-gray-700">NÍVEL 100</div>
-            </div>
-        </div>
-
-        <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
-            <div class="drawer-button">
-                <a>Saldo: {{ toBRL(wallet) }}</a>
-            </div>
-            <Link
-                v-for="link in routes"
-                class="drawer-button"
-                :href="route(link.route)"
-            >
-                <a>{{ link.label }}</a>
-            </Link>
-        </div>
+  <div class="border-8 border-black bg-white rounded-xl py-2 lg:pb-6 p-2">
+    <div class="flex items-center mb-8 lg:ml-5">
+      <img
+        class="mr-1 lg:mr-3 rounded"
+        width="50"
+        height="50"
+        :src="fotoPerfil"
+      />
+      <div>
+        <div class="text-xs lg:text-sm text-gray-400">Seja bem-vindo(a)</div>
+        <div class="text-xl lg:text-2xl text-gray-700 -mt-2">{{ email }}</div>
+        <div class="tex-lg lg:text-xl text-gray-700">NÍVEL 100</div>
+      </div>
     </div>
+
+    <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
+      <div class="drawer-button">
+        <a>Saldo: {{ toBRL(wallet) }}</a>
+      </div>
+      <Link
+        v-for="link in routes"
+        class="drawer-button"
+        :href="route(link.route)"
+      >
+        <a>{{ link.label }}</a>
+      </Link>
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineProps, computed, ref  } from "vue";
+import { defineProps, computed, ref, toRef } from "vue";
 
 const routes = [
   {
@@ -68,23 +64,25 @@ const routes = [
   // },
 ];
 
-
-// function toBRL(value) {
-//     return value.toLocaleString("pt-br", {
-//         style: "currency",
-//         currency: "BRL",
-//     });
-// }
-
 const page = usePage();
 
 const user = computed(() => page.props.auth.user);
-const userWallet = computed(() => page.props.auth.user.wallet * 1);
-const wallet = ref(userWallet);
+const userId = computed(() => page.props.auth.user.id);
+const email = page.props.auth.user.email
+const userIdref = ref(userId);
+const userWallet = page.props.auth.user.wallet * 1;
+const wallet = ref(userWallet)
+
+window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
+  console.log(e.user.wallet);
+  wallet.value = e.user.wallet;
+});
+
+
 function toBRL(value) {
-    return Number(value).toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL",
-    });
+  return Number(value).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
 }
 </script>
