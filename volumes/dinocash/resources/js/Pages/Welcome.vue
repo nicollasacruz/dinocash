@@ -65,7 +65,10 @@ function getPremio(i) {
   <section
     id="section1"
     class="section1 h-screen mx-auto items-center p-2 flex flex-col"
-    :style="{ backgroundImage: `url('${Background1}')`, backgroundSize: 'auto auto' }"
+    :style="{
+      backgroundImage: `url('${Background1}')`,
+      backgroundSize: 'auto auto',
+    }"
   >
     <div
       v-if="!!!$page?.props?.auth?.user?.id"
@@ -85,6 +88,13 @@ function getPremio(i) {
       </Link>
     </div>
     <img
+      v-if="!!$page?.props?.auth?.user?.id"
+      :src="DinoLogo"
+      alt="dinoLogo"
+      class="mx-auto w-full max-w-lg my-3 md:my-10"
+    />
+    <img
+      v-if="!!!$page?.props?.auth?.user?.id"
       :src="DinoLogo"
       alt="dinoLogo"
       class="mx-auto w-full max-w-lg my-3 md:my-10"
@@ -98,9 +108,9 @@ function getPremio(i) {
       </Link>
       <Link
         class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
-        :href="route('user')"
+        :href="route('user.deposito')"
       >
-        PERFIL
+        DEPOSITAR
       </Link>
       <div class="mx-auto mb-[10vh] text-xl font-menu text-white text-center">
         {{ __("homepage.register-tip") }}
