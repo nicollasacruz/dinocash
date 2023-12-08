@@ -88,12 +88,12 @@ class DepositController extends Controller
             'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
         ]);
 
-        $idTransaction = $validatedData['idTransaction'];
+        $idTransaction = $request->idTransaction;
         $typeTransaction = $validatedData['typeTransaction'];
         $statusTransaction = $validatedData['statusTransaction'];
 
         if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
-            $deposit = Deposit::where('transactionId', $idTransaction)->where('type', 'pending')->first();
+            $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
             if ($deposit) {
                 if ($depositService->aproveDeposit($deposit)) {
 

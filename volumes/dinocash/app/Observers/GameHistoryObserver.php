@@ -41,7 +41,7 @@ class GameHistoryObserver
             }
 
             AffiliateHistory::create([
-                'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2,'.',''),
+                'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2, '.', ''),
                 'gameId' => $gameHistory->id,
                 'affiliateId' => $gameHistory->user->affiliateId,
                 'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($gameHistory->user->affiliate))->id,

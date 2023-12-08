@@ -41,6 +41,7 @@ class DepositService
                 'userId' => $user->id,
                 'amount' => $amount,
                 'transactionId' => $uuid,
+                'externalId' => $response->json('idTransaction'),
                 'type' => 'pending',
                 'paymentCode' => $result,
             ]);

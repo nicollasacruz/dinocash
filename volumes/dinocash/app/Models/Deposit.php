@@ -18,6 +18,7 @@ class Deposit extends Model
         'type',
         'paymentCode',
         'approvedAt',
+        'externalId',
     ];
     
     protected $guarded = [];

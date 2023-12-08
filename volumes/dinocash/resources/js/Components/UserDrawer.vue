@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineProps, computed  } from "vue";
+import { defineProps, computed, ref  } from "vue";
 
 const routes = [
   {
@@ -67,12 +67,7 @@ const routes = [
   //   route: "user.suporte",
   // },
 ];
-const { wallet } = defineProps({
-    wallet: {
-        type: Number,
-        default: 0,
-    },
-});
+
 
 // function toBRL(value) {
 //     return value.toLocaleString("pt-br", {
@@ -84,8 +79,8 @@ const { wallet } = defineProps({
 const page = usePage();
 
 const user = computed(() => page.props.auth.user);
-const userWallet = computed(() => page.props.auth.user.wallet);
-
+const userWallet = computed(() => page.props.auth.user.wallet * 1);
+const wallet = ref(userWallet);
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
