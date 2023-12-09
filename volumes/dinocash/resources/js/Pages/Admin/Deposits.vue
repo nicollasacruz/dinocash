@@ -44,7 +44,7 @@ const getStatus = (status) => {
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head title="Admin Depósitos" />
 
   <AuthenticatedLayout>
     <div class="text-4xl text-white font-bold mb-3">Depósitos</div>

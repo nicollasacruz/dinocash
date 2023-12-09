@@ -83,7 +83,7 @@ const rows = withdraws.map((withdraw) => {
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head title="Admin Saques" />
 
   <AuthenticatedLayout>
     <div class="text-4xl text-white font-bold mb-5">Saques</div>

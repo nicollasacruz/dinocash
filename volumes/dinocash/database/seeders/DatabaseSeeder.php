@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
                 'document' => '156.201.067-05',
                 'password' => Hash::make('admin'),
                 'role' => 'admin',
+                'isAffiliate' => true,
                 'wallet' => 500
             ]);
             GameHistory::create([
@@ -51,8 +52,7 @@ class DatabaseSeeder extends Seeder
         }
         foreach (range(1, 50) as $index) {
             $user = User::factory()->create();
-            $affiliateId = $faker->randomNumber(1);
-            $user->addReferral($faker->randomElement(User::where('isAffiliate', true)->get()));
+            $user->addReferral($faker->randomElement(User::where('isAffiliate', true)->orderBy('id', 'asc')->limit(10)->get()));
             $user->save();
             $type = $faker->randomElement(['win', 'loss']);
             $amount = $faker->randomNumber($type === 'win' ? 1 : 3) * ($type === 'win' ? 1 : -1);

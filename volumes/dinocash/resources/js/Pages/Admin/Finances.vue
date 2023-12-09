@@ -105,7 +105,7 @@ function toBRL(value) {
 </script>
 
 <template>
-    <Head title="Dashboard" />
+  <Head title="Admin Financeiro" />
 
     <AuthenticatedLayout>
         <div class="flex justify-between">

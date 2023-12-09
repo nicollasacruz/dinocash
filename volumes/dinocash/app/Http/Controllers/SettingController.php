@@ -14,7 +14,7 @@ class SettingController extends Controller
     public function index()
     {
         $settings = Setting::all()->first();
-        return Inertia::render("Settings", [
+        return Inertia::render("Admin/Settings", [
             "settings" => $settings,
         ]);
     }

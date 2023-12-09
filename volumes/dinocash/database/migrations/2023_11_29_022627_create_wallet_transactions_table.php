@@ -20,11 +20,9 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->foreign('userId')
-                ->references('id')->on('users')
-                ->onDelete('set null');
+                ->references('id')->on('users');
             $table->foreign('managerUserId')
-                ->references('id')->on('users')
-                ->onDelete('set null');
+                ->references('id')->on('users');
         });
     }
 

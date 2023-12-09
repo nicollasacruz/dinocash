@@ -11,12 +11,16 @@ const routes = [
     route: "afiliado.dashboard",
   },
   {
-    label: "Solicitações de saque",
-    route: "afiliado.saque",
+    label: "Saques",
+    route: "afiliado.saques",
   },
   {
-    label: "Pagamentos",
+    label: "Comissões",
     route: "afiliado.historico",
+  },
+  {
+    label: "Faturas",
+    route: "afiliado.faturas",
   },
 ];
 const test = ref(false);

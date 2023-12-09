@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime('payedAt')->nullable();
             $table->timestamps();
 
-            $table->foreign('affiliateId')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('affiliateId')->references('id')->on('users');
         });
     }
 

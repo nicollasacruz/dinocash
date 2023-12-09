@@ -1,5 +1,5 @@
 <template>
-    <Head title="Dashboard" />
+    <Head title="Admin Usuarios" />
 
     <AuthenticatedLayout>
         <div class="text-4xl text-white font-bold">Usuários</div>

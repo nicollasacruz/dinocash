@@ -27,7 +27,7 @@ class AffiliateInvoice extends Model
 
     public function affiliateHistories(): HasMany
     {
-        return $this->hasMany(AffiliateHistory::class, 'affiliateInvoiceId', 'id');
+        return $this->hasMany(AffiliateHistory::class, 'affiliateInvoiceId');
     }
 
     public function getTotal(): float 

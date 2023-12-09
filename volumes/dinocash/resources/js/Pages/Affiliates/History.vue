@@ -5,12 +5,13 @@ import BaseTable from "@/Components/BaseTable.vue";
 import { defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
+
 const columns = [
-    { label: "Email", key: "email" },
-    { label: "Chave Pix", key: "document" },
-    { label: "Valor", key: "amount" },
     { label: "Data", key: "updated_at" },
+    { label: "Valor", key: "amount" },
     { label: "Status", key: "type" },
+    { label: "Nº Fatura", key: "affiliateInvoiceId" },
+    { label: "Faturado Em", key: "invoicedAt" },
 ];
 const { affiliateHistory } = defineProps(["affiliateHistory"]);
 const toBRL = (value) => {
@@ -23,17 +24,19 @@ console.log(affiliateHistory);
 const getStatus = (status) => {
     console.log(status);
     switch (status) {
-        case "paid":
-            return "FINALIZADO";
+        case "win":
+            return "GANHO";
+        case "loss":
+            return "PERDA";
         default:
-            return "PENDENTE";
+            return "CPA";
     }
 };
 const rows = [];
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Afiliado Comissões" />
 
     <AffiliateLayout>
         <div class="text-4xl text-white font-bold mb-3">Histórico de pagamentos</div>
@@ -52,18 +55,23 @@ const rows = [];
         <BaseTable
             hide-actions
             :columns="columns"
-            :rows="rows"
+            :rows="affiliateHistory"
             class="table-xs mt-6 h-3/4"
         >
             <template #updated_at="{ value }">
                 <td>
-                    {{ dayjs(value).format("DD/MM/YYYY") }}
+                    {{ dayjs(value).format("DD/MM/YYYY hh:mm:ss") }}
+                </td>
+            </template>
+            <template #invoicedAt="{ value }">
+                <td>
+                    {{ value ? dayjs(value).format("DD/MM/YYYY hh:mm:ss") : null}}
                 </td>
             </template>
             <template #amount="{ value }">
                 <td>
                     {{
-                        value.toLocaleString("pt-br", {
+                        Number(value).toLocaleString("pt-br", {
                             style: "currency",
                             currency: "BRL",
                         })
@@ -76,8 +84,10 @@ const rows = [];
                         <div
                             class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
                             :class="{
-                                'bg-red-600': value === 'pending',
-                                'bg-green-600': value === 'paid',
+                                'bg-red-600': value === 'loss',
+                                'bg-green-600': value === 'win',
+                                'bg-green-800': value === 'CPA',
+                                'bg-yellow-600': value === 'WITHDRAW',
                             }"
                         >
                             {{ getStatus(value) }}

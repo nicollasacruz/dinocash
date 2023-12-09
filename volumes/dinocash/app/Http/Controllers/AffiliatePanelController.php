@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AffiliateHistory;
+use App\Models\AffiliateInvoice;
 use App\Models\AffiliateWithdraw;
 use App\Models\User;
 use DateTime;
@@ -96,12 +97,12 @@ class AffiliatePanelController extends Controller
             $dateEnd->setTime(23, 59, 59);
         }
 
-        $affiliatesInvoices = $user->invoices->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+        $affiliatesInvoices = AffiliateInvoice::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->get();
+        })->where('affiliateId', $user->id)->get();
 
-        return Inertia::render('Affiliates/Withdraws', [
-            'affiliatesInvoices' => $affiliatesInvoices,
+        return Inertia::render('Affiliates/Invoices', [
+            'affiliatesInvoices' => $affiliatesInvoices ?? [],
         ]);
     }
 }

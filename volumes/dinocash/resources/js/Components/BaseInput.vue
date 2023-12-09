@@ -1,12 +1,12 @@
 <template>
-    <div :class="`'form-control w-full`">
+    <div :class="`'form-control w-full bg-transparent border-none`">
         <label
             :class="
                 error
                     ? `text-error ${labelStyle}`
                     : ` ${labelStyle} mb-1`
             "
-            class="text-sm z-10"
+            class="text-xs  sm:text-sm z-10"
         >
             {{ label }}
         </label>

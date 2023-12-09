@@ -168,7 +168,7 @@ const Ggr = import.meta.env.APP_GGR
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head title="Admin GGR" />
 
   <AuthenticatedLayout>
     <div v-if="Ggr">
