@@ -28,6 +28,17 @@ onMounted(() => {
   forceLandscapeOrientation();
   window.addEventListener("orientationchange", handleOrientationChange);
 });
+
+document.addEventListener(
+  "touchmove",
+  function (e) {
+    if (e.scale !== 1) {
+      e.preventDefault();
+    }
+  },
+  { passive: false }
+);
+
 const props = defineProps({
   active: Boolean,
 });

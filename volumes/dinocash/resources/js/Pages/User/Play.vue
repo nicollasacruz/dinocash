@@ -9,6 +9,14 @@
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
+        <div class="text-center text-xl mb-2 ">
+          Como Jogar:
+          - Para iniciar o game aperte em qualquer lugar da tela!
+          - Para pular aperte com um dedo na tela e para abaixar, pressione com dois dedos.
+          Para computadores:
+          - Para iniciar o game aperte a seta para cima ou a barra de espaço!
+          - A setas para cima e para baixo direcionam o dino!
+        </div>
         <div class="text-center text-lg mb-2 lg:hidden">
           Saldo disponível: {{ toBRL(wallet) }}
         </div>
