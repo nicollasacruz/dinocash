@@ -36,7 +36,7 @@ const rows = [];
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Afiliado Saques" />
 
     <AffiliateLayout>
         <div class="text-4xl text-white font-bold mb-3">Depósitos</div>

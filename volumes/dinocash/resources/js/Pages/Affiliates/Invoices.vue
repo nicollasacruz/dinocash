@@ -2,7 +2,8 @@
 import AffiliateLayout from "@/Layouts/AffiliateLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
-import { defineProps } from "vue";
+import BaseModal from "@/Components/BaseModal.vue";
+import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 
@@ -10,40 +11,40 @@ const columns = [
     { label: "Data", key: "updated_at" },
     { label: "Valor", key: "amount" },
     { label: "Status", key: "type" },
-    { label: "Nº Fatura", key: "affiliateInvoiceId" },
+    { label: "Fatura", key: "affiliateInvoiceId" },
     { label: "Faturado Em", key: "invoicedAt" },
 ];
-const { affiliateHistory } = defineProps(["affiliateHistory"]);
+const { affiliatesInvoices } = defineProps(["affiliatesInvoices"]);
+console.log(affiliatesInvoices, 'affiliatesInvoices');
+
+const showModal = ref(false);
 const toBRL = (value) => {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
         currency: "BRL",
     });
 };
-console.log(affiliateHistory);
 const getStatus = (status) => {
     console.log(status);
     switch (status) {
-        case "win":
-            return "GANHO";
-        case "loss":
-            return "PERDA";
+        case "paid":
+            return "FINALIZADO";
         default:
-            return "CPA";
+            return "PENDENTE";
     }
 };
 const rows = [];
 </script>
 
 <template>
-    <Head title="Afiliado Comissões" />
+    <Head title="Afiliado Faturas" />
 
     <AffiliateLayout>
-        <div class="text-4xl text-white font-bold mb-3">Depósitos</div>
+        <div class="text-4xl text-white font-bold mb-3">Faturas</div>
         <div class="my-3 flex justify-between">
             <div>
                 <div class="font-bold text-white uppercase mb-1">
-                    Pesquisar depósitos
+                    Pesquisar faturas
                 </div>
                 <input
                     type="text"
@@ -69,23 +70,18 @@ const rows = [];
         <BaseTable
             hide-actions
             :columns="columns"
-            :rows="affiliateHistory"
+            :rows="rows"
             class="table-xs mt-6 h-3/4"
         >
             <template #updated_at="{ value }">
                 <td>
-                    {{ dayjs(value).format("DD/MM/YYYY hh:mm:ss") }}
-                </td>
-            </template>
-            <template #invoicedAt="{ value }">
-                <td>
-                    {{ value ? dayjs(value).format("DD/MM/YYYY hh:mm:ss") : null}}
+                    {{ dayjs(value).format("DD/MM/YYYY") }}
                 </td>
             </template>
             <template #amount="{ value }">
                 <td>
                     {{
-                        Number(value).toLocaleString("pt-br", {
+                        value.toLocaleString("pt-br", {
                             style: "currency",
                             currency: "BRL",
                         })
@@ -98,10 +94,8 @@ const rows = [];
                         <div
                             class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
                             :class="{
-                                'bg-red-600': value === 'loss',
-                                'bg-green-600': value === 'win',
-                                'bg-green-800': value === 'CPA',
-                                'bg-yellow-600': value === 'WITHDRAW',
+                                'bg-red-600': value === 'pending',
+                                'bg-green-600': value === 'paid',
                             }"
                         >
                             {{ getStatus(value) }}
@@ -110,5 +104,6 @@ const rows = [];
                 </td>
             </template>
         </BaseTable>
+        <BaseModal v-model="showModal"> teste </BaseModal>
     </AffiliateLayout>
 </template>
