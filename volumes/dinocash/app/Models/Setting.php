@@ -15,6 +15,8 @@ class Setting extends Model
         'payout',
         'minWithdraw',
         'maxWithdraw',
+        'minAmountPlay'
+        'maxAmountPlay',
         'minDeposit',
         'maxDeposit',
         'rollover',

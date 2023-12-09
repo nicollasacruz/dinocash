@@ -19,6 +19,8 @@ class RequestSettings extends FormRequest
             'payout' => ['required', 'integer'],
             'minWithdraw' => ['required', 'integer'],
             'maxWithdraw' => ['required', 'integer'],
+            'minAmountPlay' => ['required', 'integer'],
+            'maxAmountPlay' => ['required', 'integer'],
             'minDeposit' => ['required', 'integer'],
             'maxDeposit' => ['required', 'integer'],
             'rollover' => ['required', 'integer'],
