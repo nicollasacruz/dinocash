@@ -134,11 +134,7 @@ function getPremio(i) {
             >
             <span
                 class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
-                >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-                enim odit debitis ab voluptas, ullam commodi accusantium amet,
-                aliquam doloribus magnam nam cum rerum. Aut excepturi qui a
-                temporibus suscipit! Lorem ipsum dolor sit amet consectetur
-                adipisicing elit.</span
+                >Bem-vindo ao DinoCash, somos uma provedora nova no mercado, legalizada em Malta. prepare-se para uma experiência totalmente nova e diverta jamais vista no mercado, onde o jogador poderá lucrar muito e testar seus reflexos.</span
             >
         </div>
         <Link
@@ -148,7 +144,7 @@ function getPremio(i) {
             {{ __("homepage.play-now") }}
         </Link>
         <div
-            class="h-[50px] mt-6 bg-roxo-escuro flex items-center rounded-2xl p-[30px]"
+            class="h-[50px] mt-6 mb-[200px] bg-roxo-escuro flex items-center rounded-2xl p-[30px]"
         >
             <span class="mx-auto md:text-2xl font-menu text-white text-center">
                 {{ __("homepage.free-spin-before-register") }}
