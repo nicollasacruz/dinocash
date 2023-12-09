@@ -1,7 +1,8 @@
 <template>
   <Head title="Jogar" />
 
-  <UserLayouyt>
+  <UserLayouyt v-slot="{ wallet }">
+
     <div class="p-2 lg:px-8 h-full">
       <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">
                 Jogar
@@ -9,7 +10,7 @@
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
-        <div class="text-center text-lg">Saldo disponível: {{ toBRL(walletUser) }}</div>
+        <div class="text-center text-lg mb-2 lg:hidden">Saldo disponível: {{ toBRL(wallet) }}</div>
         <input
           type="text"
           class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
@@ -86,7 +87,7 @@ import axios from "axios";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-const { viciosidade, walletUser } = defineProps(["viciosidade", 'walletUser']);
+const { viciosidade } = defineProps(["viciosidade"]);
 const finishGame = ref(false);
 const page = usePage();
 

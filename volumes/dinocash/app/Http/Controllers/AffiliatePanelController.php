@@ -78,7 +78,7 @@ class AffiliatePanelController extends Controller
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })->where('userId', $user->id)->get();
         
-        return Inertia::render('Affiliates/Histories', [
+        return Inertia::render('Affiliates/History', [
             'affiliateHistory' => $affiliateHistory,
         ]);
     }
@@ -100,7 +100,7 @@ class AffiliatePanelController extends Controller
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })->get();
 
-        return Inertia::render('Affiliates/Invoices', [
+        return Inertia::render('Affiliates/Withdraws', [
             'affiliatesInvoices' => $affiliatesInvoices,
         ]);
     }

@@ -23,7 +23,7 @@
 
     <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
       <div class="drawer-button">
-        <a>Saldo: {{ toBRL(wallet) }}</a>
+        <a>Saldo: {{ toBRL(props.wallet) }}</a>
       </div>
       <Link
         v-for="link in routes"
@@ -40,8 +40,8 @@
 <script setup lang="ts">
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineEmits, computed, ref, toRef } from "vue";
-
+import { defineEmits, defineProps, computed, ref, toRef } from "vue";
+const props = defineProps(['wallet'])
 const emit = defineEmits(["close"]);
 const routes = [
   {
@@ -76,17 +76,7 @@ const routes = [
 
 const page = usePage();
 
-const user = computed(() => page.props.auth.user);
 const email = page.props.auth.user.email;
-const userId = computed(() => page.props.auth.user.id);
-const userIdref = ref(userId);
-const userWallet = page.props.auth.user.wallet * 1;
-const wallet = ref(userWallet);
-
-window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-  console.log(e.user.wallet);
-  wallet.value = e.user.wallet;
-});
 
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {

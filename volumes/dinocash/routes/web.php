@@ -187,8 +187,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 //       AFFILIATE PANEL
 Route::middleware(['auth', 'verified'])->prefix('afiliados')->group(function () {
     Route::get('/dashboard', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
-    Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.withdraws');
-    Route::get('/historicos', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.history');
+    Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.saque');
+    Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.invoices');
 });
 Route::post('/', [ProfileController::class, 'edit'])->name('logout');

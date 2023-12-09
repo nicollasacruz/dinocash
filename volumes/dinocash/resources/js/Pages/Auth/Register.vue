@@ -173,7 +173,7 @@ const isDocumentNumberValid = (document) => {
                     </div>
 
                     <div
-                        class="flex flex-col items-center justify-center mt-3 md:mt-5 mx-auto"
+                        class="flex flex-col items-center justify-center mt-3 mx-auto"
                     >
                         <PrimaryButton
                             class="mb-2 md:mb-4 flex justify-center items-center md:w-72 md:h-16 bg-verde-claro rounded-lg font-menu text-xl md:text-2xl text-black boxShadow border-black border-4"

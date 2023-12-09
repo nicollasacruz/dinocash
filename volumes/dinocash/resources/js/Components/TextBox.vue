@@ -12,6 +12,7 @@
                 <div class="text-center flex-1" :class="valueText">
                     {{ value }}
                 </div>
+                <slot name="action" />
             </div>
         </slot>
     </div>
