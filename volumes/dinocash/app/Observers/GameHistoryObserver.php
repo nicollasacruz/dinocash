@@ -39,7 +39,7 @@ class GameHistoryObserver
                 Log::info("AffiliateHistory não criou porque o amount é: {$amount}.");
                 return;
             }
-
+            $affiliate = $gameHistory->user->affiliate;
             AffiliateHistory::create([
                 'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2, '.', ''),
                 'gameId' => $gameHistory->id,
@@ -48,9 +48,7 @@ class GameHistoryObserver
                 'userId' => $gameHistory->userId,
                 'type' => $amount > 0 ? 'win' : 'loss',
             ]);
-            $affiliate = $gameHistory->user->affiliate;
-            $affiliate->changeWalletAffiliate(((string)$amount * (string)$gameHistory->user->affiliate->revShare / 100));
-            $affiliate->save();
+            
             Log::info("AffiliateHistory criado com sucesso.");
 
         } catch (\Exception $e) {
