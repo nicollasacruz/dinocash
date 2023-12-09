@@ -12,6 +12,10 @@ const {
   balanceAmount,
   depositsAmount,
   withdrawsAmount,
+  withdrawsAffiliateAmount,
+  walletAmount,
+  walletAffiliateAmount,
+  walletsAfilliatePending,
   totalReceived,
   totalPaid,
   topWithdraws,
@@ -23,6 +27,10 @@ const {
   "balanceAmount",
   "depositsAmount",
   "withdrawsAmount",
+  "withdrawsAffiliateAmount",
+  "walletAmount",
+  "walletAffiliateAmount",
+  "walletsAfilliatePending",
   "totalReceived",
   "totalPaid",
   "topWithdraws",
@@ -39,15 +47,14 @@ onMounted(() => {
     maxDate: "today",
     dateFormat: "Y-m-d",
     onChange: (selectedDates) => {
-
-      console.log(selectedDates, 'antes');
+      console.log(selectedDates, "antes");
       // Formatar a data para dd-mm-YYYY
       const formattedStartDate = format(
         new Date(selectedDates[0]),
         "yyyy-MM-dd"
       );
       const formattedEndDate = format(new Date(selectedDates[1]), "yyyy-MM-dd");
-      
+
       try {
         if (formattedEndDate && formattedStartDate) {
           router.get(route("admin.financeiro"), {
@@ -55,9 +62,9 @@ onMounted(() => {
             dateEnd: formattedEndDate,
           });
         }
-    } catch (error) {
-      console.error("Erro no filtro:", error);
-    }
+      } catch (error) {
+        console.error("Erro no filtro:", error);
+      }
       console.log("Datas selecionadas:", formattedStartDate, formattedEndDate);
     },
   });
@@ -82,8 +89,6 @@ onMounted(() => {
 //   }
 // };
 
-
-
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {
     style: "currency",
@@ -104,7 +109,7 @@ function toBRL(value) {
           :value="toBRL(balanceAmount)"
           value-text="text-center text-green-500"
         />
-        <div class=" w-full my-auto mr-6">
+        <div class="w-full my-auto mr-6">
           <input
             id="datePicker"
             type="text"
@@ -113,12 +118,12 @@ function toBRL(value) {
         </div>
       </div>
     </div>
-    <div class="flex items-center gap-x-4 mt-2">
+    <div class="flex items-start gap-x-4 mt-2">
       <div class="flex-1">
         <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2">
           <CurrencyBox
-            label="Lucro Total"
+            label="Lucro Total Em Jogos"
             :value="totalReceived"
             :class="{ negative: totalReceived < 0 }"
           />
@@ -128,11 +133,35 @@ function toBRL(value) {
 
       <div class="flex-1">
         <div class="text-2xl text-red-500 mb-4 font-bold">Prejuízos</div>
-        <div class="grid grid-cols-1 md:grid-cols-2  gap-x-2">
-          <CurrencyBox label="Prejuizo Total" :value="totalPaid" negative />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2">
+          <CurrencyBox
+            label="Prejuizo Total Em Jogos"
+            :value="totalPaid"
+            negative
+          />
+          <CurrencyBox
+            label="Saldo de Carteiras"
+            :value="withdrawsAmount * -1"
+            negative
+          />
+          <CurrencyBox
+            label="Saldo de Comissões a pagar"
+            :value="walletAffiliateAmount * -1"
+            negative
+          />
+          <CurrencyBox
+            label="Saldo de Comissões pendentes"
+            :value="walletsAfilliatePending * -1"
+            negative
+          />
           <CurrencyBox
             label="Total de saques"
-            :value="withdrawsAmount"
+            :value="withdrawsAmount * -1"
+            negative
+          />
+          <CurrencyBox
+            label="Total de saque de afiliados"
+            :value="withdrawsAffiliateAmount * -1"
             negative
           />
         </div>
