@@ -31,7 +31,6 @@ export default class GameRunner {
         if (!paused) {
             window.requestAnimationFrame(this.__loop);
         }
-       
     }
 
     stop() {

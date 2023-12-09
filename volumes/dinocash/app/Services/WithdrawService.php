@@ -16,19 +16,21 @@ class WithdrawService
     public function createWithdraw(User $user, $amount)
     {
         try {
-            $withdraw = Withdraw::create([
-                'userId' => $user->id,
-                'transactionId' => Uuid::uuid4()->toString(),
-                'amount' => $amount,
-                'type' => 'pending',
-            ]);
+            if (!$user->isAffiliate) {
+                $withdraw = Withdraw::create([
+                    'userId' => $user->id,
+                    'transactionId' => Uuid::uuid4()->toString(),
+                    'amount' => $amount,
+                    'type' => 'pending',
+                ]);
 
-            WalletTransaction::create([
-                'userId' => $user->id,
-                'oldValue' => $user->wallet,
-                'newValue' => $user->wallet - $amount,
-                'type' => 'WITHDRAW',
-            ]);
+                WalletTransaction::create([
+                    'userId' => $user->id,
+                    'oldValue' => $user->wallet,
+                    'newValue' => $user->wallet - $amount,
+                    'type' => 'WITHDRAW',
+                ]);
+            }
 
             $user->changeWallet($amount * -1);
             $user->save();
@@ -90,14 +92,15 @@ class WithdrawService
                 ]);
             }
             return [
-                'success'=> $saque['success'],
+                'success' => $saque['success'],
                 'message' => $saque['message'],
-            ];;
+            ];
+            ;
 
         } catch (Exception $e) {
             Log::error('Erro ao aprovar o saque: ' . $e->getMessage());
             return [
-                'success'=> false,
+                'success' => false,
                 'message' => 'Erro interno',
             ];
         }
