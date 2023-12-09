@@ -35,4 +35,10 @@ class Invoice extends Model
         $invoiceService = new InvoiceService();
         return $invoiceService->getInvoice();
     }
+
+    public function scopeUnpaid($query)
+    {
+        return $query->where('status', 'closed')->where('amountPayed', '<', $this->amount);
+    }
+    
 }
