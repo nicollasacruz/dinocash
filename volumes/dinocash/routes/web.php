@@ -162,25 +162,25 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('user.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('user.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('user.destroy');
-
+    
     Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
-
+    
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
-
+    
     Route::get('/deposito', [DepositController::class, 'index'])->name('user.deposito');
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposito.destroy');
-
+    
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
     Route::get('/suporte', function () {
         return Inertia::render('User/Suport');
     })->name('user.suporte');
-
+    
 });
 
 
@@ -191,6 +191,7 @@ Route::middleware(['auth', 'verified'])->prefix('afiliados')->group(function () 
     Route::get('/historicos', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.history');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.invoices');
 });
+Route::post('/', [ProfileController::class, 'edit'])->name('logout');
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');
 
