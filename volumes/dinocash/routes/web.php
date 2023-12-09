@@ -133,8 +133,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/ggr', [DashboardController::class, 'ggr'])->name('admin.ggr');
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
-    Route::post('/settings', [SettingController::class, 'index'])->name('admin.settings.update');
-    Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.edit');
+    // Route::post('/settings', [SettingController::class, 'index'])->name('admin.settings.update');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
     Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');
 
     Route::prefix('afiliados')->group(function () {
