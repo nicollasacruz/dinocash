@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('maxDeposit')->default(10000);
             $table->integer('rollover')->default(2);
             $table->integer('defaultCPA')->default(20);
+            $table->boolean('affiliatePayGGR')->default(true);
             $table->integer('defaultRevShare')->default(20);
             $table->boolean('autoPayWithdraw')->default(true);
             $table->integer('maxAutoPayWithdraw')->default(100);

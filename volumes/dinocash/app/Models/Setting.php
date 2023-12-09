@@ -22,6 +22,7 @@ class Setting extends Model
         'rollover',
         'defaultCPA',
         'defaultRevShare',
+        'affiliatePayGGR',
         'autoPayWithdraw',
         'maxAutoPayWithdraw',
         'created_at',

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\AffiliateHistory;
 use App\Models\GameHistory;
+use App\Models\Setting;
 use App\Services\AffiliateInvoiceService;
 use App\Services\InvoiceService;
 use Illuminate\Support\Facades\Log;
@@ -60,19 +61,22 @@ class GameHistoryObserver
     public function createGgrHistory(GameHistory $gameHistory): void
     {
         try {
+            $setting = Setting::first();
             $amount = $gameHistory->finalAmount * -1;
             if ($amount === 0) {
                 Log::info("GGR - createGgrHistory não criou porque o amount é: {$amount}.");
                 return;
             }
+            if (!$gameHistory->user->isAffiliate || $setting->affiliatePayGGR) {
 
-            $invoiceService = new InvoiceService();
+                $invoiceService = new InvoiceService();
 
-            $invoice = $invoiceService->getInvoice();
+                $invoice = $invoiceService->getInvoice();
 
-            $invoiceService->addTransaction($invoice, $amount);
+                $invoiceService->addTransaction($invoice, $amount);
 
-            Log::info("GGR - Transação adicionada com sucesso à Invoice {$invoice->id}.");
+                Log::info("GGR - Transação adicionada com sucesso à Invoice {$invoice->id}.");
+            }
         } catch (\Exception $e) {
             Log::error("GGR - Erro ao processar função createGgrHistory da Invoice {$invoice->id}: " . $e->getMessage());
         }
