@@ -5,6 +5,8 @@ import { ref } from "vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import TextBox from "@/Components/TextBox.vue";
 import { UserIcon } from "@heroicons/vue/24/solid";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const showModal = ref(false);
 const {
@@ -32,6 +34,23 @@ const {
   "CPA",
   "paymentPending",
 ]);
+
+interface ImportMetaEnv {
+  APP_URL: string;
+}
+
+const link = "https://dinocash.io/ref/" + affiliateLink;
+
+const toBRL = (value) => {
+  return Number(value).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
+};
+function copy() {
+  navigator.clipboard.writeText(link);
+  toast.success("Copiado!");
+}
 const selectedUser = ref(null);
 </script>
 
@@ -43,12 +62,12 @@ const selectedUser = ref(null);
       <div class="text-4xl text-white font-bold mb-5">Dashboard</div>
       <div class="h-64">grafico</div>
       <div class="flex gap-x-5 -mt-4">
-        <TextBox label="Online" :value="2" label-text="text-green-500">
+        <TextBox label="CPA" :value="toBRL(CPA)" label-text="text-green-500">
           <template #icon>
             <UserIcon class="w-5 fill-green-500" />
           </template>
         </TextBox>
-        <TextBox label="Cadastros" :value="2">
+        <TextBox label="RevShare" :value="`${revShare}%`">
           <template #icon>
             <UserIcon class="w-5" />
           </template>
@@ -71,10 +90,11 @@ const selectedUser = ref(null);
         label-text="text-2xl text-white !text-left capitalize"
         value-text="!text-left flex items-center"
         class="col-span-3"
-        :value="'https://dinocash.io/ref/' + affiliateLink"
+        :value="link"
       >
         <template #action>
           <button
+            @click="copy()"
             class="btn min-h-[2rem] h-[2rem] bg-yellow-500 text-black hover:text-white"
           >
             Copiar o link

@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
-import Background from "../../../storage/imgs/admin/bg.jpg";
+import Background from "../../../storage/imgs/bg-afiliado.png";
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 const routes = [
@@ -54,7 +54,7 @@ onMounted(() => {
             class="drawer-overlay"
           ></label>
           <ul
-            class="menu py-4 lg:w-80 min-h-full bg-[#212121] text-white relative"
+            class="menu py-4 lg:w-80 min-h-full bg-[#2b0e36] text-white relative"
           >
             <x-mark-icon
               class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"

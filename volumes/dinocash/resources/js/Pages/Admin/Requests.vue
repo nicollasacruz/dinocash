@@ -147,7 +147,7 @@ const rows = withdraws.map((withdraw) => {
       </template>
       <template #updated_at="{ value }">
         <td>
-          {{ dayjs(value).format("DD/MM/YYYY hh:mm:ss") }}
+          {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
         </td>
       </template>
       <template #amount="{ value }">

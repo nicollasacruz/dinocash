@@ -35,7 +35,7 @@ class AffiliatePanelController extends Controller
             'affiliateLink' => $user->invitation_link,
             'walletAffiliate' => $user->walletAffiliate,
             'revShare' => $user->revShare,
-            'CPA' => $user->invitation_link,
+            'CPA' => $user->CPA,
             'paymentPending' => $paymentPending,
         ]);
     }
@@ -55,10 +55,11 @@ class AffiliatePanelController extends Controller
 
         $affiliateWithdrawsList = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->where('userId', $user->id)->get();
+        })->orderBy('updated_at', 'desc')->get();
 
         return Inertia::render('Affiliates/Withdraws', [
             'affiliatesWithdrawsList' => $affiliateWithdrawsList,
+            'user' => $user,
         ]);
     }
 
@@ -77,7 +78,7 @@ class AffiliatePanelController extends Controller
 
         $affiliateHistory = AffiliateHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->where('affiliateId', $user->id)->get();
+        })->where('affiliateId', $user->id)->orderBy('created_at', 'desc')->get();
         
         return Inertia::render('Affiliates/History', [
             'affiliateHistory' => $affiliateHistory,
@@ -99,7 +100,7 @@ class AffiliatePanelController extends Controller
 
         $affiliatesInvoices = AffiliateInvoice::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->where('affiliateId', $user->id)->get();
+        })->where('affiliateId', $user->id)->orderBy('updated_at', 'desc')->get();
 
         return Inertia::render('Affiliates/Invoices', [
             'affiliatesInvoices' => $affiliatesInvoices ?? [],
