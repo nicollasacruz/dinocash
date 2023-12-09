@@ -1,5 +1,5 @@
 <template>
-    <UserLayouyt>
+    <UserLayouyt v-slot="{ wallet }">
         <div class="p-2 lg:px-8 h-full">
             <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">
                 Jogar
@@ -7,15 +7,16 @@
             <div
                 class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
             >
+                <div class="mb-3 text-center lg:hidden">
+                    Saldo: {{ toBRL(wallet) }}
+                </div>
                 <input
                     type="text"
                     class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
                     placeholder="Digite o valor da aposta"
                     v-model="amount"
                 />
-                <div class="text-center">
-                    Aposta mínima: R$ 1,00
-                </div>
+                <div class="text-center">Aposta mínima: R$ 1,00</div>
                 <button
                     class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
                     @click="startGame"
@@ -85,8 +86,8 @@ import GameCluster from "../../Components/GameCluster.vue";
 import { computed, onMounted, ref, toRef } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import axios from "axios";
-
-const { viciosidade } = defineProps(["viciosidade"]);
+const { viciosidade, wallet } = defineProps(["viciosidade", "wallet"]);
+console.log(wallet);
 const finishGame = ref(false);
 const page = usePage();
 
@@ -102,8 +103,13 @@ const clientHeight = ref(0);
 const clientWidth = ref(0);
 const difficulty = ref(false);
 const score = ref(0);
-const type = ref('loss');
-
+const type = ref("loss");
+const toBRL = (value) => {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+};
 async function fetchStore() {
     try {
         const response = await axios.post(route("user.play.store"), {
@@ -136,7 +142,9 @@ async function generateSHA256Hash(input) {
 async function fetchUpdate() {
     // console.log(type.value, 'value');
     try {
-        const hash = await generateSHA256Hash(`${gameId.value}${userId.value}dinocash`);
+        const hash = await generateSHA256Hash(
+            `${gameId.value}${userId.value}dinocash`
+        );
         const response = await axios.patch(route("user.play.update"), {
             distance: score.value,
             gameId: gameId.value,

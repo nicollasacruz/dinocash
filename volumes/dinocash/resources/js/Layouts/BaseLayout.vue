@@ -39,7 +39,7 @@ const props = defineProps({
         :class="homepage ? '' : 'overflow-hidden'"
     >
         <div id="menu">
-            <nav class="h-20 sm:h-24 w-auto flex justify-center content-center">
+            <nav class="h-16 sm:h-20 w-auto flex justify-center content-center">
                 <div
                     v-if="!!!$page?.props?.auth?.user?.id"
                     class="flex justify-center bg-roxo-escuro w-[330px] md:w-[430px] rounded-2xl"

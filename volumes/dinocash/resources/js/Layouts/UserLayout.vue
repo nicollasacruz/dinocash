@@ -1,11 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, watch, computed } from "vue";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
 import Background from "../../../storage/imgs/home-page/home-bg2.jpg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
-
+import { usePage } from "@inertiajs/vue3";
+const page = usePage();
+const userId = computed(() => page.props.auth.user.id);
+const userIdref = ref(userId);
+const userWallet = page.props.auth.user.wallet * 1;
+const wallet = ref(userWallet);
+console.log(wallet.value);
+window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
+    console.log('event',e.user.wallet);
+    wallet.value = e.user.wallet;
+});
+watch(
+    () => wallet.value,
+    () => console.log('wallet', wallet.value)
+)
 const drawer = ref(false);
 </script>
 
@@ -33,7 +47,7 @@ const drawer = ref(false);
                             class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
                             @click="drawer = !drawer"
                         />
-                        <UserDrawer class="mt-3" />
+                        <UserDrawer :wallet="wallet" class="mt-3" />
                     </ul>
                 </div>
             </div>
@@ -59,11 +73,12 @@ const drawer = ref(false);
                     <UserDrawer
                         @close="drawer = false"
                         class="hidden lg:block"
+                        :wallet="wallet"
                     />
                     <div
                         class="border-8 border-black bg-white rounded-xl flex-1"
                     >
-                        <slot />
+                        <slot :wallet="wallet" />
                     </div>
                 </div>
             </div>

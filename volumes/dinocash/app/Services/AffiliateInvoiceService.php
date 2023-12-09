@@ -57,34 +57,19 @@ class AffiliateInvoiceService
         }
     }
 
-    public function addPayment(AffiliateInvoice $invoice, $amount): GgrPayment|bool
-    {
-        try {
-            $payment = new GgrPayment([
-                'amount' => $amount,
-                'status' => 'pending',
-                'invoice_id' => $invoice->id,
-            ]);
-
-            $invoice->ggrPayments()->save($payment);
-
-            return $payment;
-        } catch (\Exception $e) {
-            Log::error("Erro ao adicionar pagamento à Invoice: " . $e->getMessage());
-            return false;
-        }
-    }
-
     public function closeInvoice(AffiliateInvoice $invoice): AffiliateInvoice|bool
     {
         try {
+            $amount = $invoice->affiliateHistories->sum('amount');
             $invoice->update([
                 'status' => 'closed',
                 'invoicedAt' => now(),
-                'amount' => $invoice->affiliateHistories->sum('amount'),
+                'amount' => $amount,
             ]);
             $affiliate = User::where('id', $invoice->affiliateId)->first();
-            $affiliate->resetWalletAffiliate();
+            $affiliate->update([
+                'walletAffiliate' => number_format(($affiliate->walletAffiliate + $amount), 2,'.','')
+            ]);
 
             foreach ($invoice->affiliateHistories as $transaction) {
                 $transaction->update([
