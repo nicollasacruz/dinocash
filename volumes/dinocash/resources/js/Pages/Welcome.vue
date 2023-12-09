@@ -144,7 +144,7 @@ function getPremio(i) {
             {{ __("homepage.play-now") }}
         </Link>
         <div
-            class="h-[50px] mt-6 bg-roxo-escuro flex items-center rounded-2xl p-[30px]"
+            class="h-[50px] mt-6 mb-[200px] bg-roxo-escuro flex items-center rounded-2xl p-[30px]"
         >
             <span class="mx-auto md:text-2xl font-menu text-white text-center">
                 {{ __("homepage.free-spin-before-register") }}
