@@ -18,13 +18,9 @@ class GameHistoryObserver
             Log::info("Iniciando update GameHistory.");
             if ($gameHistory->user->affiliateId && $gameHistory->user->affiliate->isAffiliate) {
                 $this->createAffiliateHistory($gameHistory);
-            } else {
-                Log::info("Não tem referral.");
             }
             if (env('APP_GGR')) {
                 $this->createGgrHistory($gameHistory);
-            } else {
-                Log::info("GGR - não está ativado para esse cliente.");
             }
         }
     }

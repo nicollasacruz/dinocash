@@ -11,8 +11,13 @@
         <div class="text-xs lg:text-sm text-gray-400">Seja bem-vindo(a)</div>
         <div class="text-xl lg:text-2xl text-gray-700 -mt-2">{{ email }}</div>
         <!-- <div class="tex-lg lg:text-xl text-gray-700">NÍVEL 100</div> -->
-        <Link class="tex-lg lg:text-sm text-red-700" 
-        :href="route('logout')" method="post"> Encerrar sessão </Link>
+        <Link
+          class="tex-lg lg:text-sm text-red-700"
+          :href="route('logout')"
+          method="post"
+        >
+          Encerrar sessão
+        </Link>
       </div>
     </div>
 
@@ -26,7 +31,7 @@
         :href="route(link.route)"
         @click="emit('close')"
       >
-        <a >{{ link.label }}</a>
+        <a>{{ link.label }}</a>
       </Link>
     </div>
   </div>
@@ -39,6 +44,10 @@ import { defineEmits, computed, ref, toRef } from "vue";
 
 const emit = defineEmits(["close"]);
 const routes = [
+  {
+    label: "perfil",
+    route: "user.edit",
+  },
   {
     label: "Jogar",
     route: "user.play",
@@ -58,10 +67,6 @@ const routes = [
   {
     label: "Sacar",
     route: "user.saque",
-  },
-  {
-    label: "Alterar Senha",
-    route: "user.alterar_senha",
   },
   // {
   //   label: "Suporte",

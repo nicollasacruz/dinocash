@@ -18,10 +18,10 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'role' => ['required', 'string'],
-            'wallet' => ['required', 'integer'],
-            'isAffiliate' => ['required', 'bool'],
-            'invitation_link' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'role' => ['string'],
+            'wallet' => ['integer'],
+            'isAffiliate' => ['bool'],
+            'invitation_link' => ['string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
     }
 }
