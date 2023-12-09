@@ -2,7 +2,6 @@
   <Head title="Jogar" />
 
   <UserLayouyt v-slot="{ wallet }">
-
     <div class="p-2 lg:px-8 h-full">
       <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">
                 Jogar
@@ -10,7 +9,9 @@
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
-        <div class="text-center text-lg mb-2 lg:hidden">Saldo disponível: {{ toBRL(wallet) }}</div>
+        <div class="text-center text-lg mb-2 lg:hidden">
+          Saldo disponível: {{ toBRL(wallet) }}
+        </div>
         <input
           type="text"
           class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
@@ -84,8 +85,8 @@ import GameCluster from "../../Components/GameCluster.vue";
 import { computed, onMounted, ref, toRef } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import axios from "axios";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const { viciosidade } = defineProps(["viciosidade"]);
 const finishGame = ref(false);
@@ -194,9 +195,9 @@ const handleFinishGame = (pontuation) => {
 };
 
 function toBRL(value) {
-    return Number(value).toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL",
-    });
+  return Number(value).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
 }
 </script>
