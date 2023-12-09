@@ -6,8 +6,6 @@ import Background from "../../../storage/imgs/admin/bg.jpg";
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 
-const page = usePage();
-
 const routes = [
   {
     label: "Dashboard",
@@ -83,7 +81,7 @@ onMounted(() => {
               <img class="mr-3" width="50" height="50" :src="fotoPerfil" />
               <div>
                 <div class="">Seja bem-vindo(a)</div>
-                <div class="text-lg">{{ page.props.auth.user.name }}</div>
+                <div class="text-lg">{{ $page.props.auth.user.name }}</div>
                 <div class="text-red-400 underline cursor-pointer">
                   <Link :href="route('logout')" method="post">
                     Encerrar sessão
