@@ -76,7 +76,7 @@ class AffiliatePanelController extends Controller
 
         $affiliateHistory = AffiliateHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->where('userId', $user->id)->get();
+        })->where('affiliateId', $user->id)->get();
         
         return Inertia::render('Affiliates/History', [
             'affiliateHistory' => $affiliateHistory,

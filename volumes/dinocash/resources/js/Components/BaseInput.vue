@@ -12,7 +12,7 @@
         </label>
         <input
             :value="value"
-            @input="($event) => emit('update:modelValue', $event)"
+            @input="($event) => emit('update:value', $event)"
             class="input w-full input-sm bordered"
             :class="[
                 error ? 'input-error ' : `${color} ${bgColor}`,
@@ -83,7 +83,7 @@ const inputStyle = computed(() => {
 const isAutoComplete = computed(() => !!props.itemsSelected); // Use !! to convert to a boolean value
 const isSelect = computed(() => !!props.options?.length); // Use !! to convert to a boolean value
 
-const emit = defineEmits(["update:modelValue", "update:selected"]);
+const emit = defineEmits(["update:value", "update:selected"]);
 
 function updateSelected(e: any) {
     emit("update:selected", e);
@@ -92,6 +92,6 @@ function handleEvent(e: any) {
     teste(e.target.value);
 }
 function teste(e: any) {
-    emit("update:modelValue", e);
+    emit("update:value", e);
 }
 </script>

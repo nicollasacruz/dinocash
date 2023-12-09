@@ -36,31 +36,17 @@ const rows = [];
     <Head title="Dashboard" />
 
     <AffiliateLayout>
-        <div class="text-4xl text-white font-bold mb-3">Depósitos</div>
+        <div class="text-4xl text-white font-bold mb-3">Histórico de pagamentos</div>
         <div class="my-3 flex justify-between">
             <div>
                 <div class="font-bold text-white uppercase mb-1">
-                    Pesquisar depósitos
+                    Pesquisar
                 </div>
                 <input
                     type="text"
                     class="admin-input"
                     placeholder="Digite o email do usuário... "
                 />
-            </div>
-            <div class="flex gap-x-5">
-                <div class="flex gap-x-5">
-                    <TextBox
-                        label="CAIXA DA CASA"
-                        :value="toBRL(2)"
-                        value-text="text-center text-green-500"
-                    />
-                    <TextBox
-                        label="total de depósitos hoje"
-                        :value="toBRL(2)"
-                        value-text="text-center text-green-500"
-                    />
-                </div>
             </div>
         </div>
         <BaseTable
