@@ -23,7 +23,7 @@
 
     <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
       <div class="drawer-button">
-        <a>Saldo: {{ toBRL(props.wallet) }}</a>
+        <a class="text-yellow-400 text-xl">Saldo: {{ toBRL(props.wallet) }}</a>
       </div>
       <Link
         v-for="link in routes"

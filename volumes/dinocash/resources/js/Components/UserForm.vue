@@ -158,7 +158,7 @@
                         <td>{{ item.type }}</td>
                         <td>{{ toBRL(item.amount) }}</td>
                         <td>
-                            {{ dayjs(item.updated_at).format("DD/MM/YYYY") }}
+                            {{ dayjs(item.updated_at).format("DD/MM/YYYY HH:mm:ss") }}
                         </td>
                     </tr>
                 </tbody>

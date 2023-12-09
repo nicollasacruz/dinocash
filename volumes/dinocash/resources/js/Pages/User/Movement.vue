@@ -22,7 +22,7 @@
           class="grid grid-cols-4 bg-gray-200 py-2 text-sm lg:text-xl text-center"
         >
           <div>
-            {{ dayjs(updated_at).format("DD/MM/YYYY") }}
+            {{ dayjs(updated_at).format("DD/MM/YYYY HH:mm:ss") }}
           </div>
           <div>
             {{ transaction_type === "deposit" ? "DEPÓSITO" : "SAQUE" }}
