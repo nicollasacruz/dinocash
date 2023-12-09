@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AffiliateController;
+use App\Http\Controllers\AffiliatePanelController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\FinanceController;
@@ -106,21 +107,13 @@ Route::get('language/{language}', function ($language) {
     return;
 })->name('language');
 
-Route::get('php_info', function () {
-    echo 'ssaad';
-    return dd(phpinfo());
-})->name('info');
-
-
-Route::get('/afiliado', function () {
-    return Inertia::render('Admin/Affiliates');
-})->middleware(['auth', 'verified'])->name('user.affiliate');
-Route::get('/saques', function () {
-    return Inertia::render('Requests');
-})->middleware(['auth', 'verified'])->name('user.requests');
-Route::get('/depositos', function () {
-    return Inertia::render('Deposits');
-})->middleware(['auth', 'verified'])->name('user.deposits');
+//     JOGAR
+Route::middleware(['auth', 'verified', 'singleSession'])->group(function () {
+    Route::get('/jogar', [GameHistoryController::class, 'play'])->name('user.play');
+    Route::post('/jogar', [GameHistoryController::class, 'store'])->name('user.play.store');
+    Route::patch('/jogar', [GameHistoryController::class, 'update'])->name('user.play.update');
+});
+//     JOGAR
 
 //       ADMIN GROUP
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
@@ -157,13 +150,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/deposito', [DepositController::class, 'indexAdmin'])->name('admin.deposito');
 });
 
-Route::middleware(['auth', 'verified', 'singleSession'])->group(function () {
-    Route::get('/jogar', [GameHistoryController::class, 'play'])->name('user.play');
-    Route::post('/jogar', [GameHistoryController::class, 'store'])->name('user.play.store');
-    Route::patch('/jogar', [GameHistoryController::class, 'update'])->name('user.play.update');
-});
-
-//       USER GROUP
+//       USER PAINEL
 Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/', function () {
         return Redirect::route('user.historico');
@@ -193,14 +180,13 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 
 });
 
+
+//       AFFILIATE PANEL
 Route::middleware(['auth', 'verified'])->prefix('afiliados')->group(function () {
-    Route::get('/', [AffiliateController::class, 'affiliateIndex'])->name('afiliado.dashboard');
-    Route::get('/saques', function(){
-        return  Inertia::render('Affiliates/Withdraws');
-    })->name('afiliado.saque');
-    Route::get('/historico', function(){
-        return  Inertia::render('Affiliates/History');
-    })->name('afiliado.historico');
+    Route::get('/dashboard', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
+    Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.saque');
+    Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');
+    Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.invoices');
 });
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');

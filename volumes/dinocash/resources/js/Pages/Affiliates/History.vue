@@ -2,8 +2,7 @@
 import AffiliateLayout from "@/Layouts/AffiliateLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
-import BaseModal from "@/Components/BaseModal.vue";
-import { ref, defineProps } from "vue";
+import { defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 const columns = [
@@ -25,7 +24,6 @@ const depositsRow = deposits?.map((deposit) => {
     email: deposit.user.email,
   };
 });
-const showModal = ref(false);
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
     style: "currency",
@@ -111,6 +109,5 @@ const getStatus = (status) => {
         </td>
       </template>
     </BaseTable>
-    <BaseModal v-model="showModal"> teste </BaseModal>
   </AffiliateLayout>
 </template>

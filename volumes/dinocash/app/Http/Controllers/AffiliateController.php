@@ -38,31 +38,6 @@ class AffiliateController extends Controller
         ]);
     }
 
-    public function affiliateIndex(Request $request)
-    {
-        // $user = User::find(Auth::user()->id);
-        // $email = $request->query('email');
-
-        // $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
-
-        // $affiliateInvoiceList = $user->invoices;
-
-        // $affiliates = User::when($email, function ($query) use ($email) {
-        //     $query->where('email', 'LIKE', '%' . $email . '%');
-        // })
-        //     ->where('isAffiliate', true)->get();
-
-        // $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
-        // return Inertia::render('User/Affiliates', [
-        //     'affiliates' => $affiliates,
-        //     'affiliatesWithdraws' => $affiliateWithdraws,
-        //     'affiliatesWithdrawsList' => $affiliateWithdrawsList,
-        //     'affiliateInvoiceList' => $affiliateInvoiceList,
-        // ]);
-    }
-
-
-
     /**
      * Update the user's profile information.
      */

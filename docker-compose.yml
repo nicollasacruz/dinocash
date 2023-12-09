@@ -9,8 +9,8 @@ services:
       - ./volumes/dinocash:/var/www/html:rw
     container_name: dinocash_web
     environment:
-      - VIRTUAL_HOST=dev.dinocash.io
-      - LETSENCRYPT_HOST=dev.dinocash.io
+      - VIRTUAL_HOST=dinocash.io
+      - LETSENCRYPT_HOST=dinocash.io
       - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
       - VIRTUAL_PORT=8080
     depends_on:
@@ -53,13 +53,13 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      PMA_ARBITRARY: 1
-      PMA_HOST: db_dino
-      PMA_PORT: 3306
-      VIRTUAL_HOST: database.dinocash.io
-      LETSENCRYPT_HOST: database.dinocash.io
-      LETSENCRYPT_EMAIL: nicollasacruz@gmail.com
-      VIRTUAL_PORT: 9000
+      - VIRTUAL_HOST=database.dinocash.io
+      - LETSENCRYPT_HOST=database.dinocash.io
+      - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
+      - VIRTUAL_PORT=9000
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db_dino
+      - PMA_PORT=3306
     ports:
       - "9000:80"
     depends_on:

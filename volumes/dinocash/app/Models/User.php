@@ -29,6 +29,7 @@ class User extends Authenticatable
         'document',
         'role',
         'wallet',
+        'walletAffiliate',
         'isAffiliate',
         'affiliateId',
         'affiliatedAt',
@@ -38,7 +39,6 @@ class User extends Authenticatable
         'referralsCounter',
         'CPA',
         'revShare',
-        'walletAffiliate',
     ];
 
     /**

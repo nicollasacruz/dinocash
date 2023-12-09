@@ -1,49 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import AffiliateLayout from "@/Layouts/AffiliateLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import BaseTable from "@/Components/BaseTable.vue";
-import BaseModal from "@/Components/BaseModal.vue";
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import TextBox from "@/Components/TextBox.vue";
 import { UserIcon } from "@heroicons/vue/24/solid";
-import UserForm from "@/Components/UserForm.vue";
 
-const {
-  activeSessions,
-  totalUsers,
-  lastUsers,
-  lossLast30,
-  lossToday,
-  lossTotal,
-  payoutLast30,
-  payoutToday,
-  payoutTotal,
-  groupedDateWin,
-  groupedDateLoss,
-} = defineProps([
-  "activeSessions",
-  "totalUsers",
-  "lastUsers",
-  "lossLast30",
-  "lossToday",
-  "lossTotal",
-  "payoutLast30",
-  "payoutToday",
-  "payoutTotal",
-  "groupedDateWin",
-  "groupedDateLoss",
-]);
 const showModal = ref(false);
-const columns = [
-  { label: "Nome", key: "name" },
-  { label: "Email", key: "email" },
-  { label: "Saldo", key: "wallet" },
-  { label: "Afiliado", key: "isAffiliate" },
-];
-const last5Users = lastUsers.slice(0, 5);
+
 const selectedUser = ref(null);
-console.log(last5Users);
 function selectUser(user) {
   showModal.value = true;
   selectedUser.value = user;
@@ -59,14 +24,14 @@ function selectUser(user) {
       <div class="flex gap-x-5 -mt-4">
         <TextBox
           label="Online"
-          :value="activeSessions"
+          :value="2"
           label-text="text-green-500"
         >
           <template #icon>
             <UserIcon class="w-5 fill-green-500" />
           </template>
         </TextBox>
-        <TextBox label="Cadastros" :value="totalUsers">
+        <TextBox label="Cadastros" :value="2">
           <template #icon>
             <UserIcon class="w-5" />
           </template>
@@ -75,43 +40,12 @@ function selectUser(user) {
     </div>             
 
     <div class="grid xs:  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-2 mt-4">
-      <CurrencyBox label="Lucro em 30 dias" :value="payoutLast30" />
-      <CurrencyBox label="Prejuizo em 30 dias" :value="lossLast30" negative />
-      <CurrencyBox label="Lucro Total" :value="payoutTotal" />
-      <CurrencyBox label="Prejuizo Total" :value="lossTotal" negative />
-      <CurrencyBox label="Lucro do dia" :value="payoutToday" />
+      <CurrencyBox label="Lucro em 30 dias" :value="2" />
+      <CurrencyBox label="Prejuizo em 30 dias" :value="2" negative />
+      <CurrencyBox label="Lucro Total" :value="2" />
+      <CurrencyBox label="Prejuizo Total" :value="2" negative />
+      <CurrencyBox label="Lucro do dia" :value="2" />
     </div>
     <div class="text-2xl font-bold text-white mt-6 mb-2">Últimos Cadastros</div>
-    <BaseTable class="table-xs" :columns="columns" :rows="last5Users">
-      <template #actions="{ value }">
-        <td>
-          <div
-            @click="selectUser(value)"
-            class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
-          >
-            GERENCIAR
-          </div>
-        </td>
-      </template>
-      <template #wallet="{ value }">
-        <td>
-          {{
-            value.toLocaleString("pt-br", {
-              style: "currency",
-              currency: "BRL",
-            })
-          }}
-        </td>
-      </template>
-      <template #isAffiliate="{ value }">
-        <td>
-          <div v-if="value">SIM</div>
-          <div v-else>NÃO</div>
-        </td>
-      </template>
-    </BaseTable>
-    <BaseModal v-if="showModal" v-model="showModal">
-      <UserForm :user="selectedUser" typeForm="user" />
-    </BaseModal>
   </AffiliateLayout>
 </template>
