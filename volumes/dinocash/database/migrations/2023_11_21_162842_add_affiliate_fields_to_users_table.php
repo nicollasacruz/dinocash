@@ -21,7 +21,7 @@ class AddAffiliateFieldsToUsersTable extends Migration
             $table->timestamp('cpaCollectedAt')->nullable();
 
             // Adiciona a chave estrangeira para o afiliado (referenciando outro usuário)
-            $table->foreign('affiliateId')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('affiliateId')->references('id')->on('users');
         });
     }
 

@@ -22,8 +22,7 @@ return new class extends Migration
 
             // Ensure the foreign key is unsigned
             $table->foreign('userId')
-                ->references('id')->on('users')
-                ->onDelete('set null');
+                ->references('id')->on('users');
         });
     }
 
