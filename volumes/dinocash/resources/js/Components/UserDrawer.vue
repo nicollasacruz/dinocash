@@ -31,10 +31,12 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
 import { defineEmits, computed, ref, toRef } from "vue";
+
 const emit = defineEmits(["close"]);
 const routes = [
   {
@@ -70,8 +72,8 @@ const routes = [
 const page = usePage();
 
 const user = computed(() => page.props.auth.user);
-const userId = computed(() => page.props.auth.user.id);
 const email = page.props.auth.user.email;
+const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
 const userWallet = page.props.auth.user.wallet * 1;
 const wallet = ref(userWallet);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PixReceived;
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
 use App\Models\Setting;
@@ -94,9 +95,10 @@ class DepositController extends Controller
 
         if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
             $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
+            $user = User::find($deposit->userId);
             if ($deposit) {
                 if ($depositService->aproveDeposit($deposit)) {
-
+                    event(new PixReceived($user));
                     return response()->json(['status' => 'success', 'message' => 'Deposito aprovado']);
                 }
             }

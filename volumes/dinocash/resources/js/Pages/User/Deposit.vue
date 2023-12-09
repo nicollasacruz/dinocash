@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
@@ -56,6 +56,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "../../Components/BaseModal.vue";
 import QRCodeVue3 from "qrcode-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 const { minDeposit, maxDeposit } = defineProps(["minDeposit", "maxDeposit"]);
 
@@ -88,6 +89,17 @@ async function startDeposit() {
     amount.value = 0;
   }
 }
+const page = usePage();
+
+const userId = computed(() => page.props.auth.user.id);
+const userIdref = ref(userId);
+
+window.Echo.channel("pixReceived" + userIdref.value).listen("PixReceived", (e) => {
+  modal.value = false;
+  qrCode.value = "";
+  toast.success("Deposito realizado com sucesso!");
+});
+
 function copy() {
   navigator.clipboard.writeText(qrCode.value);
   toast.success("Copiado!");
