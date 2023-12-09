@@ -23,6 +23,7 @@ class AffiliatePanelController extends Controller
         $lossLast30Days = AffiliateHistory::lossesLast30Days()->where('affiliateId', $user->id)->sum('amount');
         $profitTotal = AffiliateHistory::winsTotal()->where('affiliateId', $user->id)->sum('amount');
         $lossTotal = AffiliateHistory::lossesTotal()->where('affiliateId', $user->id)->sum('amount');
+        $countInvited = User::where('affiliateId', $user->id)->count();
         $revShareTotal = $profitToday - $lossTotal;
         $paymentPending = AffiliateHistory::where('affiliateId', $user->id)->where('invoicedAt', null)->sum('amount');
         ;
@@ -31,6 +32,7 @@ class AffiliatePanelController extends Controller
             'profitLast30Days' => $profitLast30Days,
             'lossLast30Days' => $lossLast30Days,
             'profitTotal' => $profitTotal,
+            'countInvited' => $countInvited,
             'lossTotal' => $lossTotal * 1,
             'revShareTotal' => $revShareTotal,
             'profitCPA' => $profitCPA,

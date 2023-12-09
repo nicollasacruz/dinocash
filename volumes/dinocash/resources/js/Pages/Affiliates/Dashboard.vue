@@ -21,6 +21,7 @@ const {
   revShare,
   CPA,
   paymentPending,
+  countInvited,
 } = defineProps([
   "profitToday",
   "profitLast30Days",
@@ -35,6 +36,7 @@ const {
   "revShare",
   "CPA",
   "paymentPending",
+  "countInvited",
 ]);
 
 interface ImportMetaEnv {
@@ -60,9 +62,9 @@ const selectedUser = ref(null);
   <Head title="Afiliados Dashboard" />
 
   <AffiliateLayout>
-    <div class="flex justify-between">
+    <div class="flex-row lg:flex xl:flex justify-between">
       <div class="text-4xl text-white font-bold mb-5">Dashboard</div>
-      <div class="h-64">grafico</div>
+      <!-- <div class="h-64">grafico</div> -->
       <div class="flex gap-x-5 -mt-4">
         <TextBox label="CPA" :value="toBRL(CPA)" label-text="text-green-500">
           <template #icon>
@@ -78,20 +80,21 @@ const selectedUser = ref(null);
     </div>
 
     <div
-      class="grid xs: grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-2 mt-4"
+      class="grid xs: grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-x-2 gap-y-2 mt-4"
     >
       <CurrencyBox label="Lucro em 30 dias" :value="profitLast30Days" />
       <CurrencyBox label="Prejuizo em 30 dias" :value="lossLast30Days" negative />
       <CurrencyBox label="Lucro Total" :value="profitTotal" />
       <CurrencyBox label="Prejuizo Total" :value="lossTotal" negative />
       <CurrencyBox label="Lucro do dia" :value="profitToday" />
+      <TextBox label="Convidados" :value="countInvited"></TextBox>
     </div>
-    <div class="grid grid-cols-5 gap-x-3 mt-10">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
       <TextBox
         label="Link de afiliado"
         label-text="text-2xl text-white !text-left capitalize"
-        value-text="!text-left flex items-center"
-        class="col-span-3"
+        value-text="!text-left flex items-center text-xs lg:text-xl"
+        class="lg:col-span-2"
         :value="link"
       >
         <template #action>
@@ -99,7 +102,7 @@ const selectedUser = ref(null);
             @click="copy()"
             class="btn min-h-[2rem] h-[2rem] bg-yellow-500 text-black hover:text-white"
           >
-            Copiar o link
+            Copiar
           </button>
         </template>
       </TextBox>
