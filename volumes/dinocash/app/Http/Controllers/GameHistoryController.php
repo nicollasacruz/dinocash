@@ -103,6 +103,17 @@ class GameHistoryController extends Controller {
                 ]);
             }
 
+            if(!$request->distance) {
+                Log::error('Partida zerada erro');
+                $user->changeWallet($gameHistory->amount);
+                $user->save();
+                $gameHistory->delete();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Partida zerada.',
+                ]);
+            }
+
             $finalAmount = $gameHistory->amount * -1;
             if($request->type === 'win') {
                 $finalAmount = (($gameHistory->amount / 500) * $request->distance);
