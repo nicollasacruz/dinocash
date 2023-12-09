@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, difficulty = randInteger(0, 1)) {
+    constructor(width, height, difficulty = randInteger(0, 2)) {
         super();
         this.width = null;
         this.height = null;
@@ -24,16 +24,16 @@ export default class DinoGame extends GameRunner {
         this.spriteImageData = null;
         this.defaultSettings = {
             bgSpeed: 8, // ppf
-            birdSpeed: 7.2, // ppf
+            birdSpeed: 8, // ppf
             birdSpawnRate: 240, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: difficulty ? 25 : randInteger(20, 50), // fpa
+            cactiSpawnRate: difficulty ? 25 : randInteger(30, 45), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: difficulty ? 0.7 : randInteger(5, 7) / 10, // ppf
             dinoGroundOffset: 4, // px
-            dinoLegsRate: 6, // fpa
-            dinoLift: difficulty ? 8 : randInteger(9), // ppf
+            dinoLegsRate: 6, // fpa - 6
+            dinoLift: difficulty ? 9 : randInteger(8,10), // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: difficulty ? 8 : randInteger(6, 8), // fpa
         };
@@ -270,15 +270,15 @@ export default class DinoGame extends GameRunner {
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
 
-        if (level > 2 && level < 8) {
+        if (level > 2 && level <= 4) {
             settings.bgSpeed++;
             settings.birdSpeed = settings.bgSpeed * 0.8;
-        } else if (level > 7) {
+        } else if (level >= 5) {
             settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
             settings.birdSpeed = settings.bgSpeed * 0.9;
             settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
 
-            if (level > 7 && level % 2 === 0 && dinoLegsRate >= 3) {
+            if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
                 settings.dinoLegsRate--;
             }
         }
@@ -307,7 +307,7 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = this.state.score.value / 5;
+            button.textContent = `${this.state.score.value / 5} %`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();

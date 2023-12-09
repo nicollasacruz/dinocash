@@ -20,9 +20,11 @@ class GameHistoryController extends Controller {
         if ($payLimit <= $pay) {
             $viciosidade = true;
         }
+        $user = User::find(Auth::user()->id);
 
         return Inertia::render('User/Play', [
-            "viciosidade" => $viciosidade
+            "viciosidade" => $viciosidade,
+            "walletUser" => $user->wallet,
         ]);
     }
 
@@ -98,6 +100,17 @@ class GameHistoryController extends Controller {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Partida não encontrada.',
+                ]);
+            }
+
+            if(!$request->distance) {
+                Log::error('Partida zerada erro');
+                $user->changeWallet($gameHistory->amount);
+                $user->save();
+                $gameHistory->delete();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Partida zerada.',
                 ]);
             }
 

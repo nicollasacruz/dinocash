@@ -13,13 +13,13 @@ const userWallet = page.props.auth.user.wallet * 1;
 const wallet = ref(userWallet);
 console.log(wallet.value);
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    console.log('event',e.user.wallet);
+    console.log("event", e.user.wallet);
     wallet.value = e.user.wallet;
 });
 watch(
     () => wallet.value,
-    () => console.log('wallet', wallet.value)
-)
+    () => console.log("wallet", wallet.value)
+);
 const drawer = ref(false);
 </script>
 
@@ -71,14 +71,14 @@ const drawer = ref(false);
                 />
                 <div class="flex gap-x-6 force-height">
                     <UserDrawer
+                        :wallet="wallet"
                         @close="drawer = false"
                         class="hidden lg:block"
-                        :wallet="wallet"
                     />
                     <div
-                        class="border-8 border-black bg-white rounded-xl flex-1"
+                        class="border-8 border-black bg-white rounded-xl flex-1 overflow-x-auto"
                     >
-                        <slot :wallet="wallet" />
+                        <slot :wallet="wallet"/>
                     </div>
                 </div>
             </div>

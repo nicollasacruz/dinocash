@@ -24,10 +24,10 @@ return new class extends Migration
 
             $table->foreign('userId')
                 ->references('id')->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
             $table->foreign('managerUserId')
                 ->references('id')->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
         });
     }
 

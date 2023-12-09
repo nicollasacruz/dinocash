@@ -3,13 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Services\AffiliateInvoiceService;
-use App\Services\InvoiceService;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class CloseAffiliateInvoicesCommand extends Command
-{
+class CloseAffiliateInvoicesCommand extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -22,20 +20,27 @@ class CloseAffiliateInvoicesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'CloseAffiliateInvoicesCommand';
+    protected $description = 'Command description';
 
     /**
      * Execute the console command.
      */
-    public function handle(InvoiceService $invoiceService)
-    {
+    public function handle(AffiliateInvoiceService $invoiceService) {
         try {
-            $invoice = $invoiceService->getInvoice();
-            Log::info("Começando a fechar a invoice {$invoice->id} as " . now() . " com o total de {$invoice->count} transações e {$invoice->ggrTransactions->sum('amount')}");
-            $invoiceService->closeInvoice($invoice);
+            $invoices = $invoiceService->getAllInvoices();
+
+            if(!$invoices) {
+                Log::error('Não há AffiliateInvoice para fechar');
+                return;
+            }
+            foreach($invoices as $invoice) {
+                Log::info("Começando a fechar a AffiliateInvoice {$invoice->id} as ".now()." com o total de {$invoice->affiliateHistories->count()} transações e {$invoice->affiliateHistories->sum('amount')}");
+
+                $invoiceService->closeInvoice($invoice);
+            }
 
         } catch (Exception $exception) {
-            Log::error('Erro ao fechar a invoice: ' . $invoiceService->getInvoice()->id . ' | ERRO: ' . $exception->getMessage());
+            Log::error('Erro ao fechar as AffiliateInvoice | ERRO: '.$exception->getMessage());
         }
     }
 }
