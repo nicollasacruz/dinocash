@@ -7,6 +7,7 @@
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
+        <div class="text-center text-lg">Saldo disponível: {{ toBRL(walletUser) }}</div>
         <input
           type="text"
           class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
@@ -14,6 +15,7 @@
           v-model="amount"
         />
         <div class="text-center">Aposta mínima: R$ 1,00</div>
+        <div class="text-center">Aposta máxima: R$ 1000,00</div>
         <button
           class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
           @click="startGame"
@@ -82,14 +84,13 @@ import axios from "axios";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-const { viciosidade } = defineProps(["viciosidade"]);
+const { viciosidade, walletUser } = defineProps(["viciosidade", 'walletUser']);
 const finishGame = ref(false);
 const page = usePage();
 
 const user = computed(() => page.props.auth.user.id);
 const userId = toRef(user, "userId");
 
-console.log(page.props, "props");
 const amount = ref(0);
 const isRunning = ref(false);
 const gameId = ref(0);
@@ -113,7 +114,6 @@ async function fetchStore() {
     const response = await axios.post(route("user.play.store"), {
       amount: amount.value,
     });
-    console.log(response);
     const result = response.data.gameHistory.id;
 
     return result;
@@ -138,7 +138,6 @@ async function generateSHA256Hash(input) {
 }
 
 async function fetchUpdate() {
-  // console.log(type.value, 'value');
   try {
     const hash = await generateSHA256Hash(
       `${gameId.value}${userId.value}dinocash`
@@ -151,7 +150,6 @@ async function fetchUpdate() {
     });
 
     const result = response.data;
-    console.log(result, "result");
     return result;
   } catch (error) {
     console.error("Erro na pesquisa:", error);
@@ -173,7 +171,6 @@ async function startGame() {
   }
 }
 const handleEndGame = (pontuation) => {
-  console.log(pontuation, "value handle");
   isRunning.value = false;
   endGame.value = true;
   score.value = pontuation;
@@ -184,7 +181,6 @@ const handleEndGame = (pontuation) => {
 };
 
 const handleFinishGame = (pontuation) => {
-  console.log(pontuation, "value handle");
   isRunning.value = false;
   endGame.value = true;
   score.value = pontuation;
@@ -193,9 +189,11 @@ const handleFinishGame = (pontuation) => {
   div.style.display = "block";
   fetchUpdate();
 };
-// onMounted(() => {
-//     const { height, width } = document.body.getBoundingClientRect();
 
-//     clientWidth.value = width;
-// });
+function toBRL(value) {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+}
 </script>

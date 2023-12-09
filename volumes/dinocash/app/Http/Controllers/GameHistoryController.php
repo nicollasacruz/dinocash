@@ -20,9 +20,11 @@ class GameHistoryController extends Controller {
         if ($payLimit <= $pay) {
             $viciosidade = true;
         }
+        $user = User::find(Auth::user()->id);
 
         return Inertia::render('User/Play', [
-            "viciosidade" => $viciosidade
+            "viciosidade" => $viciosidade,
+            "walletUser" => $user->wallet,
         ]);
     }
 
