@@ -40,19 +40,20 @@ class GameHistoryObserver
                 return;
             }
             $affiliate = $gameHistory->user->affiliate;
-            AffiliateHistory::create([
-                'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2, '.', ''),
-                'gameId' => $gameHistory->id,
-                'affiliateId' => $gameHistory->user->affiliateId,
-                'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($gameHistory->user->affiliate))->id,
-                'userId' => $gameHistory->userId,
-                'type' => $amount > 0 ? 'win' : 'loss',
-            ]);
-            
+            if (!$gameHistory->user->isAffiliate) {
+                AffiliateHistory::create([
+                    'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2, '.', ''),
+                    'gameId' => $gameHistory->id,
+                    'affiliateId' => $gameHistory->user->affiliateId,
+                    'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($gameHistory->user->affiliate))->id,
+                    'userId' => $gameHistory->userId,
+                    'type' => $amount > 0 ? 'win' : 'loss',
+                ]);
+            }
             Log::info("AffiliateHistory criado com sucesso.");
 
         } catch (\Exception $e) {
-            Log::error("Erro ao criar AffiliateHistory: " . $e->getMessage() . " - ". $e->getFile() . " - ". $e->getLine());
+            Log::error("Erro ao criar AffiliateHistory: " . $e->getMessage() . " - " . $e->getFile() . " - " . $e->getLine());
         }
     }
 
