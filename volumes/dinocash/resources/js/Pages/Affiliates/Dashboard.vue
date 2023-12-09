@@ -24,7 +24,9 @@ const {
 } = defineProps([
   "profitToday",
   "profitLast30Days",
+  "lossLast30Days",
   "profitTotal",
+  "lossTotal",
   "revShareTotal",
   "profitCPA",
   "countCPA",
@@ -78,11 +80,11 @@ const selectedUser = ref(null);
     <div
       class="grid xs: grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-2 mt-4"
     >
-      <CurrencyBox label="Lucro em 30 dias" :value="2" />
-      <CurrencyBox label="Prejuizo em 30 dias" :value="2" negative />
-      <CurrencyBox label="Lucro Total" :value="2" />
-      <CurrencyBox label="Prejuizo Total" :value="2" negative />
-      <CurrencyBox label="Lucro do dia" :value="2" />
+      <CurrencyBox label="Lucro em 30 dias" :value="profitLast30Days" />
+      <CurrencyBox label="Prejuizo em 30 dias" :value="lossLast30Days" negative />
+      <CurrencyBox label="Lucro Total" :value="profitTotal" />
+      <CurrencyBox label="Prejuizo Total" :value="lossTotal" negative />
+      <CurrencyBox label="Lucro do dia" :value="profitToday" />
     </div>
     <div class="grid grid-cols-5 gap-x-3 mt-10">
       <TextBox

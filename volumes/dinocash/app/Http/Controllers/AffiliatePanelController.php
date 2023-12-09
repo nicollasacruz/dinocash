@@ -20,6 +20,7 @@ class AffiliatePanelController extends Controller
         $countCPA = AffiliateHistory::TotalCPA()->where('affiliateId', $user->id)->count();
         $profitToday = AffiliateHistory::winsToday()->where('affiliateId', $user->id)->sum('amount');
         $profitLast30Days = AffiliateHistory::winsLast30Days()->where('affiliateId', $user->id)->sum('amount');
+        $lossLast30Days = AffiliateHistory::lossesLast30Days()->where('affiliateId', $user->id)->sum('amount');
         $profitTotal = AffiliateHistory::winsTotal()->where('affiliateId', $user->id)->sum('amount');
         $lossTotal = AffiliateHistory::lossesTotal()->where('affiliateId', $user->id)->sum('amount');
         $revShareTotal = $profitToday - $lossTotal;
@@ -28,7 +29,9 @@ class AffiliatePanelController extends Controller
         return Inertia::render('Affiliates/Dashboard', [
             'profitToday' => $profitToday,
             'profitLast30Days' => $profitLast30Days,
+            'lossLast30Days' => $lossLast30Days,
             'profitTotal' => $profitTotal,
+            'lossTotal' => $lossTotal * 1,
             'revShareTotal' => $revShareTotal,
             'profitCPA' => $profitCPA,
             'countCPA' => $countCPA,
