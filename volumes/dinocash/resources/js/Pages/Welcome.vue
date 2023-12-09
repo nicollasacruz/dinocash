@@ -134,11 +134,7 @@ function getPremio(i) {
             >
             <span
                 class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
-                >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-                enim odit debitis ab voluptas, ullam commodi accusantium amet,
-                aliquam doloribus magnam nam cum rerum. Aut excepturi qui a
-                temporibus suscipit! Lorem ipsum dolor sit amet consectetur
-                adipisicing elit.</span
+                >Bem-vindo ao DinoCash, somos uma provedora nova no mercado, legalizada em Malta. prepare-se para uma experiência totalmente nova e diverta jamais vista no mercado, onde o jogador poderá lucrar muito e testar seus reflexos.</span
             >
         </div>
         <Link
