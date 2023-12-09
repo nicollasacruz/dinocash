@@ -23,7 +23,7 @@ return new class extends Migration
             // Ensure the foreign key is unsigned
             $table->foreign('userId')
                 ->references('id')->on('users')
-                ->onDelete('cascade');
+                ->onDelete('set null');
         });
     }
 

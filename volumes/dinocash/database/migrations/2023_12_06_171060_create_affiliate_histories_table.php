@@ -23,10 +23,10 @@ return new class extends Migration
             $table->dateTime('payedAt')->nullable();
             $table->timestamps();
 
-            $table->foreign('affiliateInvoiceId')->references('id')->on('affiliate_invoices')->onDelete('cascade');
-            $table->foreign('gameId')->references('id')->on('game_histories')->onDelete('cascade');
-            $table->foreign('affiliateId')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('userId')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('affiliateInvoiceId')->references('id')->on('affiliate_invoices')->onDelete('set null');
+            $table->foreign('gameId')->references('id')->on('game_histories')->onDelete('set null');
+            $table->foreign('affiliateId')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('userId')->references('id')->on('users')->onDelete('set null');
         });
     }
 
