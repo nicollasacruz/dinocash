@@ -131,11 +131,12 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/ggr', [DashboardController::class, 'ggr'])->name('admin.ggr');
-    Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
-    // Route::post('/settings', [SettingController::class, 'index'])->name('admin.settings.update');
-    Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
     Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');
+    Route::get('/ggr', [DashboardController::class, 'ggr'])->name('admin.ggr');
+
+    Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
+    // Route::post('/settings', [SettingController::class, 'index'])->name('admin.settings.update');
 
     Route::prefix('afiliados')->group(function () {
         Route::get('/', [AffiliateController::class, 'index'])->name('admin.afiliados');
