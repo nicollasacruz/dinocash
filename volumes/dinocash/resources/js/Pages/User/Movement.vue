@@ -1,4 +1,6 @@
 <template>
+  <Head title="Movimentações" />
+
     <UserLayouyt>
         <div class="p-2 lg:px-8 overflow-hidden flex flex-col h-full">
             <div class="text-center uppercase text-3xl text-gray-800 mb-4">

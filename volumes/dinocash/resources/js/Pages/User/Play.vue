@@ -1,4 +1,6 @@
 <template>
+  <Head title="Jogar" />
+
   <UserLayouyt>
     <div class="p-2 lg:px-8 h-full">
       <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">

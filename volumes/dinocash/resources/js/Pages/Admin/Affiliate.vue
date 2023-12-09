@@ -12,7 +12,7 @@ const columns = computed(() =>
     ? [
         { label: "Nome", key: "name" },
         { label: "Email", key: "email" },
-        { label: "Saldo", key: "wallet" },
+        { label: "Saldo", key: "walletAffiliate" },
         { label: "Afiliado", key: "isAffiliate" },
       ]
     : [
@@ -65,7 +65,7 @@ const handleSearch = async () => {
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head title="Admin Afiliados" />
 
   <AuthenticatedLayout>
     <div role="tablist" class="tabs tabs-bordered inline">

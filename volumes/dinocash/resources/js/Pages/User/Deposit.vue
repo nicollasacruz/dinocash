@@ -1,7 +1,10 @@
 <template>
+  <Head title="Depósitos" />
   <UserLayouyt>
-    <div class="p-2 lg:px-8 ">
-      <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4 mt-5">
+    <div class="p-2 lg:px-8">
+      <div
+        class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4 mt-5"
+      >
         Depositar
       </div>
       <div class="w-full text-center flex-col flex gap-y-4 text-gray-800">
@@ -94,11 +97,14 @@ const page = usePage();
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
 
-window.Echo.channel("pixReceived" + userIdref.value).listen("PixReceived", (e) => {
-  modal.value = false;
-  qrCode.value = "";
-  toast.success("Deposito realizado com sucesso!");
-});
+window.Echo.channel("pixReceived" + userIdref.value).listen(
+  "PixReceived",
+  (e) => {
+    modal.value = false;
+    qrCode.value = "";
+    toast.success("Deposito realizado com sucesso!");
+  }
+);
 
 function copy() {
   navigator.clipboard.writeText(qrCode.value);

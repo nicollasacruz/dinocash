@@ -13,7 +13,7 @@ class CloseAffiliateInvoicesCommand extends Command {
      *
      * @var string
      */
-    protected $signature = 'app:close-invoices-ggr';
+    protected $signature = 'app:close-affiliate-invoices';
 
     /**
      * The console command description.
