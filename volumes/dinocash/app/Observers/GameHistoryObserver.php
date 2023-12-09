@@ -58,7 +58,7 @@ class GameHistoryObserver
     {
         try {
             $setting = Setting::first();
-            $amount = $gameHistory->finalAmount * -1;
+            $amount = $gameHistory->finalAmount * (env('APP_GGR_VALUE') ?? 12) / 100 * -1;
             if ($amount === 0) {
                 Log::info("GGR - createGgrHistory não criou porque o amount é: {$amount}.");
                 return;
