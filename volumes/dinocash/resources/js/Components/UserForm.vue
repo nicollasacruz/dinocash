@@ -7,24 +7,33 @@
         <div class="grid grid-cols-2 items-center gap-x-4 gap-y-2 text-white">
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['email']"
                 v-bind="email"
                 label="Email"
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['isAffiliate']"
                 v-bind="afiliado"
                 label="Afiliado"
+                class="p-0"
+                :options="[
+                    { value: false, label: 'Não' },
+                    { value: true, label: 'Sim' },
+                ]"
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['wallet']"
                 v-bind="wallet"
                 label="Saldo"
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['revShare']"
                 v-bind="revShare"
                 label="Rev Share%"
@@ -32,6 +41,7 @@
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['cpa']"
                 v-bind="cpa"
                 label="CPA"
@@ -39,6 +49,7 @@
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['linkCadastros']"
                 v-bind="linkCadastros"
                 label="Cadastros no link"
@@ -46,6 +57,7 @@
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['comissao']"
                 v-bind="comissao"
                 label="Valor de comissão"
@@ -53,6 +65,7 @@
             />
             <base-input
                 label-style="font-bold text-xs"
+                classes="!h-[40px]"
                 :error="errors['afiliadosLink']"
                 v-bind="afiliadosLink"
                 label="Link de afiliados"
@@ -60,7 +73,7 @@
                 class=""
             />
         </div>
-        <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div class="grid grid-cols-2 gap-x-4 mt-4">
             <div class="flex flex-col col-span-1 uppercase gap-y-2">
                 <div
                     @click="getHistories(user.id)"
@@ -217,12 +230,11 @@ const validationSchema = yup.object().shape({
         .email("O email deve ser válido"),
     isAffiliate: yup.string().required("Campo obrigatório"),
     wallet: yup.string().required("Saldo é obrigatório"),
-    ...affiliateValidations,
 });
 const initialValues = user
     ? {
           email: user.email,
-          isAffiliate: user.isAffiliate ? "Sim" : "Não",
+          isAffiliate: user.isAffiliate,
           wallet: user.wallet,
           revShare: user.revShare,
           cpa: user.CPA,
@@ -231,7 +243,7 @@ const initialValues = user
           afiliadosLink: user.invitation_link,
       }
     : {};
-
+console.log(user)
 const { handleSubmit, defineInputBinds, errors } = useForm({
     validationSchema,
     initialValues,
@@ -248,6 +260,9 @@ const submit = handleSubmit((values) => {
     console.log(values);
     const payload = {
         CPA: values.cpa,
+        invitation_link: values.afiliadosLink,
+        walletAffiliate: values.comissao,
+        revShare: values.revShare,
     };
     emit("submit", values);
 });

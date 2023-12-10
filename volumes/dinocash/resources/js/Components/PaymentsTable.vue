@@ -74,7 +74,7 @@ const getStatus = (status) => {
 };
 async function pay(id: number) {
   try {
-    const { data } = await axios.post("admin.saque.aprovar", {
+    const { data } = await axios.post("admin.saque.afiliados.aprovar", {
       withdraw: id,
     });
     console.log(data);
@@ -86,7 +86,7 @@ async function pay(id: number) {
 
 async function reject(id: number) {
   try {
-    const { data } = await axios.post("admin.saque.rejeitar", {
+    const { data } = await axios.post("admin.saque.afiliados.rejeitar", {
       withdraw: id,
     });
     console.log(data);

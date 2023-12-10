@@ -1,11 +1,14 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
+import { ref } from "vue";
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Expansion from "@/Components/BaseExpansion.vue";
 import Background1 from "../../../storage/imgs/home-page/home-bg1.jpg";
 import Background2 from "../../../storage/imgs/home-page/home-bg2.jpg";
 import Background3 from "../../../storage/imgs/home-page/bg-ranking.png";
 import Background4 from "../../../storage/imgs/home-page/home-bg3.jpg";
+import Background1Mobile from "../../../storage/imgs/home-page/bg1.jpg";
+import Background3Mobile from "../../../storage/imgs/home-page/bg3.jpg";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import DinoInterrogacao from "../../../storage/imgs/home-page/dino-interrogacao-bg3.svg";
 import DinoRoxo from "../../../storage/imgs/home-page/dino-roxo.svg";
@@ -32,6 +35,12 @@ defineProps({
         required: true,
     },
 });
+const windowWidth = ref(window.innerWidth);
+
+window.addEventListener("resize", (valu) => {
+    windowWidth.value = window.innerWidth;
+});
+console.log(windowWidth.value);
 
 function getTrophy(i) {
     switch (i) {
@@ -65,7 +74,9 @@ function getPremio(i) {
         id="section1"
         class="section1 h-screen mx-auto items-center p-2 flex flex-col"
         :style="{
-            backgroundImage: `url('${Background1}')`,
+            backgroundImage: `url('${
+                windowWidth < 700 ? Background1Mobile : Background1
+            }')`,
             backgroundSize: 'auto auto',
         }"
     >
@@ -134,7 +145,10 @@ function getPremio(i) {
             >
             <span
                 class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
-                >Bem-vindo ao DinoCash, somos uma provedora nova no mercado, legalizada em Malta. prepare-se para uma experiência totalmente nova e diverta jamais vista no mercado, onde o jogador poderá lucrar muito e testar seus reflexos.</span
+                >Bem-vindo ao DinoCash, somos uma provedora nova no mercado,
+                legalizada em Malta. prepare-se para uma experiência totalmente
+                nova e diverta jamais vista no mercado, onde o jogador poderá
+                lucrar muito e testar seus reflexos.</span
             >
         </div>
         <Link
@@ -155,7 +169,11 @@ function getPremio(i) {
     <section
         id="section3"
         class="section3 h-screen mx-auto flex flex-col items-center p-2"
-        :style="{ backgroundImage: `url('${Background3}')` }"
+        :style="{
+            backgroundImage: `url('${
+                windowWidth < 700 ? Background3Mobile : Background3
+            }')`,
+        }"
     >
         <div class="text-center text-white font-menu text-7xl pt-3">
             RANKING GLOBAL
@@ -177,7 +195,7 @@ function getPremio(i) {
                     />
                 </div>
                 <div
-                    class="flex-1 grid grid-cols-5 md:gap-x-0 font-menu  xl:text-[20px] text-xs sm:text-sm mt-5"
+                    class="flex-1 grid grid-cols-5 md:gap-x-0 font-menu xl:text-[20px] text-xs sm:text-sm mt-5"
                 >
                     <div class="">Posição</div>
                     <div class="col-span-2">Usuário</div>
@@ -185,7 +203,7 @@ function getPremio(i) {
                     <div class="mb-3 text-center">Prêmio</div>
                     <template v-for="(user, i) in rankedUsers">
                         <div
-                            class="flex items-center col-span-3 rounded-s-full pl-2 sm:pl-4  overflow-hidden"
+                            class="flex items-center col-span-3 rounded-s-full pl-2 sm:pl-4 overflow-hidden"
                             :class="
                                 user.email === $page.props.auth.user?.email
                                     ? 'bg-purple-800 text-orange-500'
