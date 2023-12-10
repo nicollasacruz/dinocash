@@ -79,8 +79,6 @@ async function pay(id: number) {
         const response = await axios.post(route("admin.saque.afiliados.aprovar"), {
             withdraw: id,
         });
-        // window.location.reload();
-        console.log(response);
     } catch (err) {
         console.log(err);
     }
@@ -96,7 +94,6 @@ async function reject(id: number) {
             }
         );
         // window.location.reload();
-        console.log(response);
     } catch (err) {
         toast.error(err.response.data.message);
         console.log(err);
