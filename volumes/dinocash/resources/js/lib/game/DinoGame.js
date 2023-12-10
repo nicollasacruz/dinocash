@@ -104,12 +104,12 @@ export default class DinoGame extends GameRunner {
 
         const finishButton = document.createElement("button");
         finishButton.style.padding = "12px";
-        finishButton.style.fontSize = "16px";
+        finishButton.style.fontSize = "20px";
         finishButton.style.backgroundColor = "#3f3";
         finishButton.style.color = "black";
         finishButton.style.fontWeight = 700;
-        finishButton.style.width = "100px";
-        finishButton.style.border = "1px solid #000";
+        finishButton.style.width = "150px";
+        finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.addEventListener("click", () => {
             const eventoModificacao = new CustomEvent("finishGame", {
@@ -317,7 +317,7 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `${(parseFloat(this.state.score.value) / 500).toFixed(2)}x `;
+            button.textContent = `${(parseFloat(this.state.score.value) / 500).toFixed(2)}x - SACAR`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();
