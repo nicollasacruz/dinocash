@@ -5,18 +5,18 @@
         :columns="columns"
         :rows="rows"
     >
-        <template #type="{ value }">
+        <template #type="{ value, item }">
             <td>
                 <div class="no-wrap text-xs cursor-pointer">
                     <div v-if="value !== 'paid'" class="flex gap-x-2">
                         <div
-                            @click="pay(value)"
+                            @click="pay(item.id)"
                             class="badge w-24 font-bold rounded-sm badge-success no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
                         >
                             PAGAR
                         </div>
                         <div
-                            @click="reject(value)"
+                            @click="reject(item.id)"
                             class="badge w-24 font-bold rounded-sm bg-red-600 border-0 no-wrap text-black whitespace-nowrap text-xs cursor-pointer"
                         >
                             RECUSAR
@@ -63,6 +63,8 @@ import BaseTable from "./BaseTable.vue";
 import { defineProps } from "vue";
 import dayjs from "dayjs";
 import axios from "axios";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 const { columns, rows } = defineProps(["columns", "rows"]);
 const getStatus = (status) => {
     switch (status) {
@@ -73,24 +75,32 @@ const getStatus = (status) => {
     }
 };
 async function pay(id: number) {
-  try {
-    const { data } = await axios.post("admin.saque.afiliados.aprovar", {
-      withdraw: id,
-    });
-  } catch (err) {
-    console.log('erro interno');
-  }
-  return ''
+    try {
+        const response = await axios.post(route("admin.saque.afiliados.aprovar"), {
+            withdraw: id,
+        });
+        // window.location.reload();
+        console.log(response);
+    } catch (err) {
+        console.log(err);
+    }
+    return "";
 }
 
 async function reject(id: number) {
-  try {
-    const { data } = await axios.post("admin.saque.afiliados.rejeitar", {
-      withdraw: id,
-    });
-  } catch (err) {
-    console.log('erro interno');
-  }
-  return ''
+    try {
+        const response = await axios.post(
+            route("admin.saque.afiliados.rejeitar"),
+            {
+                withdraw: id,
+            }
+        );
+        // window.location.reload();
+        console.log(response);
+    } catch (err) {
+        toast.error(err.response.data.message);
+        console.log(err);
+    }
+    return "";
 }
 </script>

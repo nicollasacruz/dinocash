@@ -73,17 +73,17 @@ const rows = [];
       class="table-xl mt-6 h-3/4"
     >
       <template #created_at="{ value }">
-        <td>
+        <td class="py-1">
           {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
         </td>
       </template>
       <template #approvedAt="{ value }">
-        <td>
+        <td class="py-1">
           {{ value ? dayjs(value).format("DD/MM/YYYY HH:mm:ss") : "-" }}
         </td>
       </template>
       <template #amount="{ value }">
-        <td>
+        <td class="py-1">
           {{
             Number(value).toLocaleString("pt-br", {
               style: "currency",
@@ -93,7 +93,7 @@ const rows = [];
         </td>
       </template>
       <template #type="{ value }">
-        <td>
+        <td class="py-1">
           <div class="no-wrap text-xs cursor-pointer">
             <div
               class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"

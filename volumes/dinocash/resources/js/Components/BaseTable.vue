@@ -22,6 +22,7 @@
                         :value="item[key]"
                         :name="key"
                         :key="index"
+                        :item="item"
                     >
                         <td class="pb-0 pt-0">
                             <span>{{ item[key] }}</span>

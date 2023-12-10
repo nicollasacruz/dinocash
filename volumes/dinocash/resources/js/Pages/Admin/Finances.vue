@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { ref, defineProps, onMounted } from "vue";
+import { ref, defineProps, onMounted, watch } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import { format } from "date-fns";
@@ -42,7 +42,7 @@ const {
   "houseHealth",
 ]);
 
-const addictRange = ref(payout.payout);
+const addictRange = ref(payout.payout / 5);
 
 onMounted(() => {
   flatpickr("#datePicker", {
@@ -50,6 +50,8 @@ onMounted(() => {
     maxDate: "today",
     dateFormat: "Y-m-d",
     onChange: (selectedDates) => {
+      console.log(selectedDates, "antes");
+      // Formatar a data para dd-mm-YYYY
       const formattedStartDate = format(
         new Date(selectedDates[0]),
         "yyyy-MM-dd"
@@ -64,30 +66,32 @@ onMounted(() => {
           });
         }
       } catch (error) {
-        console.log("erro interno");
+        console.error("Erro no filtro:", error);
       }
+      console.log("Datas selecionadas:", formattedStartDate, formattedEndDate);
     },
   });
 });
 
-// const handlePayout = async () => {
-//   if (searchQuery.value.length > 0) {
-//     try {
-//       router.get(route("admin.afiliados"), {
-//         email: searchQuery.value,
-//       });
-//     } catch (error) {
-//       console.error("Erro na pesquisa:", error);
-//     }
-//     return;
-//   }
-//   try {
-//     router.get(route("admin.afiliados"));
-//     searchQuery.value = "";
-//   } catch (error) {
-//     console.error("Erro na pesquisa:", error);
-//   }
-// };
+const handlePayout = async () => {
+  const payout = addictRange.value * 5;
+  //   if (searchQuery.value.length > 0) {
+  //     try {
+  //       router.get(route("admin.afiliados"), {
+  //         email: searchQuery.value,
+  //       });
+  //     } catch (error) {
+  //       console.error("Erro na pesquisa:", error);
+  //     }
+  //     return;
+  //   }
+  //   try {
+  //     router.get(route("admin.afiliados"));
+  //     searchQuery.value = "";
+  //   } catch (error) {
+  //     console.error("Erro na pesquisa:", error);
+  //   }
+};
 
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {
@@ -95,13 +99,17 @@ function toBRL(value) {
     currency: "BRL",
   });
 }
+const showButton = ref(false);
+watch(addictRange, (value) => {
+  showButton.value = true;
+});
 </script>
 
 <template>
   <Head title="Admin Financeiro" />
 
   <AuthenticatedLayout>
-    <div class="flex justify-between">
+    <div class="flex flex-col lg:flex-row justify-between">
       <div class="text-4xl text-white font-bold">Financeiro</div>
       <div class="flex gap-x-5">
         <TextBox
@@ -250,15 +258,24 @@ function toBRL(value) {
             <div>Pagar</div>
           </div>
           <div class="text-center text-white font-bold text-xl">
-            {{ addictRange }}
+            {{ addictRange * 5 }}
           </div>
           <input
             type="range"
             :min="0"
-            :max="100"
+            :max="20"
             v-model="addictRange"
             class="range range-success bg-white"
           />
+          <div class="flex justify-center">
+            <button
+              v-if="showButton"
+              @click="handlePayout"
+              class="btn mx-auto btn-success mt-2"
+            >
+              Salvar
+            </button>
+          </div>
         </div>
 
         <div class="py-3 px-5 text-xs mt-1 box">
