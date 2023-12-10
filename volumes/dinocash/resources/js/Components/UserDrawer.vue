@@ -45,6 +45,10 @@ const props = defineProps(['wallet'])
 const emit = defineEmits(["close"]);
 const routes = [
   {
+    label: "Depositar",
+    route: "user.deposito",
+  },
+  {
     label: "perfil",
     route: "user.edit",
   },
@@ -59,10 +63,6 @@ const routes = [
   {
     label: "Movimentação",
     route: "user.movimentacao",
-  },
-  {
-    label: "Depositar",
-    route: "user.deposito",
   },
   {
     label: "Sacar",

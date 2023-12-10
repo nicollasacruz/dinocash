@@ -36,12 +36,13 @@ async function approveWithdraw(withdrawId) {
     console.log(data);
     if (data.success === 'error') {
       toast.error(data.message);
+      console.log(data.message, 'message error');
       return;
     }
     toast.success("Saque aprovado com sucesso!");
     window.location.reload();
   } catch (error) {
-    alert(error);
+    // alert(error);
   }
 }
 
@@ -57,7 +58,7 @@ async function reject(withdrawId) {
     toast.success("Saque recusado com sucesso!");
     window.location.reload();
   } catch (error) {
-    alert(error);
+    // alert(error);
   }
 }
 
