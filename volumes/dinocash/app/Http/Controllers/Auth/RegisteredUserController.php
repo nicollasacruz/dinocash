@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -31,6 +32,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $settings = Setting::first();
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
@@ -45,6 +48,8 @@ class RegisteredUserController extends Controller
             'contact' => $request->contact,
             'document' => $request->document,
             'password' => Hash::make($request->password),
+            'CPA' => $settings->defaultCPA,
+            'revShare' => $settings->defaultRevShare,
         ]);
 
         event(new Registered($user));
