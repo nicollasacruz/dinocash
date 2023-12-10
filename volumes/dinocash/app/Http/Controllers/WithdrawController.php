@@ -115,9 +115,11 @@ class WithdrawController extends Controller
         }
     }
 
-    public function aprove(Request $request, WithdrawService $withdrawService)
+    public function aprove(Request $request)
     {
         try {
+            $withdrawService = new WithdrawService();
+
             $withdraw = Withdraw::find($request->withdraw);
             $response = $withdrawService->aprove($withdraw);
             if ($response['success']) {

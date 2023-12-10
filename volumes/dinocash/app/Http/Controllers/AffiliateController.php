@@ -7,7 +7,9 @@ use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
 use App\Models\GameHistory;
 use App\Models\User;
+use App\Services\WithdrawAffiliateService;
 use Auth;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
@@ -85,8 +87,35 @@ class AffiliateController extends Controller
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }
-    public function user(Request $request)
+
+    public function aprove(Request $request)
     {
-        return Inertia::render('User/Affiliate');
+        try {
+            $withdrawService = new WithdrawAffiliateService();
+
+            $withdraw = AffiliateWithdraw::find($request->withdraw);
+            $response = $withdrawService->aprove($withdraw);
+            if ($response['success']) {
+                return response()->json([
+                    'success' => 'success',
+                    'message' => 'Saque aprovado com sucesso!'
+                ]);
+            }
+            return response()->json([
+                'success' => 'error',
+                'message' => $response['message']
+            ]);
+        } catch (Exception $e) {
+            return redirect()->route('admin.saque')->with('error', $e->getMessage());
+        }
+    }
+
+    public function reject(Request $request)
+    {
+        $withdrawService = new WithdrawAffiliateService();
+        $withdraw = AffiliateWithdraw::find($request->withdraw);
+        $withdrawService->reject($withdraw);
+
+        return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
     }
 }

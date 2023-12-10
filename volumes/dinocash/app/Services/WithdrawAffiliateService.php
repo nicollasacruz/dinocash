@@ -43,40 +43,66 @@ class WithdrawAffiliateService
 
     public function autoWithdraw(AffiliateWithdraw $withdraw)
     {
+        $document = preg_replace('/[^0-9]/', '', $withdraw->user->document);
         $response = Http::withHeaders([
             'ci' => env('SUITPAY_CI'),
             'cs' => env('SUITPAY_CS'),
         ])->post(env('SUITPAY_URL') . 'gateway/pix-payment', [
                     'value' => $withdraw->amount,
-                    'key' => $withdraw->user->document,
+                    'key' => $document,
                     'typeKey' => 'document',
                     'callbackUrl' => env('APP_URL_API') . env('SUITPAY_URL_WEBHOOK_SEND'),
                 ]);
 
         $data = $response->json();
 
+        Log::info('AUTOPAY RESPONSE' . json_encode($data));
+
         if ($data['response'] === 'OK') {
-            return true;
+            return [
+                'success' => true
+            ];
+        } elseif ($data['response'] === 'PIX_KEY_NOT_FOUND') {
+            Log::error('RESULTADO AUTOPAY WITHDRAW - Chave pix não encontrada');
+            return [
+                'success' => false,
+                'message' => 'Chave Pix não encontrada!'
+            ];
+        } elseif ($data['response'] === 'NO_FUNDS') {
+            Log::error('RESULTADO AUTOPAY WITHDRAW - Sem Saldo na conta');
+            return [
+                'success' => false,
+                'message' => 'Sem Saldo na conta'
+            ];
         }
 
-        return $data['response'];
+        return [
+            'success' => false,
+            'message' => 'Erro desconhecido'
+        ];
     }
 
-    public function aprove(AffiliateWithdraw $withdraw, $type): bool
+    public function aprove(AffiliateWithdraw $withdraw): array
     {
         try {
-            if ($this->autoWithdraw($withdraw)) {
+            $saque = $this->autoWithdraw($withdraw);
+            if ($saque['success']) {
                 $withdraw->update([
                     'type' => 'paid',
                     'approvedAt' => now(),
                 ]);
             }
-
-            return true;
+            return [
+                'success' => $saque['success'],
+                'message' => $saque['message'],
+            ];
 
         } catch (Exception $e) {
-            Log::error('Erro ao aprovar o saque: ' . $e->getMessage());
-            return false;
+            Log::error('Erro ao aprovar o saque do afiliado: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Erro interno',
+            ];
         }
     }
 

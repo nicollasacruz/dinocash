@@ -56,7 +56,6 @@ class WithdrawService
                     'callbackUrl' => env('APP_URL_API') . env('SUITPAY_URL_WEBHOOK_SEND'),
                 ]);
 
-        // Obtenha a resposta da requisição
         $data = $response->json();
 
         Log::info('AUTOPAY RESPONSE' . json_encode($data));
@@ -79,7 +78,10 @@ class WithdrawService
             ];
         }
 
-        return false;
+        return [
+            'success' => false,
+            'message' => 'Erro desconhecido'
+        ];
     }
 
     public function aprove(Withdraw $withdraw): array
@@ -96,7 +98,6 @@ class WithdrawService
                 'success' => $saque['success'],
                 'message' => $saque['message'],
             ];
-            ;
 
         } catch (Exception $e) {
             Log::error('Erro ao aprovar o saque: ' . $e->getMessage());
@@ -105,11 +106,6 @@ class WithdrawService
                 'message' => 'Erro interno',
             ];
         }
-    }
-
-    private function scheduleAutoWithdrawJob(Withdraw $withdraw)
-    {
-        app('Illuminate\Console\Scheduling\Schedule')->job(new ProcessAutoWithdraw($withdraw))->weekdays()->at('12:00');
     }
 
     public function reject(Withdraw $withdraw): bool
