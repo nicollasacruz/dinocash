@@ -8,6 +8,16 @@ import { toast } from "vue3-toastify";
 import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 const {
+  profitToday,
+  profitLast30Days,
+  lossLast30Days,
+  profitTotal,
+  lossTotal,
+  revShareTotal,
+  profitCPAToday,
+  profitCPALast30Days,
+  profitCPATotal,
+  countCPA,
   affiliateLink,
   walletAffiliate,
   revShare,
@@ -21,7 +31,9 @@ const {
   "profitTotal",
   "lossTotal",
   "revShareTotal",
-  "profitCPA",
+  "profitCPAToday",
+  "profitCPALast30Days",
+  "profitCPATotal",
   "countCPA",
   "affiliateLink",
   "walletAffiliate",
@@ -75,11 +87,18 @@ const showModal = ref(false);
     <div
       class="grid xs: grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-x-2 gap-y-2 mt-4"
     >
-      <CurrencyBox label="Lucro em 30 dias" :value="profitLast30Days" />
-      <CurrencyBox label="Prejuizo em 30 dias" :value="lossLast30Days" negative />
-      <CurrencyBox label="Lucro Total" :value="profitTotal" />
       <CurrencyBox label="Prejuizo Total" :value="lossTotal" negative />
+      <CurrencyBox
+        label="Prejuizo em 30 dias"
+        :value="lossLast30Days"
+        negative
+      />
       <CurrencyBox label="Lucro do dia" :value="profitToday" />
+      <CurrencyBox label="Lucro em 30 dias" :value="profitLast30Days" />
+      <CurrencyBox label="Lucro Total" :value="profitTotal" />
+      <CurrencyBox label="Lucro CPA do dia" :value="profitCPAToday" />
+      <CurrencyBox label="Lucro CPA 30 dias" :value="profitCPALast30Days" />
+      <CurrencyBox label="Lucro CPA Total" :value="profitCPATotal" />
       <TextBox label="Convidados" :value="countInvited"></TextBox>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
@@ -100,8 +119,14 @@ const showModal = ref(false);
         </template>
       </TextBox>
       <div class="grid grid-cols-2 gap-x-2 col-span-2 mt-4">
-        <CurrencyBox label="Valor pendente" :value="paymentPending"></CurrencyBox>
-        <CurrencyBox label="Valor disponível" :value="walletAffiliate"></CurrencyBox>
+        <CurrencyBox
+          label="Valor pendente"
+          :value="paymentPending"
+        ></CurrencyBox>
+        <CurrencyBox
+          label="Valor disponível"
+          :value="walletAffiliate"
+        ></CurrencyBox>
         <button
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
         >

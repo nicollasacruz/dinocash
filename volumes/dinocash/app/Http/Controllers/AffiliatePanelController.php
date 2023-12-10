@@ -17,7 +17,17 @@ class AffiliatePanelController extends Controller
     public function dashboardAffiliate(Request $request)
     {
         $user = User::find(Auth::user()->id);
-        $profitCPA = $user->affiliateHistories->where('type', 'CPA')->sum('amount');
+        $profitCPAToday = $user->affiliateHistories
+        ->filter(function ($history) {
+            return $history->type === 'CPA' && $history->updated_at->isToday();
+        })
+        ->sum('amount');
+        $profitCPALast30Days = $user->affiliateHistories
+        ->filter(function ($history) {
+            return $history->type === 'CPA' && $history->updated_at->isBetween(now()->subDays(30), now());
+        })
+        ->sum('amount');
+        $profitCPATotal = $user->affiliateHistories->where('type', 'CPA')->sum('amount');
         $countCPA = $user->affiliateHistories->where('type', 'CPA')->count();
         $profitToday = $user->affiliateHistories
             ->filter(function ($history) {
@@ -53,7 +63,9 @@ class AffiliatePanelController extends Controller
             'countInvited' => $countInvited,
             'lossTotal' => $lossTotal * 1,
             'revShareTotal' => $revShareTotal,
-            'profitCPA' => $profitCPA,
+            'profitCPAToday' => $profitCPAToday,
+            'profitCPALast30Days' => $profitCPALast30Days,
+            'profitCPATotal' => $profitCPATotal,
             'countCPA' => $countCPA,
             'affiliateLink' => $user->invitation_link,
             'walletAffiliate' => $user->walletAffiliate,
