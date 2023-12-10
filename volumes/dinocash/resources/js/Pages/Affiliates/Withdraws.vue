@@ -7,89 +7,110 @@ import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 const columns = [
-    { label: "Email", key: "email" },
-    { label: "Chave Pix", key: "document" },
-    { label: "Valor", key: "amount" },
-    { label: "Data", key: "updated_at" },
-    { label: "Status", key: "type" },
+  { label: "Data", key: "created_at" },
+  { label: "Valor", key: "amount" },
+  { label: "Status", key: "type" },
+  { label: "Pago Em", key: "approvedAt" },
 ];
-const { affiliatesInvoices } = defineProps(["affiliatesInvoices"]);
-console.log(affiliatesInvoices);
+const { affiliatesWithdrawsList, user } = defineProps(["affiliatesWithdrawsList", 'user']);
+console.log(affiliatesWithdrawsList);
 
 const showModal = ref(false);
+
 const toBRL = (value) => {
-    return Number(value).toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL",
-    });
+  return Number(value).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
 };
 const getStatus = (status) => {
-    console.log(status);
-    switch (status) {
-        case "paid":
-            return "FINALIZADO";
-        default:
-            return "PENDENTE";
-    }
+  console.log(status);
+  switch (status) {
+    case "paid":
+      return "PAGO";
+    case "rejected":
+      return "REJEITADO";
+    default:
+      return "PENDENTE";
+  }
 };
 const rows = [];
 </script>
 
 <template>
-    <Head title="Afiliado Saques" />
+  <Head title="Afiliado Saques" />
 
-    <AffiliateLayout>
-        <div class="text-4xl text-white font-bold mb-3">Solicitações de saques</div>
-        <div class="my-3 flex justify-between">
-            <div>
-                <div class="font-bold text-white uppercase mb-1">
-                    Pesquisar
-                </div>
-                <input
-                    type="text"
-                    class="admin-input"
-                    placeholder="Digite o email do usuário... "
-                />
-            </div>
-           
+  <AffiliateLayout>
+    <div class="text-4xl text-white font-bold mb-3">Saques</div>
+    <div class="my-3 flex justify-between">
+      <div>
+        <div class="font-bold text-white uppercase mb-1">
+          Pesquisar saques
         </div>
-        <BaseTable
-            hide-actions
-            :columns="columns"
-            :rows="rows"
-            class="table-xs mt-6 h-3/4"
-        >
-            <template #updated_at="{ value }">
-                <td>
-                    {{ dayjs(value).format("DD/MM/YYYY") }}
-                </td>
-            </template>
-            <template #amount="{ value }">
-                <td>
-                    {{
-                        value.toLocaleString("pt-br", {
-                            style: "currency",
-                            currency: "BRL",
-                        })
-                    }}
-                </td>
-            </template>
-            <template #type="{ value }">
-                <td>
-                    <div class="no-wrap text-xs cursor-pointer">
-                        <div
-                            class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
-                            :class="{
-                                'bg-red-600': value === 'pending',
-                                'bg-green-600': value === 'paid',
-                            }"
-                        >
-                            {{ getStatus(value) }}
-                        </div>
-                    </div>
-                </td>
-            </template>
-        </BaseTable>
-        <BaseModal v-model="showModal"> teste </BaseModal>
-    </AffiliateLayout>
+        <input
+          type="text"
+          class="admin-input"
+          placeholder="Digite o email do usuário... "
+        />
+      </div>
+      <!-- <div class="flex gap-x-5">
+        <div class="flex gap-x-5">
+          <TextBox
+            label="CAIXA DA CASA"
+            :value="toBRL(2)"
+            value-text="text-center text-green-500"
+          />
+          <TextBox
+            label="total de depósitos hoje"
+            :value="toBRL(2)"
+            value-text="text-center text-green-500"
+          />
+        </div>
+      </div> -->
+    </div>
+    <BaseTable
+      hide-actions
+      :columns="columns"
+      :rows="affiliatesWithdrawsList"
+      class="table-xl mt-6 h-3/4"
+    >
+      <template #created_at="{ value }">
+        <td>
+          {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
+        </td>
+      </template>
+      <template #approvedAt="{ value }">
+        <td>
+          {{ value ? dayjs(value).format("DD/MM/YYYY HH:mm:ss") : "-" }}
+        </td>
+      </template>
+      <template #amount="{ value }">
+        <td>
+          {{
+            Number(value).toLocaleString("pt-br", {
+              style: "currency",
+              currency: "BRL",
+            })
+          }}
+        </td>
+      </template>
+      <template #type="{ value }">
+        <td>
+          <div class="no-wrap text-xs cursor-pointer">
+            <div
+              class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
+              :class="{
+                'bg-gray-600': value === 'pending',
+                'bg-red-600': value === 'rejected',
+                'bg-green-600': value === 'paid',
+              }"
+            >
+              {{ getStatus(value) }}
+            </div>
+          </div>
+        </td>
+      </template>
+    </BaseTable>
+    <BaseModal v-model="showModal"> teste </BaseModal>
+  </AffiliateLayout>
 </template>

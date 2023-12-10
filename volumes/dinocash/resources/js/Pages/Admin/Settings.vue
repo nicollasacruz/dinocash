@@ -16,6 +16,8 @@
                         type="email"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
+                        :error="errors['emailFatura']"
                         placeholder="Email para fatura"
                     />
 
@@ -24,7 +26,9 @@
                         label="Payout"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['payout']"
                         placeholder="Payout"
                     />
 
@@ -33,7 +37,9 @@
                         label="Saque mínimo"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['minWithdraw']"
                         placeholder="Saque mínimo"
                     />
 
@@ -42,7 +48,9 @@
                         label="Saque máximo"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['maxWithdraw']"
                         placeholder="Saque máximo"
                     />
 
@@ -51,7 +59,9 @@
                         label="Depósito mínimo"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['minDeposit']"
                         placeholder="Depósito mínimo"
                     />
 
@@ -60,7 +70,9 @@
                         label="Depósito máximo"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['maxDeposit']"
                         placeholder="Depósito máximo"
                     />
 
@@ -69,7 +81,9 @@
                         label="Rollover"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['rollover']"
                         placeholder="Rollover"
                     />
 
@@ -78,7 +92,9 @@
                         label="CPA"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['defaultCPA']"
                         placeholder="CPA"
                     />
 
@@ -87,7 +103,9 @@
                         label="RevShare"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['defaultRevShare']"
                         placeholder="RevShare"
                     />
 
@@ -96,7 +114,12 @@
                         label="AutoPay Saque"
                         label-style="font-bold "
                         class="p-0"
-                        type="text"
+                        classes="!h-[40px]"
+                        :options="[
+                            { value: false, label: 'Não' },
+                            { value: true, label: 'Sim' },
+                        ]"
+                        :error="errors['autoPayWithdraw']"
                         placeholder="AutoPay Saque"
                     />
 
@@ -105,7 +128,9 @@
                         label="AutoPay Saque Máximo"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['maxAutoPayWithdraw']"
                         placeholder="AutoPay Saque Máximo"
                     />
                     <base-input
@@ -113,7 +138,14 @@
                         label="Afiliado Paga GGR"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :options="[
+                            { value: false, label: 'Não' },
+                            { value: true, label: 'Sim' },
+                        ]"
+                        size="sm"
+                        :error="errors['affiliatePayGGR']"
                         placeholder="Afiliado Paga GGR"
                     />
                     <base-input
@@ -121,7 +153,10 @@
                         label="Valor mínimo de aposta"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['minAmountPlay']"
+
                         placeholder="Valor mínimo de aposta"
                     />
                     <base-input
@@ -129,7 +164,10 @@
                         label="Valor máximo de aposta"
                         label-style="font-bold "
                         class="p-0"
+                        classes="!h-[40px]"
                         type="text"
+                        :error="errors['maxAmountPlay']"
+
                         placeholder="Valor máximo de aposta"
                     />
                 </div>
@@ -171,27 +209,11 @@ const schema = yup.object({
     affiliatePayGGR: yup.string().required("Campo obrigatório"),
     maxAmountPlay: yup.string().required("Campo obrigatório"),
     minAmountPlay: yup.string().required("Campo obrigatório"),
-
 });
-const formParams = {
-    emailFatura: settings.emailFatura,
-    payout: settings.payout,
-    minWithdraw: settings.minWithdraw,
-    maxWithdraw: settings.maxWithdraw,
-    minDeposit: settings.minDeposit,
-    maxDeposit: settings.maxDeposit,
-    rollover: settings.rollover,
-    defaultCPA: settings.defaultCPA,
-    defaultRevShare: settings.defaultRevShare,
-    autoPayWithdraw: settings.autoPayWithdraw,
-    maxAutoPayWithdraw: settings.maxAutoPayWithdraw,
-    affiliatePayGGR: settings.affiliatePayGGR,
-    maxAmountPlay: settings.maxAmountPlay,
-    minAmountPlay: settings.minAmountPlay,
-};
-const { handleSubmit, defineInputBinds, setFieldValue, errors } = useForm({
+
+const { handleSubmit, defineInputBinds, errors } = useForm({
     validationSchema: schema,
-    initialValues: formParams,
+    initialValues: settings,
 });
 
 const emailFatura = defineInputBinds("emailFatura");
@@ -212,7 +234,6 @@ const minAmountPlay = defineInputBinds("minAmountPlay");
 //@ts-ignore
 const onSubmit = handleSubmit(async (values) => {
     const test = await axios.patch(route("admin.settings.update"), values);
-    console.log(test)
     toast.success("Dados atualizados com sucesso!");
 });
 </script>

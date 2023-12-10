@@ -60,12 +60,12 @@ const rows = [];
         >
             <template #updated_at="{ value }">
                 <td>
-                    {{ dayjs(value).format("DD/MM/YYYY hh:mm:ss") }}
+                    {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
                 </td>
             </template>
             <template #invoicedAt="{ value }">
                 <td>
-                    {{ value ? dayjs(value).format("DD/MM/YYYY hh:mm:ss") : null}}
+                    {{ value ? dayjs(value).format("DD/MM/YYYY HH:mm:ss") : null}}
                 </td>
             </template>
             <template #amount="{ value }">

@@ -31,5 +31,6 @@ class Setting extends Model
 
     protected $casts = [
         'autoPayWithdraw' => 'boolean',
+        'affiliatePayGGR' => 'boolean',
     ];
 }

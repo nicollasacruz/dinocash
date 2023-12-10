@@ -16,18 +16,18 @@ class RequestSettings extends FormRequest
     public function rules(): array
     {
         return [
-            'payout' => ['required', 'integer'],
-            'minWithdraw' => ['required', 'integer'],
-            'maxWithdraw' => ['required', 'integer'],
-            'minAmountPlay' => ['required', 'integer'],
-            'maxAmountPlay' => ['required', 'integer'],
-            'minDeposit' => ['required', 'integer'],
-            'maxDeposit' => ['required', 'integer'],
-            'rollover' => ['required', 'integer'],
-            'defaultCPA' => ['required', 'integer'],
-            'defaultRevShare' => ['required', 'integer'],
-            'autoPayWithdraw' => ['required', 'boolean'],
-            'maxAutoPayWithdraw' => ['required', 'integer'],
+            'payout' => ['required', 'integer'], // Lucro
+            'minWithdraw' => ['required', 'integer'], // Saque Minimo
+            'maxWithdraw' => ['required', 'integer'], // Saque Maximo
+            'minAmountPlay' => ['required', 'integer'], // Aposta Minima
+            'maxAmountPlay' => ['required', 'integer'], // Aposta Maxima
+            'minDeposit' => ['required', 'integer'], // Deposito Minimo
+            'maxDeposit' => ['required', 'integer'], // Deposito Maximo
+            'rollover' => ['required', 'integer'], // Rollover
+            'defaultCPA' => ['required', 'integer'], // CPA Padrão
+            'defaultRevShare' => ['required', 'integer'], // RevShare Padrão
+            'autoPayWithdraw' => ['required', 'boolean'], // Saque Automatico
+            'maxAutoPayWithdraw' => ['required', 'integer'], // Maximo Saque Automatico
         ];
     }
 }

@@ -6,6 +6,7 @@ import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
 import { usePage } from "@inertiajs/vue3";
+
 const page = usePage();
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);

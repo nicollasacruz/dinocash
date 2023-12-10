@@ -2,14 +2,22 @@
   <Head title="Jogar" />
 
   <UserLayouyt v-slot="{ wallet }">
-    <div class="p-2 lg:px-8 h-full">
+    <div class="p-2 lg:px-4 h-full">
       <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">
                 Jogar
             </div> -->
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
-        <div class="text-center text-lg mb-2 lg:hidden">
+        <div class="text-center text-xl mb-2 ">
+          <p class="text-4xl">Como Jogar:</p>
+          <p class="text-xl">- Para iniciar o game aperte em qualquer lugar da tela!</p>
+          <p class="text-xl">- Para pular aperte com um dedo na tela e para abaixar, pressione com dois dedos.</p>
+          <p class="text-xl">Para computadores:</p>
+          <p class="text-xl">- Para iniciar o game aperte a seta para cima ou a barra de espaço!</p>
+          <p class="text-xl">- A setas para cima e para baixo direcionam o dino!</p>
+        </div>
+        <div class="text-center text-xl font-bold mb-2 lg:hidden">
           Saldo disponível: {{ toBRL(wallet) }}
         </div>
         <input

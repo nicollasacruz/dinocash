@@ -1,23 +1,33 @@
 <template>
     <div :class="`'form-control w-full bg-transparent border-none`">
         <label
-            :class="
-                error
-                    ? `text-error ${labelStyle}`
-                    : ` ${labelStyle} mb-1`
-            "
-            class="text-xs  sm:text-sm z-10"
+            :class="error ? `text-error ${labelStyle}` : ` ${labelStyle} mb-1`"
+            class="text-xs sm:text-sm z-10"
         >
             {{ label }}
         </label>
+        <div class="w-full" v-if="isSelect">
+            <base-select
+               
+                :value="value"
+                :inputStyle="inputStyle"
+                :bordered="bordered"
+                class="w-full bordered bg-[#151515] min-h-[40px] h-[40px]"
+                @input="($event) => emit('update:value', $event)"
+                :options="props.options"
+            />
+        </div>
         <input
+            v-else
             :value="value"
             @input="($event) => emit('update:value', $event)"
             class="input w-full input-sm bordered"
+
             :class="[
                 error ? 'input-error ' : `${color} ${bgColor}`,
                 bordered && 'input-bordered',
                 inputStyle,
+                classes,
             ]"
             :placeholder="placeholder"
         />
@@ -30,6 +40,7 @@
 <script setup lang="ts">
 // import { MaskType } from "maska";
 import { computed } from "vue";
+import BaseSelect from "./BaseSelect.vue";
 const props = defineProps({
     label: String,
     labelStyle: String,
