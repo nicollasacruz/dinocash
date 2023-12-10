@@ -136,7 +136,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
 
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
     Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
-    // Route::post('/settings', [SettingController::class, 'index'])->name('admin.settings.update');
+    Route::post('/settings/changePayout', [SettingController::class, 'changePayout'])->name('admin.settings.payout');
 
     Route::prefix('afiliados')->group(function () {
         Route::get('/', [AffiliateController::class, 'index'])->name('admin.afiliados');
