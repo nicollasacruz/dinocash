@@ -184,7 +184,14 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/suporte', function () {
         return Inertia::render('User/Suport');
     })->name('user.suporte');
-    
+    Route::get('/lastGame', function () {
+        $user = User::find(Auth::user()->id);
+        $amount = $user->gameHistories->where('type', 'pending')->first();
+        return response()->json([
+            'userId' => $user->id,
+            'amount' => $amount ? (float)$amount->amount : 0,
+        ]);
+    })->name('user.lastGame');
 });
 
 

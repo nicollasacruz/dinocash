@@ -37,6 +37,7 @@
         </button>
       </div>
       <GameCluster
+        :amount="userId"
         :viciosidade="viciosidade"
         :isAffiliate="isAffiliate"
         @end-game="handleEndGame"

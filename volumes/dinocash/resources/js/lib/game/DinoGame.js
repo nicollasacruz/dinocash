@@ -12,10 +12,13 @@ import {
     randInteger,
 } from "../utils.js";
 import GameRunner from "./GameRunner.js";
+import axios from "axios";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, viciosity, isAffiliate) {
+    constructor(width, height, viciosity, isAffiliate, userId) {
         super();
+        this.amount = 0;
+        this.userId = userId;
         this.viciosity = viciosity;
         this.isAffiliate = isAffiliate;
         this.width = null;
@@ -39,7 +42,6 @@ export default class DinoGame extends GameRunner {
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: isAffiliate ? 7 : viciosity ? 10 : randInteger(8, 10), // fpa
         };
-
         this.state = {
             settings: { ...this.defaultSettings },
             birds: [],
@@ -97,18 +99,18 @@ export default class DinoGame extends GameRunner {
         const buttonContainer = document.createElement("div");
         buttonContainer.id = "buttonContainer";
         buttonContainer.style.position = "absolute";
-        buttonContainer.style.top = "100px";
+        buttonContainer.style.top = "200px";
         buttonContainer.style.width = "100%";
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "center";
 
         const finishButton = document.createElement("button");
-        finishButton.style.padding = "12px";
-        finishButton.style.fontSize = "20px";
+        finishButton.style.padding = "8px";
+        finishButton.style.fontSize = "25px";
         finishButton.style.backgroundColor = "#3f3";
         finishButton.style.color = "black";
-        finishButton.style.fontWeight = 700;
-        finishButton.style.width = "150px";
+        finishButton.style.fontWeight = 800;
+        finishButton.style.width = "200px";
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.addEventListener("click", () => {
@@ -280,7 +282,8 @@ export default class DinoGame extends GameRunner {
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
 
-        if (level > 2 && level <= 4) {
+        if (level >= 3 && level <= 4) {
+
             settings.bgSpeed++;
             settings.birdSpeed = settings.bgSpeed * 0.8;
         } else if (level >= 5) {
@@ -317,7 +320,7 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `${(parseFloat(this.state.score.value) / 500).toFixed(2)}x - SACAR`;
+            button.textContent = `R$ ${(parseFloat(this.state.score.value) / 500 * this.amount).toFixed(2)}`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();
@@ -397,6 +400,7 @@ export default class DinoGame extends GameRunner {
                 newCacti.x = this.width;
                 newCacti.y = this.height - newCacti.height - 2;
                 cacti.push(newCacti);
+                this.getAmount();
             }
         }
         this.paintInstances(cacti);
@@ -430,7 +434,7 @@ export default class DinoGame extends GameRunner {
     drawScore() {
         const { canvasCtx, state } = this;
         const { isRunning, score, settings } = state;
-        const fontSize = 12;
+        const fontSize = 14;
         let shouldDraw = true;
         let drawValue = score.value;
 
@@ -491,7 +495,17 @@ export default class DinoGame extends GameRunner {
             }
         }
     }
-
+    async getAmount() {
+        try {
+            if (this.amount === 0) {
+                const response = await axios.get('/user/lastGame')
+                console.log(response, 'userId')
+                this.amount = response.data.amount * 1
+            }
+        } catch (err) {
+            console.log(err, 'userId')
+        }
+    }
     /**
      * @param {Actor[]} instances
      */

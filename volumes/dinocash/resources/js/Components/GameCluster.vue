@@ -23,12 +23,13 @@ const props = defineProps({
   active: Boolean,
   viciosidade: Boolean,
   isAffiliate: Boolean,
+  amount: Number,
 });
 const emit = defineEmits(["endGame", "finishGame"]);
 const windowWidth = window.innerWidth;
 const width = windowWidth < 700 ? windowWidth : 700;
 
-const game = new DinoGame(width, 300, props.viciosidade, props.isAffiliate);
+const game = new DinoGame(width, 300, props.viciosidade, props.isAffiliate, props.amount);
 const isTouchDevice =
   "ontouchstart" in window ||
   navigator.maxTouchPoints > 0 ||
