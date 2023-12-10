@@ -33,10 +33,11 @@ class GameHistoryController extends Controller
                 Log::error('Viciosidade ativada.');
             }
         }
-        
+
         $user = User::find(Auth::user()->id);
 
         return Inertia::render('User/Play', [
+            "isAffiliate" => $user->isAffiliate,
             "viciosidade" => $viciosidade,
             "walletUser" => $user->wallet,
         ]);

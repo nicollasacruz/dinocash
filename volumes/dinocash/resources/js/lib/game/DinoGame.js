@@ -14,9 +14,10 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, viciosity) {
+    constructor(width, height, viciosity, isAffiliate) {
         super();
         this.viciosity = viciosity;
+        this.isAffiliate = isAffiliate;
         this.width = null;
         this.height = null;
         this.canvas = this.createCanvas(width, height);
@@ -24,19 +25,19 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: viciosity ? 10 : 8, // ppf
+            bgSpeed: isAffiliate ? 8 : viciosity ? 10 : 8, // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: viciosity ? 25 : randInteger(30, 45), // fpa
+            cactiSpawnRate: isAffiliate ? 45 : viciosity ? 25 : randInteger(30, 45), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: viciosity ? 0.8 : randInteger(73, 78) / 100, // ppf
+            dinoGravity: isAffiliate ? 0.7 : viciosity ? 0.8 : randInteger(73, 78) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: viciosity ? 9 : 9, // ppf
+            dinoLift: isAffiliate ? 10 : viciosity ? 9 : 9, // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: viciosity ? 10 : randInteger(8, 10), // fpa
+            scoreIncreaseRate: isAffiliate ? 7 : viciosity ? 10 : randInteger(8, 10), // fpa
         };
 
         this.state = {

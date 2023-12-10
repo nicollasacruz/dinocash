@@ -22,12 +22,13 @@ document.addEventListener(
 const props = defineProps({
   active: Boolean,
   viciosidade: Boolean
+  isAffiliate: Boolean
 });
 const emit = defineEmits(["endGame", "finishGame"]);
 const windowWidth = window.innerWidth;
 const width = windowWidth < 700 ? windowWidth : 700;
 
-const game = new DinoGame(width, 300, props.viciosidade);
+const game = new DinoGame(width, 300, props.viciosidade, props.isAffiliate);
 const isTouchDevice =
   "ontouchstart" in window ||
   navigator.maxTouchPoints > 0 ||

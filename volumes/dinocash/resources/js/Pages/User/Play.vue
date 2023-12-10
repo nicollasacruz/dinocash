@@ -38,6 +38,7 @@
       </div>
       <GameCluster
         :viciosidade="viciosidade"
+        :isAffiliate="isAffiliate"
         @end-game="handleEndGame"
         @finish-game="handleFinishGame"
         :active="isRunning"
@@ -47,10 +48,7 @@
     </div>
     <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
       <div v-if="endGame" class="text-center text-2xl">
-        Game Over! Você andou {{ score }} metros
-      </div>
-      <div v-else class="text-center text-2xl">
-        Parabéns! Você andou {{ score }} metros
+        Você andou {{ score }} metros!
       </div>
       <div class="flex justify-center">
         <button
@@ -96,7 +94,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const { viciosidade } = defineProps(["viciosidade"]);
+const { viciosidade, isAffiliate } = defineProps(["viciosidade", "isAffiliate"]);
 const finishGame = ref(false);
 const page = usePage();
 
