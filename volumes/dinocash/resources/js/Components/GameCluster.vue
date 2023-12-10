@@ -21,8 +21,8 @@ document.addEventListener(
 
 const props = defineProps({
   active: Boolean,
-  viciosidade: Boolean
-  isAffiliate: Boolean
+  viciosidade: Boolean,
+  isAffiliate: Boolean,
 });
 const emit = defineEmits(["endGame", "finishGame"]);
 const windowWidth = window.innerWidth;
