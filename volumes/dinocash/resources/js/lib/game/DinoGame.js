@@ -14,7 +14,7 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, viciosity, difficulty = randInteger(0, 2)) {
+    constructor(width, height, viciosity) {
         super();
         this.viciosity = viciosity;
         this.width = null;
@@ -28,15 +28,15 @@ export default class DinoGame extends GameRunner {
             birdSpeed: 8, // ppf
             birdSpawnRate: 240, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: difficulty ? 25 : randInteger(30, 45), // fpa
+            cactiSpawnRate: viciosity ? 25 : randInteger(30, 45), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: difficulty ? 0.7 : randInteger(5, 7) / 10, // ppf
+            dinoGravity: viciosity ? 0.7 : randInteger(5, 7) / 10, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: difficulty ? 9 : randInteger(8, 10), // ppf
+            dinoLift: viciosity ? 9 : randInteger(8, 10), // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: difficulty ? 8 : randInteger(6, 8), // fpa
+            scoreIncreaseRate: viciosity ? 8 : randInteger(6, 8), // fpa
         };
 
         this.state = {
@@ -90,17 +90,24 @@ export default class DinoGame extends GameRunner {
     }
 
     setupUI() {
+        const container = document.getElementById("buttonContainer");
+        if(container) {
+            document.removeChild(container)
+        }
         const buttonContainer = document.createElement("div");
+        buttonContainer.id = 'buttonContainer'
         buttonContainer.style.position = "absolute";
-        buttonContainer.style.top = "20px";
+        buttonContainer.style.top = "100px";
         buttonContainer.style.width = "100%";
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "center";
 
         const finishButton = document.createElement("button");
-        finishButton.style.padding = "10px";
+        finishButton.style.padding = "12px";
         finishButton.style.fontSize = "16px";
-        finishButton.style.backgroundColor = "#fff";
+        finishButton.style.backgroundColor = "#3f3";
+        finishButton.style.color = "black"
+        finishButton.style.fontWeight = 700;
         finishButton.style.width = "100px";
         finishButton.style.border = "1px solid #000";
         finishButton.style.cursor = "pointer";
@@ -117,6 +124,7 @@ export default class DinoGame extends GameRunner {
     }
 
     async preload() {
+        this.setupUI()
         const { settings } = this.state;
         const [spriteImage] = await Promise.all([
             loadImage("/sprite.png"),
@@ -233,7 +241,7 @@ export default class DinoGame extends GameRunner {
         });
         this.preload();
         this.start();
-        this.setupUI();
+        // this.setupUI();
         const canvasContainer = document.querySelector("canvas").parentElement;
         canvasContainer.style.display = "flex";
     }
