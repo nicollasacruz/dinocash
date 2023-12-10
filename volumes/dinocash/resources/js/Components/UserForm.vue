@@ -58,8 +58,8 @@
       <base-input
         label-style="font-bold text-xs"
         classes="!h-[40px]"
-        :error="errors['comissao']"
-        v-bind="comissao"
+        :error="errors['walletAffiliate']"
+        v-bind="walletAffiliate"
         label="Valor de comissão"
         v-if="typeForm == 'affiliate'"
       />
@@ -206,7 +206,7 @@ const affiliateValidations =
         referralsCounter: yup
           .string()
           .required("O campo Cadastros no link é obrigatório"),
-        comissao: yup
+        walletAffiliate: yup
           .string()
           .required("O campo Valor de comissão é obrigatório"),
         invitation_link: yup
@@ -230,7 +230,7 @@ const initialValues = user
       revShare: user.revShare,
       CPA: user.CPA,
       referralsCounter: user.referralsCounter,
-      comissao: user.walletAffiliate,
+      walletAffiliate: user.walletAffiliate,
       invitation_link: user.invitation_link,
     }
   : {};
@@ -244,13 +244,13 @@ const wallet = defineInputBinds("wallet");
 const revShare = defineInputBinds("revShare");
 const CPA = defineInputBinds("CPA");
 const referralsCounter = defineInputBinds("referralsCounter");
-const comissao = defineInputBinds("comissao");
+const walletAffiliate = defineInputBinds("walletAffiliate");
 const invitation_link = defineInputBinds("invitation_link");
 const submit = handleSubmit((values) => {
   const payload = {
     CPA: values.CPA,
     invitation_link: values.invitation_link,
-    walletAffiliate: values.comissao,
+    walletAffiliate: values.walletAffiliate,
     revShare: values.revShare,
   };
   emit("submit", values);

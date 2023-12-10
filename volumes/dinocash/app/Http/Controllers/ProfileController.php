@@ -47,10 +47,8 @@ class ProfileController extends Controller {
         $user = User::where('email', $request->email)->first(); 
     
         $newUserData = $request->json()->all();
-        return response()->json(['status' => 'success', 'message' => $newUserData]);
         
         unset($newUserData['email']);
-
 
         $user->update($newUserData);
     
