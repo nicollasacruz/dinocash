@@ -164,15 +164,15 @@ function statusClass(status) {
     else return "text-red-500";
 }
 // get data from .env
-const { GGR } = defineProps(["GGR"]);
-console.log(GGR)
+const { GgrIsTrue } = defineProps(["GgrIsTrue"]);
+console.log(GgrIsTrue)
 </script>
 
 <template>
     <Head title="Admin GGR" />
 
     <AuthenticatedLayout>
-        <div v-if="GGR">
+        <div v-if="GgrIsTrue">
             <div class="text-4xl text-white font-bold">GGR</div>
             <div class="flex mb-3">
                 <div>

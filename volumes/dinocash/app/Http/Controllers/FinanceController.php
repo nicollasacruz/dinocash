@@ -140,6 +140,7 @@ class FinanceController extends Controller
         $withdrawsAmountAffiliateCaixa = AffiliateWithdraw::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
+        $walletsAfilliatePendingCaixa = AffiliateHistory::where('invoicedAt', null)->sum('amount');
         
         $gain = (GameHistory::where('type', 'loss')->with('user', function () {
             return User::where('role', 'user')->where('isAffiliate', false);
@@ -150,7 +151,7 @@ class FinanceController extends Controller
         $total = $gain + $pay;
         $houseHealth = round(($gain * 100 / $total), 1);
         
-        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
+        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $walletsAfilliatePendingCaixa);
         
         return Inertia::render("Admin/Finances", [
             'balanceAmount' => $balanceAmount,
