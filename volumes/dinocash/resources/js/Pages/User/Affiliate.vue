@@ -1,6 +1,6 @@
 <template>
     <UserLayouyt>
-        a
+        
     </UserLayouyt>
 </template>
 <script setup lang="ts">

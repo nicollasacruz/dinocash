@@ -24,19 +24,19 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: 8, // ppf
-            birdSpeed: 8, // ppf
-            birdSpawnRate: 240, // fpa
+            bgSpeed: viciosity ? 10 : 8, // ppf
+            birdSpeed: 12, // ppf
+            birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
             cactiSpawnRate: viciosity ? 25 : randInteger(30, 45), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: viciosity ? 0.7 : randInteger(5, 7) / 10, // ppf
+            dinoGravity: viciosity ? 0.8 : randInteger(73, 78) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: viciosity ? 9 : randInteger(8, 10), // ppf
+            dinoLift: viciosity ? 9 : 9, // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: viciosity ? 8 : randInteger(6, 8), // fpa
+            scoreIncreaseRate: viciosity ? 10 : randInteger(8, 10), // fpa
         };
 
         this.state = {
@@ -91,11 +91,11 @@ export default class DinoGame extends GameRunner {
 
     setupUI() {
         const container = document.getElementById("buttonContainer");
-        if(container) {
-            document.removeChild(container)
+        if (container) {
+            document.removeChild(container);
         }
         const buttonContainer = document.createElement("div");
-        buttonContainer.id = 'buttonContainer'
+        buttonContainer.id = "buttonContainer";
         buttonContainer.style.position = "absolute";
         buttonContainer.style.top = "100px";
         buttonContainer.style.width = "100%";
@@ -106,7 +106,7 @@ export default class DinoGame extends GameRunner {
         finishButton.style.padding = "12px";
         finishButton.style.fontSize = "16px";
         finishButton.style.backgroundColor = "#3f3";
-        finishButton.style.color = "black"
+        finishButton.style.color = "black";
         finishButton.style.fontWeight = 700;
         finishButton.style.width = "100px";
         finishButton.style.border = "1px solid #000";
@@ -124,7 +124,7 @@ export default class DinoGame extends GameRunner {
     }
 
     async preload() {
-        this.setupUI()
+        this.setupUI();
         const { settings } = this.state;
         const [spriteImage] = await Promise.all([
             loadImage("/sprite.png"),
@@ -155,7 +155,7 @@ export default class DinoGame extends GameRunner {
         if (state.isRunning) {
             this.drawCacti();
 
-            if (state.level > randInteger(3, 5)) {
+            if (state.level > randInteger(2, 5)) {
                 this.drawBirds();
             }
 
