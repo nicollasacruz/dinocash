@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 class GameHistoryController extends Controller {
     public function play(Request $request) {
-        $viciosidade = true;
+        $viciosidade = false;
         $settings = Setting::first();
         $balance = (GameHistory::all()->sum("finalAmount")) * -1;
         $pay = (GameHistory::where('type', 'win')->sum('finalAmount'));
