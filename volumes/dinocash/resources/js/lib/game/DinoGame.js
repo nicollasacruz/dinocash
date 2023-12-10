@@ -107,12 +107,23 @@ export default class DinoGame extends GameRunner {
         const finishButton = document.createElement("button");
         finishButton.style.padding = "8px";
         finishButton.style.fontSize = "25px";
-        finishButton.style.backgroundColor = "#3f3";
+        finishButton.style.backgroundColor = "#d6f8b8";
         finishButton.style.color = "black";
-        finishButton.style.fontWeight = 800;
+        finishButton.style.fontWeight = 500;
+        finishButton.style.fontFamily = "Upheavtt, sans-serif"; // Adicione a fonte Upheavtt e fallbacks
         finishButton.style.width = "200px";
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
+        finishButton.style.borderRadius = "8px"; // Adicione essa linha para arredondar as bordas
+        
+        // Adicione a sombra à caixa
+        finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
+        finishButton.style.webkitBoxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
+        finishButton.style.mozBoxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
+        
+        // Adicione margens à caixa para se parecer com o botão fornecido
+        finishButton.style.margin = "auto";
+        finishButton.style.marginBottom = "4px"; // Ajuste conforme necessário
         finishButton.addEventListener("click", () => {
             const eventoModificacao = new CustomEvent("finishGame", {
                 detail: this.state.score.value,
