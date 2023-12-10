@@ -27,9 +27,20 @@ class SettingController extends Controller
 
         return response()->json(
             [
+                "status" => "success",
                 "message" => "Settings updated successfully",
-            ],
-            200
+            ]
         );
-    }   
+    }
+
+    public function changePayout(Request $request)
+    {
+        Setting::first()->update(['payout' => $request->payout]);
+        return response()->json(
+            [
+                "status" => "success",
+                "message" => "Settings updated successfully",
+            ]
+        );
+    }
 }

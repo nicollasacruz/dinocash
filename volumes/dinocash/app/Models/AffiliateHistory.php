@@ -52,16 +52,15 @@ class AffiliateHistory extends Model
         return $this->belongsTo(AffiliateInvoice::class, 'affiliateInvoiceId', 'id');
     }
 
+    public function scopeCPA($query)
+    {
+        return $query->where('type', 'CPA');
+    }
+
     // Adicionando um escopo local para filtrar os registros do tipo 'win'
     public function scopeWins($query)
     {
         return $query->where('type', 'win');
-    }
-
-    // Adicionando um escopo local para filtrar os registros do tipo 'win'
-    public function scopeCPA($query)
-    {
-        return $query->where('type', 'CPA');
     }
 
     // Adicionando um escopo local para filtrar os registros do tipo 'loss'
@@ -85,25 +84,25 @@ class AffiliateHistory extends Model
     // Escopo para filtrar os registros do tipo 'win' hoje
     public function scopeWinsToday($query)
     {
-        return $query->losses()->whereDate('updated_at', now());
+        return $query->wins()->whereDate('updated_at', now());
     }
-
+    
     // Escopo para filtrar os registros do tipo 'loss' hoje
     public function scopeLossesToday($query)
     {
-        return $query->wins()->whereDate('updated_at', now());
+        return $query->losses()->whereDate('updated_at', now());
     }
 
     // Escopo para filtrar todos os registros do tipo 'win'
     public function scopeWinsTotal($query)
     {
-        return $query->losses();
+        return $query->wins();
     }
 
     // Escopo para filtrar todos os registros do tipo 'loss'
     public function scopeLossesTotal($query)
     {
-        return $query->wins();
+        return $query->losses();
     }
 
     // Escopo para filtrar todos os registros do tipo 'loss'

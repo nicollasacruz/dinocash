@@ -115,9 +115,11 @@ class WithdrawController extends Controller
         }
     }
 
-    public function aprove(Request $request, WithdrawService $withdrawService)
+    public function aprove(Request $request)
     {
         try {
+            $withdrawService = new WithdrawService();
+
             $withdraw = Withdraw::find($request->withdraw);
             $response = $withdrawService->aprove($withdraw);
             if ($response['success']) {
@@ -135,15 +137,12 @@ class WithdrawController extends Controller
         }
     }
 
-    public function reject(Request $request, WithdrawService $withdrawService)
+    public function reject(Request $request)
     {
+        $withdrawService = new WithdrawService();
         $withdraw = Withdraw::find($request->withdraw);
         $withdrawService->reject($withdraw);
 
         return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
-    }
-    public function user(Request $request)
-    {
-        return Inertia::render('User/Movement');
     }
 }

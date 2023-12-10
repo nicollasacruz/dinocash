@@ -126,6 +126,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
             'users' => User::all()
         ]);
     })->name('admin.usuarios');
+    Route::patch('/usuarios', [ProfileController::class, 'modalUserUpdate'])->name('admin.usuarios.update');
     Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
     Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
     Route::get('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
@@ -136,7 +137,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
 
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
     Route::patch('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
-    // Route::post('/settings', [SettingController::class, 'index'])->name('admin.settings.update');
+    Route::post('/settings/changePayout', [SettingController::class, 'changePayout'])->name('admin.settings.payout');
 
     Route::prefix('afiliados')->group(function () {
         Route::get('/', [AffiliateController::class, 'index'])->name('admin.afiliados');

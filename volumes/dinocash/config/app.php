@@ -172,6 +172,7 @@ return [
         App\Providers\ReferralServiceProvider::class,
         App\Providers\DepositServiceProvider::class,
         App\Providers\WithdrawServiceProvider::class,
+        App\Providers\WithdrawAffiliateServiceProvider::class,
         App\Providers\InvoiceServiceProvider::class,
     ])->toArray(),
 
