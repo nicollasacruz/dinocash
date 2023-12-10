@@ -39,7 +39,7 @@ class AffiliateWithdrawController extends Controller
     }
 
     public function store(Request $request)
-    { 
+    {
         try {
             $withdrawService = new WithdrawAffiliateService();
             $userId = Auth::user()->id;
@@ -56,7 +56,7 @@ class AffiliateWithdrawController extends Controller
                 'message' => 'Erro ao solicitar o saque.'
             ]);
         } catch (Exception $e) {
-            Log::error('Erro ao solicitar o saque de afiliado.  -   ' .  $e->getMessage());
+            Log::error('Erro ao solicitar o saque de afiliado.  -   ' . $e->getMessage());
             return response()->json([
                 'success' => 'error',
                 'message' => 'Erro ao solicitar o saque.'
@@ -80,18 +80,33 @@ class AffiliateWithdrawController extends Controller
             return response()->json([
                 'success' => 'error',
                 'message' => $response['message']
-            ]);
+            ], 500);
         } catch (Exception $e) {
-            return redirect()->route('admin.saque')->with('error', $e->getMessage());
+            return response()->json([
+                Log::error('Erro ao aprovar o o saque do afiliado  - ' . $e->getMessage()),
+                'success' => 'error',
+                'message' => 'Erro interno!'
+            ], 500);
         }
     }
 
     public function reject(Request $request)
     {
-        $withdrawService = new WithdrawAffiliateService();
-        $withdraw = AffiliateWithdraw::find($request->withdraw);
-        $withdrawService->reject($withdraw);
+        try {
+            $withdrawService = new WithdrawAffiliateService();
+            $withdraw = AffiliateWithdraw::find($request->withdraw);
+            $withdrawService->reject($withdraw);
 
-        return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
+            return response()->json([
+                'success' => 'success',
+                'message' => 'Saque rejeitado com sucesso.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                Log::error('Erro ao aprovar o o saque do afiliado  - ' . $e->getMessage()),
+                'success' => 'error',
+                'message' => 'Erro interno!'
+            ], 500);
+        }
     }
 }
