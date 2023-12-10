@@ -10,7 +10,7 @@ class IsAffiliateMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && (Auth::user()->isAffiliated || Auth::user()->hasRole("admin"))) {
+        if (Auth::check() && (Auth::user()->isAffiliate || Auth::user()->hasRole("admin"))) {
             return $next($request);
         }
 

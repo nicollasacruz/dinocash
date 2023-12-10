@@ -76,7 +76,7 @@ const routes = [
 
 const page = usePage();
 
-const email = page.props.auth.user.email;
+const email = page.props.auth.user.name;
 
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {
