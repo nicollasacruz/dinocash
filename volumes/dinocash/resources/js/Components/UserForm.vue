@@ -42,16 +42,16 @@
       <base-input
         label-style="font-bold text-xs"
         classes="!h-[40px]"
-        :error="errors['cpa']"
-        v-bind="cpa"
+        :error="errors['CPA']"
+        v-bind="CPA"
         label="CPA"
         v-if="typeForm == 'affiliate'"
       />
       <base-input
         label-style="font-bold text-xs"
         classes="!h-[40px]"
-        :error="errors['linkCadastros']"
-        v-bind="linkCadastros"
+        :error="errors['referralsCounter']"
+        v-bind="referralsCounter"
         label="Cadastros no link"
         v-if="typeForm == 'affiliate'"
       />
@@ -66,8 +66,8 @@
       <base-input
         label-style="font-bold text-xs"
         classes="!h-[40px]"
-        :error="errors['afiliadosLink']"
-        v-bind="afiliadosLink"
+        :error="errors['invitation_link']"
+        v-bind="invitation_link"
         label="Link de afiliados"
         v-if="typeForm == 'affiliate'"
         class=""
@@ -202,14 +202,14 @@ const affiliateValidations =
   typeForm === "affiliate"
     ? {
         revShare: yup.string().required("O campo Rev Share é obrigatório"),
-        cpa: yup.string().required("O campo CPA é obrigatório"),
-        linkCadastros: yup
+        CPA: yup.string().required("O campo CPA é obrigatório"),
+        referralsCounter: yup
           .string()
           .required("O campo Cadastros no link é obrigatório"),
         comissao: yup
           .string()
           .required("O campo Valor de comissão é obrigatório"),
-        afiliadosLink: yup
+        invitation_link: yup
           .string()
           .required("O campo Link de afiliados é obrigatório"),
       }
@@ -228,10 +228,10 @@ const initialValues = user
       isAffiliate: user.isAffiliate,
       wallet: user.wallet,
       revShare: user.revShare,
-      cpa: user.CPA,
-      linkCadastros: user.invitation_link,
+      CPA: user.CPA,
+      referralsCounter: user.referralsCounter,
       comissao: user.walletAffiliate,
-      afiliadosLink: user.invitation_link,
+      invitation_link: user.invitation_link,
     }
   : {};
 const { handleSubmit, defineInputBinds, errors } = useForm({
@@ -242,14 +242,14 @@ const email = defineInputBinds("email");
 const afiliado = defineInputBinds("isAffiliate");
 const wallet = defineInputBinds("wallet");
 const revShare = defineInputBinds("revShare");
-const cpa = defineInputBinds("cpa");
-const linkCadastros = defineInputBinds("linkCadastros");
+const CPA = defineInputBinds("CPA");
+const referralsCounter = defineInputBinds("referralsCounter");
 const comissao = defineInputBinds("comissao");
-const afiliadosLink = defineInputBinds("afiliadosLink");
+const invitation_link = defineInputBinds("invitation_link");
 const submit = handleSubmit((values) => {
   const payload = {
-    CPA: values.cpa,
-    invitation_link: values.afiliadosLink,
+    CPA: values.CPA,
+    invitation_link: values.invitation_link,
     walletAffiliate: values.comissao,
     revShare: values.revShare,
   };

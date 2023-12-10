@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FinanceController extends Controller
 {
@@ -149,7 +150,12 @@ class FinanceController extends Controller
             return User::where('role', 'user')->where('isAffiliate', false);
         })->sum('finalAmount'));
         $total = $gain + $pay;
-        $houseHealth = round(($gain * 100 / $total), 1);
+        if (!$total || !$gain) {
+            Log::info('Vazio ou 0');
+            $houseHealth = 100;
+        } else {
+            $houseHealth = round(($gain * 100 / $total), 1);
+        }
         
         $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $walletsAfilliatePendingCaixa);
         

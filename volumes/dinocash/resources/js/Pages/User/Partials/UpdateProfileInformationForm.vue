@@ -103,9 +103,6 @@ const form = useForm({
           type="text"
           class="mt-1 block w-full"
           v-model="form.invitation_link"
-          v-mask="
-            'https://dinoc!ash.io/ref/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-          "
           required
           autofocus
         />

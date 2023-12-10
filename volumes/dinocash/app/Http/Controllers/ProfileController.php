@@ -47,12 +47,12 @@ class ProfileController extends Controller {
         $user = User::where('email', $request->email)->first(); 
     
         $newUserData = $request->json()->all();
+        return response()->json(['status' => 'success', 'message' => $newUserData]);
         
         unset($newUserData['email']);
 
-        $updatedData = array_diff_assoc($newUserData, $user->toArray());
 
-        $user->update($updatedData,);
+        $user->update($newUserData);
     
         return response()->json(['status' => 'success', 'message' => 'Usuário atualizado com sucesso.']);
     }
