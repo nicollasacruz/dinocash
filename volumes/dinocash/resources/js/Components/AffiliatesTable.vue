@@ -10,20 +10,14 @@
                 </div>
             </td>
         </template>
-        <template #wallet="{ value }">
+        <template #walletAffiliate="{ value }">
             <td>
                 {{
-                    value.toLocaleString("pt-br", {
+                    Number(value).toLocaleString("pt-br", {
                         style: "currency",
                         currency: "BRL",
                     })
                 }}
-            </td>
-        </template>
-        <template #isAffiliate="{ value }">
-            <td>
-                <div v-if="value">SIM</div>
-                <div v-else>NÃO</div>
             </td>
         </template>
     </BaseTable>

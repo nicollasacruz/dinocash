@@ -13,7 +13,6 @@ const columns = computed(() =>
         { label: "Nome", key: "name" },
         { label: "Email", key: "email" },
         { label: "Saldo", key: "walletAffiliate" },
-        { label: "Afiliado", key: "isAffiliate" },
       ]
     : [
         { label: "Nome", key: "name" },
