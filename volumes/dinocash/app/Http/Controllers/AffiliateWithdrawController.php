@@ -8,9 +8,11 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Services\WithdrawAffiliateService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AffiliateWithdrawController extends Controller
@@ -36,32 +38,60 @@ class AffiliateWithdrawController extends Controller
         ]);
     }
 
-    public function store(Request $request, WithdrawAffiliateService $withdrawService)
+    public function store(Request $request)
+    { 
+        try {
+            $withdrawService = new WithdrawAffiliateService();
+            $userId = Auth::user()->id;
+            $user = User::find($userId);
+            $withdraw = $withdrawService->createWithdraw($user, $request->amount);
+            if ($withdraw) {
+                return response()->json([
+                    'success' => 'success',
+                    'message' => 'Saque solicitado com sucesso.'
+                ]);
+            }
+            return response()->json([
+                'success' => 'error',
+                'message' => 'Erro ao solicitar o saque.'
+            ]);
+        } catch (Exception $e) {
+            Log::error('Erro ao solicitar o saque de afiliado.  -   ' .  $e->getMessage());
+            return response()->json([
+                'success' => 'error',
+                'message' => 'Erro ao solicitar o saque.'
+            ]);
+        }
+    }
+
+    public function aprove(Request $request)
     {
-        $userId = Auth::user()->id;
-        $user = User::find($userId);
-        $withdraw = $withdrawService->createWithdraw($user, $request->amount);
-        $setting = Setting::first();
+        try {
+            $withdrawService = new WithdrawAffiliateService();
 
-        return Inertia::render('User/Withdraw', [
-        ]);
+            $withdraw = AffiliateWithdraw::find($request->withdraw);
+            $response = $withdrawService->aprove($withdraw);
+            if ($response['success']) {
+                return response()->json([
+                    'success' => 'success',
+                    'message' => 'Saque aprovado com sucesso!'
+                ]);
+            }
+            return response()->json([
+                'success' => 'error',
+                'message' => $response['message']
+            ]);
+        } catch (Exception $e) {
+            return redirect()->route('admin.saque')->with('error', $e->getMessage());
+        }
     }
 
-    public function aprove(AffiliateWithdraw $affiliateWithdraw) {
-        $affiliateWithdraw->update([
-            'type' => 'paid',
-            'approvedAt' => now(),
-        ]);
-    }
-
-    public function reject(AffiliateWithdraw $affiliateWithdraw) {
-        $affiliateWithdraw->update([
-            'type' => 'rejected',
-            'reprovedAt' => now(),
-        ]);
-    }
-    public function user(Request $request)
+    public function reject(Request $request)
     {
-        return Inertia::render('User/Movement');
+        $withdrawService = new WithdrawAffiliateService();
+        $withdraw = AffiliateWithdraw::find($request->withdraw);
+        $withdrawService->reject($withdraw);
+
+        return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
     }
 }

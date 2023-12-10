@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\AffiliatePanelController;
+use App\Http\Controllers\AffiliateWithdrawController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\FinanceController;
@@ -146,6 +147,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
         Route::post('/listAffiliateHistory', [AffiliateController::class, 'listAffiliateHistory'])->name('admin.afiliados.comissao');
         Route::post('/listGameHistory', [AffiliateController::class, 'listGameHistory'])->name('admin.afiliados.jogadas');
         Route::post('/listTransactions', [AffiliateController::class, 'listTransactions'])->name('admin.afiliados.saques');
+        Route::post('/saque/aprovar', [AffiliateWithdrawController::class, 'aprove'])->name('admin.saque.afiliados.aprovar');
+        Route::post('/saque/rejeitar', [AffiliateWithdrawController::class, 'reject'])->name('admin.saque.afiliados.rejeitar');
     });
 
     Route::get('/saque', [WithdrawController::class, 'indexAdmin'])->name('admin.saque');
@@ -190,6 +193,7 @@ Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->gro
     Route::get('/', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.index');
     Route::get('/dashboard', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
     Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.saques');
+    Route::post('/saques', [AffiliateWithdrawController::class, 'store'])->name('afiliado.saques.store');
     Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.faturas');
 });
