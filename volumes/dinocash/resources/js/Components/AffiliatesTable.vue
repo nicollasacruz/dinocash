@@ -64,10 +64,10 @@ function toBRL(value) {
 function submit(values) {
     console.log(values);
     const payload = {
-        
+
     }
     axios
-        .patch("/admin/afiliados", values)
+        .patch(route('admin.usuarios.update'), values)
         .then((response) => {
             console.log(response.data);
             showModal.value = false;

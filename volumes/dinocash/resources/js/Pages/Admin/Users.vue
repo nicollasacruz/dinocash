@@ -77,7 +77,7 @@ function selectUser(user) {
 function submit(values) {
     console.log(values);
     axios
-        .patch(route('user.update'), values)
+        .patch(route('admin.usuarios.update'), values)
         .then((response) => {
             console.log(response.data);
             showModal.value = false;
