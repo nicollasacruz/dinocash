@@ -14,12 +14,17 @@ class GameHistoryController extends Controller {
     public function play(Request $request) {
         $viciosidade = false;
         $settings = Setting::first();
-        $balance = (GameHistory::all()->sum("finalAmount")) * -1;
-        $pay = (GameHistory::where('type', 'win')->sum('finalAmount'));
-        $payLimit = (100 - $settings->payout) * $balance / 100;
-        if ($payLimit <= $pay) {
+        $gain = (GameHistory::where('type', 'loss')->with('user', function () {
+            return User::where('role', 'user')->where('isAffiliate', false);
+        })->sum('finalAmount')) * -1;
+        $pay = (GameHistory::where('type', 'win')->with('user', function () {
+            return User::where('role', 'user')->where('isAffiliate', false);
+        })->sum('finalAmount'));
+        $total = $gain + $pay;
+        $houseHealth = round(($gain * 100 / $total), 1);
+        if ($houseHealth < $settings->payout) {
             $viciosidade = true;
-            Log::error('Viciosidade detectada.');
+            Log::error('Viciosidade ativada.');
         }
         $user = User::find(Auth::user()->id);
 

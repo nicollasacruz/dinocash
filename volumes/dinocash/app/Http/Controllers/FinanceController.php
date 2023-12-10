@@ -25,21 +25,21 @@ class FinanceController extends Controller
         if ($dateStart) {
             $dateStart->setTime(0, 0, 0);
         }
-        
+
         if ($dateEnd) {
             $dateEnd->setTime(23, 59, 59);
         }
         $depositsAmount = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
-        ->where('type', 'paid')
-        ->with([
-            'user' => function ($query) {
-                $query
-                    ->where('isAffiliate', false);
-            }
-        ])
-        ->sum('amount');
+            ->where('type', 'paid')
+            ->with([
+                'user' => function ($query) {
+                    $query
+                        ->where('isAffiliate', false);
+                }
+            ])
+            ->sum('amount');
 
 
         $withdrawsAmount = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
@@ -98,11 +98,11 @@ class FinanceController extends Controller
         $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })->with([
-            'affiliate' => function ($query) {
-                $query
-                    ->where('role', 'user');
-            }
-        ])->sum('amount');
+                    'affiliate' => function ($query) {
+                        $query
+                            ->where('role', 'user');
+                    }
+                ])->sum('amount');
 
         $topWithdraws = Withdraw::where('type', 'paid')
             ->where('withdraws.updated_at', '>=', now()->subDay())
@@ -140,8 +140,18 @@ class FinanceController extends Controller
         $withdrawsAmountAffiliateCaixa = AffiliateWithdraw::where('type', 'paid')->sum('amount');
         $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
         $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
+        
+        $gain = (GameHistory::where('type', 'loss')->with('user', function () {
+            return User::where('role', 'user')->where('isAffiliate', false);
+        })->sum('finalAmount')) * -1;
+        $pay = (GameHistory::where('type', 'win')->with('user', function () {
+            return User::where('role', 'user')->where('isAffiliate', false);
+        })->sum('finalAmount'));
+        $total = $gain + $pay;
+        $houseHealth = round(($gain * 100 / $total), 1);
+        
         $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa);
-
+        
         return Inertia::render("Admin/Finances", [
             'balanceAmount' => $balanceAmount,
             'depositsAmount' => $depositsAmount,
@@ -157,6 +167,7 @@ class FinanceController extends Controller
             'topProfitableAffiliates' => $topProfitableAffiliates,
             'topLossAffiliates' => $topLossAffiliates,
             'payout' => Setting::first('payout'),
+            'houseHealth' => $houseHealth * 1,
         ]);
     }
 
