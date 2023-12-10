@@ -52,7 +52,7 @@ const rows = [];
                     placeholder="Digite o email do usuário... "
                 />
             </div>
-            <div class="flex gap-x-5">
+            <!-- <div class="flex gap-x-5">
                 <div class="flex gap-x-5">
                     <TextBox
                         label="CAIXA DA CASA"
@@ -65,7 +65,7 @@ const rows = [];
                         value-text="text-center text-green-500"
                     />
                 </div>
-            </div>
+            </div> -->
         </div>
         <BaseTable
             hide-actions
