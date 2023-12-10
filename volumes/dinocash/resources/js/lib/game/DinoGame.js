@@ -110,11 +110,11 @@ export default class DinoGame extends GameRunner {
         finishButton.style.backgroundColor = "#d6f8b8";
         finishButton.style.color = "black";
         finishButton.style.fontWeight = 500;
-        finishButton.style.fontFamily = "Upheavtt, sans-serif"; // Adicione a fonte Upheavtt e fallbacks
-        finishButton.style.width = "200px";
+        finishButton.style.fontFamily = "Upheavtt, sans-serif";
+        // finishButton.style.width = "200px";
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
-        finishButton.style.borderRadius = "8px"; // Adicione essa linha para arredondar as bordas
+        finishButton.style.borderRadius = "8px";
         
         // Adicione a sombra à caixa
         finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
@@ -331,7 +331,7 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `R$ ${(parseFloat(this.state.score.value) / 500 * this.amount).toFixed(2)}`;
+            button.textContent = `Clique aqui para sacar: R$ ${(parseFloat(this.state.score.value) / 500 * this.amount).toFixed(2)}`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();
