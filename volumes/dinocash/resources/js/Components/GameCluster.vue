@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+    <div></div>
 </template>
 
 <script setup lang="ts">
@@ -41,9 +41,13 @@ document.addEventListener(
 
 const props = defineProps({
   active: Boolean,
+  viciosidade: Boolean
 });
 const emit = defineEmits(["endGame", "finishGame"]);
-const game = new DinoGame(700, 400);
+const windowWidth = window.innerWidth;
+const width = windowWidth < 700 ? windowWidth : 700;
+
+const game = new DinoGame(width, 300, props.viciosidade);
 const isTouchDevice =
   "ontouchstart" in window ||
   navigator.maxTouchPoints > 0 ||

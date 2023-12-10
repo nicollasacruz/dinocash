@@ -14,8 +14,9 @@ import {
 import GameRunner from "./GameRunner.js";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, difficulty = randInteger(0, 2)) {
+    constructor(width, height, viciosity, difficulty = randInteger(0, 2)) {
         super();
+        this.viciosity = viciosity;
         this.width = null;
         this.height = null;
         this.canvas = this.createCanvas(width, height);
@@ -33,7 +34,7 @@ export default class DinoGame extends GameRunner {
             dinoGravity: difficulty ? 0.7 : randInteger(5, 7) / 10, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: difficulty ? 9 : randInteger(8,10), // ppf
+            dinoLift: difficulty ? 9 : randInteger(8, 10), // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: difficulty ? 8 : randInteger(6, 8), // fpa
         };
@@ -61,6 +62,7 @@ export default class DinoGame extends GameRunner {
     // ref for canvas pixel density:
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio#correcting_resolution_in_a_%3Ccanvas%3E
     createCanvas(width, height) {
+        console.log(this.viciosity);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const scale = window.devicePixelRatio;
@@ -81,6 +83,7 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.width = "100%";
         canvasContainer.style.height = "100vh";
         canvasContainer.style.position = "relative";
+        canvasContainer.style.overflow = "hidden";
         canvasContainer.append(canvas);
         app.prepend(canvasContainer);
         return canvas;
@@ -106,7 +109,7 @@ export default class DinoGame extends GameRunner {
                 detail: this.state.score.value,
             });
             document.dispatchEvent(eventoModificacao);
-            this.endGame()
+            this.endGame();
         });
         const canvasContainer = document.querySelector("canvas").parentElement;
         buttonContainer.appendChild(finishButton);
@@ -176,7 +179,7 @@ export default class DinoGame extends GameRunner {
 
         switch (type) {
             case "jump": {
-                console.log('teste')
+                console.log("teste");
                 if (state.isRunning) {
                     if (state.dino.jump()) {
                         playSound("jump");
@@ -228,7 +231,7 @@ export default class DinoGame extends GameRunner {
                 value: 0,
             },
         });
-        this.preload()
+        this.preload();
         this.start();
         this.setupUI();
         const canvasContainer = document.querySelector("canvas").parentElement;

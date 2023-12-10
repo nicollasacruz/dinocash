@@ -37,12 +37,12 @@
         </button>
       </div>
       <GameCluster
+        :viciosidade="viciosidade"
         @end-game="handleEndGame"
         @finish-game="handleFinishGame"
         :active="isRunning"
         :height="clientHeight"
         :width="clientWidth"
-        :viciosidade="false"
       />
     </div>
     <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
@@ -97,6 +97,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const { viciosidade } = defineProps(["viciosidade"]);
+console.log(viciosidade);
 const finishGame = ref(false);
 const page = usePage();
 
