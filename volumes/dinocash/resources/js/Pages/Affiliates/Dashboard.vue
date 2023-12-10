@@ -100,8 +100,8 @@ const showModal = ref(false);
         </template>
       </TextBox>
       <div class="grid grid-cols-2 gap-x-2 col-span-2 mt-4">
-        <CurrencyBox label="Valor pendente" value="200"></CurrencyBox>
-        <CurrencyBox label="Valor disponível" value="200"></CurrencyBox>
+        <CurrencyBox label="Valor pendente" :value="paymentPending"></CurrencyBox>
+        <CurrencyBox label="Valor disponível" :value="walletAffiliate"></CurrencyBox>
         <button
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
         >
