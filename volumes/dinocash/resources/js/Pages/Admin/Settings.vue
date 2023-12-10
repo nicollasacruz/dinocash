@@ -23,13 +23,13 @@
 
                     <base-input
                         v-bind="payout"
-                        label="Payout"
+                        label="Lucro da Casa"
                         label-style="font-bold "
                         class="p-0"
                         classes="!h-[40px]"
                         type="text"
                         :error="errors['payout']"
-                        placeholder="Payout"
+                        placeholder="Lucro da Casa"
                     />
 
                     <base-input
@@ -89,29 +89,29 @@
 
                     <base-input
                         v-bind="defaultCPA"
-                        label="CPA"
+                        label=" PadrãoCPA"
                         label-style="font-bold "
                         class="p-0"
                         classes="!h-[40px]"
                         type="text"
                         :error="errors['defaultCPA']"
-                        placeholder="CPA"
+                        placeholder="CPA Padrão"
                     />
 
                     <base-input
                         v-bind="defaultRevShare"
-                        label="RevShare"
+                        label="RevShare Padrão"
                         label-style="font-bold "
                         class="p-0"
                         classes="!h-[40px]"
                         type="text"
                         :error="errors['defaultRevShare']"
-                        placeholder="RevShare"
+                        placeholder="RevShare Padrão"
                     />
 
                     <base-input
                         v-bind="autoPayWithdraw"
-                        label="AutoPay Saque"
+                        label="Saque Paga Automático"
                         label-style="font-bold "
                         class="p-0"
                         classes="!h-[40px]"
@@ -120,18 +120,18 @@
                             { value: true, label: 'Sim' },
                         ]"
                         :error="errors['autoPayWithdraw']"
-                        placeholder="AutoPay Saque"
+                        placeholder="Saque Paga Automático"
                     />
 
                     <base-input
                         v-bind="maxAutoPayWithdraw"
-                        label="AutoPay Saque Máximo"
+                        label="Saque Máximo Automático"
                         label-style="font-bold "
                         class="p-0"
                         classes="!h-[40px]"
                         type="text"
                         :error="errors['maxAutoPayWithdraw']"
-                        placeholder="AutoPay Saque Máximo"
+                        placeholder="Saque Máximo Automático"
                     />
                     <base-input
                         v-bind="affiliatePayGGR"
