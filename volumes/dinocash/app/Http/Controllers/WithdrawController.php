@@ -54,7 +54,7 @@ class WithdrawController extends Controller
         return Inertia::render('User/Withdraw', [
             'minWithdraw' => $settings->minWithdraw,
             'maxWithdraw' => $settings->maxWithdraw,
-            'walletUser' => number_format($user->wallet, 2,'.',''),
+            'walletUser' => number_format($user->wallet, 2, '.', ''),
         ]);
     }
 
@@ -63,6 +63,20 @@ class WithdrawController extends Controller
         try {
             $userId = Auth::user()->id;
             $user = User::find($userId);
+            $setting = Setting::first();
+            if (!$user->isAffiliate || !$user->hasRole('admin')) {
+                $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
+                $totalRoll = $user->gameHistories->sum('amount');
+
+                $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
+
+                if ($totalRoll < $totalDeposits * $setting->rollover) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Você precisa movimentar mais R$' . number_format($totalNeeded) . ' para conseguir sacar',
+                    ]);
+                }
+            }
 
             if ($user->wallet < $request->amount || $request->amount < 0) {
                 return response()->json([
@@ -70,7 +84,14 @@ class WithdrawController extends Controller
                     'message' => 'Valor não disponivel para saque.',
                 ]);
             }
+
             $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2));
+            if (is_bool($withdraw)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Saque realizado com sucesso.',
+                ]);
+            }
             $setting = Setting::first();
             if (!!$withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
                 Log::info('entrou no auto saque');
@@ -84,12 +105,9 @@ class WithdrawController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Saque realizado com sucesso.',
-                'withdraw' => !!$withdraw,
-                'autoPayWithdraw' => $setting->autoPayWithdraw,
-                'maxAutoPay' => (float) $withdraw->amount <= $setting->maxAutoPayWithdraw,
             ]);
         } catch (Exception $e) {
-            Log::error('ERROR CRIAR WITHDRAW   - ' . Auth::user()->getAuthIdentifierName() . $e->getMessage());
+            Log::error('ERROR CRIAR WITHDRAW   - ' . (Auth::user())->id . '  -  ' . $e->getMessage() . '  -  ' . $e->getTraceAsString());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Erro ao realizar o saque.',
@@ -104,12 +122,12 @@ class WithdrawController extends Controller
             $response = $withdrawService->aprove($withdraw);
             if ($response['success']) {
                 return response()->json([
-                    'success'=> 'success',
+                    'success' => 'success',
                     'message' => 'Saque aprovado com sucesso!'
                 ]);
             }
             return response()->json([
-                'success'=> 'error',
+                'success' => 'error',
                 'message' => $response['message']
             ]);
         } catch (Exception $e) {

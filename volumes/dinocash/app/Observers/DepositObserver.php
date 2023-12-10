@@ -55,7 +55,5 @@ class DepositObserver
             'cpaCollected' => true,
             'cpaCollectedAt' => now(),
         ]);
-        $affiliate->changeWalletAffiliate($affiliate->CPA);    
-        $affiliate->save();
     }
 }

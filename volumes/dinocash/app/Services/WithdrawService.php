@@ -15,6 +15,7 @@ class WithdrawService
 {
     public function createWithdraw(User $user, $amount)
     {
+        
         try {
             if (!$user->isAffiliate) {
                 $withdraw = Withdraw::create([
@@ -23,7 +24,7 @@ class WithdrawService
                     'amount' => $amount,
                     'type' => 'pending',
                 ]);
-
+                
                 WalletTransaction::create([
                     'userId' => $user->id,
                     'oldValue' => $user->wallet,
@@ -35,7 +36,7 @@ class WithdrawService
             $user->changeWallet($amount * -1);
             $user->save();
 
-            return $withdraw;
+            return $withdraw ?? true;
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage());
             return false;

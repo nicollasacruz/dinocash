@@ -32,6 +32,10 @@ const routes = [
     route: "admin.deposito",
   },
   {
+    label: "Configurações",
+    route: "admin.settings",
+  },
+  {
     label: "GGR",
     route: "admin.ggr",
   },

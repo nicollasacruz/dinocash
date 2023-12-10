@@ -279,4 +279,11 @@ class User extends Authenticatable
     {
         return \env('APP_URL') . '/ref/' . $this->invitation_link;
     }
+
+    public function scopeTotalDeposits($query)
+    {
+        return $query->with('deposits')->get()->sum(function ($user) {
+            return $user->deposits->where('type', 'paid')->sum('amount');
+        });
+    }
 }

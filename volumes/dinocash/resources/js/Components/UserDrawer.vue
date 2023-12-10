@@ -45,6 +45,10 @@ const props = defineProps(['wallet'])
 const emit = defineEmits(["close"]);
 const routes = [
   {
+    label: "Depositar",
+    route: "user.deposito",
+  },
+  {
     label: "perfil",
     route: "user.edit",
   },
@@ -61,10 +65,6 @@ const routes = [
     route: "user.movimentacao",
   },
   {
-    label: "Depositar",
-    route: "user.deposito",
-  },
-  {
     label: "Sacar",
     route: "user.saque",
   },
@@ -76,7 +76,7 @@ const routes = [
 
 const page = usePage();
 
-const email = page.props.auth.user.email;
+const email = page.props.auth.user.name;
 
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {
