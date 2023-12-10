@@ -43,10 +43,9 @@ class ProfileController extends Controller {
      * Update the user's profile information.
      */
     public function modalUserUpdate(Request $request) {
-        $request->user()->fill($request->json()->all());
+        $request->user()->update($request->json()->all());
 
-        $request->user()->save();
-
+        return response()->json(['status' => 'success', 'message' => 'Usuario atualizado com sucesso.']);
     }
 
     /**
