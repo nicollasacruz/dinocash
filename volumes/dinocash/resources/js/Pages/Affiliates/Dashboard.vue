@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import AffiliateLayout from "@/Layouts/AffiliateLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import TextBox from "@/Components/TextBox.vue";
 import { UserIcon } from "@heroicons/vue/24/solid";
 import { toast } from "vue3-toastify";
+import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
-
-const showModal = ref(false);
 const {
-  profitToday,
-  profitLast30Days,
-  profitTotal,
-  revShareTotal,
-  profitCPA,
-  countCPA,
   affiliateLink,
   walletAffiliate,
   revShare,
@@ -56,6 +48,7 @@ function copy() {
   toast.success("Copiado!");
 }
 const selectedUser = ref(null);
+const showModal = ref(false);
 </script>
 
 <template>
