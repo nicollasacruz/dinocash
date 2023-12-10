@@ -48,15 +48,30 @@ function selectUser(user) {
   showModal.value = true;
   selectedUser.value = user;
 }
+function submit(values) {
+    console.log(values);
+    const payload = {
+
+    }
+    axios
+        .patch(route('admin.usuarios.update'), values)
+        .then((response) => {
+            console.log(response.data);
+            showModal.value = false;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
 </script>
 
 <template>
   <Head title="Dashboard" />
 
   <AuthenticatedLayout>
-    <div class="flex justify-between">
+    <div class="flex flex-col lg:flex-row justify-between">
       <div class="text-4xl text-white font-bold mb-5">Dashboard</div>
-      <div class="flex gap-x-5 -mt-4">
+      <div class="flex gap-x-5 lg:-mt-4">
         <TextBox
           label="Online"
           :value="activeSessions"
@@ -111,7 +126,7 @@ function selectUser(user) {
       </template>
     </BaseTable>
     <BaseModal v-if="showModal" v-model="showModal">
-      <UserForm :user="selectedUser" typeForm="user" />
+      <UserForm @submit="submit" :user="selectedUser" typeForm="user" />
     </BaseModal>
   </AuthenticatedLayout>
 </template>

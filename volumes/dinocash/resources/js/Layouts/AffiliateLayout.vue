@@ -112,9 +112,19 @@ onMounted(() => {
     </div>
   </div>
 </template>
-<style>
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap");
 .text-montserrat {
   font-family: "Montserrat", sans-serif !important;
+}
+.table-xs {
+  tbody{
+    tr{
+      td{
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+    }
+  }
 }
 </style>
