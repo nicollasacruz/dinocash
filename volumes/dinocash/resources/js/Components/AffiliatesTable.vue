@@ -63,6 +63,9 @@ function toBRL(value) {
 
 function submit(values) {
     console.log(values);
+    const payload = {
+        
+    }
     axios
         .patch("/admin/afiliados", values)
         .then((response) => {

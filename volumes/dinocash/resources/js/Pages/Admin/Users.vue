@@ -9,7 +9,7 @@
             </div>
             <input
                 type="text"
-                class="admin-input "
+                class="admin-input"
                 placeholder="Digite o email do usuário... "
             />
         </div>
@@ -42,7 +42,7 @@
             </template>
         </BaseTable>
         <BaseModal v-if="showModal" v-model="showModal">
-            <UserForm :user="selectedUser" typeForm="user" />
+            <UserForm @submit="submit" :user="selectedUser" typeForm="user" />
         </BaseModal>
     </AuthenticatedLayout>
 </template>
@@ -52,8 +52,9 @@ import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
 import { ref, computed } from "vue";
-import { usePage } from '@inertiajs/vue3'
+import { usePage } from "@inertiajs/vue3";
 import UserForm from "@/Components/UserForm.vue";
+import axios from "axios";
 const columns = [
     { label: "Nome", key: "name" },
     { label: "Email", key: "email" },
@@ -62,16 +63,27 @@ const columns = [
 ];
 
 const showModal = ref(false);
-const selectedUser = ref(null)
-const page = usePage()
+const selectedUser = ref(null);
+const page = usePage();
 
-const users = computed(() => page.props.users) as any
+const users = computed(() => page.props.users) as any;
 
-function selectUser(user){
-    console.log(user)
-    showModal.value = true
-    selectedUser.value = user
+function selectUser(user) {
+    console.log(user);
+    showModal.value = true;
+    selectedUser.value = user;
 }
 
-
+function submit(values) {
+    console.log(values);
+    axios
+        .patch(route('user.update'), values)
+        .then((response) => {
+            console.log(response.data);
+            showModal.value = false;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
 </script>

@@ -72,8 +72,10 @@ class DashboardController extends Controller
     }
     public function ggr()
     {
+        // get env 
+        $env = env('APP_GGR');
         return Inertia::render('Admin/GGR', [
-           
+           'GGR' => $env,
         ]);
     }
 }

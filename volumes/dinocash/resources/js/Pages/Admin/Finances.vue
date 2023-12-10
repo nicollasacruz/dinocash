@@ -278,7 +278,7 @@ function toBRL(value) {
                     <input
                         type="range"
                         :min="0"
-                        :max="100"
+                        :max="20"
                         v-model="addictRange"
                         class="range range-success bg-white"
                     />
