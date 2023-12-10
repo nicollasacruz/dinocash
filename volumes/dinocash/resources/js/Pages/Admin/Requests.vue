@@ -97,7 +97,7 @@ const rows = withdraws.map((withdraw) => {
           placeholder="Digite o email do usuário... "
         />
       </div>
-      <div class="flex gap-x-5">
+      <!-- <div class="flex gap-x-5">
         <TextBox
           label="CAIXA DA CASA"
           :value="toBRL(totalAmount)"
@@ -108,7 +108,7 @@ const rows = withdraws.map((withdraw) => {
           :value="toBRL(totalToday)"
           value-text="text-center text-red-500"
         />
-      </div>
+      </div> -->
     </div>
     <BaseTable
       hideActions

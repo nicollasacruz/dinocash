@@ -318,7 +318,7 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `${this.state.score.value / 5} %`;
+            button.textContent = `${(parseFloat(this.state.score.value) / 500).toFixed(2)}x `;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();

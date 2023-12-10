@@ -87,35 +87,4 @@ class AffiliateController extends Controller
 
         return response()->json(['status' => 'success', 'transactions' => $withdraws]);
     }
-
-    public function aprove(Request $request)
-    {
-        try {
-            $withdrawService = new WithdrawAffiliateService();
-
-            $withdraw = AffiliateWithdraw::find($request->withdraw);
-            $response = $withdrawService->aprove($withdraw);
-            if ($response['success']) {
-                return response()->json([
-                    'success' => 'success',
-                    'message' => 'Saque aprovado com sucesso!'
-                ]);
-            }
-            return response()->json([
-                'success' => 'error',
-                'message' => $response['message']
-            ]);
-        } catch (Exception $e) {
-            return redirect()->route('admin.saque')->with('error', $e->getMessage());
-        }
-    }
-
-    public function reject(Request $request)
-    {
-        $withdrawService = new WithdrawAffiliateService();
-        $withdraw = AffiliateWithdraw::find($request->withdraw);
-        $withdrawService->reject($withdraw);
-
-        return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
-    }
 }

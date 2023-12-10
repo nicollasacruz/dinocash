@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GameHistory;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
 use Illuminate\Support\Facades\DB;
