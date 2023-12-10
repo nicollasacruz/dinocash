@@ -33,7 +33,6 @@ const toBRL = (value) => {
   });
 };
 const getStatus = (status) => {
-    console.log(status)
   switch (status) {
     case "paid":
       return "FINALIZADO";

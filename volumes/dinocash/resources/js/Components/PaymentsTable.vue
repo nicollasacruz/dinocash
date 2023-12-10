@@ -77,9 +77,8 @@ async function pay(id: number) {
     const { data } = await axios.post("admin.saque.afiliados.aprovar", {
       withdraw: id,
     });
-    console.log(data);
   } catch (err) {
-    console.log(err);
+    console.log('erro interno');
   }
   return ''
 }
@@ -89,9 +88,8 @@ async function reject(id: number) {
     const { data } = await axios.post("admin.saque.afiliados.rejeitar", {
       withdraw: id,
     });
-    console.log(data);
   } catch (err) {
-    console.log(err);
+    console.log('erro interno');
   }
   return ''
 }

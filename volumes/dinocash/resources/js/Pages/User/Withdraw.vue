@@ -63,7 +63,6 @@ const amount = ref(0);
 const wallet = ref(walletUser);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-  console.log(e.user.wallet, "withdraw");
   wallet.value = e.user.wallet;
 });
 
@@ -86,7 +85,6 @@ async function withdraw() {
     const { data } = await axios.post(route("user.saque.store"), {
       amount: amount.value,
     });
-    console.log(data);
     if (data.status === "error") {
       toast.error(data.message);
       return;

@@ -13,7 +13,6 @@ const columns = [
   { label: "Pago Em", key: "approvedAt" },
 ];
 const { affiliatesWithdrawsList, user } = defineProps(["affiliatesWithdrawsList", 'user']);
-console.log(affiliatesWithdrawsList);
 
 const showModal = ref(false);
 
@@ -24,7 +23,6 @@ const toBRL = (value) => {
   });
 };
 const getStatus = (status) => {
-  console.log(status);
   switch (status) {
     case "paid":
       return "PAGO";

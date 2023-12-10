@@ -43,7 +43,6 @@ const columns = [
 ];
 const last5Users = lastUsers.slice(0, 5);
 const selectedUser = ref(null);
-console.log(last5Users);
 function selectUser(user) {
   showModal.value = true;
   selectedUser.value = user;

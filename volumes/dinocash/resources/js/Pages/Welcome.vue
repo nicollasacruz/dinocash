@@ -40,7 +40,6 @@ const windowWidth = ref(window.innerWidth);
 window.addEventListener("resize", (valu) => {
     windowWidth.value = window.innerWidth;
 });
-console.log(windowWidth.value);
 
 function getTrophy(i) {
     switch (i) {

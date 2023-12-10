@@ -97,7 +97,6 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const { viciosidade } = defineProps(["viciosidade"]);
-console.log(viciosidade);
 const finishGame = ref(false);
 const page = usePage();
 

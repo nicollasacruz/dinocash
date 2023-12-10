@@ -62,7 +62,6 @@ export default class DinoGame extends GameRunner {
     // ref for canvas pixel density:
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio#correcting_resolution_in_a_%3Ccanvas%3E
     createCanvas(width, height) {
-        console.log(this.viciosity);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const scale = window.devicePixelRatio;
@@ -187,7 +186,6 @@ export default class DinoGame extends GameRunner {
 
         switch (type) {
             case "jump": {
-                console.log("teste");
                 if (state.isRunning) {
                     if (state.dino.jump()) {
                         playSound("jump");

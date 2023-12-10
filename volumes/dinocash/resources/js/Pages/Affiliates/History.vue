@@ -20,9 +20,7 @@ const toBRL = (value) => {
         currency: "BRL",
     });
 };
-console.log(affiliateHistory);
 const getStatus = (status) => {
-    console.log(status);
     switch (status) {
         case "win":
             return "GANHO";

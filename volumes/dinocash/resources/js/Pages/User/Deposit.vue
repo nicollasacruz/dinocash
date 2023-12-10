@@ -82,11 +82,10 @@ async function startDeposit() {
     const { data } = await axios.post(route("user.deposito.store"), {
       amount: amount.value,
     });
-    console.log(data);
     qrCode.value = data.qrCode;
     modal.value = true;
   } catch (error) {
-    console.log(error);
+    console.log('erro interno');
   } finally {
     loading.value = false;
     amount.value = 0;

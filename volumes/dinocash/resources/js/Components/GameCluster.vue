@@ -9,26 +9,6 @@ import { onUnmounted } from "vue";
 import { defineProps, defineEmits, watch } from "vue";
 import { onMounted } from "vue";
 
-// Função para forçar a orientação para paisagem
-const forceLandscapeOrientation = () => {
-  if (screen.orientation.lock) {
-    screen.orientation.lock("landscape").catch((err) => {
-      console.error("Erro ao forçar a orientação para paisagem:", err);
-    });
-  }
-};
-
-// Trata mudanças de orientação
-const handleOrientationChange = () => {
-  console.log("Orientação alterada:", window.orientation);
-};
-
-// Adiciona um listener quando o componente é montado
-onMounted(() => {
-  forceLandscapeOrientation();
-  window.addEventListener("orientationchange", handleOrientationChange);
-});
-
 document.addEventListener(
   "touchmove",
   function (e) {
@@ -57,12 +37,10 @@ const isTouchDevice =
 // @ts-ignore
 document.addEventListener("endGame", ({ detail }) => {
   emit("endGame", detail);
-  console.log(detail, "endGame");
   // destroy game instance
 });
 document.addEventListener("finishGame", ({ detail }) => {
   emit("finishGame", detail);
-  console.log(detail, "finishGame");
   // destroy game instance
 });
 game.start().catch(console.error);

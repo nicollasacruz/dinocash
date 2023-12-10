@@ -62,18 +62,16 @@ function toBRL(value) {
 }
 
 function submit(values) {
-    console.log(values);
     const payload = {
 
     }
     axios
         .patch(route('admin.usuarios.update'), values)
         .then((response) => {
-            console.log(response.data);
             showModal.value = false;
         })
         .catch((error) => {
-            console.log(error);
+            console.log('erro interno');
         });
 }
 </script>
