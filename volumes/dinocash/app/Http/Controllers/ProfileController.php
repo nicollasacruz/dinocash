@@ -40,6 +40,16 @@ class ProfileController extends Controller {
     }
 
     /**
+     * Update the user's profile information.
+     */
+    public function modalUserUpdate(Request $request) {
+        $request->user()->fill($request->json()->all());
+
+        $request->user()->save();
+
+    }
+
+    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse {

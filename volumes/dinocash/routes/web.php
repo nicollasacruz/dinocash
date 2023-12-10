@@ -126,6 +126,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
             'users' => User::all()
         ]);
     })->name('admin.usuarios');
+    Route::patch('/', [ProfileController::class, 'modalUserUpdate'])->name('admin.usuarios.update');
     Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
     Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
     Route::get('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
