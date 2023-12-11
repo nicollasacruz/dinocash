@@ -33,21 +33,31 @@ Route::get('/', function () {
     $userIdLogado = Auth::id();
 
     $rankedUsers = [];
+    $ids = [];
     $position = 1;
     $usuarioLogadoInserido = false;
 
     $rankings = GameHistory::select(['userId', 'distance'])
         ->where('type', 'win')
         ->orderBy('distance', 'desc')
-        ->limit(10)
+        ->limit(1000)
         ->get();
 
     foreach ($rankings as $ranking) {
+        if (count($rankedUsers) === 10){
+            break;
+        }
         $user = User::find($ranking->userId);
         $email = $user->email;
 
         if ($ranking->userId == $userIdLogado) {
             $usuarioLogadoInserido = true;
+        }
+        if (in_array($ranking->userId, $ids)) {
+            if (count($rankedUsers) === 10){
+                break;
+            }
+            continue;
         }
 
         $rankedUsers[] = [
@@ -55,6 +65,7 @@ Route::get('/', function () {
             'email' => $email,
             'distancia' => $ranking->distance,
         ];
+        $ids[] = $ranking->userId;
 
         $position++;
     }
@@ -79,6 +90,8 @@ Route::get('/', function () {
             'email' => $emailLogado,
             'distancia' => $distance ? $distance->distance : 0,
         ];
+        $ids[] = $userLogado->id;
+
     }
     $wallet = 0;
     if (Auth::check()) {
