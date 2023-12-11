@@ -115,12 +115,12 @@ export default class DinoGame extends GameRunner {
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.style.borderRadius = "8px";
-        
+
         // Adicione a sombra à caixa
         finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.webkitBoxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.mozBoxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
-        
+
         // Adicione margens à caixa para se parecer com o botão fornecido
         finishButton.style.margin = "auto";
         finishButton.style.marginBottom = "4px"; // Ajuste conforme necessário
@@ -294,261 +294,278 @@ export default class DinoGame extends GameRunner {
         const { level } = this.state;
 
         if (level >= 3 && level <= 4) {
-
-            settings.bgSpeed++;
-            settings.birdSpeed = settings.bgSpeed * 0.8;
-        } else if (level >= 5) {
-            settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
-            settings.birdSpeed = settings.bgSpeed * 0.9;
-            settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
-
-            if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
-                settings.dinoLegsRate--;
-            }
-        }
-
-        for (const bird of birds) {
-            bird.speed = settings.birdSpeed;
-        }
-
-        for (const cactus of cacti) {
-            cactus.speed = settings.bgSpeed;
-        }
-
-        for (const cloud of clouds) {
-            cloud.speed = settings.bgSpeed;
-        }
-
-        dino.legsRate = settings.dinoLegsRate;
-    }
-
-    updateScore() {
-        const { state } = this;
-
-        if (this.frameCount % state.settings.scoreIncreaseRate === 0) {
-            const oldLevel = state.level;
-
-            state.score.value++;
-            state.level = Math.floor(state.score.value / 100);
-            const button = document.querySelector("button");
-            button.textContent = `Clique aqui para sacar: R$ ${(parseFloat(this.state.score.value) / 500 * this.amount).toFixed(2)}`;
-            if (state.level !== oldLevel) {
-                playSound("level-up");
-                this.increaseDifficulty();
-                state.score.isBlinking = true;
-            }
-        }
-    }
-
-    drawFPS() {
-        this.paintText("fps: " + Math.round(this.frameRate), 0, 0, {
-            font: "PressStart2P",
-            size: "12px",
-            baseline: "top",
-            align: "left",
-            color: "#535353",
-        });
-    }
-
-    drawBackground() {
-        this.canvasCtx.fillStyle = "#f7f7f7";
-        this.canvasCtx.fillRect(0, 0, this.width, this.height);
-    }
-
-    drawGround() {
-        const { state } = this;
-        const { bgSpeed } = state.settings;
-        const groundImgWidth = sprites.ground.w / 2;
-
-        this.paintSprite("ground", state.groundX, state.groundY);
-        state.groundX -= bgSpeed;
-
-        // append second image until first is fully translated
-        if (state.groundX <= -groundImgWidth + this.width) {
-            this.paintSprite(
-                "ground",
-                state.groundX + groundImgWidth,
-                state.groundY
-            );
-
-            if (state.groundX <= -groundImgWidth) {
-                state.groundX = -bgSpeed;
-            }
-        }
-    }
-
-    drawClouds() {
-        const { clouds, settings } = this.state;
-
-        this.progressInstances(clouds);
-        if (this.frameCount % settings.cloudSpawnRate === 0) {
-            const newCloud = new Cloud();
-            newCloud.speed = settings.bgSpeed;
-            newCloud.x = this.width;
-            newCloud.y = randInteger(20, 80);
-            clouds.push(newCloud);
-        }
-        this.paintInstances(clouds);
-    }
-
-    drawDino() {
-        const { dino } = this.state;
-
-        dino.nextFrame();
-        this.paintSprite(dino.sprite, dino.x, dino.y);
-    }
-
-    drawCacti() {
-        const { state } = this;
-        const { cacti, settings } = state;
-
-        this.progressInstances(cacti);
-        if (this.frameCount % settings.cactiSpawnRate === 0) {
-            // randomly either do or don't add cactus
-            if (!state.birds.length && randBoolean()) {
-                const newCacti = new Cactus(this.spriteImageData);
-                newCacti.speed = settings.bgSpeed;
-                newCacti.x = this.width;
-                newCacti.y = this.height - newCacti.height - 2;
-                cacti.push(newCacti);
-                this.getAmount();
-            }
-        }
-        this.paintInstances(cacti);
-    }
-
-    drawBirds() {
-        const { birds, settings } = this.state;
-
-        this.progressInstances(birds);
-        if (this.frameCount % settings.birdSpawnRate === 0) {
-            // randomly either do or don't add bird
-            if (randBoolean()) {
-                const newBird = new Bird(this.spriteImageData);
-                newBird.speed = settings.birdSpeed;
-                newBird.wingsRate = settings.birdWingsRate;
-                newBird.x = this.width;
-                // ensure birds are always at least 5px higher than a ducking dino
-                newBird.y =
-                    this.height -
-                    Bird.maxBirdHeight -
-                    Bird.wingSpriteYShift -
-                    5 -
-                    sprites.dinoDuckLeftLeg.h / 2 -
-                    settings.dinoGroundOffset;
-                birds.push(newBird);
-            }
-        }
-        this.paintInstances(birds);
-    }
-
-    drawScore() {
-        const { canvasCtx, state } = this;
-        const { isRunning, score, settings } = state;
-        const fontSize = 14;
-        let shouldDraw = true;
-        let drawValue = score.value;
-
-        if (isRunning && score.isBlinking) {
-            score.blinkFrames++;
-
-            if (score.blinkFrames % settings.scoreBlinkRate === 0) {
-                score.blinks++;
-            }
-
-            if (score.blinks > 7) {
-                score.blinkFrames = 0;
-                score.blinks = 0;
-                score.isBlinking = false;
+            if (!this.isAffiliate) {
+                settings.bgSpeed++;
+                settings.birdSpeed = settings.bgSpeed * 0.8;
             } else {
-                if (score.blinks % 2 === 0) {
-                    drawValue = Math.floor(drawValue / 100) * 100;
-                } else {
-                    shouldDraw = false;
+                if (level == 4) {
+                    settings.bgSpeed++;
+                    settings.birdSpeed = settings.bgSpeed * 0.8;
+                }
+            }
+        } else if (level >= 5) {
+            if (!this.isAffiliate) {
+                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
+                settings.birdSpeed = settings.bgSpeed * 0.9;
+                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
+
+                if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
+                    settings.dinoLegsRate--;
+                }
+            } else {
+                if (level % 2 === 0) {
+                    settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
+                    settings.birdSpeed = settings.bgSpeed * 0.9;
+                    settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
+
+                    if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
+                        settings.dinoLegsRate--;
+                    }
+                }
+            }
+
+            for (const bird of birds) {
+                bird.speed = settings.birdSpeed;
+            }
+
+            for (const cactus of cacti) {
+                cactus.speed = settings.bgSpeed;
+            }
+
+            for (const cloud of clouds) {
+                cloud.speed = settings.bgSpeed;
+            }
+
+            dino.legsRate = settings.dinoLegsRate;
+        }
+
+        updateScore() {
+            const { state } = this;
+
+            if (this.frameCount % state.settings.scoreIncreaseRate === 0) {
+                const oldLevel = state.level;
+
+                state.score.value++;
+                state.level = Math.floor(state.score.value / 100);
+                const button = document.querySelector("button");
+                button.textContent = `Clique aqui para sacar: R$ ${(parseFloat(this.state.score.value) / 500 * this.amount).toFixed(2)}`;
+                if (state.level !== oldLevel) {
+                    playSound("level-up");
+                    this.increaseDifficulty();
+                    state.score.isBlinking = true;
                 }
             }
         }
 
-        if (shouldDraw) {
-            // draw the background behind it in case this is called
-            // at a time where the background isn't re-drawn (i.e. in `endGame`)
-            canvasCtx.fillStyle = "#f7f7f7";
-            canvasCtx.fillRect(
-                this.width - fontSize * 5,
-                0,
-                fontSize * 5,
-                fontSize
-            );
-
-            this.paintText((drawValue + "").padStart(5, "0"), this.width, 0, {
+        drawFPS() {
+            this.paintText("fps: " + Math.round(this.frameRate), 0, 0, {
                 font: "PressStart2P",
-                size: `${fontSize}px`,
-                align: "right",
+                size: "12px",
                 baseline: "top",
+                align: "left",
                 color: "#535353",
             });
         }
-    }
 
-    /**
-     * For each instance in the provided array, calculate the next
-     * frame and remove any that are no longer visible
-     * @param {Actor[]} instances
-     */
-    progressInstances(instances) {
-        for (let i = instances.length - 1; i >= 0; i--) {
-            const instance = instances[i];
+        drawBackground() {
+            this.canvasCtx.fillStyle = "#f7f7f7";
+            this.canvasCtx.fillRect(0, 0, this.width, this.height);
+        }
 
-            instance.nextFrame();
-            if (instance.rightX <= 0) {
-                // remove if off screen
-                instances.splice(i, 1);
+        drawGround() {
+            const { state } = this;
+            const { bgSpeed } = state.settings;
+            const groundImgWidth = sprites.ground.w / 2;
+
+            this.paintSprite("ground", state.groundX, state.groundY);
+            state.groundX -= bgSpeed;
+
+            // append second image until first is fully translated
+            if (state.groundX <= -groundImgWidth + this.width) {
+                this.paintSprite(
+                    "ground",
+                    state.groundX + groundImgWidth,
+                    state.groundY
+                );
+
+                if (state.groundX <= -groundImgWidth) {
+                    state.groundX = -bgSpeed;
+                }
             }
         }
-    }
+
+        drawClouds() {
+            const { clouds, settings } = this.state;
+
+            this.progressInstances(clouds);
+            if (this.frameCount % settings.cloudSpawnRate === 0) {
+                const newCloud = new Cloud();
+                newCloud.speed = settings.bgSpeed;
+                newCloud.x = this.width;
+                newCloud.y = randInteger(20, 80);
+                clouds.push(newCloud);
+            }
+            this.paintInstances(clouds);
+        }
+
+        drawDino() {
+            const { dino } = this.state;
+
+            dino.nextFrame();
+            this.paintSprite(dino.sprite, dino.x, dino.y);
+        }
+
+        drawCacti() {
+            const { state } = this;
+            const { cacti, settings } = state;
+
+            this.progressInstances(cacti);
+            if (this.frameCount % settings.cactiSpawnRate === 0) {
+                // randomly either do or don't add cactus
+                if (!state.birds.length && randBoolean()) {
+                    const newCacti = new Cactus(this.spriteImageData);
+                    newCacti.speed = settings.bgSpeed;
+                    newCacti.x = this.width;
+                    newCacti.y = this.height - newCacti.height - 2;
+                    cacti.push(newCacti);
+                    this.getAmount();
+                }
+            }
+            this.paintInstances(cacti);
+        }
+
+        drawBirds() {
+            const { birds, settings } = this.state;
+
+            this.progressInstances(birds);
+            if (this.frameCount % settings.birdSpawnRate === 0) {
+                // randomly either do or don't add bird
+                if (randBoolean()) {
+                    const newBird = new Bird(this.spriteImageData);
+                    newBird.speed = settings.birdSpeed;
+                    newBird.wingsRate = settings.birdWingsRate;
+                    newBird.x = this.width;
+                    // ensure birds are always at least 5px higher than a ducking dino
+                    newBird.y =
+                        this.height -
+                        Bird.maxBirdHeight -
+                        Bird.wingSpriteYShift -
+                        5 -
+                        sprites.dinoDuckLeftLeg.h / 2 -
+                        settings.dinoGroundOffset;
+                    birds.push(newBird);
+                }
+            }
+            this.paintInstances(birds);
+        }
+
+        drawScore() {
+            const { canvasCtx, state } = this;
+            const { isRunning, score, settings } = state;
+            const fontSize = 14;
+            let shouldDraw = true;
+            let drawValue = score.value;
+
+            if (isRunning && score.isBlinking) {
+                score.blinkFrames++;
+
+                if (score.blinkFrames % settings.scoreBlinkRate === 0) {
+                    score.blinks++;
+                }
+
+                if (score.blinks > 7) {
+                    score.blinkFrames = 0;
+                    score.blinks = 0;
+                    score.isBlinking = false;
+                } else {
+                    if (score.blinks % 2 === 0) {
+                        drawValue = Math.floor(drawValue / 100) * 100;
+                    } else {
+                        shouldDraw = false;
+                    }
+                }
+            }
+
+            if (shouldDraw) {
+                // draw the background behind it in case this is called
+                // at a time where the background isn't re-drawn (i.e. in `endGame`)
+                canvasCtx.fillStyle = "#f7f7f7";
+                canvasCtx.fillRect(
+                    this.width - fontSize * 5,
+                    0,
+                    fontSize * 5,
+                    fontSize
+                );
+
+                this.paintText((drawValue + "").padStart(5, "0"), this.width, 0, {
+                    font: "PressStart2P",
+                    size: `${fontSize}px`,
+                    align: "right",
+                    baseline: "top",
+                    color: "#535353",
+                });
+            }
+        }
+
+        /**
+         * For each instance in the provided array, calculate the next
+         * frame and remove any that are no longer visible
+         * @param {Actor[]} instances
+         */
+        progressInstances(instances) {
+            for (let i = instances.length - 1; i >= 0; i--) {
+                const instance = instances[i];
+
+                instance.nextFrame();
+                if (instance.rightX <= 0) {
+                    // remove if off screen
+                    instances.splice(i, 1);
+                }
+            }
+        }
     async getAmount() {
-        try {
-            if (this.amount === 0) {
-                const response = await axios.get('/user/lastGame')
-                console.log(response, 'userId')
-                this.amount = response.data.amount * 1
+            try {
+                if (this.amount === 0) {
+                    const response = await axios.get('/user/lastGame')
+                    console.log(response, 'userId')
+                    this.amount = response.data.amount * 1
+                }
+            } catch (err) {
+                console.log(err, 'userId')
             }
-        } catch (err) {
-            console.log(err, 'userId')
+        }
+        /**
+         * @param {Actor[]} instances
+         */
+        paintInstances(instances) {
+            for (const instance of instances) {
+                this.paintSprite(instance.sprite, instance.x, instance.y);
+            }
+        }
+
+        paintSprite(spriteName, dx, dy) {
+            const { h, w, x, y } = sprites[spriteName];
+            this.canvasCtx.drawImage(
+                this.spriteImage,
+                x,
+                y,
+                w,
+                h,
+                dx,
+                dy,
+                w / 2,
+                h / 2
+            );
+        }
+
+        paintText(text, x, y, opts) {
+            const { font = "serif", size = "12px" } = opts;
+            const { canvasCtx } = this;
+
+            canvasCtx.font = `${size} ${font}`;
+            if (opts.align) canvasCtx.textAlign = opts.align;
+            if (opts.baseline) canvasCtx.textBaseline = opts.baseline;
+            if (opts.color) canvasCtx.fillStyle = opts.color;
+            canvasCtx.fillText(text, x, y);
         }
     }
-    /**
-     * @param {Actor[]} instances
-     */
-    paintInstances(instances) {
-        for (const instance of instances) {
-            this.paintSprite(instance.sprite, instance.x, instance.y);
-        }
-    }
-
-    paintSprite(spriteName, dx, dy) {
-        const { h, w, x, y } = sprites[spriteName];
-        this.canvasCtx.drawImage(
-            this.spriteImage,
-            x,
-            y,
-            w,
-            h,
-            dx,
-            dy,
-            w / 2,
-            h / 2
-        );
-    }
-
-    paintText(text, x, y, opts) {
-        const { font = "serif", size = "12px" } = opts;
-        const { canvasCtx } = this;
-
-        canvasCtx.font = `${size} ${font}`;
-        if (opts.align) canvasCtx.textAlign = opts.align;
-        if (opts.baseline) canvasCtx.textBaseline = opts.baseline;
-        if (opts.color) canvasCtx.fillStyle = opts.color;
-        canvasCtx.fillText(text, x, y);
-    }
-}
