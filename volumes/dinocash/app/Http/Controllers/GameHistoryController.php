@@ -35,6 +35,15 @@ class GameHistoryController extends Controller
         }
 
         $user = User::find(Auth::user()->id);
+        
+        $gameHistory = $user->gameHistories->where('type', 'pending');
+        if ($gameHistory) {
+            foreach ($gameHistory as $gameHistoryItem) {
+                $user->changeWallet($gameHistoryItem->amount);
+                $gameHistoryItem->delete();
+                Log::error('Partida já iniciada. - ' . $user->email);
+            }
+        }
 
         return Inertia::render('User/Play', [
             "isAffiliate" => $user->isAffiliate,
