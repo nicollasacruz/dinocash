@@ -206,6 +206,7 @@ export default class DinoGame extends GameRunner {
                         playSound("jump");
                     }
                 } else {
+                    
                     this.resetGame();
                     state.dino.jump();
                     playSound("jump");
@@ -237,7 +238,13 @@ export default class DinoGame extends GameRunner {
     }
 
     resetGame() {
-        this.state.dino.reset();
+        this.getAmount();
+        if (this.state.dino) {
+            this.state.dino.reset();
+        } else {
+            location.reload();
+            this.resetGame();
+        }
         Object.assign(this.state, {
             settings: { ...this.defaultSettings },
             birds: [],
@@ -423,7 +430,6 @@ export default class DinoGame extends GameRunner {
                 newCacti.x = this.width;
                 newCacti.y = this.height - newCacti.height - 2;
                 cacti.push(newCacti);
-                this.getAmount();
             }
         }
         this.paintInstances(cacti);
@@ -460,14 +466,14 @@ export default class DinoGame extends GameRunner {
         const fontSize = 14;
         let shouldDraw = true;
         let drawValue = score.value;
-
+        
         if (isRunning && score.isBlinking) {
             score.blinkFrames++;
-
+            
             if (score.blinkFrames % settings.scoreBlinkRate === 0) {
                 score.blinks++;
             }
-
+            
             if (score.blinks > 7) {
                 score.blinkFrames = 0;
                 score.blinks = 0;
@@ -480,7 +486,7 @@ export default class DinoGame extends GameRunner {
                 }
             }
         }
-
+        
         if (shouldDraw) {
             // draw the background behind it in case this is called
             // at a time where the background isn't re-drawn (i.e. in `endGame`)
@@ -520,11 +526,9 @@ export default class DinoGame extends GameRunner {
     }
     async getAmount() {
         try {
-            if (this.amount === 0) {
                 const response = await axios.get('/user/lastGame')
                 console.log(response, 'userId')
                 this.amount = response.data.amount * 1
-            }
         } catch (err) {
             console.log(err, 'userId')
         }

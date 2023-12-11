@@ -59,26 +59,6 @@
         >
           OK
         </button>
-        <button
-          v-if="finishGame"
-          class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
-          @click="finishGame = false"
-        >
-          OK
-        </button>
-      </div>
-    </BaseModal>
-    <BaseModal v-if="finishGame" :score="score" v-model="finishGame">
-      <div class="text-center text-2xl">
-        Parabéns! Você andou {{ score }} metros
-      </div>
-      <div class="flex justify-center">
-        <button
-          class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
-          @click="finishGame = false"
-        >
-          OK
-        </button>
       </div>
     </BaseModal>
   </UserLayouyt>
