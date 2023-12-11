@@ -23,7 +23,7 @@
 
     <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
       <div class="drawer-button">
-        <a class="text-yellow-400 text-xl">Saldo: {{ toBRL(props.wallet) }}</a>
+        <a class="text-yellow-400 text-xl">Saldo: {{ toBRL(wallet) }}</a>
       </div>
       <Link
         v-for="link in routes"
@@ -41,8 +41,24 @@
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
 import { defineEmits, defineProps, computed, ref, toRef } from "vue";
+
+
 const props = defineProps(['wallet'])
 const emit = defineEmits(["close"]);
+
+const page = usePage();
+
+const userId = computed(() => page.props.auth.user.id);
+const userIdref = ref(userId);
+const loading = ref(false); 
+
+const amount = ref(0);
+const wallet = ref(props.wallet);
+
+window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
+  wallet.value = e.user.wallet;
+});
+
 const routes = [
   {
     label: "Depositar",
@@ -73,8 +89,6 @@ const routes = [
   //   route: "user.suporte",
   // },
 ];
-
-const page = usePage();
 
 const email = page.props.auth.user.name;
 
