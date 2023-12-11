@@ -57,13 +57,22 @@ class GameHistoryController extends Controller
                 ], 500);
             }
             $gameHistory = $user->gameHistories->where('type', 'pending');
-            if ($gameHistory->count() > 0) {
+            if ($gameHistory) {
                 foreach ($gameHistory as $gameHistoryItem) {
-                    $gameHistoryItem->type = 'loss';
-                    $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
-                    $gameHistoryItem->save();
+                    $user->changeWallet($gameHistoryItem->amount);
+                    $gameHistoryItem->delete();
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
+            }
+            $gameHistory = $user->gameHistories->where('type', 'gaming')
+                ->where('id', $request->gameId)->first();
+
+            if ($gameHistory) {
+                $gameHistoryItem->type = 'loss';
+                $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
+                $gameHistoryItem->save();
+
+                Log::error('Partida já iniciada. - ' . $user->email);
             }
 
             $user->changeWallet($request->amount * -1);
@@ -109,7 +118,7 @@ class GameHistoryController extends Controller
             }
 
             $user = User::find(Auth::user()->id);
-            $gameHistory = $user->gameHistories->where('type', 'pending')
+            $gameHistory = $user->gameHistories->where('type', 'gaming')
                 ->where('id', $request->gameId)->first();
 
             if (!$gameHistory) {

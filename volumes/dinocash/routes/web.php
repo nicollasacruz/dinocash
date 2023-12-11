@@ -200,6 +200,9 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/lastGame', function () {
         $user = User::find(Auth::user()->id);
         $amount = $user->gameHistories->where('type', 'pending')->first();
+        $amount->update([
+            'type' => 'gaming',
+        ]);
         return response()->json([
             'userId' => $user->id,
             'amount' => $amount ? (float)$amount->amount : 0,
