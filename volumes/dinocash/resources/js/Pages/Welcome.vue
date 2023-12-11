@@ -204,7 +204,7 @@ function getPremio(i) {
                         <div
                             class="flex items-center col-span-3 rounded-s-full pl-2 sm:pl-4 overflow-hidden"
                             :class="
-                                user.email === $page.props.auth.user?.email
+                                user.email === $page.props.auth.user?.name
                                     ? 'bg-purple-800 text-orange-500'
                                     : 'bg-white'
                             "
@@ -220,7 +220,7 @@ function getPremio(i) {
                         <div
                             class="flex items-center justify-center text-center"
                             :class="
-                                user.email === $page.props.auth.user?.email
+                                user.email === $page.props.auth.user?.name
                                     ? 'bg-purple-800 text-orange-500'
                                     : 'bg-white'
                             "
@@ -230,7 +230,7 @@ function getPremio(i) {
                         <div
                             class="flex items-center justify-center rounded-r-full"
                             :class="
-                                user.email === $page.props.auth.user?.email
+                                user.email === $page.props.auth.user?.name
                                     ? 'bg-purple-800 text-orange-500'
                                     : 'bg-white'
                             "
