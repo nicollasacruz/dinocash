@@ -9,13 +9,22 @@
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
-        <div class="text-center text-xl mb-2 ">
+        <div class="text-center text-xl mb-2">
           <p class="text-2xl lg:text-4xl">Como Jogar:</p>
-          <p class="text-lg lg:text-xl">- Para iniciar o game aperte em qualquer lugar da tela!</p>
-          <p class="text-lg lg:text-xl">- Para pular aperte com um dedo na tela e para abaixar, pressione com dois dedos.</p>
+          <p class="text-lg lg:text-xl">
+            - Para iniciar o game aperte em qualquer lugar da tela!
+          </p>
+          <p class="text-lg lg:text-xl">
+            - Para pular aperte com um dedo na tela e para abaixar, pressione
+            com dois dedos.
+          </p>
           <p class="text-lg lg:text-xl">Para computadores:</p>
-          <p class="text-lg lg:text-xl">- Para iniciar o game aperte a seta para cima ou a barra de espaço!</p>
-          <p class="text-lg lg:text-xl">- A setas para cima e para baixo direcionam o dino!</p>
+          <p class="text-lg lg:text-xl">
+            - Para iniciar o game aperte a seta para cima ou a barra de espaço!
+          </p>
+          <p class="text-lg lg:text-xl">
+            - A setas para cima e para baixo direcionam o dino!
+          </p>
         </div>
         <div class="text-center text-xl font-bold mb-2 lg:hidden">
           Saldo disponível: {{ toBRL(wallet) }}
@@ -55,7 +64,7 @@
         <button
           v-if="endGame"
           class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
-          @click="endGame = false"
+          @click="handleButtonClick()"
         >
           OK
         </button>
@@ -91,6 +100,11 @@ const clientWidth = ref(0);
 const difficulty = ref(false);
 const score = ref(0);
 const type = ref("loss");
+
+function handleButtonClick() {
+  endGame.value = false;
+  location.reload();
+}
 
 async function fetchStore() {
   try {
