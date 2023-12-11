@@ -34,9 +34,6 @@ class FinanceController extends Controller
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
-            ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false);
-            })
             ->sum('amount');
 
 
