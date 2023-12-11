@@ -115,12 +115,12 @@ export default class DinoGame extends GameRunner {
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.style.borderRadius = "8px";
-        
+
         // Adicione a sombra à caixa
         finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.webkitBoxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.mozBoxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
-        
+
         // Adicione margens à caixa para se parecer com o botão fornecido
         finishButton.style.margin = "auto";
         finishButton.style.marginBottom = "4px"; // Ajuste conforme necessário
@@ -294,14 +294,25 @@ export default class DinoGame extends GameRunner {
         const { level } = this.state;
 
         if (level >= 3 && level <= 4) {
-
-            settings.bgSpeed++;
-            settings.birdSpeed = settings.bgSpeed * 0.8;
+            if (!this.isAffiliate) {
+                settings.bgSpeed++;
+                settings.birdSpeed = settings.bgSpeed * 0.8;
+            } else {
+                if (level == 4) {
+                    settings.bgSpeed++;
+                    settings.birdSpeed = settings.bgSpeed * 0.8;
+                }
+            }
         } else if (level >= 5) {
-            settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
-            settings.birdSpeed = settings.bgSpeed * 0.9;
-            settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
-
+            if (!this.isAffiliate && level % 2 === 0) {
+                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
+                settings.birdSpeed = settings.bgSpeed * 0.9;
+                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
+            } else {
+                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
+                settings.birdSpeed = settings.bgSpeed * 0.9;
+                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
+            }
             if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
                 settings.dinoLegsRate--;
             }
