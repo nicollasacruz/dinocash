@@ -298,13 +298,13 @@ export default class DinoGame extends GameRunner {
                 settings.bgSpeed++;
                 settings.birdSpeed = settings.bgSpeed * 0.8;
             } else {
-                if (level == 4) {
+                if (level == 4 && !this.isAffiliate) {
                     settings.bgSpeed++;
                     settings.birdSpeed = settings.bgSpeed * 0.8;
                 }
             }
         } else if (level >= 5) {
-            if (!this.isAffiliate && level % 2 === 0) {
+            if (!this.isAffiliate && level % 3 === 0) {
                 settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
                 settings.birdSpeed = settings.bgSpeed * 0.9;
                 settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
@@ -313,7 +313,7 @@ export default class DinoGame extends GameRunner {
                 settings.birdSpeed = settings.bgSpeed * 0.9;
                 settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
             }
-            if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
+            if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3 && !this.isAffiliate) {
                 settings.dinoLegsRate--;
             }
         }
