@@ -48,11 +48,11 @@ document.addEventListener("finishGame", ({ detail }) => {
 game.start().catch(console.error);
 
 const touchStartCallback = ({ touches }) => {
-  if (touches.length === 1) {
+  // if (touches.length === 1) {
     game.onInput("jump");
-  } else if (touches.length === 2) {
+  // } else if (touches.length === 2) {
     game.onInput("duck");
-  }
+  // }
 };
 
 const touchEndCallback = () => {
@@ -68,8 +68,8 @@ const keydownCallback = ({ keyCode }) => {
 
   if (keycodes.JUMP[keyCode]) {
     game.onInput("jump");
-  } else if (keycodes.DUCK[keyCode]) {
-    game.onInput("duck");
+  // } else if (keycodes.DUCK[keyCode]) {
+  //   game.onInput("duck");
   } else if (keycodes.FINISH[keyCode]) {
     game.onInput("finish");
   }

@@ -169,9 +169,9 @@ export default class DinoGame extends GameRunner {
         if (state.isRunning) {
             this.drawCacti();
 
-            if (state.level > randInteger(2, 5)) {
-                this.drawBirds();
-            }
+            // if (state.level > randInteger(2, 5)) {
+            //     this.drawBirds();
+            // }
 
             if (state.dino.hits([state.cacti[0], state.birds[0]])) {
                 playSound("game-over");
