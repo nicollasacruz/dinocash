@@ -33,26 +33,53 @@ Route::get('/', function () {
     $userIdLogado = Auth::id();
 
     $rankedUsers = [];
+    $position = 1;
+    $usuarioLogadoInserido = false;
 
-    // Obter as entradas únicas mais altas
     $rankings = GameHistory::select(['userId', 'distance'])
         ->where('type', 'win')
-        ->groupBy('userId') // Agrupar por usuário para garantir entradas únicas
-        ->orderByDesc('distance')
+        ->orderBy('distance', 'desc')
         ->limit(10)
         ->get();
 
-    foreach ($rankings as $position => $ranking) {
+    foreach ($rankings as $ranking) {
         $user = User::find($ranking->userId);
         $email = $user->email;
 
+        if ($ranking->userId == $userIdLogado) {
+            $usuarioLogadoInserido = true;
+        }
+
         $rankedUsers[] = [
-            'posicao' => $position + 1, // Posição começa do 1
+            'posicao' => $position,
             'email' => $email,
             'distancia' => $ranking->distance,
         ];
+
+        $position++;
     }
 
+    if (!$usuarioLogadoInserido && $userIdLogado) {
+        $userLogado = User::find($userIdLogado);
+        $emailLogado = $userLogado->email;
+
+        $posicaoUsuarioLogado = GameHistory::where('type', 'win')
+            ->orderBy('distance', 'desc')
+            ->pluck('userId')
+            ->search($userLogado->id);
+
+        $distance = GameHistory::select(['distance'])
+            ->where('type', 'win')
+            ->where('userId', $userLogado->id)
+            ->orderBy('distance', 'desc')
+            ->first();
+
+        $rankedUsers[9] = [
+            'posicao' => $posicaoUsuarioLogado + 1,
+            'email' => $emailLogado,
+            'distancia' => $distance ? $distance->distance : 0,
+        ];
+    }
     $wallet = 0;
     if (Auth::check()) {
         $userLogado = User::find($userIdLogado);
@@ -65,7 +92,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
         'rankedUsers' => $rankedUsers,
-        'wallet' => $wallet,
+        'wallet' => $wallet ,
     ]);
 })->name('homepage');
 
@@ -139,18 +166,18 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('user.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('user.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('user.destroy');
-
+    
     Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
-
+    
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
-
+    
     Route::get('/deposito', [DepositController::class, 'index'])->name('user.deposito');
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposito.destroy');
-
+    
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
@@ -162,7 +189,7 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
         $amount = $user->gameHistories->where('type', 'pending')->first();
         return response()->json([
             'userId' => $user->id,
-            'amount' => $amount ? (float) $amount->amount : 0,
+            'amount' => $amount ? (float)$amount->amount : 0,
         ]);
     })->name('user.lastGame');
 });
