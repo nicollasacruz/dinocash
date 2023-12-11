@@ -27,7 +27,9 @@
           <div>{{ toBRL(wallet) }}</div>
         </div>
         <div class="mt-10">
-          Saques serão enviados em até 12 horas úteis após a retirada. Depositado na chave pix do CPF cadastrado!
+          Saques serão enviados em até 12 horas úteis após a retirada.
+          <br>
+          Depositado na chave pix do CPF cadastrado.
         </div>
       </div>
     </div>

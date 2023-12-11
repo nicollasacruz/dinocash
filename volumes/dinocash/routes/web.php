@@ -48,7 +48,7 @@ Route::get('/', function () {
             break;
         }
         $user = User::find($ranking->userId);
-        $email = $user->email;
+        $email = $user->name;
 
         if ($ranking->userId == $userIdLogado) {
             $usuarioLogadoInserido = true;
@@ -72,7 +72,7 @@ Route::get('/', function () {
 
     if (!$usuarioLogadoInserido && $userIdLogado) {
         $userLogado = User::find($userIdLogado);
-        $emailLogado = $userLogado->email;
+        $emailLogado = $userLogado->name;
 
         $posicaoUsuarioLogado = GameHistory::where('type', 'win')
             ->orderBy('distance', 'desc')
