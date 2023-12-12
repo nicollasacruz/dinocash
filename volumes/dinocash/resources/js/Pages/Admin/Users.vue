@@ -69,21 +69,18 @@ const page = usePage();
 const users = computed(() => page.props.users) as any;
 
 function selectUser(user) {
-    console.log(user);
     showModal.value = true;
     selectedUser.value = user;
 }
 
 function submit(values) {
-    console.log(values);
     axios
         .patch(route('admin.usuarios.update'), values)
         .then((response) => {
-            console.log(response.data);
             showModal.value = false;
         })
         .catch((error) => {
-            console.log(error);
+    console.log('erro interno');
         });
 }
 </script>

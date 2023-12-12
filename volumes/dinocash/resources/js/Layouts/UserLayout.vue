@@ -12,14 +12,11 @@ const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
 const userWallet = page.props.auth.user.wallet * 1;
 const wallet = ref(userWallet);
-console.log(wallet.value);
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    console.log("event", e.user.wallet);
     wallet.value = e.user.wallet;
 });
 watch(
     () => wallet.value,
-    () => console.log("wallet", wallet.value)
 );
 const drawer = ref(false);
 </script>

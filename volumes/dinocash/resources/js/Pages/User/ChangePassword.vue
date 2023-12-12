@@ -58,9 +58,7 @@ async function changePassword() {
       password: newPassword.value,
       password_confirmation: newPasswordConfirmation.value,
     };
-    console.log(payload);
     const { data } = await axios.put(route("password.update"), payload);
-    console.log(data);
     toast.success("Senha alterada com sucesso!");
   } catch (error) {
     alert(error.response.data.message);

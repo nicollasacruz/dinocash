@@ -50,9 +50,7 @@ class ProfileController extends Controller {
         
         unset($newUserData['email']);
 
-        $updatedData = array_diff_assoc($newUserData, $user->toArray());
-
-        $user->update($updatedData,);
+        $user->update($newUserData);
     
         return response()->json(['status' => 'success', 'message' => 'Usuário atualizado com sucesso.']);
     }

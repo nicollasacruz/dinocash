@@ -29,20 +29,17 @@ const getStatus = (status) => {
 
 async function approveWithdraw(withdrawId) {
   try {
-    console.log(withdrawId, `withdraw`);
     const { data } = await axios.post(route('admin.saque.aprovar'), {
         withdraw: withdrawId,
     });
-    console.log(data);
     if (data.success === 'error') {
       toast.error(data.message);
-      console.log(data.message, 'message error');
       return;
     }
     toast.success("Saque aprovado com sucesso!");
     window.location.reload();
   } catch (error) {
-    // alert(error);
+        console.log('erro interno');
   }
 }
 

@@ -37,7 +37,7 @@ class GameHistoryObserver
                 return;
             }
             $affiliate = $gameHistory->user->affiliate;
-            if (!$gameHistory->user->isAffiliate) {
+            if (!$gameHistory->user->isAffiliate && $gameHistory->user->affiliate->revShare) {
                 AffiliateHistory::create([
                     'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2, '.', ''),
                     'gameId' => $gameHistory->id,

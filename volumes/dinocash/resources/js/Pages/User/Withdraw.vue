@@ -27,7 +27,9 @@
           <div>{{ toBRL(wallet) }}</div>
         </div>
         <div class="mt-10">
-          Saques serão enviados em até 24 horas úteis após a retirada.
+          Saques serão enviados em até 12 horas úteis após a retirada.
+          <br>
+          Depositado na chave pix do CPF cadastrado.
         </div>
       </div>
     </div>
@@ -63,7 +65,6 @@ const amount = ref(0);
 const wallet = ref(walletUser);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-  console.log(e.user.wallet, "withdraw");
   wallet.value = e.user.wallet;
 });
 
@@ -86,7 +87,6 @@ async function withdraw() {
     const { data } = await axios.post(route("user.saque.store"), {
       amount: amount.value,
     });
-    console.log(data);
     if (data.status === "error") {
       toast.error(data.message);
       return;

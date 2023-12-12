@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FinanceController extends Controller
 {
@@ -33,12 +34,6 @@ class FinanceController extends Controller
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
             ->sum('amount');
 
 
@@ -46,45 +41,34 @@ class FinanceController extends Controller
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
             ->sum('amount');
         $withdrawsAmountAffiliate = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
             ->sum('amount');
-        $totalReceived = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })
-            ->where('type', 'loss')
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
-            ->sum('finalAmount');
+            $totalReceived = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })
+                ->where('type', 'loss')
+                ->whereHas('user', function ($query) {
+                    $query->where('isAffiliate', false);
+                })
+                ->sum('finalAmount');
+            
         $totalPaid = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'win')
-            ->with([
-                'user' => function ($query) {
-                    $query
-                        ->where('isAffiliate', false);
-                }
-            ])
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
             ->sum('finalAmount');
 
         $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
@@ -149,7 +133,12 @@ class FinanceController extends Controller
             return User::where('role', 'user')->where('isAffiliate', false);
         })->sum('finalAmount'));
         $total = $gain + $pay;
-        $houseHealth = round(($gain * 100 / $total), 1);
+        if (!$total || !$gain) {
+            Log::info('Vazio ou 0');
+            $houseHealth = 100;
+        } else {
+            $houseHealth = round(($gain * 100 / $total), 1);
+        }
         
         $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $walletsAfilliatePendingCaixa);
         

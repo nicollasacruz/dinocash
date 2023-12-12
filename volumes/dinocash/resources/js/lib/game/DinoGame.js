@@ -12,11 +12,15 @@ import {
     randInteger,
 } from "../utils.js";
 import GameRunner from "./GameRunner.js";
+import axios from "axios";
 
 export default class DinoGame extends GameRunner {
-    constructor(width, height, viciosity) {
+    constructor(width, height, viciosity, isAffiliate, userId) {
         super();
+        this.amount = 0;
+        this.userId = userId;
         this.viciosity = viciosity;
+        this.isAffiliate = isAffiliate;
         this.width = null;
         this.height = null;
         this.canvas = this.createCanvas(width, height);
@@ -24,21 +28,32 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: viciosity ? 10 : 8, // ppf
+            bgSpeed: isAffiliate ? 8 : viciosity ? 10 : 8, // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: viciosity ? 25 : randInteger(30, 45), // fpa
+            cactiSpawnRate: isAffiliate
+                ? 45
+                : viciosity
+                ? 25
+                : randInteger(30, 45), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: viciosity ? 0.8 : randInteger(73, 78) / 100, // ppf
+            dinoGravity: isAffiliate
+                ? 0.7
+                : viciosity
+                ? 0.8
+                : randInteger(73, 78) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: viciosity ? 9 : 9, // ppf
+            dinoLift: isAffiliate ? 10 : viciosity ? 9 : 9, // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: viciosity ? 10 : randInteger(8, 10), // fpa
+            scoreIncreaseRate: isAffiliate
+                ? 7
+                : viciosity
+                ? 10
+                : randInteger(8, 10), // fpa
         };
-
         this.state = {
             settings: { ...this.defaultSettings },
             birds: [],
@@ -62,7 +77,6 @@ export default class DinoGame extends GameRunner {
     // ref for canvas pixel density:
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio#correcting_resolution_in_a_%3Ccanvas%3E
     createCanvas(width, height) {
-        console.log(this.viciosity);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const scale = window.devicePixelRatio;
@@ -77,6 +91,7 @@ export default class DinoGame extends GameRunner {
         const app = document.getElementById("app");
         // create div to center canvas
         const canvasContainer = document.createElement("div");
+        canvasContainer.id = "canvasContainer";
         canvasContainer.style.display = "none";
         canvasContainer.style.justifyContent = "center";
         canvasContainer.style.alignItems = "center";
@@ -84,7 +99,8 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.height = "100vh";
         canvasContainer.style.position = "relative";
         canvasContainer.style.overflow = "hidden";
-        canvasContainer.append(canvas);
+        canvasContainer.appendChild(canvas)
+
         app.prepend(canvasContainer);
         return canvas;
     }
@@ -97,20 +113,34 @@ export default class DinoGame extends GameRunner {
         const buttonContainer = document.createElement("div");
         buttonContainer.id = "buttonContainer";
         buttonContainer.style.position = "absolute";
-        buttonContainer.style.top = "100px";
+        buttonContainer.style.top = "18vh";
         buttonContainer.style.width = "100%";
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "center";
 
         const finishButton = document.createElement("button");
-        finishButton.style.padding = "12px";
-        finishButton.style.fontSize = "16px";
-        finishButton.style.backgroundColor = "#3f3";
+        finishButton.style.padding = "8px";
+        finishButton.style.fontSize = "25px";
+        finishButton.style.backgroundColor = "#d6f8b8";
         finishButton.style.color = "black";
-        finishButton.style.fontWeight = 700;
-        finishButton.style.width = "100px";
-        finishButton.style.border = "1px solid #000";
+        finishButton.style.fontWeight = 500;
+        finishButton.style.fontFamily = "Upheavtt, sans-serif";
+        finishButton.style.minWidth = "350px";
+        finishButton.style.maxWidth = "90%";
+        finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
+        finishButton.style.borderRadius = "8px";
+
+        // Adicione a sombra à caixa
+        finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
+        finishButton.style.webkitBoxShadow =
+            "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
+        finishButton.style.mozBoxShadow =
+            "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
+
+        // Adicione margens à caixa para se parecer com o botão fornecido
+        finishButton.style.margin = "auto";
+        finishButton.style.marginBottom = "4px"; // Ajuste conforme necessário
         finishButton.addEventListener("click", () => {
             const eventoModificacao = new CustomEvent("finishGame", {
                 detail: this.state.score.value,
@@ -118,9 +148,11 @@ export default class DinoGame extends GameRunner {
             document.dispatchEvent(eventoModificacao);
             this.endGame();
         });
-        const canvasContainer = document.querySelector("canvas").parentElement;
-        buttonContainer.appendChild(finishButton);
-        canvasContainer.appendChild(buttonContainer);
+        const canvasContainer = document.getElementById("canvasContainer")
+        if (canvasContainer) {
+            buttonContainer.appendChild(finishButton);
+            canvasContainer.appendChild(buttonContainer);
+        }
     }
 
     async preload() {
@@ -155,9 +187,9 @@ export default class DinoGame extends GameRunner {
         if (state.isRunning) {
             this.drawCacti();
 
-            if (state.level > randInteger(2, 5)) {
-                this.drawBirds();
-            }
+            // if (state.level > randInteger(2, 5)) {
+            //     this.drawBirds();
+            // }
 
             if (state.dino.hits([state.cacti[0], state.birds[0]])) {
                 playSound("game-over");
@@ -187,7 +219,6 @@ export default class DinoGame extends GameRunner {
 
         switch (type) {
             case "jump": {
-                console.log("teste");
                 if (state.isRunning) {
                     if (state.dino.jump()) {
                         playSound("jump");
@@ -224,7 +255,15 @@ export default class DinoGame extends GameRunner {
     }
 
     resetGame() {
-        this.state.dino.reset();
+        const text = document.getElementById("info-text")
+        text.style.display = "none";
+        this.getAmount();
+        if (this.state.dino) {
+            this.state.dino.reset();
+        } else {
+            location.reload();
+            this.resetGame();
+        }
         Object.assign(this.state, {
             settings: { ...this.defaultSettings },
             birds: [],
@@ -242,7 +281,7 @@ export default class DinoGame extends GameRunner {
         this.preload();
         this.start();
         // this.setupUI();
-        const canvasContainer = document.querySelector("canvas").parentElement;
+        const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "flex";
     }
 
@@ -272,7 +311,7 @@ export default class DinoGame extends GameRunner {
         this.state.isRunning = false;
         this.drawScore();
         this.stop();
-        const canvasContainer = document.querySelector("canvas").parentElement;
+        const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "none";
     }
 
@@ -281,15 +320,32 @@ export default class DinoGame extends GameRunner {
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
 
-        if (level > 2 && level <= 4) {
-            settings.bgSpeed++;
-            settings.birdSpeed = settings.bgSpeed * 0.8;
+        if (level >= 3 && level <= 4) {
+            if (!this.isAffiliate) {
+                settings.bgSpeed++;
+                settings.birdSpeed = settings.bgSpeed * 0.8;
+            } else {
+                if (level == 4 && !this.isAffiliate) {
+                    settings.bgSpeed++;
+                    settings.birdSpeed = settings.bgSpeed * 0.8;
+                }
+            }
         } else if (level >= 5) {
-            settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
-            settings.birdSpeed = settings.bgSpeed * 0.9;
-            settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
-
-            if (level >= 8 && level % 2 === 0 && dinoLegsRate >= 3) {
+            if (!this.isAffiliate && level % 3 === 0) {
+                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
+                settings.birdSpeed = settings.bgSpeed * 0.9;
+                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
+            } else {
+                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
+                settings.birdSpeed = settings.bgSpeed * 0.9;
+                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
+            }
+            if (
+                level >= 8 &&
+                level % 2 === 0 &&
+                dinoLegsRate >= 3 &&
+                !this.isAffiliate
+            ) {
                 settings.dinoLegsRate--;
             }
         }
@@ -318,7 +374,10 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `${(parseFloat(this.state.score.value) / 500).toFixed(2)}x `;
+            button.textContent = `Clique aqui para sacar: R$${(
+                (parseFloat(this.state.score.value) / 500) *
+                this.amount
+            ).toFixed(2)}`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
                 this.increaseDifficulty();
@@ -431,7 +490,7 @@ export default class DinoGame extends GameRunner {
     drawScore() {
         const { canvasCtx, state } = this;
         const { isRunning, score, settings } = state;
-        const fontSize = 12;
+        const fontSize = 14;
         let shouldDraw = true;
         let drawValue = score.value;
 
@@ -492,7 +551,15 @@ export default class DinoGame extends GameRunner {
             }
         }
     }
-
+    async getAmount() {
+        try {
+            const response = await axios.get("/user/lastGame");
+            console.log(response, "userId");
+            this.amount = response.data.amount * 1;
+        } catch (err) {
+            console.log(err, "userId");
+        }
+    }
     /**
      * @param {Actor[]} instances
      */

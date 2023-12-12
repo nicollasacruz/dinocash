@@ -190,7 +190,6 @@ import axios from "axios";
 import BaseInput from "@/Components/BaseInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 const { settings } = defineProps(["settings"]);
-console.log(settings);
 
 const schema = yup.object({
   emailFatura: yup.string().nullable().email("Email inválido"),

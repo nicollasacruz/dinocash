@@ -33,21 +33,31 @@ Route::get('/', function () {
     $userIdLogado = Auth::id();
 
     $rankedUsers = [];
+    $ids = [];
     $position = 1;
     $usuarioLogadoInserido = false;
 
     $rankings = GameHistory::select(['userId', 'distance'])
         ->where('type', 'win')
         ->orderBy('distance', 'desc')
-        ->limit(10)
+        ->limit(1000)
         ->get();
 
     foreach ($rankings as $ranking) {
+        if (count($rankedUsers) === 10){
+            break;
+        }
         $user = User::find($ranking->userId);
-        $email = $user->email;
+        $email = $user->name;
 
         if ($ranking->userId == $userIdLogado) {
             $usuarioLogadoInserido = true;
+        }
+        if (in_array($ranking->userId, $ids)) {
+            if (count($rankedUsers) === 10){
+                break;
+            }
+            continue;
         }
 
         $rankedUsers[] = [
@@ -55,13 +65,14 @@ Route::get('/', function () {
             'email' => $email,
             'distancia' => $ranking->distance,
         ];
+        $ids[] = $ranking->userId;
 
         $position++;
     }
 
     if (!$usuarioLogadoInserido && $userIdLogado) {
         $userLogado = User::find($userIdLogado);
-        $emailLogado = $userLogado->email;
+        $emailLogado = $userLogado->name;
 
         $posicaoUsuarioLogado = GameHistory::where('type', 'win')
             ->orderBy('distance', 'desc')
@@ -79,6 +90,8 @@ Route::get('/', function () {
             'email' => $emailLogado,
             'distancia' => $distance ? $distance->distance : 0,
         ];
+        $ids[] = $userLogado->id;
+
     }
     $wallet = 0;
     if (Auth::check()) {
@@ -184,7 +197,17 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/suporte', function () {
         return Inertia::render('User/Suport');
     })->name('user.suporte');
-    
+    Route::get('/lastGame', function () {
+        $user = User::find(Auth::user()->id);
+        $amount = $user->gameHistories->where('type', 'pending')->first();
+        $amount->update([
+            'type' => 'gaming',
+        ]);
+        return response()->json([
+            'userId' => $user->id,
+            'amount' => $amount ? (float)$amount->amount : 0,
+        ]);
+    })->name('user.lastGame');
 });
 
 

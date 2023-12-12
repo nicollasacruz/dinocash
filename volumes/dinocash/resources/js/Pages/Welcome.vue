@@ -41,7 +41,6 @@ const windowWidth = ref(window.innerWidth);
 window.addEventListener("resize", (valu) => {
     windowWidth.value = window.innerWidth;
 });
-console.log(windowWidth.value);
 
 function getTrophy(i) {
     switch (i) {
@@ -205,8 +204,8 @@ function getPremio(i) {
                         <div class="mb-3 text-center">Prêmio</div>
                     </div>
                     <div
-                        class="grid grid-cols-5 md:gap-x-0 gap-y-1 font-menu xl:text-[20px] text-xs sm:text-sm mt-5 "
-                        :class="rankedUsers.length > 7 ? 'flex-1' : 'flex-0'"
+                        class="grid grid-cols-5 md:gap-x-0 font-menu xl:text-[20px] text-xs sm:text-sm mt-5 "
+                        :class="rankedUsers.length > 7 ? 'flex-1' : 'flex-0 gap-y-3'"
                         >
                         <template v-for="(user, i) in rankedUsers">
                             <div

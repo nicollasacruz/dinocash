@@ -15,7 +15,6 @@ const columns = [
     { label: "Faturado Em", key: "invoicedAt" },
 ];
 const { affiliatesInvoices } = defineProps(["affiliatesInvoices"]);
-console.log(affiliatesInvoices, 'affiliatesInvoices');
 
 const showModal = ref(false);
 const toBRL = (value) => {
@@ -25,7 +24,6 @@ const toBRL = (value) => {
     });
 };
 const getStatus = (status) => {
-    console.log(status);
     switch (status) {
         case "closed":
             return "FECHADA";

@@ -95,12 +95,15 @@ class AffiliateWithdrawController extends Controller
         try {
             $withdrawService = new WithdrawAffiliateService();
             $withdraw = AffiliateWithdraw::find($request->withdraw);
-            $withdrawService->reject($withdraw);
-
+            if ($withdraw->type === 'pending') {
+                $withdrawService->reject($withdraw);
+                return to_route('admin.afiliados')->with('success','Saque rejeitado com sucesso.');
+            }
             return response()->json([
-                'success' => 'success',
-                'message' => 'Saque rejeitado com sucesso.'
-            ]);
+                Log::error('Erro ao aprovar o o saque do afiliado.'),
+                'success' => 'error',
+                'message' => 'Saque já foi rejeitado.'
+            ], 500);
         } catch (Exception $e) {
             return response()->json([
                 Log::error('Erro ao aprovar o o saque do afiliado  - ' . $e->getMessage()),

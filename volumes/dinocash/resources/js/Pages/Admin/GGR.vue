@@ -165,7 +165,6 @@ function statusClass(status) {
 }
 // get data from .env
 const { GgrIsTrue } = defineProps(["GgrIsTrue"]);
-console.log(GgrIsTrue)
 </script>
 
 <template>

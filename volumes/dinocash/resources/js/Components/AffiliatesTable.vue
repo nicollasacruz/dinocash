@@ -10,20 +10,14 @@
                 </div>
             </td>
         </template>
-        <template #wallet="{ value }">
+        <template #walletAffiliate="{ value }">
             <td>
                 {{
-                    value.toLocaleString("pt-br", {
+                    Number(value).toLocaleString("pt-br", {
                         style: "currency",
                         currency: "BRL",
                     })
                 }}
-            </td>
-        </template>
-        <template #isAffiliate="{ value }">
-            <td>
-                <div v-if="value">SIM</div>
-                <div v-else>NÃO</div>
             </td>
         </template>
     </BaseTable>
@@ -62,18 +56,16 @@ function toBRL(value) {
 }
 
 function submit(values) {
-    console.log(values);
     const payload = {
 
     }
     axios
         .patch(route('admin.usuarios.update'), values)
         .then((response) => {
-            console.log(response.data);
             showModal.value = false;
         })
         .catch((error) => {
-            console.log(error);
+            console.log('erro interno');
         });
 }
 </script>

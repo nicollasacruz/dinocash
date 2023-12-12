@@ -109,16 +109,22 @@ class WithdrawAffiliateService
     public function reject(AffiliateWithdraw $withdraw): bool
     {
         try {
+            $affiliateInvoiceService = new AffiliateInvoiceService();
+
             $withdraw->update([
                 'type' => 'rejected',
                 'reprovedAt' => now(),
             ]);
+
+            $withdraw->save();
 
             $user = $withdraw->user;
             $amount = $withdraw->amount;
 
             AffiliateHistory::create([
                 'userId' => $withdraw->user->id,
+                'affiliateId' => $withdraw->user->id,
+                'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($withdraw->user))->id,
                 'amount' => $amount,
                 'type' => 'WITHDRAW REJECTED',
             ]);

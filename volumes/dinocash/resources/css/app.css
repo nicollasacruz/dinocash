@@ -20,4 +20,9 @@
     .drawer-button {
         @apply text-lg bg-gray-700 px-4 rounded-md py-[6px];
     }
+    .start-game-text {
+        position: absolute;
+        top: 50%;
+        font-size: 25px;
+    }
 }
