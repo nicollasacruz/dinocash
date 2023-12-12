@@ -53,7 +53,8 @@ class GameHistory extends Model
             ->with([
                 'user' => function ($query) {
                     $query
-                        ->where('isAffiliate', false);
+                        ->where('isAffiliate', false)
+                        ->where('role', 'user');
                 }
             ])
             ->groupBy('formatted_date')
@@ -68,7 +69,8 @@ class GameHistory extends Model
             ->with([
                 'user' => function ($query) {
                     $query
-                        ->where('isAffiliate', false);
+                        ->where('isAffiliate', false)
+                        ->where('role', 'user');
                 }
             ])
             ->groupBy('formatted_date')

@@ -16,37 +16,43 @@ class DashboardController extends Controller
         $winsToday = GameHistory::winsToday()->with([
             'user' => function ($query) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
             }
         ])->sum('finalAmount');
         $winsLast30Days = GameHistory::winsLast30Days()->with([
             'user' => function ($query) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
             }
         ])->sum('finalAmount');
         $winsTotal = GameHistory::winsTotal()->with([
             'user' => function ($query) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
             }
         ])->sum('finalAmount');
         $lossesToday = GameHistory::lossesToday()->with([
             'user' => function ($query) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
             }
         ])->sum('finalAmount');
         $lossesLast30Days = GameHistory::lossesLast30Days()->with([
             'user' => function ($query) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
             }
         ])->sum('finalAmount');
         $lossesTotal = GameHistory::lossesTotal()->with([
             'user' => function ($query) {
                 $query
-                    ->where('isAffiliate', false);
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
             }
         ])->sum('finalAmount');
         $groupedDateLoss = GameHistory::dateGroupWin()->get();
@@ -55,7 +61,7 @@ class DashboardController extends Controller
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
         $totalUsers = User::all()->count();
-        $lastUsers = User::latest('created_at')->where('isAffiliate', false)->limit(30)->get();
+        $lastUsers = User::latest('created_at')->where('isAffiliate', false)->where('role', 'user')->limit(30)->get();
 
         return Inertia::render('Admin/Dashboard', [
             'activeSessions' => $activeSessions,
