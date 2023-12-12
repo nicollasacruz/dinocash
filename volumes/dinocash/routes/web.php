@@ -40,6 +40,10 @@ Route::get('/', function () {
 
     $rankings = GameHistory::select(['userId', 'distance'])
         ->where('type', 'win')
+        ->whereHas('user', function ($query) {
+            $query->where('isAffiliate', false)
+            ->where('role', 'user');
+        })
         ->orderBy('distance', 'desc')
         ->limit(1000)
         ->get();
