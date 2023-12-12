@@ -15,26 +15,27 @@ import DinoRoxo from "../../../storage/imgs/home-page/dino-roxo.svg";
 import firstPlace from "../../../storage/imgs/home-page/ranking/1.svg";
 import secondPlace from "../../../storage/imgs/home-page/ranking/2.svg";
 import thirdPlace from "../../../storage/imgs/home-page/ranking/3.svg";
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-    rankedUsers: {
-        type: Array,
-        required: true,
-    },
-});
+const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
+    defineProps({
+        canLogin: {
+            type: Boolean,
+        },
+        canRegister: {
+            type: Boolean,
+        },
+        laravelVersion: {
+            type: String,
+            required: true,
+        },
+        phpVersion: {
+            type: String,
+            required: true,
+        },
+        rankedUsers: {
+            type: Array,
+            required: true,
+        },
+    });
 const windowWidth = ref(window.innerWidth);
 
 window.addEventListener("resize", (valu) => {
@@ -194,51 +195,60 @@ function getPremio(i) {
                         class="h-60 -ml-10 mt-auto"
                     />
                 </div>
-                <div
-                    class="flex-1 grid grid-cols-5 md:gap-x-0 font-menu xl:text-[20px] text-xs sm:text-sm mt-5"
-                >
-                    <div class="">Posição</div>
-                    <div class="col-span-2">Usuário</div>
-                    <div class="text-center">Distância</div>
-                    <div class="mb-3 text-center">Prêmio</div>
-                    <template v-for="(user, i) in rankedUsers">
-                        <div
-                            class="flex items-center col-span-3 rounded-s-full pl-2 sm:pl-4 overflow-hidden"
-                            :class="
-                                user.email === $page.props.auth.user?.email
-                                    ? 'bg-purple-800 text-orange-500'
-                                    : 'bg-white'
-                            "
+                <div class="flex flex-col">
+                    <div
+                        class="grid grid-cols-5 md:gap-x-0 gap-y-1 font-menu xl:text-[20px] text-xs sm:text-sm mt-5"
+                    >
+                        <div class="">Posição</div>
+                        <div class="col-span-2">Usuário</div>
+                        <div class="text-center">Distância</div>
+                        <div class="mb-3 text-center">Prêmio</div>
+                    </div>
+                    <div
+                        class="grid grid-cols-5 md:gap-x-0 gap-y-1 font-menu xl:text-[20px] text-xs sm:text-sm mt-5 "
+                        :class="rankedUsers.length > 7 ? 'flex-1' : 'flex-0'"
                         >
-                            <img
-                                class="w-3 mr-1 sm:w-4 md:w-6 sm:mr-2"
-                                v-if="i < 3"
-                                :src="getTrophy(i)"
-                            />
-                            <span class="mr-2" v-else>{{ user.posicao }}º</span>
-                            {{ user.email }}
-                        </div>
-                        <div
-                            class="flex items-center justify-center text-center"
-                            :class="
-                                user.email === $page.props.auth.user?.email
-                                    ? 'bg-purple-800 text-orange-500'
-                                    : 'bg-white'
-                            "
-                        >
-                            {{ user.distancia }}M
-                        </div>
-                        <div
-                            class="flex items-center justify-center rounded-r-full"
-                            :class="
-                                user.email === $page.props.auth.user?.email
-                                    ? 'bg-purple-800 text-orange-500'
-                                    : 'bg-white'
-                            "
-                        >
-                            {{ getPremio(i) }}
-                        </div>
-                    </template>
+                        <template v-for="(user, i) in rankedUsers">
+                            <div
+                                class="flex items-center col-span-3 rounded-s-full pl-2 sm:pl-4 overflow-hidden"
+                                :class="
+                                    user.email === $page.props.auth.user?.email
+                                        ? 'bg-purple-800 text-orange-500'
+                                        : 'bg-white'
+                                "
+                            >
+                                <img
+                                    class="w-3 mr-1 sm:w-4 md:w-6 sm:mr-2"
+                                    v-if="i < 3"
+                                    :src="getTrophy(i)"
+                                />
+                                <span class="mr-2" v-else
+                                    >{{ user.posicao }}º</span
+                                >
+                                {{ user.email }}
+                            </div>
+                            <div
+                                class="flex items-center justify-center text-center"
+                                :class="
+                                    user.email === $page.props.auth.user?.email
+                                        ? 'bg-purple-800 text-orange-500'
+                                        : 'bg-white'
+                                "
+                            >
+                                {{ user.distancia }}M
+                            </div>
+                            <div
+                                class="flex items-center justify-center rounded-r-full"
+                                :class="
+                                    user.email === $page.props.auth.user?.email
+                                        ? 'bg-purple-800 text-orange-500'
+                                        : 'bg-white'
+                                "
+                            >
+                                {{ getPremio(i) }}
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
