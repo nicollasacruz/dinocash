@@ -17,7 +17,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    <script src="//code.jivosite.com/widget/IgclMWygKX" async></script>
+    <script async src="//code.jivosite.com/widget/IgclMWygKX"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z43MJ7SN7Q"></script>
