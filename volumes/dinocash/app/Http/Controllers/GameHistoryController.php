@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AffiliateHistory;
+use App\Models\AffiliateWithdraw;
+use App\Models\Deposit;
 use App\Models\GameHistory;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -16,26 +20,47 @@ class GameHistoryController extends Controller
     {
         $viciosidade = false;
         $settings = Setting::first();
-        $gain = (GameHistory::where('type', 'loss')->with('user', function () {
-            return User::where('role', 'user')->where('isAffiliate', false);
-        })->sum('finalAmount')) * -1;
-        $pay = (GameHistory::where('type', 'win')->with('user', function () {
-            return User::where('role', 'user')->where('isAffiliate', false);
-        })->sum('finalAmount'));
-        $total = $gain + $pay;
-        if (!$total || !$gain) {
+
+        $depositsAmountPaid = Deposit::where('type', 'paid')
+            ->sum('amount');
+
+        $withdrawsAmountPaid = Withdraw::where('type', 'paid')
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
+            ->sum('amount');
+        $withdrawsAmountAffiliatePaid = AffiliateWithdraw::where('type', 'paid')
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
+            ->sum('amount');
+
+        $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
+
+        $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
+
+        $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)->with([
+            'affiliate' => function ($query) {
+                $query
+                    ->where('role', 'user');
+            }
+        ])->sum('amount');
+
+        $gain = $depositsAmountPaid;
+        $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
+        if (!$gain || !$pay) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
         } else {
-            $houseHealth = round(($gain * 100 / $total), 1);
-            if ($houseHealth < $settings->payout) {
+            $houseHealth = round(($pay * 100 / $gain), 1);
+            if ($houseHealth > 100 - $settings->payout) {
                 $viciosidade = true;
                 Log::error('Viciosidade ativada.');
             }
         }
 
         $user = User::find(Auth::user()->id);
-        
+
         $gameHistory = $user->gameHistories->where('type', 'pending');
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {

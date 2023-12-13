@@ -15,7 +15,7 @@ class ReferralService
             ->selectRaw('affiliate.email, SUM(game_histories.finalAmount) * -1 as totalGain')
             ->groupBy('affiliate.email')
             ->orderByDesc('totalGain')
-            ->limit(3)
+            ->limit(5)
             ->get();
     }
 
@@ -27,7 +27,7 @@ class ReferralService
         ->selectRaw('affiliate.email, SUM(game_histories.finalAmount) * -1 as totalPayed')
         ->groupBy('affiliate.email')
         ->orderBy('totalPayed', 'asc')
-        ->limit(3)
+        ->limit(5)
         ->get();
     }
 }

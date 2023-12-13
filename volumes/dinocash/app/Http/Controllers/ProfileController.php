@@ -40,22 +40,6 @@ class ProfileController extends Controller {
     }
 
     /**
-     * Update the user's profile information.
-     */
-    public function modalUserUpdate(Request $request) {
-
-        $user = User::where('email', $request->email)->first(); 
-    
-        $newUserData = $request->json()->all();
-        
-        unset($newUserData['email']);
-
-        $user->update($newUserData);
-    
-        return response()->json(['status' => 'success', 'message' => 'Usuário atualizado com sucesso.']);
-    }
-
-    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse {

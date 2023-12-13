@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\GameHistoryController;
+use App\Http\Controllers\UserController;
 use App\Models\GameHistory;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -39,12 +40,16 @@ Route::get('/', function () {
 
     $rankings = GameHistory::select(['userId', 'distance'])
         ->where('type', 'win')
+        ->whereHas('user', function ($query) {
+            $query->where('isAffiliate', false)
+                ->where('role', 'user');
+        })
         ->orderBy('distance', 'desc')
         ->limit(1000)
         ->get();
 
     foreach ($rankings as $ranking) {
-        if (count($rankedUsers) === 10){
+        if (count($rankedUsers) === 10) {
             break;
         }
         $user = User::find($ranking->userId);
@@ -54,7 +59,7 @@ Route::get('/', function () {
             $usuarioLogadoInserido = true;
         }
         if (in_array($ranking->userId, $ids)) {
-            if (count($rankedUsers) === 10){
+            if (count($rankedUsers) === 10) {
                 break;
             }
             continue;
@@ -105,7 +110,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
         'rankedUsers' => $rankedUsers,
-        'wallet' => $wallet ,
+        'wallet' => $wallet,
     ]);
 })->name('homepage');
 
@@ -135,12 +140,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     Route::get('/', function () {
         return Redirect::route('admin.dashboard');
     })->name('admin');
-    Route::get('/usuarios', function () {
-        return Inertia::render('Admin/Users', [
-            'users' => User::all()
-        ]);
-    })->name('admin.usuarios');
-    Route::patch('/usuarios', [ProfileController::class, 'modalUserUpdate'])->name('admin.usuarios.update');
+    Route::get('/usuarios', [UserController::class, 'indexAdmin'])->name('admin.usuarios');
+    Route::patch('/usuarios', [UserController::class, 'modalUserUpdate'])->name('admin.usuarios.update');
     Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
     Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
     Route::get('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
@@ -179,18 +180,18 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('user.edit');
     Route::patch('/perfil', [ProfileController::class, 'update'])->name('user.update');
     Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('user.destroy');
-    
+
     Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
-    
+
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
-    
+
     Route::get('/deposito', [DepositController::class, 'index'])->name('user.deposito');
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposito.destroy');
-    
+
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
@@ -200,12 +201,14 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/lastGame', function () {
         $user = User::find(Auth::user()->id);
         $amount = $user->gameHistories->where('type', 'pending')->first();
-        $amount->update([
-            'type' => 'gaming',
-        ]);
+        if ($amount) {
+            $amount->update([
+                'type' => 'gaming',
+            ]);
+        }
         return response()->json([
             'userId' => $user->id,
-            'amount' => $amount ? (float)$amount->amount : 0,
+            'amount' => $amount ? (float) $amount->amount : 0,
         ]);
     })->name('user.lastGame');
 });

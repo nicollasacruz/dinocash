@@ -30,14 +30,16 @@ class FinanceController extends Controller
         if ($dateEnd) {
             $dateEnd->setTime(23, 59, 59);
         }
-        $depositsAmount = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+
+
+        $depositsAmountPaid = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
             ->sum('amount');
 
 
-        $withdrawsAmount = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+        $withdrawsAmountPaid = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
@@ -45,7 +47,7 @@ class FinanceController extends Controller
                 $query->where('isAffiliate', false);
             })
             ->sum('amount');
-        $withdrawsAmountAffiliate = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+        $withdrawsAmountAffiliatePaid = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
@@ -53,27 +55,11 @@ class FinanceController extends Controller
                 $query->where('isAffiliate', false);
             })
             ->sum('amount');
-            $totalReceived = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-            })
-                ->where('type', 'loss')
-                ->whereHas('user', function ($query) {
-                    $query->where('isAffiliate', false);
-                })
-                ->sum('finalAmount');
-            
-        $totalPaid = GameHistory::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })
-            ->where('type', 'win')
-            ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false);
-            })
-            ->sum('finalAmount');
 
         $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })->sum('wallet');
+
 
         $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', true)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
@@ -87,6 +73,7 @@ class FinanceController extends Controller
                             ->where('role', 'user');
                     }
                 ])->sum('amount');
+
 
         $topWithdraws = Withdraw::where('type', 'paid')
             ->where('withdraws.updated_at', '>=', now()->subDay())
@@ -116,42 +103,38 @@ class FinanceController extends Controller
                 ];
             });
 
+        $caixaDaCasa = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid;
+
+        $lucroTotal = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
+
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
 
-        $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
-        $withdrawsAmountCaixa = Withdraw::where('type', 'paid')->sum('amount');
-        $withdrawsAmountAffiliateCaixa = AffiliateWithdraw::where('type', 'paid')->sum('amount');
-        $walletsAmountCaixa = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
-        $walletsAfilliateAmountCaixa = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
-        $walletsAfilliatePendingCaixa = AffiliateHistory::where('invoicedAt', null)->sum('amount');
-        
-        $gain = (GameHistory::where('type', 'loss')->with('user', function () {
-            return User::where('role', 'user')->where('isAffiliate', false);
-        })->sum('finalAmount')) * -1;
-        $pay = (GameHistory::where('type', 'win')->with('user', function () {
-            return User::where('role', 'user')->where('isAffiliate', false);
-        })->sum('finalAmount'));
-        $total = $gain + $pay;
-        if (!$total || !$gain) {
+        $gain = $depositsAmountPaid;
+        $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
+        if (!$pay || !$gain) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
         } else {
-            $houseHealth = round(($gain * 100 / $total), 1);
+            $houseHealth = 100 - round(($pay * 100 / $gain), 1);
         }
         
-        $balanceAmount = ($depositsAmountCaixa - $withdrawsAmountCaixa - $withdrawsAmountAffiliateCaixa - $walletsAmountCaixa - $walletsAfilliateAmountCaixa - $walletsAfilliatePendingCaixa);
-        
+        $activeSessions = DB::table('sessions')
+            ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
+            ->count();
+        $totalUsers = User::all()->count();
+
         return Inertia::render("Admin/Finances", [
-            'balanceAmount' => $balanceAmount,
-            'depositsAmount' => $depositsAmount,
-            'withdrawsAmount' => $withdrawsAmount,
-            'withdrawsAffiliateAmount' => $withdrawsAmountAffiliate,
+            'activeSessions' => $activeSessions,
+            'totalUsers' => $totalUsers,
+            'balanceAmount' => $caixaDaCasa,
+            'depositsAmount' => $depositsAmountPaid,
+            'withdrawsAmount' => $withdrawsAmountPaid,
+            'withdrawsAffiliateAmount' => $withdrawsAmountAffiliatePaid,
             'walletAmount' => $walletsAmount,
             'walletAffiliateAmount' => $walletsAfilliateAmount,
             'walletsAfilliatePending' => $walletsAfilliatePending,
-            'totalReceived' => ($totalReceived * -1),
-            'totalPaid' => $totalPaid * -1,
+            'lucroTotal' => $lucroTotal,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,
