@@ -69,7 +69,6 @@ function getPremio(i) {
 </script>
 
 <template>
-    <Head title="Home" />
     <section
         id="section1"
         class="section1 h-screen mx-auto items-center p-2 flex flex-col"

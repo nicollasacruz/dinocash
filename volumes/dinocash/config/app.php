@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'DinoCash'),
+    'name' => env('APP_NAME', 'Dinocash | Lucre com a gente'),
     
     /*
     |--------------------------------------------------------------------------
