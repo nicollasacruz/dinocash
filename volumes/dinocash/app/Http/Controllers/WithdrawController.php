@@ -67,7 +67,18 @@ class WithdrawController extends Controller
             if (!$user->isAffiliate || !$user->hasRole('admin')) {
                 $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
                 $totalRoll = $user->gameHistories->sum('amount');
+                $hasWIthdrawToday = $user->withdraws
+                ->filter(function ($withdraw) {
+                    return $withdraw->type === 'paid' && $withdraw->updated_at->isToday();
+                })->first();
 
+                if ($hasWIthdrawToday) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Só é possível fazer um saque por dia.',
+                    ]);
+                }
+                
                 $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
 
                 if ($totalRoll < $totalDeposits * $setting->rollover) {
@@ -92,7 +103,6 @@ class WithdrawController extends Controller
                     'message' => 'Saque realizado com sucesso.',
                 ]);
             }
-            $setting = Setting::first();
             if (!!$withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
                 Log::info('entrou no auto saque');
                 $response = $withdrawService->aprove($withdraw);
