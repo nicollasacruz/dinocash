@@ -102,9 +102,9 @@ class GameHistoryController extends Controller
                 ->where('id', $request->gameId)->first();
 
             if ($gameHistory) {
-                $gameHistory->type = 'loss';
-                $gameHistory->finalAmount = $gameHistoryItem->amount * -1;
-                $gameHistory->save();
+                $gameHistoryItem->type = 'loss';
+                $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
+                $gameHistoryItem->save();
 
                 Log::error('Partida já iniciada. - ' . $user->email);
             }
