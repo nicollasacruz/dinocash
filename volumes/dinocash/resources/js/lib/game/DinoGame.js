@@ -28,7 +28,7 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: isAffiliate ? 7.5 : viciosity ? 10 : 8, // ppf
+            bgSpeed: isAffiliate ? 7.5 : viciosity ? 10 : randInteger(8,10), // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
@@ -36,23 +36,23 @@ export default class DinoGame extends GameRunner {
                 ? 45
                 : viciosity
                 ? 25
-                : randInteger(40, 45), // fpa
+                : randInteger(30, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: isAffiliate
                 ? 0.7
                 : viciosity
                 ? 0.8
-                : randInteger(70, 75) / 100, // ppf
+                : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: isAffiliate ? 10 : viciosity ? 9 : 9.5, // ppf
+            dinoLift: isAffiliate ? 10 : viciosity ? 9 : 9.3, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: isAffiliate
                 ? 7
                 : viciosity
                 ? 10
-                : randInteger(8, 9), // fpa
+                : randInteger(8, 10), // fpa
         };
         this.state = {
             settings: { ...this.defaultSettings },
