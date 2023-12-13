@@ -9,6 +9,8 @@ import CurrencyBox from "@/Components/CurrencyBox.vue";
 import { format } from "date-fns";
 
 const {
+  activeSessions,
+  totalUsers,
   balanceAmount,
   depositsAmount,
   withdrawsAmount,
@@ -16,7 +18,7 @@ const {
   walletAmount,
   walletAffiliateAmount,
   walletsAfilliatePending,
-  totalReceived,
+  lucroTotal,
   totalPaid,
   topWithdraws,
   topDeposits,
@@ -25,6 +27,8 @@ const {
   payout,
   houseHealth,
 } = defineProps([
+  "activeSessions",
+  "totalUsers",
   "balanceAmount",
   "depositsAmount",
   "withdrawsAmount",
@@ -32,7 +36,7 @@ const {
   "walletAmount",
   "walletAffiliateAmount",
   "walletsAfilliatePending",
-  "totalReceived",
+  "lucroTotal",
   "totalPaid",
   "topWithdraws",
   "topDeposits",
@@ -113,6 +117,20 @@ watch(addictRange, (value) => {
       <div class="text-4xl text-white font-bold">Financeiro</div>
       <div class="flex gap-x-5">
         <TextBox
+          label="Online"
+          :value="activeSessions"
+          label-text="text-green-500"
+        >
+          <template #icon>
+            <UserIcon class="w-5 fill-green-500" />
+          </template>
+        </TextBox>
+        <TextBox label="Cadastros" :value="totalUsers">
+          <template #icon>
+            <UserIcon class="w-5" />
+          </template>
+        </TextBox>
+        <TextBox
           label="CAIXA DA CASA"
           :value="toBRL(balanceAmount)"
           value-text="text-center text-green-500"
@@ -131,9 +149,9 @@ watch(addictRange, (value) => {
         <div class="text-2xl text-green-400 mb-4 font-bold">Lucros</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
           <CurrencyBox
-            label="Lucro Total Em Jogos"
-            :value="totalReceived"
-            :class="{ negative: totalReceived < 0 }"
+            label="Lucro Total"
+            :value="lucroTotal"
+            :class="{ negative: lucroTotal < 0 }"
           />
           <CurrencyBox label="Total de depósitos" :value="depositsAmount" />
           <TextBox label="Saude da Casa" :value="houseHealth + '%'" />
@@ -143,11 +161,6 @@ watch(addictRange, (value) => {
       <div class="flex-1">
         <div class="text-2xl text-red-500 mb-4 font-bold">Prejuízos</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
-          <CurrencyBox
-            label="Prejuizo Total Em Jogos"
-            :value="totalPaid"
-            negative
-          />
           <CurrencyBox
             label="Saldo de Carteiras"
             :value="withdrawsAmount * -1"

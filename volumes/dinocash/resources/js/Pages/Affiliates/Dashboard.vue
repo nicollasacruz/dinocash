@@ -87,19 +87,20 @@ const showModal = ref(false);
     <div
       class="grid xs: grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-x-2 gap-y-2 mt-4"
     >
-      <CurrencyBox label="Prejuizo Total" :value="lossTotal" negative />
+      <CurrencyBox label="Prejuizo Total RevShare" :value="lossTotal" negative />
       <CurrencyBox
-        label="Prejuizo em 30 dias"
+        label="Prejuizo RevShare em 30 dias"
         :value="lossLast30Days"
         negative
       />
-      <CurrencyBox label="Lucro do dia" :value="profitToday" />
-      <CurrencyBox label="Lucro em 30 dias" :value="profitLast30Days" />
-      <CurrencyBox label="Lucro Total" :value="profitTotal" />
+      <CurrencyBox label="Lucro RevShare do dia" :value="profitToday" />
+      <CurrencyBox label="Lucro RevShare em 30 dias" :value="profitLast30Days" />
+      <CurrencyBox label="Lucro RevShare Total" :value="profitTotal" />
       <CurrencyBox label="Lucro CPA do dia" :value="profitCPAToday" />
       <CurrencyBox label="Lucro CPA 30 dias" :value="profitCPALast30Days" />
       <CurrencyBox label="Lucro CPA Total" :value="profitCPATotal" />
       <TextBox label="Convidados" :value="countInvited"></TextBox>
+      <TextBox label="Convidados CPA" :value="countCPA"></TextBox>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
       <TextBox
@@ -120,11 +121,11 @@ const showModal = ref(false);
       </TextBox>
       <div class="grid grid-cols-2 gap-x-2 col-span-2 mt-4">
         <CurrencyBox
-          label="Valor pendente"
+          label="Valor pendente a faturar"
           :value="paymentPending"
         ></CurrencyBox>
         <CurrencyBox
-          label="Valor disponível"
+          label="Valor disponível para saque"
           :value="walletAffiliate"
         ></CurrencyBox>
         <button

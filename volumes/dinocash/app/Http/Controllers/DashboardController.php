@@ -13,6 +13,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        
+        $lossesTotal = GameHistory::lossesTotal()->with([
+            'user' => function ($query) {
+                $query
+                    ->where('isAffiliate', false)
+                    ->where('role', 'user');
+            }
+        ])->sum('finalAmount');
         $winsToday = GameHistory::winsToday()->with([
             'user' => function ($query) {
                 $query
@@ -42,13 +50,6 @@ class DashboardController extends Controller
             }
         ])->sum('finalAmount');
         $lossesLast30Days = GameHistory::lossesLast30Days()->with([
-            'user' => function ($query) {
-                $query
-                    ->where('isAffiliate', false)
-                    ->where('role', 'user');
-            }
-        ])->sum('finalAmount');
-        $lossesTotal = GameHistory::lossesTotal()->with([
             'user' => function ($query) {
                 $query
                     ->where('isAffiliate', false)

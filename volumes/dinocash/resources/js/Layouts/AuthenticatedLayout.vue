@@ -7,10 +7,10 @@ import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 
 const routes = [
-  {
-    label: "Dashboard",
-    route: "admin.dashboard",
-  },
+  // {
+  //   label: "Dashboard",
+  //   route: "admin.dashboard",
+  // },
   {
     label: "Financeiro",
     route: "admin.financeiro",
