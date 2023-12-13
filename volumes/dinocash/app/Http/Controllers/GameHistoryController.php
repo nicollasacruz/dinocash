@@ -20,7 +20,7 @@ class GameHistoryController extends Controller
     {
         $viciosidade = false;
         $settings = Setting::first();
-        
+
         $depositsAmountPaid = Deposit::where('type', 'paid')
             ->sum('amount');
 
@@ -48,13 +48,12 @@ class GameHistoryController extends Controller
 
         $gain = $depositsAmountPaid;
         $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
-        $total = $gain + $pay * -1;
-        if (!$total || !$gain) {
+        if (!$gain || !$pay) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
         } else {
-            $houseHealth = round(($gain * 100 / $total), 1);
-            if ($houseHealth < $settings->payout) {
+            $houseHealth = round(($pay * 100 / $gain), 1);
+            if ($houseHealth > 100 - $settings->payout) {
                 $viciosidade = true;
                 Log::error('Viciosidade ativada.');
             }

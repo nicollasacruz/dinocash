@@ -112,12 +112,11 @@ class FinanceController extends Controller
 
         $gain = $depositsAmountPaid;
         $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
-        $total = $gain + $pay * -1;
-        if (!$total || !$gain) {
+        if (!$pay || !$gain) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
         } else {
-            $houseHealth = round(($gain * 100 / $total), 1);
+            $houseHealth = 100 - round(($pay * 100 / $gain), 1);
         }
         
         $activeSessions = DB::table('sessions')
