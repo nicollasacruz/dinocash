@@ -99,6 +99,7 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.height = "100vh";
         canvasContainer.style.position = "relative";
         canvasContainer.style.overflow = "hidden";
+        canvasContainer.style.transition = "background 0.5s ease";
         canvasContainer.appendChild(canvas)
 
         app.prepend(canvasContainer);
@@ -382,6 +383,10 @@ export default class DinoGame extends GameRunner {
                 playSound("level-up");
                 this.increaseDifficulty();
                 state.score.isBlinking = true;
+            }
+            if(state.score.value === 500){
+                const canvasContainer = document.getElementById("canvasContainer");
+                canvasContainer.style.background = "#a88532";
             }
         }
     }
