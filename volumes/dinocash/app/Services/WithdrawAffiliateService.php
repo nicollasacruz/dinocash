@@ -25,12 +25,13 @@ class WithdrawAffiliateService
                 'type' => 'pending',
             ]);
 
-            AffiliateHistory::create([
-                'affiliateInvoiceId' => 0,
-                'userId' => $affiliate->id,
-                'amount' => $amount,
-                'type' => 'WITHDRAW',
-            ]);
+            // AffiliateHistory::create([
+            //     'affiliateInvoiceId' => 0,
+            //     'affiliateId' => $affiliate->id,
+            //     'userId' => $affiliate->id,
+            //     'amount' => $amount,
+            //     'type' => 'WITHDRAW',
+            // ]);
 
             $affiliate->changeWalletAffiliate($amount * -1);
             $affiliate->save();
@@ -122,13 +123,13 @@ class WithdrawAffiliateService
             $user = $withdraw->user;
             $amount = $withdraw->amount;
 
-            AffiliateHistory::create([
-                'userId' => $withdraw->user->id,
-                'affiliateId' => $withdraw->user->id,
-                'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($withdraw->user))->id,
-                'amount' => $amount,
-                'type' => 'WITHDRAW REJECTED',
-            ]);
+            // AffiliateHistory::create([
+            //     'userId' => $withdraw->user->id,
+            //     'affiliateId' => $withdraw->user->id,
+            //     'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($withdraw->user))->id,
+            //     'amount' => $amount,
+            //     'type' => 'WITHDRAW REJECTED',
+            // ]);
             $user->changeWallet($amount);
             $user->save();
 
