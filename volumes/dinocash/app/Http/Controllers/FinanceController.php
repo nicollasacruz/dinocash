@@ -44,7 +44,8 @@ class FinanceController extends Controller
         })
             ->where('type', 'paid')
             ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false);
+                $query->where('isAffiliate', false)
+                    ->where('role', 'user');
             })
             ->sum('amount');
         $withdrawsAmountAffiliatePaid = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
@@ -52,22 +53,28 @@ class FinanceController extends Controller
         })
             ->where('type', 'paid')
             ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false);
+                $query->where('isAffiliate', false)
+                    ->where('role', 'user');
             })
             ->sum('amount');
 
-        $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->sum('wallet');
+        $walletsAmount = User::where('role', 'user')
+            ->where('isAffiliate', false)
+            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })->sum('wallet');
 
 
-        $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', true)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->sum('walletAffiliate');
+        $walletsAfilliateAmount = User::where('role', 'user')
+            ->where('isAffiliate', true)
+            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })->sum('walletAffiliate');
 
-        $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->with([
+        $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)
+            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })->with([
                     'affiliate' => function ($query) {
                         $query
                             ->where('role', 'user');
@@ -118,7 +125,7 @@ class FinanceController extends Controller
         } else {
             $houseHealth = 100 - round(($pay * 100 / $gain), 1);
         }
-        
+
         $activeSessions = DB::table('sessions')
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
