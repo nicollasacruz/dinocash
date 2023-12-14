@@ -26,6 +26,7 @@ class WithdrawAffiliateService
             ]);
 
             AffiliateHistory::create([
+                'affiliateInvoiceId' => 0,
                 'userId' => $affiliate->id,
                 'amount' => $amount,
                 'type' => 'WITHDRAW',
