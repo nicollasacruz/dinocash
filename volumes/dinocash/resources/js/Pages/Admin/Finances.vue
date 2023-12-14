@@ -163,7 +163,7 @@ watch(addictRange, (value) => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
           <CurrencyBox
             label="Saldo de Carteiras"
-            :value="withdrawsAmount * -1"
+            :value="walletAmount * -1"
             negative
           />
           <CurrencyBox
