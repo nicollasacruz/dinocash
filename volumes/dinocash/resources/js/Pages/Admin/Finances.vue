@@ -12,6 +12,7 @@ import { format } from "date-fns";
 const {
   activeSessions,
   totalUsers,
+  totalUsersToday,
   balanceAmount,
   depositsAmount,
   withdrawsAmount,
@@ -30,6 +31,7 @@ const {
 } = defineProps([
   "activeSessions",
   "totalUsers",
+  "totalUsersToday",
   "balanceAmount",
   "depositsAmount",
   "withdrawsAmount",
