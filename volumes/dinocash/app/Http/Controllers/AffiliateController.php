@@ -29,7 +29,12 @@ class AffiliateController extends Controller
         $affiliates = User::when($email, function ($query) use ($email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-            ->where('isAffiliate', true)->get();
+            ->where('isAffiliate', true)
+            ->get();
+
+        $affiliates->each(function ($affiliate) {
+            $affiliate->paymentPending = $affiliate->affiliateHistories->where('invoicedAt', null)->sum('amount');
+        });
 
         $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
 

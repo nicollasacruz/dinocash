@@ -20,6 +20,16 @@
                 }}
             </td>
         </template>
+        <template #paymentPending="{ value }">
+            <td>
+                {{
+                    Number(value).toLocaleString("pt-br", {
+                        style: "currency",
+                        currency: "BRL",
+                    })
+                }}
+            </td>
+        </template>
     </BaseTable>
     <BaseModal class="z-10" v-if="showModal" v-model="showModal">
         <UserForm typeForm="affiliate"

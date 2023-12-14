@@ -138,7 +138,7 @@ Route::middleware(['auth', 'verified', 'singleSession'])->group(function () {
 //       ADMIN GROUP
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
-        return Redirect::route('admin.dashboard');
+        return Redirect::route('admin.financeiro');
     })->name('admin');
     Route::get('/usuarios', [UserController::class, 'indexAdmin'])->name('admin.usuarios');
     Route::patch('/usuarios', [UserController::class, 'modalUserUpdate'])->name('admin.usuarios.update');
