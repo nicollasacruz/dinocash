@@ -111,6 +111,7 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.overflow = "hidden";
         app.style.backgroundImage = `url(${bgNatal})`;
         app.style.backgroundPosition = "center";
+        app.style.userSelect = "none";
         app.style.backgroundSize = "cover";
         app.style.backgroundRepeat = "no-repeat";
         const image = new Image();
