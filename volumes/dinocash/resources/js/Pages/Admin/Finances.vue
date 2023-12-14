@@ -26,6 +26,7 @@ const {
   topDeposits,
   topProfitableAffiliates,
   topLossAffiliates,
+  topAffiliatesCPA,
   payout,
   houseHealth,
 } = defineProps([
@@ -45,6 +46,7 @@ const {
   "topDeposits",
   "topProfitableAffiliates",
   "topLossAffiliates",
+  "topAffiliatesCPA",
   "payout",
   "houseHealth",
 ]);
@@ -267,6 +269,21 @@ watch(addictRange, (value) => {
                   {{ email }} - {{ toBRL(totalPayed * -1) }}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="box p-2 mt-2">
+          <div
+            class="text-green-500 text-center font-bold text-xs uppercase mb-2"
+          >
+            Afiliados que mais trouxeram cadastros pagantes
+          </div>
+          <div class="grid-cols-2">
+            <div
+              class="text-xs pt-1"
+              v-for="{ email, totalCount } in topAffiliatesCPA"
+            >
+              <div class="text-white text-lg ">{{ email }} - {{ totalCount }} convidados</div>
             </div>
           </div>
         </div>

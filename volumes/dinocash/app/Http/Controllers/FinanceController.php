@@ -116,7 +116,7 @@ class FinanceController extends Controller
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
-
+        $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
         $gain = $depositsAmountPaid;
         $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
         if (!$pay || !$gain) {
@@ -147,6 +147,7 @@ class FinanceController extends Controller
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,
+            'topAffiliatesCPA' => $topAffiliatesCPA,
             'topLossAffiliates' => $topLossAffiliates,
             'payout' => Setting::first('payout'),
             'houseHealth' => $houseHealth * 1,
