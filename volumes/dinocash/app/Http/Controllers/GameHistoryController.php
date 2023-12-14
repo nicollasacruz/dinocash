@@ -65,8 +65,9 @@ class GameHistoryController extends Controller
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
                 $user->update([
-                    'wallet' => $user->wallet + $gameHistoryItem->amount * 1,
+                    'wallet' => $user->wallet + ($gameHistoryItem->amount * 1),
                 ]);
+                $user->save();
                 $gameHistoryItem->delete();
                 Log::error('Partida já iniciada. - ' . $user->email);
             }
