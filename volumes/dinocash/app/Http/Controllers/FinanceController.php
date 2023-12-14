@@ -130,10 +130,12 @@ class FinanceController extends Controller
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
         $totalUsers = User::all()->count();
+        $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
 
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
+            'totalUsersToday' => $totalUsersToday,
             'balanceAmount' => $caixaDaCasa,
             'depositsAmount' => $depositsAmountPaid,
             'withdrawsAmount' => $withdrawsAmountPaid,

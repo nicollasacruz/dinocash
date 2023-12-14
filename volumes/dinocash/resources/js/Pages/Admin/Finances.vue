@@ -4,6 +4,7 @@ import { Head, router } from "@inertiajs/vue3";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { ref, defineProps, onMounted, watch } from "vue";
+import { UserIcon } from "@heroicons/vue/24/solid";
 import TextBox from "@/Components/TextBox.vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import { format } from "date-fns";
@@ -126,6 +127,11 @@ watch(addictRange, (value) => {
           </template>
         </TextBox>
         <TextBox label="Cadastros" :value="totalUsers">
+          <template #icon>
+            <UserIcon class="w-5" />
+          </template>
+        </TextBox>
+        <TextBox label="Cadastros Hoje" :value="totalUsersToday">
           <template #icon>
             <UserIcon class="w-5" />
           </template>
