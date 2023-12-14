@@ -108,10 +108,9 @@ class WithdrawAffiliateService
         }
     }
 
-    public function reject(AffiliateWithdraw $withdraw): bool
+    public function reject(AffiliateWithdraw $withdraw): array
     {
         try {
-            $affiliateInvoiceService = new AffiliateInvoiceService();
 
             $withdraw->update([
                 'type' => 'rejected',
@@ -133,10 +132,16 @@ class WithdrawAffiliateService
             $user->changeWallet($amount);
             $user->save();
 
-            return true;
+            return [
+                'success' => 'sucesso',
+                'message' => 'Saque rejeitado com sucesso.',
+            ];
         } catch (Exception $e) {
             Log::error('Erro ao rejeitar o saque: ' . $e->getMessage());
-            return false;
+            return [
+                'success' => 'error',
+                'message' => $e->getMessage(),
+            ];
         }
     }
 }

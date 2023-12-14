@@ -96,8 +96,11 @@ class AffiliateWithdrawController extends Controller
             $withdrawService = new WithdrawAffiliateService();
             $withdraw = AffiliateWithdraw::find($request->withdraw);
             if ($withdraw->type === 'pending') {
-                $withdrawService->reject($withdraw);
-                return to_route('admin.afiliados')->with('success','Saque rejeitado com sucesso.');
+                $response = $withdrawService->reject($withdraw);
+                return response()->json([
+                    'success' => $response['success'],
+                    'message' => $response['message']
+                ], 500);
             }
             return response()->json([
                 Log::error('Erro ao aprovar o o saque do afiliado.'),
