@@ -65,8 +65,8 @@ const showModal = ref(false);
 const amount = ref(0);
 
 function withdraw() {
-  if (amount.value < 0) {
-    toast.error("Saque não pode ser menor que zero");
+  if (amount.value <= 0 ) {
+    toast.error("Saque não pode ser menor ou igual a zero");
     return;
   }
   if (amount.value > walletAffiliate) {
