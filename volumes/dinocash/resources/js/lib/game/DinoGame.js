@@ -94,6 +94,7 @@ export default class DinoGame extends GameRunner {
         canvas.height = Math.floor(height * scale);
         canvas.style.border = "8px solid #303B69";
         canvas.style.borderRadius = "8px";
+        canvas.style.userSelect = "none";
         // shadow bottom with margin left
         canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
         ctx.scale(scale, scale);
@@ -109,6 +110,7 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.height = "100vh";
         canvasContainer.style.position = "relative";
         canvasContainer.style.overflow = "hidden";
+        canvasContainer.style.userSelect = "none";
         app.style.backgroundImage = `url(${bgNatal})`;
         app.style.backgroundPosition = "center";
         app.style.userSelect = "none";
@@ -131,6 +133,7 @@ export default class DinoGame extends GameRunner {
         felizNatal.classList.add("text-xl","lg:text-6xl");
         felizNatal.style.fontSize = "40px";
         felizNatal.style.marginBottom = "-36px";
+        felizNatal.style.userSelect = "none";
         felizNatal.textContent = "Feliz Natal!";
         const prosperoAno = document.createElement("span");
         prosperoAno.textContent = "e um Próspero Ano Novo!";
@@ -164,6 +167,7 @@ export default class DinoGame extends GameRunner {
         const buttonContainer = document.createElement("div");
         buttonContainer.id = "buttonContainer";
         buttonContainer.style.position = "absolute";
+        buttonContainer.style.userSelect = "none";
         buttonContainer.style.top = "18vh";
         buttonContainer.style.width = "100%";
         buttonContainer.style.display = "flex";
@@ -181,6 +185,7 @@ export default class DinoGame extends GameRunner {
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.style.borderRadius = "8px";
+        finishButton.style.userSelect = "none";
 
         // Adicione a sombra à caixa
         finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
@@ -313,6 +318,7 @@ export default class DinoGame extends GameRunner {
     resetGame() {
         const text = document.getElementById("info-text");
         text.style.display = "none";
+        text.style.userSelect = "none";
         this.getAmount();
         if (this.state.dino) {
             this.state.dino.reset();
