@@ -15,34 +15,39 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Redirect;
 
 class AffiliateController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
-        $email = $request->query('email');
+        try {
+            $email = $request->query('email');
 
-        $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+            $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
 
-        $affiliates = User::when($email, function ($query) use ($email) {
-            $query->where('email', 'LIKE', '%' . $email . '%');
-        })
-            ->where('isAffiliate', true)
-            ->get();
+            $affiliates = User::when($email, function ($query) use ($email) {
+                $query->where('email', 'LIKE', '%' . $email . '%');
+            })
+                ->where('isAffiliate', true)
+                ->get();
 
-        $affiliates->each(function ($affiliate) {
-            $affiliate->paymentPending = $affiliate->affiliateHistories->where('invoicedAt', null)->sum('amount');
-        });
+            $affiliates->each(function ($affiliate) {
+                $affiliate->paymentPending = $affiliate->affiliateHistories->where('invoicedAt', null)->sum('amount');
+            });
 
-        $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+            $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
 
-        return Inertia::render('Admin/Affiliate', [
-            'affiliates' => $affiliates,
-            'affiliatesWithdraws' => $affiliateWithdraws,
-            'affiliatesWithdrawsList' => $affiliateWithdrawsList,
-        ]);
+            return Inertia::render('Admin/Affiliate', [
+                'affiliates' => $affiliates,
+                'affiliatesWithdraws' => $affiliateWithdraws,
+                'affiliatesWithdrawsList' => $affiliateWithdrawsList,
+            ]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage() . '  -  ///   ' . $e->getTraceAsString());
+        }
     }
 
     /**

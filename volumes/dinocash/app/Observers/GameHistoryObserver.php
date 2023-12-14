@@ -37,12 +37,12 @@ class GameHistoryObserver
                 return;
             }
             $affiliate = $gameHistory->user->affiliate;
-            if (!$gameHistory->user->isAffiliate && $gameHistory->user->affiliate->revShare) {
+            if (!$gameHistory->user->isAffiliate && $affiliate->revShare > 0) {
                 AffiliateHistory::create([
-                    'amount' => number_format($amount * ($gameHistory->user->affiliate->revShare) / 100, 2, '.', ''),
+                    'amount' => number_format($amount * ($affiliate->revShare) / 100, 2, '.', ''),
                     'gameId' => $gameHistory->id,
                     'affiliateId' => $gameHistory->user->affiliateId,
-                    'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($gameHistory->user->affiliate))->id,
+                    'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($affiliate))->id,
                     'userId' => $gameHistory->userId,
                     'type' => $amount > 0 ? 'win' : 'loss',
                 ]);
