@@ -26,7 +26,7 @@ class AffiliateController extends Controller
         try {
             $email = $request->query('email');
 
-            $affiliateWithdrawsList = AffiliateWithdraw::orderBy('created_at', 'desc')->get();
+            $affiliateWithdrawsList = AffiliateWithdraw::all()->orderBy('created_at', 'desc');
 
             $affiliates = User::when($email, function ($query) use ($email) {
                 $query->where('email', 'LIKE', '%' . $email . '%');
