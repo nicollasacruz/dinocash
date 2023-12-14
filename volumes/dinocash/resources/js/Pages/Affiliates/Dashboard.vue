@@ -124,6 +124,7 @@ function withdraw() {
             />
             <CurrencyBox label="Lucro CPA Total" :value="profitCPATotal" />
             <TextBox label="Convidados" :value="countInvited"></TextBox>
+            <TextBox label="Convidados CPA" :value="countCPA"></TextBox>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
             <TextBox
