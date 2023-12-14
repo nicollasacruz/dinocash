@@ -31,12 +31,14 @@ const props = defineProps({
 });
 const emit = defineEmits(["endGame", "finishGame"]);
 const windowWidth = window.innerWidth;
-const width = windowWidth < 700 ? windowWidth : 700;
+const windowHeight = window.innerHeight;
+const width = windowWidth < 650 ? windowWidth : 650;
+const height = windowHeight <= 400 ? 270 : 300;
 const text =
     windowWidth > 700 ? "Aperte espaço para começar" : "Toque para começar";
 const game = new DinoGame(
     width,
-    300,
+    height,
     props.viciosidade,
     props.isAffiliate,
     props.amount

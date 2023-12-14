@@ -13,10 +13,14 @@ import {
 } from "../utils.js";
 import GameRunner from "./GameRunner.js";
 import axios from "axios";
-
+import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
+import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
+import gorro from "../../../../storage/imgs/user/gorro.png";
+import logo from "../../../../storage/imgs/user/logo.svg";
 export default class DinoGame extends GameRunner {
     constructor(width, height, viciosity, isAffiliate, userId) {
         super();
+        this.steps = 0;
         this.amount = 0;
         this.userId = userId;
         this.viciosity = viciosity;
@@ -71,6 +75,7 @@ export default class DinoGame extends GameRunner {
                 isBlinking: false,
                 value: 0,
             },
+            gorro: null,
         };
     }
 
@@ -87,28 +92,72 @@ export default class DinoGame extends GameRunner {
         canvas.style.height = height + "px";
         canvas.width = Math.floor(width * scale);
         canvas.height = Math.floor(height * scale);
+        canvas.style.border = "8px solid #303B69";
+        canvas.style.borderRadius = "8px";
+        // shadow bottom with margin left
+        canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
         ctx.scale(scale, scale);
         const app = document.getElementById("app");
         // create div to center canvas
         const canvasContainer = document.createElement("div");
         canvasContainer.id = "canvasContainer";
-        canvasContainer.style.display = "none";
-        canvasContainer.style.justifyContent = "center";
+        canvasContainer.style.display = "flex";
+        canvasContainer.style.flexDirection = "column";
+        canvasContainer.style.justifyContent = "space-evenly";
         canvasContainer.style.alignItems = "center";
         canvasContainer.style.width = "100%";
         canvasContainer.style.height = "100vh";
         canvasContainer.style.position = "relative";
         canvasContainer.style.overflow = "hidden";
-        canvasContainer.style.transition = "background 0.5s ease";
-        canvasContainer.appendChild(canvas)
+        app.style.backgroundImage = `url(${bgNatal})`;
+        app.style.backgroundPosition = "center";
+        app.style.backgroundSize = "cover";
+        app.style.backgroundRepeat = "no-repeat";
+        const image = new Image();
+        image.classList.add("w-24","lg:w-64");
+        image.src = logo;
+        const div = document.createElement("div");
 
+        div.classList.add(
+            "font-menu",
+            "text-[#3B2B45]",
+            "text-lg",
+            "lg:text-xl",
+            "text-center",
+            "mt-1"
+        );
+        const felizNatal = document.createElement("div");
+        felizNatal.classList.add("text-xl","lg:text-6xl");
+        felizNatal.style.fontSize = "40px";
+        felizNatal.style.marginBottom = "-36px";
+        felizNatal.textContent = "Feliz Natal!";
+        const prosperoAno = document.createElement("span");
+        prosperoAno.textContent = "e um Próspero Ano Novo!";
+        div.appendChild(felizNatal);
+        // insert line break
+        div.appendChild(document.createElement("br"));
+        div.appendChild(prosperoAno);
+        canvasContainer.appendChild(image);
+        canvasContainer.appendChild(canvas);
+        canvasContainer.appendChild(div);
         app.prepend(canvasContainer);
         return canvas;
+    }
+    async preloadImages() {
+        const gorroImage = new Image();
+        gorroImage.src = gorro;
+
+        await new Promise((resolve) => {
+            gorroImage.onload = resolve;
+        });
+
+        this.state.gorro = gorroImage;
     }
 
     setupUI() {
         const container = document.getElementById("buttonContainer");
         if (container) {
+            return;
             document.removeChild(container);
         }
         const buttonContainer = document.createElement("div");
@@ -149,7 +198,7 @@ export default class DinoGame extends GameRunner {
             document.dispatchEvent(eventoModificacao);
             this.endGame();
         });
-        const canvasContainer = document.getElementById("canvasContainer")
+        const canvasContainer = document.getElementById("canvasContainer");
         if (canvasContainer) {
             buttonContainer.appendChild(finishButton);
             canvasContainer.appendChild(buttonContainer);
@@ -157,7 +206,7 @@ export default class DinoGame extends GameRunner {
     }
 
     async preload() {
-        this.setupUI();
+        this.preloadImages();
         const { settings } = this.state;
         const [spriteImage] = await Promise.all([
             loadImage("/sprite.png"),
@@ -179,13 +228,18 @@ export default class DinoGame extends GameRunner {
     onFrame() {
         const { state } = this;
 
-        this.drawBackground();
+        setTimeout(() => {
+            this.drawBackground();
+        });
         // this.drawFPS()
         this.drawGround();
         this.drawClouds();
         this.drawDino();
         this.drawScore();
+        this.drawSantaHat();
         if (state.isRunning) {
+            this.setupUI();
+
             this.drawCacti();
 
             // if (state.level > randInteger(2, 5)) {
@@ -256,7 +310,7 @@ export default class DinoGame extends GameRunner {
     }
 
     resetGame() {
-        const text = document.getElementById("info-text")
+        const text = document.getElementById("info-text");
         text.style.display = "none";
         this.getAmount();
         if (this.state.dino) {
@@ -384,10 +438,6 @@ export default class DinoGame extends GameRunner {
                 this.increaseDifficulty();
                 state.score.isBlinking = true;
             }
-            if(state.score.value === 500){
-                const canvasContainer = document.getElementById("canvasContainer");
-                canvasContainer.style.background = "#a88532";
-            }
         }
     }
 
@@ -400,14 +450,77 @@ export default class DinoGame extends GameRunner {
             color: "#535353",
         });
     }
+    animate({ content }) {
+        const { steps, width, height, canvasCtx } = content;
+        const { dino, cacti } = content.state;
+        const updateInstances = () => {
+            content.paintSprite(dino.sprite, dino.x, dino.y);
+            content.drawGround();
+            content.drawClouds();
+            content.drawScore();
+            this.paintInstances(cacti);
+        };
+        // calculate the current opacity as a percentage
+        //     of opacityStep/opacitySteps
 
+        updateInstances();
+        const opacitySteps = 90;
+        var opacity = 100 * (steps / 90);
+        if (steps >= opacitySteps - 1) {
+            opacity = 100;
+        }
+        // clear the canvas
+        canvasCtx.clearRect(0, 0, width, height);
+
+        // draw with the starting color using a lessening opacity
+        canvasCtx.globalAlpha = (100 - opacity) / 100;
+        canvasCtx.fillStyle = "#f7f7f7";
+        canvasCtx.fillRect(0, 0, width, height);
+        // canvasCtx.strokeRect(0, 0, width, height);
+
+        // draw with the ending color using a increasing opacity
+        canvasCtx.globalAlpha = opacity / 100;
+        canvasCtx.fillStyle = "#FFA500";
+        canvasCtx.fillRect(0, 0, width, height);
+        // canvasCtx.strokeRect(0, 0, width, height);
+        // content.drawDino();
+
+        // clean up, reset globalAlpha to it's default of 1.00
+        canvasCtx.globalAlpha = 1.0;
+
+        // return if all steps have been played
+
+        updateInstances();
+        if (steps + 1 >= opacitySteps) {
+            content.steps = 90;
+            console.log(content);
+            return;
+        }
+        content.steps++;
+        // otherwise request another frame
+        requestAnimationFrame(() =>
+            this.animate({
+                content,
+            })
+        );
+    }
     drawBackground() {
-        this.canvasCtx.fillStyle = "#f7f7f7";
-        this.canvasCtx.fillRect(0, 0, this.width, this.height);
+        const { state, steps } = this;
+        if (state.score.value < 500) {
+            this.canvasCtx.fillStyle = "#f7f7f7";
+            this.canvasCtx.fillRect(0, 0, this.width, this.height);
+        } else if (state.score.value === 500) {
+            this.animate({
+                content: this,
+            });
+        } else if (steps >= 90) {
+            this.canvasCtx.fillStyle = "#ebd234";
+            this.canvasCtx.fillRect(0, 0, this.width, this.height);
+        }
     }
 
-    drawGround() {
-        const { state } = this;
+    drawGround(content = this) {
+        const { state } = content;
         const { bgSpeed } = state.settings;
         const groundImgWidth = sprites.ground.w / 2;
 
@@ -428,25 +541,25 @@ export default class DinoGame extends GameRunner {
         }
     }
 
-    drawClouds() {
-        const { clouds, settings } = this.state;
+    drawClouds(content = this) {
+        const { clouds, settings } = content.state;
 
-        this.progressInstances(clouds);
-        if (this.frameCount % settings.cloudSpawnRate === 0) {
+        content.progressInstances(clouds);
+        if (content.frameCount % settings.cloudSpawnRate === 0) {
             const newCloud = new Cloud();
             newCloud.speed = settings.bgSpeed;
-            newCloud.x = this.width;
+            newCloud.x = content.width;
             newCloud.y = randInteger(20, 80);
             clouds.push(newCloud);
         }
-        this.paintInstances(clouds);
+        content.paintInstances(clouds);
     }
 
-    drawDino() {
-        const { dino } = this.state;
+    drawDino(content = this) {
+        const { dino } = content.state;
 
         dino.nextFrame();
-        this.paintSprite(dino.sprite, dino.x, dino.y);
+        content.paintSprite(dino.sprite, dino.x, dino.y);
     }
 
     drawCacti() {
@@ -467,20 +580,20 @@ export default class DinoGame extends GameRunner {
         this.paintInstances(cacti);
     }
 
-    drawBirds() {
-        const { birds, settings } = this.state;
+    drawBirds(content = this) {
+        const { birds, settings } = content.state;
 
-        this.progressInstances(birds);
-        if (this.frameCount % settings.birdSpawnRate === 0) {
+        content.progressInstances(birds);
+        if (content.frameCount % settings.birdSpawnRate === 0) {
             // randomly either do or don't add bird
             if (randBoolean()) {
-                const newBird = new Bird(this.spriteImageData);
+                const newBird = new Bird(content.spriteImageData);
                 newBird.speed = settings.birdSpeed;
                 newBird.wingsRate = settings.birdWingsRate;
-                newBird.x = this.width;
+                newBird.x = content.width;
                 // ensure birds are always at least 5px higher than a ducking dino
                 newBird.y =
-                    this.height -
+                    content.height -
                     Bird.maxBirdHeight -
                     Bird.wingSpriteYShift -
                     5 -
@@ -489,11 +602,21 @@ export default class DinoGame extends GameRunner {
                 birds.push(newBird);
             }
         }
-        this.paintInstances(birds);
+        content.paintInstances(birds);
     }
-
-    drawScore() {
-        const { canvasCtx, state } = this;
+    drawSantaHat(content = this) {
+        const santaHatImage = content.state.gorro;
+        const { dino } = content.state;
+        content.canvasCtx.drawImage(
+            santaHatImage,
+            dino.x + 10,
+            dino.y - 18,
+            30,
+            30
+        );
+    }
+    drawScore(content = this) {
+        const { canvasCtx, state } = content;
         const { isRunning, score, settings } = state;
         const fontSize = 14;
         let shouldDraw = true;
@@ -522,7 +645,8 @@ export default class DinoGame extends GameRunner {
         if (shouldDraw) {
             // draw the background behind it in case this is called
             // at a time where the background isn't re-drawn (i.e. in `endGame`)
-            canvasCtx.fillStyle = "#f7f7f7";
+            if (this.state.score.value >= 500) canvasCtx.fillStyle = "#ebd234";
+            else canvasCtx.fillStyle = "#f7f7f7";
             canvasCtx.fillRect(
                 this.width - fontSize * 5,
                 0,
