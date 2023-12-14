@@ -85,6 +85,22 @@ function withdraw() {
       toast.error(error.response.data.message);
     });
 }
+
+function formatAmount() {
+
+  // Limpar caracteres não numéricos, exceto o ponto decimal
+  let cleanedValue = amount.value.replace(/[^\d.]/g, "");
+
+  // Permitir apenas um ponto decimal
+  const decimalCount = cleanedValue.split(".").length - 1;
+  if (decimalCount > 1) {
+    cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
+  }
+  console.log(cleanedValue, 'value')
+
+  // Atualizar o valor
+  amount.value = cleanedValue;
+}
 </script>
 
 <template>
@@ -152,7 +168,11 @@ function withdraw() {
           label="Valor disponível"
           :value="walletAffiliate"
         ></CurrencyBox>
-        <input class="col-span-2 admin-input mt-3" v-model="amount" />
+        <input
+          class="col-span-2 admin-input mt-3"
+          v-model="amount"
+          @input="formatAmount"
+        />
         <button
           @click="withdraw"
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
