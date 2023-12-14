@@ -66,7 +66,7 @@ const amount = ref(0);
 
 function withdraw() {
     axios
-        .post(route("user.saque.store"), {
+        .post(route("afiliado.saques.store"), {
             amount: amount.value,
         })
         .then((response) => {
