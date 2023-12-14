@@ -64,7 +64,9 @@ class GameHistoryController extends Controller
         $gameHistory = $user->gameHistories->where('type', 'pending');
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
-                $user->changeWallet($gameHistoryItem->amount);
+                $user->update([
+                    'wallet' => $user->wallet + $gameHistoryItem->amount * 1,
+                ]);
                 $gameHistoryItem->delete();
                 Log::error('Partida já iniciada. - ' . $user->email);
             }
