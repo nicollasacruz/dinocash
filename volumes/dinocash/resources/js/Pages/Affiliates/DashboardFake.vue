@@ -43,7 +43,6 @@ const {
   "paymentPending",
   "countInvited",
 ]);
-const profitTotalFake = randFloat(13000,20000);
 interface ImportMetaEnv {
   APP_URL: string;
 }
