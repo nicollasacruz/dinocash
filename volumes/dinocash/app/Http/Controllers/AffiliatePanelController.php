@@ -116,7 +116,7 @@ class AffiliatePanelController extends Controller
         $revShareTotal = $profitTotal - $lossTotal;
         $paymentPending = $user->affiliateHistories->where('invoicedAt', null)->sum('amount');
 
-        return Inertia::render('Affiliates/Dashboard', [
+        return Inertia::render('Affiliates/DashboardFake', [
             'profitToday' => $profitToday,
             'profitLast30Days' => $profitLast30Days,
             'lossLast30Days' => $lossLast30Days,
