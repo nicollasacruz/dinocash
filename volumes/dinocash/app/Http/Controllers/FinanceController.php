@@ -53,7 +53,7 @@ class FinanceController extends Controller
         })
             ->where('type', 'paid')
             ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false)
+                $query->where('isAffiliate', true)
                     ->where('role', 'user');
             })
             ->sum('amount');
@@ -118,7 +118,7 @@ class FinanceController extends Controller
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
         $gain = $depositsAmountPaid;
-        $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
+        $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$pay || !$gain) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
