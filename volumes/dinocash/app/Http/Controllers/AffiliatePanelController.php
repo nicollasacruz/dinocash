@@ -18,15 +18,15 @@ class AffiliatePanelController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $profitCPAToday = $user->affiliateHistories
-        ->filter(function ($history) {
-            return $history->type === 'CPA' && $history->updated_at->isToday();
-        })
-        ->sum('amount');
+            ->filter(function ($history) {
+                return $history->type === 'CPA' && $history->updated_at->isToday();
+            })
+            ->sum('amount');
         $profitCPALast30Days = $user->affiliateHistories
-        ->filter(function ($history) {
-            return $history->type === 'CPA' && $history->updated_at->isBetween(now()->subDays(30), now());
-        })
-        ->sum('amount');
+            ->filter(function ($history) {
+                return $history->type === 'CPA' && $history->updated_at->isBetween(now()->subDays(30), now());
+            })
+            ->sum('amount');
         $profitCPATotal = $user->affiliateHistories->where('type', 'CPA')->sum('amount');
         $countCPA = $user->affiliateHistories->where('type', 'CPA')->count();
         $profitToday = $user->affiliateHistories
@@ -41,15 +41,15 @@ class AffiliatePanelController extends Controller
             ->sum('amount');
         $profitTotal = $user->affiliateHistories->where('type', 'win')->sum('amount');
         $lossToday = $user->affiliateHistories
-        ->filter(function ($history) {
-            return $history->type === 'loss' && $history->updated_at->isToday();
-        })
-        ->sum('amount');
+            ->filter(function ($history) {
+                return $history->type === 'loss' && $history->updated_at->isToday();
+            })
+            ->sum('amount');
         $lossLast30Days = $user->affiliateHistories
-        ->filter(function ($history) {
-            return $history->type === 'loss' && $history->updated_at->isBetween(now()->subDays(30), now());
-        })
-        ->sum('amount');
+            ->filter(function ($history) {
+                return $history->type === 'loss' && $history->updated_at->isBetween(now()->subDays(30), now());
+            })
+            ->sum('amount');
         $lossTotal = $user->affiliateHistories->where('type', 'loss')->sum('amount');
         $countInvited = User::where('affiliateId', $user->id)->count();
         $revShareTotal = $profitTotal - $lossTotal;
@@ -88,9 +88,10 @@ class AffiliatePanelController extends Controller
             $dateEnd->setTime(23, 59, 59);
         }
 
-        $affiliateWithdrawsList = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-            $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-        })->orderBy('updated_at', 'desc')->get();
+        $affiliateWithdrawsList = AffiliateWithdraw::where('userId', $user->id)
+            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })->orderBy('updated_at', 'desc')->get();
 
         return Inertia::render('Affiliates/Withdraws', [
             'affiliatesWithdrawsList' => $affiliateWithdrawsList,

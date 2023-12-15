@@ -59,7 +59,7 @@ const touchStartCallback = ({ touches }) => {
     // if (touches.length === 1) {
     game.onInput("jump");
     // } else if (touches.length === 2) {
-    game.onInput("duck");
+    // game.onInput("duck");
     // }
 };
 

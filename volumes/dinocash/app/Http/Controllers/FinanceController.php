@@ -116,7 +116,7 @@ class FinanceController extends Controller
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
-
+        $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
         $gain = $depositsAmountPaid;
         $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
         if (!$pay || !$gain) {
@@ -130,10 +130,12 @@ class FinanceController extends Controller
             ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
             ->count();
         $totalUsers = User::all()->count();
+        $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
 
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
+            'totalUsersToday' => $totalUsersToday,
             'balanceAmount' => $caixaDaCasa,
             'depositsAmount' => $depositsAmountPaid,
             'withdrawsAmount' => $withdrawsAmountPaid,
@@ -145,6 +147,7 @@ class FinanceController extends Controller
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
             'topProfitableAffiliates' => $topProfitableAffiliates,
+            'topAffiliatesCPA' => $topAffiliatesCPA,
             'topLossAffiliates' => $topLossAffiliates,
             'payout' => Setting::first('payout'),
             'houseHealth' => $houseHealth * 1,

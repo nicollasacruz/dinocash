@@ -62,7 +62,8 @@ class WithdrawAffiliateService
 
         if ($data['response'] === 'OK') {
             return [
-                'success' => true
+                'success' => true,
+                'message' => 'Saque pago com sucesso.'
             ];
         } elseif ($data['response'] === 'PIX_KEY_NOT_FOUND') {
             Log::error('RESULTADO AUTOPAY WITHDRAW - Chave pix não encontrada');

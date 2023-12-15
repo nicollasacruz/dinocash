@@ -64,9 +64,23 @@ class GameHistoryController extends Controller
         $gameHistory = $user->gameHistories->where('type', 'pending');
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
-                $user->changeWallet($gameHistoryItem->amount);
+                $user->update([
+                    'wallet' => $user->wallet + ($gameHistoryItem->amount * 1),
+                ]);
+                $user->save();
                 $gameHistoryItem->delete();
                 Log::error('Partida já iniciada. - ' . $user->email);
+            }
+        }
+
+        $gameHistory = $user->gameHistories->where('type', 'gaming');
+        if ($gameHistory) {
+            foreach ($gameHistory as $gameHistoryItem) {
+                $gameHistoryItem->update([
+                    'type' => 'loss',
+                    'finalAmount' => $gameHistoryItem->amount * -1,
+                ]);
+                Log::error('Partida já iniciada corrigida. - ' . $user->email);
             }
         }
 
@@ -83,6 +97,8 @@ class GameHistoryController extends Controller
             $this->validate($request, [
                 'amount' => ['required', 'numeric', 'min:1', 'max:1000'],
             ]);
+
+            $request->amount = (floatval($request->amount));
             $user = User::find(Auth::user()->id);
             if (($user->wallet < $request->amount)) {
                 return response()->json([
@@ -90,24 +106,27 @@ class GameHistoryController extends Controller
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
-            $gameHistory = $user->gameHistories->where('type', 'pending');
-            if ($gameHistory) {
-                foreach ($gameHistory as $gameHistoryItem) {
+            $gameHistories = $user->gameHistories->where('type', 'pending');
+            if ($gameHistories) {
+                foreach ($gameHistories as $gameHistoryItem) {
                     $user->changeWallet($gameHistoryItem->amount);
                     $gameHistoryItem->delete();
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
-            $gameHistory = $user->gameHistories->where('type', 'gaming')
-                ->where('id', $request->gameId)->first();
 
-            if ($gameHistory) {
-                $gameHistoryItem->type = 'loss';
-                $gameHistoryItem->finalAmount = $gameHistoryItem->amount * -1;
-                $gameHistoryItem->save();
+            $gameHistories = $user->gameHistories->where('type', 'gaming');
 
-                Log::error('Partida já iniciada. - ' . $user->email);
+            if ($gameHistories) {
+                foreach ($gameHistories as $gameHistoryItem) {
+                    $gameHistoryItem->update([
+                        'type' => 'loss',
+                        'finalAmount' => $gameHistoryItem->amount * -1,
+                    ]);
+                    Log::error('Partida já iniciada corrigida. - ' . $user->email);
+                }
             }
+            
 
             $user->changeWallet($request->amount * -1);
             $user->save();

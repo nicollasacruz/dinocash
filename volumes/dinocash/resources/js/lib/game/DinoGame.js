@@ -32,31 +32,31 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: isAffiliate ? 7 : viciosity ? 9 : randInteger(8,9), // ppf
+            bgSpeed: isAffiliate ? 7.5 : viciosity ? 10 : randInteger(8, 10), // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
             cactiSpawnRate: isAffiliate
                 ? 45
                 : viciosity
-                ? 30
-                : randInteger(30, 40), // fpa
+                    ? 25
+                    : randInteger(30, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: isAffiliate
                 ? 0.7
                 : viciosity
-                ? 0.8
-                : randInteger(70, 80) / 100, // ppf
+                    ? 0.8
+                    : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: isAffiliate ? 10 : viciosity ? 9.5 : 9.5, // ppf
+            dinoLift: isAffiliate ? 10 : viciosity ? 9 : 9.3, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: isAffiliate
                 ? 7
                 : viciosity
-                ? 10
-                : randInteger(8, 10), // fpa
+                    ? 10
+                    : randInteger(8, 10), // fpa
         };
         this.state = {
             settings: { ...this.defaultSettings },
@@ -94,6 +94,12 @@ export default class DinoGame extends GameRunner {
         canvas.height = Math.floor(height * scale);
         canvas.style.border = "8px solid #303B69";
         canvas.style.borderRadius = "8px";
+        canvas.style.setProperty("-webkit-touch-callout", "none");
+        canvas.style.setProperty("-webkit-user-select", "none");
+        canvas.style.setProperty("-khtml-user-select", "none");
+        canvas.style.setProperty("-moz-user-select", "none");
+        canvas.style.setProperty("-ms-user-select", "none");
+        canvas.style.setProperty("user-select", "none");
         // shadow bottom with margin left
         canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
         ctx.scale(scale, scale);
@@ -109,12 +115,25 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.height = "100vh";
         canvasContainer.style.position = "relative";
         canvasContainer.style.overflow = "hidden";
+        canvasContainer.style.setProperty("-webkit-touch-callout", "none");
+        canvasContainer.style.setProperty("-webkit-user-select", "none");
+        canvasContainer.style.setProperty("-khtml-user-select", "none");
+        canvasContainer.style.setProperty("-moz-user-select", "none");
+        canvasContainer.style.setProperty("-ms-user-select", "none");
+        canvasContainer.style.setProperty("user-select", "none");
+
         app.style.backgroundImage = `url(${bgNatal})`;
         app.style.backgroundPosition = "center";
+        app.style.setProperty("-webkit-touch-callout", "none");
+        app.style.setProperty("-webkit-user-select", "none");
+        app.style.setProperty("-khtml-user-select", "none");
+        app.style.setProperty("-moz-user-select", "none");
+        app.style.setProperty("-ms-user-select", "none");
+        app.style.setProperty("user-select", "none");
         app.style.backgroundSize = "cover";
         app.style.backgroundRepeat = "no-repeat";
         const image = new Image();
-        image.classList.add("w-24","lg:w-64");
+        image.classList.add("w-24", "lg:w-64");
         image.src = logo;
         const div = document.createElement("div");
 
@@ -127,9 +146,15 @@ export default class DinoGame extends GameRunner {
             "mt-1"
         );
         const felizNatal = document.createElement("div");
-        felizNatal.classList.add("text-xl","lg:text-6xl");
+        felizNatal.classList.add("text-xl", "lg:text-6xl");
         felizNatal.style.fontSize = "40px";
         felizNatal.style.marginBottom = "-36px";
+        felizNatal.style.setProperty("-webkit-touch-callout", "none");
+        felizNatal.style.setProperty("-webkit-user-select", "none");
+        felizNatal.style.setProperty("-khtml-user-select", "none");
+        felizNatal.style.setProperty("-moz-user-select", "none");
+        felizNatal.style.setProperty("-ms-user-select", "none");
+        felizNatal.style.setProperty("user-select", "none");
         felizNatal.textContent = "Feliz Natal!";
         const prosperoAno = document.createElement("span");
         prosperoAno.textContent = "e um Próspero Ano Novo!";
@@ -163,6 +188,12 @@ export default class DinoGame extends GameRunner {
         const buttonContainer = document.createElement("div");
         buttonContainer.id = "buttonContainer";
         buttonContainer.style.position = "absolute";
+        buttonContainer.style.setProperty("-webkit-touch-callout", "none");
+        buttonContainer.style.setProperty("-webkit-user-select", "none");
+        buttonContainer.style.setProperty("-khtml-user-select", "none");
+        buttonContainer.style.setProperty("-moz-user-select", "none");
+        buttonContainer.style.setProperty("-ms-user-select", "none");
+        buttonContainer.style.setProperty("user-select", "none");
         buttonContainer.style.top = "18vh";
         buttonContainer.style.width = "100%";
         buttonContainer.style.display = "flex";
@@ -180,7 +211,12 @@ export default class DinoGame extends GameRunner {
         finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.style.borderRadius = "8px";
-
+        finishButton.style.setProperty("-webkit-touch-callout", "none");
+        finishButton.style.setProperty("-webkit-user-select", "none");
+        finishButton.style.setProperty("-khtml-user-select", "none");
+        finishButton.style.setProperty("-moz-user-select", "none");
+        finishButton.style.setProperty("-ms-user-select", "none");
+        finishButton.style.setProperty("user-select", "none");
         // Adicione a sombra à caixa
         finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.webkitBoxShadow =

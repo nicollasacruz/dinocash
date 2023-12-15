@@ -4,6 +4,7 @@ import { Head, router } from "@inertiajs/vue3";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { ref, defineProps, onMounted, watch } from "vue";
+import { UserIcon } from "@heroicons/vue/24/solid";
 import TextBox from "@/Components/TextBox.vue";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import { format } from "date-fns";
@@ -11,6 +12,7 @@ import { format } from "date-fns";
 const {
   activeSessions,
   totalUsers,
+  totalUsersToday,
   balanceAmount,
   depositsAmount,
   withdrawsAmount,
@@ -24,11 +26,13 @@ const {
   topDeposits,
   topProfitableAffiliates,
   topLossAffiliates,
+  topAffiliatesCPA,
   payout,
   houseHealth,
 } = defineProps([
   "activeSessions",
   "totalUsers",
+  "totalUsersToday",
   "balanceAmount",
   "depositsAmount",
   "withdrawsAmount",
@@ -42,6 +46,7 @@ const {
   "topDeposits",
   "topProfitableAffiliates",
   "topLossAffiliates",
+  "topAffiliatesCPA",
   "payout",
   "houseHealth",
 ]);
@@ -130,6 +135,11 @@ watch(addictRange, (value) => {
             <UserIcon class="w-5" />
           </template>
         </TextBox>
+        <TextBox label="Cadastros Hoje" :value="totalUsersToday">
+          <template #icon>
+            <UserIcon class="w-5" />
+          </template>
+        </TextBox>
         <TextBox
           label="CAIXA DA CASA"
           :value="toBRL(balanceAmount)"
@@ -163,7 +173,7 @@ watch(addictRange, (value) => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
           <CurrencyBox
             label="Saldo de Carteiras"
-            :value="withdrawsAmount * -1"
+            :value="walletAmount * -1"
             negative
           />
           <CurrencyBox
@@ -259,6 +269,21 @@ watch(addictRange, (value) => {
                   {{ email }} - {{ toBRL(totalPayed * -1) }}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="box p-2 mt-2">
+          <div
+            class="text-green-500 text-center font-bold text-xs uppercase mb-2"
+          >
+            Afiliados que mais trouxeram cadastros pagantes
+          </div>
+          <div class="grid-cols-2">
+            <div
+              class="text-xs pt-1"
+              v-for="{ email, totalCount } in topAffiliatesCPA"
+            >
+              <div class="text-white text-lg ">{{ email }} - {{ totalCount }} convidados</div>
             </div>
           </div>
         </div>
