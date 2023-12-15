@@ -46,8 +46,8 @@ class GameHistoryController extends Controller
             }
         ])->sum('amount');
 
-        $gain = $depositsAmountPaid;
-        $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
+        $gain = $depositsAmountPaid ?? 1;
+        $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$gain || !$pay) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
