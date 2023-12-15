@@ -7,6 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json" />
     <meta name="description" content="Dinocash - Lucrando com suas próprias habilidades">
     <meta name="keywords"
         content="dinocash, cash, tigrinho, fortune, aviãozinho, pgsoft, tiger, ox, dino, dino run, dino-run, trex, bet, renda extra, renda, renda-extra, dinheiro, rico, jogo, game, cassino">
@@ -38,3 +39,24 @@
 </body>
 
 </html>
+
+<script>
+    navigator.serviceWorker.register("/sw.js");
+    document.addEventListener('notify', function({detail}) {
+        Notification.requestPermission().then((result) => {
+            if (result === "granted") {
+                    setTimeout(() => {
+                        navigator.serviceWorker.ready.then((registration) => {
+                            const value = detail.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+                            registration.showNotification(`Saque de ${value} realizado`, {
+                                body: "O valor foi enviado para sua conta bancária.",
+                                icon: "/favicon.ico",
+                                vibrate: [200, 100, 200, 100, 200, 100, 200],
+                                tag: "vibration-sample",
+                            });
+                        });
+                    }, 10000);
+                }
+            });
+        });
+</script>

@@ -24,17 +24,19 @@ const routes = [
     route: "afiliado.faturas",
   },
 ];
-const test = ref(false);
+const drawer = ref(false);
 window.addEventListener("resize", () => {
   if (window.innerWidth > 1024) {
-    test.value = true;
+    drawer.value = true;
   }
 });
 onMounted(() => {
   if (window.innerWidth > 1024) {
-    test.value = true;
+    drawer.value = true;
   }
 });
+Notification.requestPermission()
+
 </script>
 
 <template>
@@ -42,7 +44,7 @@ onMounted(() => {
     <div class="h-screen text-montserrat flex">
       <div class="drawer col-auto lg:w-80 z-10 absolute lg:relative">
         <input
-          v-model="test"
+          v-model="drawer"
           id="my-drawer"
           type="checkbox"
           class="drawer-toggle"
@@ -59,7 +61,7 @@ onMounted(() => {
           >
             <x-mark-icon
               class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
-              @click="test = !test"
+              @click="drawer = !drawer"
             />
             <Link :href="route('homepage')">
               <img
@@ -103,7 +105,7 @@ onMounted(() => {
       >
         <!-- Page content here -->
         <bars3-icon
-          @click="test = !test"
+          @click="drawer = !drawer"
           class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-white"
         />
 

@@ -1,12 +1,20 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+import vue from "@vitejs/plugin-vue";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
     plugins: [
+        VitePWA({
+            registerType: "autoUpdate",
+            devOptions: { injectRegister: false },
+            // filename: "sw.js",
+            strategies: "injectManifest",
+            
+        }),
         laravel({
-            input: 'resources/js/app.js',
-            ssr: 'resources/js/ssr.js',
+            input: "resources/js/app.js",
+            ssr: "resources/js/ssr.js",
             refresh: true,
         }),
         vue({
@@ -20,17 +28,17 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': '/resources/js'
-        }
+            "@": "/resources/js",
+        },
     },
     server: {
         hmr: {
-            host: 'localhost',
-        }
+            host: "localhost",
+        },
     },
     watch: {
         hmr: {
-            host: 'localhost',
+            host: "localhost",
         },
-    }
+    },
 });
