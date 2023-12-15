@@ -33,7 +33,9 @@ class WithdrawAffiliateService
             //     'type' => 'WITHDRAW',
             // ]);
 
-            $affiliate->changeWalletAffiliate($amount * -1);
+            $affiliate->update([
+                'walletAffiliate' => $affiliate->walletAffiliate - $amount
+            ]);
             $affiliate->save();
 
             return $withdraw;
