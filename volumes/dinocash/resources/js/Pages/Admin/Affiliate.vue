@@ -44,7 +44,7 @@ const initialEmail = urlParams.get("email") || "";
 const searchQuery = ref(initialEmail);
 
 const handleSearch = async () => {
-  if (searchQuery.value.length > 0) {
+  if (searchQuery.value.length > 4) {
     try {
       router.get(route("admin.afiliados"), {
         email: searchQuery.value,
