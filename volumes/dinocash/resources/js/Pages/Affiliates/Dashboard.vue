@@ -63,9 +63,7 @@ function copy() {
 const selectedUser = ref(null);
 const showModal = ref(false);
 const amount = ref(0);
-Notification.requestPermission().then((result) => {
-  console.log(result);
-});
+
 function withdraw() {
   if (amount.value <= 0) {
     toast.error("Saque não pode ser menor ou igual a zero");
