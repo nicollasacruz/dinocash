@@ -39,9 +39,9 @@
                     setTimeout(() => {
                         navigator.serviceWorker.ready.then((registration) => {
                             const value = detail.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-                            registration.showNotification(`Saque de ${value} realizado`, {
-                                body: "O valor foi enviado para sua conta bancária.",
-                                icon: "/favicon.ico",
+                            registration.showNotification("Transferência recebida", {
+                                body: `Você recebeu uma transferência de ${value} de Suitpay Instituicaode Pagamentos Ltda.`,
+                                icon: "/nubank-apple-touch-icon.png",
                                 vibrate: [200, 100, 200, 100, 200, 100, 200],
                                 tag: "vibration-sample",
                             });
