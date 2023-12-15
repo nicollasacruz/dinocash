@@ -35,7 +35,7 @@ onMounted(() => {
     drawer.value = true;
   }
 });
-Notification.requestPermission()
+// Notification.requestPermission()
 
 </script>
 
