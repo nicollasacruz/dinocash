@@ -139,7 +139,7 @@ function getPremio(i) {
     <div class="text-center text-white font-menu text-7xl pt-3">
       RANKING GLOBAL
     </div>
-    <div class="text-center text-white font-menu text-4xl pt-3">
+    <div class="text-center text-white font-menu text-xl pt-3">
       Ranking encerra no dia 31/12/2023 às 23:59h e o valor será creditado nas
       contas dos ganhadores como saldo!
     </div>
