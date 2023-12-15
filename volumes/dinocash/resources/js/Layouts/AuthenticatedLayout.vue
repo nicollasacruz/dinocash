@@ -51,7 +51,7 @@ onMounted(() => {
     test.value = true;
   }
 });
-Notification.requestPermission()
+// Notification.requestPermission()
 </script>
 
 <template>
