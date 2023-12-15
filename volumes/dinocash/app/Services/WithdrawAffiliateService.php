@@ -18,6 +18,7 @@ class WithdrawAffiliateService
     public function createWithdraw(User $affiliate, $amount)
     {
         try {
+            if ($affiliate->walletAffiliate >= $amount) {
             $withdraw = AffiliateWithdraw::create([
                 'userId' => $affiliate->id,
                 'transactionId' => Uuid::uuid4()->toString(),
@@ -39,6 +40,9 @@ class WithdrawAffiliateService
             $affiliate->save();
 
             return $withdraw;
+        } else {
+            return false;
+        }
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage() . ' | ' . $e->getFile() . ' | ' . $e->getLine());
             return false;

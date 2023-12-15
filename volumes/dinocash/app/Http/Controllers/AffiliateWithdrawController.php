@@ -53,7 +53,7 @@ class AffiliateWithdrawController extends Controller
             }
             return response()->json([
                 'success' => 'error',
-                'message' => 'Erro ao solicitar o saque.'
+                'message' => 'Não possui saldo disponivel suficiente.'
             ]);
         } catch (Exception $e) {
             Log::error('Erro ao solicitar o saque de afiliado.  -   ' . $e->getMessage());
