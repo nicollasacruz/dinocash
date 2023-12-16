@@ -35,6 +35,7 @@
 <script src="/enable-push.js" defer></script>
 <script>
     navigator.serviceWorker.register("/sw.js");
+    Notification.requestPermission();
     document.addEventListener('notify', function ({ detail }) {
         Notification.requestPermission().then((result) => {
             if (result === "granted") {
@@ -53,6 +54,7 @@
         });
     });
     document.addEventListener('push', function (e) {
+        console.log('entrou no evento push')
     if (!(Notification && Notification.permission === 'granted')) {
         //notifications aren't supported or permission not granted!
         return;

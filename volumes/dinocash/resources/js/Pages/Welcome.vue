@@ -75,7 +75,7 @@ function getPremio(i) {
     class="section1 h-screen mx-auto items-center p-2 flex flex-col"
     :style="{
       backgroundImage: `url('${
-        windowWidth < 700 ? Background1Mobile : Background1
+        windowWidth < 700 ? Background1 : Background1
       }')`,
       backgroundSize: 'auto auto',
     }"
@@ -330,7 +330,7 @@ function getPremio(i) {
   height: 100%;
   background-size: auto 100vh;
   background-repeat: no-repeat;
-  background-position: start;
+  background-position: center;
 }
 
 .section1 {

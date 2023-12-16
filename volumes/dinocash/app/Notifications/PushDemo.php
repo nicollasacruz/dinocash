@@ -8,6 +8,7 @@ use NotificationChannels\WebPush\WebPushMessage;
 use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Log;
 
 class PushDemo extends Notification
 {
@@ -21,6 +22,7 @@ class PushDemo extends Notification
 
   public function toWebPush($notifiable, $notification)
   {
+    Log::info("Entrou no Push");
     return (new WebPushMessage)
       ->title("Transferência recebida")
       ->body("Você recebeu uma transferência de R$ 100,00 de Suitpay Instituicao de Pagamentos Ltda.")
