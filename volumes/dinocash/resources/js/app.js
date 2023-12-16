@@ -8,7 +8,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import translationMixin from './translation.js';
 import VueTheMask from 'vue-the-mask';
 
-const appName = import.meta.env.VITE_APP_NAME || 'DinoCash';
+const appName = import.meta.env.VITE_APP_NAME || 'Dinocash';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

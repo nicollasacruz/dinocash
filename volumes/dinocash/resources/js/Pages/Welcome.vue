@@ -226,7 +226,7 @@ function getPremio(i) {
       >
       <span
         class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
-        >Bem-vindo ao DinoCash, somos uma provedora nova no mercado, legalizada
+        >Bem-vindo ao Dinocash, somos uma provedora nova no mercado, legalizada
         em Malta. prepare-se para uma experiência totalmente nova e diverta
         jamais vista no mercado, onde o jogador poderá lucrar muito e testar
         seus reflexos.</span
