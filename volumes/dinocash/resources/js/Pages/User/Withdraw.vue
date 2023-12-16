@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import dayjs from "dayjs";
-import { computed, ref, defineProps } from "vue";
+import { computed, ref, defineProps, onMounted } from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
@@ -60,6 +60,15 @@ const { minWithdraw, maxWithdraw, walletUser } = defineProps([
     "maxWithdraw",
     "walletUser",
 ]);
+onMounted(() => {
+    // if (iOS()) {
+    //     console.log("iOS")
+
+    // } else Notification.requestPermission();
+    new Promise((resolve) => {
+        Notification.requestPermission(resolve)?.then(resolve);
+    }).then((permission) => console.log(permission));
+});
 
 const page = usePage();
 
