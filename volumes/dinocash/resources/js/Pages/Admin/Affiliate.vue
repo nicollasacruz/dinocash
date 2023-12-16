@@ -25,13 +25,15 @@ const columns = computed(() =>
 );
 const { affiliates, affiliatesWithdraws, affiliatesWithdrawsList } =
   defineProps(["affiliates", "affiliatesWithdraws", "affiliatesWithdrawsList"]);
-const paymentsRow = affiliatesWithdrawsList ? affiliatesWithdrawsList.map((payment) => {
-  return {
-    ...payment,
-    name: payment.user.name,
-    email: payment.user.email,
-  };
-}) : [];
+const paymentsRow = affiliatesWithdrawsList
+  ? affiliatesWithdrawsList.map((payment) => {
+      return {
+        ...payment,
+        name: payment.user.name,
+        email: payment.user.email,
+      };
+    })
+  : [];
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
@@ -44,11 +46,13 @@ const initialEmail = urlParams.get("email") || "";
 const searchQuery = ref(initialEmail);
 
 const handleSearch = async () => {
-  if (searchQuery.value.length > 4) {
+  if (searchQuery.value.length > 0) {
     try {
-      router.get(route("admin.afiliados"), {
-        email: searchQuery.value,
-      });
+      if (searchQuery.value.length >= 3) {
+        router.get(route("admin.afiliados"), {
+          email: searchQuery.value,
+        });
+      }
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
@@ -61,7 +65,6 @@ const handleSearch = async () => {
     console.error("Erro na pesquisa:", error);
   }
 };
-
 </script>
 
 <template>
