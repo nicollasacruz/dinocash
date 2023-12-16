@@ -49,10 +49,12 @@ function iOS() {
         (navigator.userAgent.includes("Mac") && "ontouchend" in document)
     );
 }
-if(!iOS()) {
+onMounted(() => {
     Notification.requestPermission();
-}
-// Notification.requestPermission()
+    // if (!iOS()) {
+    // }
+});
+
 </script>
 
 <template>
