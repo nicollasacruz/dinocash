@@ -3,7 +3,8 @@ import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Expansion from "@/Components/BaseExpansion.vue";
-import Background1 from "../../../storage/imgs/home-page/home-bg1.jpg";
+import Background from "../../../storage/imgs/home-page/home-bg1.jpg";
+import Background1 from "../../../storage/imgs/home-page/background-natal-dinocash.jpg";
 import Background2 from "../../../storage/imgs/home-page/home-bg2.jpg";
 import Background3 from "../../../storage/imgs/home-page/bg-ranking.png";
 import Background4 from "../../../storage/imgs/home-page/home-bg3.jpg";
@@ -329,7 +330,7 @@ function getPremio(i) {
   height: 100%;
   background-size: auto 100vh;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: start;
 }
 
 .section1 {

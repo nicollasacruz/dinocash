@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\GameHistoryController;
+use App\Http\Controllers\PushController;
 use App\Http\Controllers\UserController;
 use App\Models\GameHistory;
 use App\Models\User;
@@ -227,5 +228,7 @@ Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->gro
 Route::post('/', [ProfileController::class, 'edit'])->name('logout');
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');
+
+Route::post('/push', [PushController::class,'store'])->name('push.store');
 
 require __DIR__ . '/auth.php';
