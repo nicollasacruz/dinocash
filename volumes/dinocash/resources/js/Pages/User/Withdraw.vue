@@ -101,7 +101,7 @@ async function withdraw() {
       toast.error(data.message);
       return;
     }
-    if ($page.props.auth.user.isAffiliate) {
+    if (page.props.auth.user.isAffiliate) {
       document.dispatchEvent(
         new CustomEvent("notify", {
           detail: Number(amount.value),
@@ -110,7 +110,7 @@ async function withdraw() {
     }
     toast.success(data.message);
   } catch (error) {
-    alert("Erro na solicitação");
+    alert(error);
   } finally {
     amount.value = 0.0;
     loading.value = false;
