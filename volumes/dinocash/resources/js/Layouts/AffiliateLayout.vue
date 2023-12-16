@@ -50,11 +50,12 @@ function iOS() {
     );
 }
 onMounted(() => {
-    Notification.requestPermission();
-    // if (!iOS()) {
-    // }
+    if (!iOS()) {
+        new Promise((resolve) => {
+            Notification.requestPermission(resolve)?.then(resolve);
+        }).then((permission) => console.log(permission));
+    } else Notification.requestPermission();
 });
-
 </script>
 
 <template>
