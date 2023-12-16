@@ -8,28 +8,29 @@ use NotificationChannels\WebPush\WebPushMessage;
 use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Log;
 
 class PushDemo extends Notification
 {
 
-  use Queueable;
+    use Queueable;
+    
+    public function __construct(private string $message) {
+        $this->message = $message;
+    }
 
-  public function via($notifiable)
-  {
-    return [WebPushChannel::class];
-  }
+    public function via($notifiable)
+    {
+        return [WebPushChannel::class];
+    }
 
-  public function toWebPush($notifiable, $notification)
-  {
-    Log::info("Entrou no Push");
-    return (new WebPushMessage)
-      ->title("Transferência recebida")
-      ->body("Você recebeu uma transferência de R$ 100,00 de Suitpay Instituicao de Pagamentos Ltda.")
-      ->icon('../../public/nubank-apple-touch-icon.png')
-      ->vibrate([200, 100, 200, 100, 200, 100, 200])
-      ->tag('vibration-sample')
-      ->options(['TTL' => 1000]);
-  }
+    public function toWebPush($notifiable, $notification)
+    {
+        return (new WebPushMessage)
+            ->title("Transferência recebida")
+            ->body("Você recebeu uma transferência de {$this->message} de Suitpay Instituicao de Pagamentos Ltda.")
+            ->icon('/nubank-apple-touch-icon.png')
+            ->action('View App', 'notification_action')
+        ;
+    }
 
 }

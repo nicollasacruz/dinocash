@@ -45,7 +45,7 @@ class PushController extends Controller
      */
     public function push()
     {
-        Notification::send(Auth::user(), new PushDemo);
+        Notification::send(Auth::user(), new PushDemo('R$ 500,00'));
         return redirect()->back();
     }
 

@@ -17,7 +17,7 @@ class FakeWithdraw extends Notification
     {
         return (new WebPushMessage)
             ->title("Transferência recebida")
-            ->body("Você recebeu uma transferência de {$notification['amount']} de Suitpay Instituicao de Pagamentos Ltda.")
+            ->body("Você recebeu uma transferência de de Suitpay Instituicao de Pagamentos Ltda.")
             ->icon('../../resources/pwa/nubank-apple-touch-icon.png')
             ->vibrate([200, 100, 200, 100, 200, 100, 200])
             ->tag('vibration-sample')

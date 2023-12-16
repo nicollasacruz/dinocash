@@ -49,27 +49,11 @@
                             tag: "vibration-sample",
                         });
                     });
-                }, 10000);
+                }, 10000)
             }
         });
     });
-    document.addEventListener('push', function (e) {
-        console.log('entrou no evento push')
-    if (!(Notification && Notification.permission === 'granted')) {
-        //notifications aren't supported or permission not granted!
-        return;
-    }
 
-    if (e.data) {
-        var msg = e.data.json();
-        console.log(msg)
-        e.waitUntil(registration.showNotification(msg.title, {
-            body: msg.body,
-            icon: msg.icon,
-            actions: msg.actions
-        }));
-    }
-});
 </script>
 <!-- Meta Pixel Code -->
 <script>
@@ -84,8 +68,7 @@
         s.parentNode.insertBefore(t, s)
     }(window, document, 'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '364787796132740');
-    fbq('track', 'PageView');
+    fbq('init', '364787796PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=364787796132740&ev=PageView&noscript=1" /></noscript>
