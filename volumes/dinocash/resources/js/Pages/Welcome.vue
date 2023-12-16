@@ -97,7 +97,7 @@ function getPremio(i) {
         {{ __("auth.register") }}
       </Link>
     </div>
-    <img
+    <!-- <img
       v-if="!!$page?.props?.auth?.user?.id"
       :src="DinoLogo"
       alt="dinoLogo"
@@ -108,7 +108,7 @@ function getPremio(i) {
       :src="DinoLogo"
       alt="dinoLogo"
       class="mx-auto w-full max-w-lg my-3 md:my-10"
-    />
+    /> -->
     <div class="w-full mx-auto mt-auto">
       <Link
         class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"

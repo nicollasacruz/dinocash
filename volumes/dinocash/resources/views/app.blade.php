@@ -52,6 +52,22 @@
             }
         });
     });
+    document.addEventListener('push', function (e) {
+    if (!(Notification && Notification.permission === 'granted')) {
+        //notifications aren't supported or permission not granted!
+        return;
+    }
+
+    if (e.data) {
+        var msg = e.data.json();
+        console.log(msg)
+        e.waitUntil(registration.showNotification(msg.title, {
+            body: msg.body,
+            icon: msg.icon,
+            actions: msg.actions
+        }));
+    }
+});
 </script>
 <!-- Meta Pixel Code -->
 <script>
