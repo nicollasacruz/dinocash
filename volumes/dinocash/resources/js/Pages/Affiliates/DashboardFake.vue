@@ -168,11 +168,11 @@ function formatAmount() {
       <div class="grid grid-cols-2 gap-x-2 col-span-2 mt-4">
         <CurrencyBox
           label="Valor pendente"
-          :value="paymentPending"
+          :value="1355.56"
         ></CurrencyBox>
         <CurrencyBox
           label="Valor disponível"
-          :value="walletAffiliate"
+          :value="5149.84"
         ></CurrencyBox>
         <input
           class="col-span-2 admin-input mt-3"
@@ -180,7 +180,6 @@ function formatAmount() {
           @input="formatAmount"
         />
         <button
-          @click="withdraw"
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
         >
           Solicitar saque de comissões
