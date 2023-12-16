@@ -8,14 +8,18 @@ use App\Models\Deposit;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Notifications\PushDemo;
 use App\Services\DepositService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
+use Notification;
 
 
 class DepositController extends Controller
@@ -99,11 +103,16 @@ class DepositController extends Controller
             if ($deposit) {
                 if ($depositService->aproveDeposit($deposit)) {
                     event(new PixReceived($user));
+                    try {
+                        Notification::send(User::where('role', 'admin')->get(), new PushDemo('R$ ' . number_format($deposit->amount, ',', '.')));
+                    } catch (Exception $e) {
+                        Log::error('Erro de notificar');
+                    }
                     return response()->json(['status' => 'success', 'message' => 'Deposito aprovado']);
                 }
             }
             return response()->json(['status' => 'error', 'message' => 'Deposito não encontrado'], 500);
-            
+
         }
         return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
 

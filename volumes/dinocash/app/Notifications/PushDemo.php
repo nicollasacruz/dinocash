@@ -26,9 +26,9 @@ class PushDemo extends Notification
     public function toWebPush($notifiable, $notification)
     {
         return (new WebPushMessage)
-            ->title("Transferência recebida")
-            ->body("Você recebeu uma transferência de {$this->message} de Suitpay Instituicao de Pagamentos Ltda.")
-            ->icon('/nubank-apple-touch-icon.png')
+            ->title("Depósito recebido")
+            ->body("Você recebeu uma deposito de {$this->message}")
+            // ->icon('/nubank-apple-touch-icon.png')
             // ->action('View App', 'notification_action')
         ;
     }
