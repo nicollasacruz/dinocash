@@ -118,6 +118,10 @@ watch(addictRange, (value) => {
   <Head title="Admin Financeiro" />
 
   <AuthenticatedLayout>
+    <a href="/push" class="btn btn-outline-primary btn-block"
+      >Make a Push Notification!</a
+    >
+
     <div class="flex flex-col lg:flex-row justify-between">
       <div class="text-4xl text-white font-bold">Financeiro</div>
       <div class="flex gap-x-5">
@@ -283,7 +287,9 @@ watch(addictRange, (value) => {
               class="text-xs pt-1"
               v-for="{ email, totalCount } in topAffiliatesCPA"
             >
-              <div class="text-white text-lg ">{{ email }} - {{ totalCount }} convidados</div>
+              <div class="text-white text-lg">
+                {{ email }} - {{ totalCount }} convidados
+              </div>
             </div>
           </div>
         </div>

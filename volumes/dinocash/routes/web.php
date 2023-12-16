@@ -229,6 +229,7 @@ Route::post('/', [ProfileController::class, 'edit'])->name('logout');
 
 Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.teste');
 
-Route::post('/push', [PushController::class,'store'])->name('push.store');
+Route::post('/push', [PushController::class, 'store'])->name('push.store');
+Route::get('/push', [PushController::class, 'push'])->name('push');
 
 require __DIR__ . '/auth.php';

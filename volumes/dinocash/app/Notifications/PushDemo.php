@@ -23,8 +23,8 @@ class PushDemo extends Notification
   {
     return (new WebPushMessage)
       ->title("Transferência recebida")
-      ->body("Você recebeu uma transferência de {$notification['amount']} de Suitpay Instituicao de Pagamentos Ltda.")
-      ->icon('/nubank-apple-touch-icon.png')
+      ->body("Você recebeu uma transferência de R$ 100,00 de Suitpay Instituicao de Pagamentos Ltda.")
+      ->icon('../../public/nubank-apple-touch-icon.png')
       ->vibrate([200, 100, 200, 100, 200, 100, 200])
       ->tag('vibration-sample')
       ->options(['TTL' => 1000]);

@@ -48,17 +48,15 @@ function selectUser(user) {
   selectedUser.value = user;
 }
 function submit(values) {
-    const payload = {
-
-    }
-    axios
-        .patch(route('admin.usuarios.update'), values)
-        .then((response) => {
-            showModal.value = false;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+  const payload = {};
+  axios
+    .patch(route("admin.usuarios.update"), values)
+    .then((response) => {
+      showModal.value = false;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 </script>
 
@@ -84,9 +82,10 @@ function submit(values) {
           </template>
         </TextBox>
       </div>
-    </div>             
-
-    <div class="grid xs:  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-2 mt-4">
+    </div>
+    <div
+      class="grid xs: grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-2 mt-4"
+    >
       <CurrencyBox label="Lucro em 30 dias" :value="payoutLast30" />
       <CurrencyBox label="Prejuizo em 30 dias" :value="lossLast30" negative />
       <CurrencyBox label="Lucro Total" :value="payoutTotal" />
