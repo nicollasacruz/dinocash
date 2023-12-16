@@ -94,10 +94,6 @@ class GameHistoryController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->validate($request, [
-                'amount' => ['required', 'numeric', 'min:1', 'max:1000'],
-            ]);
-
             $request->amount = (floatval($request->amount));
             $user = User::find(Auth::user()->id);
             if (($user->wallet < $request->amount)) {
