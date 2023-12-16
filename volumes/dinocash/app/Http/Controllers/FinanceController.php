@@ -53,7 +53,7 @@ class FinanceController extends Controller
         })
             ->where('type', 'paid')
             ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false)
+                $query->where('isAffiliate', true)
                     ->where('role', 'user');
             })
             ->sum('amount');
@@ -117,9 +117,9 @@ class FinanceController extends Controller
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
-        $gain = $depositsAmountPaid;
-        $pay = $withdrawsAmountPaid + $withdrawsAmountAffiliatePaid + $walletsAmount + $walletsAfilliateAmount + $walletsAfilliatePending;
-        if (!$pay || !$gain) {
+        $gain = $depositsAmountPaid ?? 1;
+        $pay = $withdrawsAmountPaid + $walletsAmount;
+        if (!$pay) {
             Log::info('Vazio ou 0');
             $houseHealth = 100;
         } else {
@@ -127,7 +127,7 @@ class FinanceController extends Controller
         }
 
         $activeSessions = DB::table('sessions')
-            ->where('last_activity', '>', now()->subMinutes(config('session.lifetime')))
+            ->where('last_activity', '>=', now()->subMinutes(5))
             ->count();
         $totalUsers = User::all()->count();
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();

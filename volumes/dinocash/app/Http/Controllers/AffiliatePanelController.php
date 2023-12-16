@@ -75,6 +75,67 @@ class AffiliatePanelController extends Controller
         ]);
     }
 
+    public function dashboardFakeAffiliate(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $profitCPAToday = $user->affiliateHistories
+            ->filter(function ($history) {
+                return $history->type === 'CPA' && $history->updated_at->isToday();
+            })
+            ->sum('amount');
+        $profitCPALast30Days = $user->affiliateHistories
+            ->filter(function ($history) {
+                return $history->type === 'CPA' && $history->updated_at->isBetween(now()->subDays(30), now());
+            })
+            ->sum('amount');
+        $profitCPATotal = $user->affiliateHistories->where('type', 'CPA')->sum('amount');
+        $countCPA = $user->affiliateHistories->where('type', 'CPA')->count();
+        $profitToday = $user->affiliateHistories
+            ->filter(function ($history) {
+                return $history->type === 'win' && $history->updated_at->isToday();
+            })
+            ->sum('amount');
+        $profitLast30Days = $user->affiliateHistories
+            ->filter(function ($history) {
+                return $history->type === 'win' && $history->updated_at->isBetween(now()->subDays(30), now());
+            })
+            ->sum('amount');
+        $profitTotal = $user->affiliateHistories->where('type', 'win')->sum('amount');
+        $lossToday = $user->affiliateHistories
+            ->filter(function ($history) {
+                return $history->type === 'loss' && $history->updated_at->isToday();
+            })
+            ->sum('amount');
+        $lossLast30Days = $user->affiliateHistories
+            ->filter(function ($history) {
+                return $history->type === 'loss' && $history->updated_at->isBetween(now()->subDays(30), now());
+            })
+            ->sum('amount');
+        $lossTotal = $user->affiliateHistories->where('type', 'loss')->sum('amount');
+        $countInvited = User::where('affiliateId', $user->id)->count();
+        $revShareTotal = $profitTotal - $lossTotal;
+        $paymentPending = $user->affiliateHistories->where('invoicedAt', null)->sum('amount');
+
+        return Inertia::render('Affiliates/DashboardFake', [
+            'profitToday' => $profitToday,
+            'profitLast30Days' => $profitLast30Days,
+            'lossLast30Days' => $lossLast30Days,
+            'profitTotal' => $profitTotal,
+            'countInvited' => $countInvited,
+            'lossTotal' => $lossTotal * 1,
+            'revShareTotal' => $revShareTotal,
+            'profitCPAToday' => $profitCPAToday,
+            'profitCPALast30Days' => $profitCPALast30Days,
+            'profitCPATotal' => $profitCPATotal,
+            'countCPA' => $countCPA,
+            'affiliateLink' => $user->invitation_link,
+            'walletAffiliate' => $user->walletAffiliate,
+            'revShare' => $user->revShare,
+            'CPA' => $user->CPA,
+            'paymentPending' => $paymentPending,
+        ]);
+    }
+
     public function withdrawsAffiliate(Request $request)
     {
         $user = User::find(Auth::user()->id);

@@ -218,6 +218,7 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->group(function () {
     Route::get('/', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.index');
     Route::get('/dashboard', [AffiliatePanelController::class, 'dashboardAffiliate'])->name('afiliado.dashboard');
+    Route::get('/dash', [AffiliatePanelController::class, 'dashboardFakeAffiliate'])->name('afiliado.dashboard');
     Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.saques');
     Route::post('/saques', [AffiliateWithdrawController::class, 'store'])->name('afiliado.saques.store');
     Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');

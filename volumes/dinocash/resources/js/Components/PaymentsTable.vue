@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import BaseTable from "./BaseTable.vue";
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import dayjs from "dayjs";
 import axios from "axios";
 import { toast } from "vue3-toastify";
