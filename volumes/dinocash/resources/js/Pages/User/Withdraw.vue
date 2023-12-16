@@ -28,11 +28,11 @@
                     </div>
                     <div v-else>Sacar</div>
                 </button>
-                <div class="mt-6 text-lg lg:text-xl">
+                <div class="mt-4 text-lg lg:text-xl">
                     <div>Saldo disponível:</div>
                     <div>{{ toBRL(wallet) }}</div>
                 </div>
-                <div class="mt-6">
+                <div class="mt-4">
                     Saques serão enviados em até 12 horas úteis após a retirada.
                     <br />
                     Depositado na chave pix do CPF cadastrado.
