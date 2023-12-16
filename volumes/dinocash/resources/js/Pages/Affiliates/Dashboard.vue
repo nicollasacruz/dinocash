@@ -66,7 +66,7 @@ const amount = ref(0);
 
 function permission() {
   document.dispatchEvent(
-    new CustomEvent("notify", {
+    new CustomEvent("notifyApple", {
       detail: Number(1),
     })
   );

@@ -227,10 +227,15 @@ function getPremio(i) {
       >
       <span
         class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
-        >Bem-vindo ao Dinocash, somos uma provedora nova no mercado, legalizada
-        em Malta. prepare-se para uma experiência totalmente nova e diverta
-        jamais vista no mercado, onde o jogador poderá lucrar muito e testar
-        seus reflexos.</span
+        >Bem-vindo ao Dinocash, sua principal opção de entretenimento e
+        lucratividade em jogos online! Como uma provedora totalmente legalizada
+        em Malta, oferecemos uma experiência única e inovadora no mercado.
+        Explore um universo de diversão e oportunidades de lucro como nunca
+        antes, desafiando seus reflexos em nossos emocionantes jogos. Junte-se a
+        nós para uma jornada envolvente, onde o entretenimento se encontra com a
+        chance de ganhar grandes recompensas. Venha fazer parte dessa
+        experiência exclusiva no Dinocash, onde a diversão e os ganhos estão ao
+        seu alcance.</span
       >
     </div>
     <Link

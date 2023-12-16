@@ -1,3 +1,6 @@
+document.addEventListener('notifyApple', function ({ detail }) {
+  initSW();
+});
 initSW();
 
 function initSW() {
