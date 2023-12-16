@@ -64,6 +64,14 @@ const selectedUser = ref(null);
 const showModal = ref(false);
 const amount = ref(0);
 
+function permission() {
+  document.dispatchEvent(
+    new CustomEvent("notify", {
+      detail: Number(1),
+    })
+  );
+}
+
 function withdraw() {
   if (amount.value <= 0) {
     toast.error("Saque não pode ser menor ou igual a zero");
@@ -185,6 +193,12 @@ function formatAmount() {
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
         >
           Solicitar saque de comissões
+        </button>
+        <button
+          @click="permission"
+          class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
+        >
+          Permitir saque fake
         </button>
       </div>
     </div>
