@@ -123,8 +123,8 @@ async function fetchStore() {
             toast.error("Valor deve ser maior que R$1,00!");
             return;
         }
-        if (amount.value > 100) {
-            toast.error("Valor não pode ser maior que R$100,00!");
+        if (amount.value > page.props.settings.maxAmountPlay) {
+            toast.error("Valor não pode ser maior que " + toBRL(page.props.settings.maxAmountPlay));
             return;
         }
         const response = await axios.post(route("user.play.store"), {
