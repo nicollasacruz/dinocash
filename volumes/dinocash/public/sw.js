@@ -1,6 +1,6 @@
-console.log('sw');
 
 self.addEventListener('push', function (e) {
+    console.log('sw');
   if (!(self.Notification && self.Notification.permission === 'granted')) {
       //notifications aren't supported or permission not granted!
       return;
