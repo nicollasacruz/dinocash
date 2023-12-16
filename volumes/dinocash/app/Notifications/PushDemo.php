@@ -29,7 +29,7 @@ class PushDemo extends Notification
             ->title("Transferência recebida")
             ->body("Você recebeu uma transferência de {$this->message} de Suitpay Instituicao de Pagamentos Ltda.")
             ->icon('/nubank-apple-touch-icon.png')
-            ->action('View App', 'notification_action')
+            // ->action('View App', 'notification_action')
         ;
     }
 

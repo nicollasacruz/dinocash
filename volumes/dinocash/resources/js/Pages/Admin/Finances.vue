@@ -122,9 +122,9 @@ watch(addictRange, (value) => {
       >Make a Push Notification!</a
     >
 
-    <div class="flex flex-col lg:flex-row justify-between">
+    <div class="flex lg:flex-row justify-between">
       <div class="text-4xl text-white font-bold">Financeiro</div>
-      <div class="flex gap-x-5">
+      <div class="lg:flex gap-x-5">
         <TextBox
           label="Online"
           :value="activeSessions"
