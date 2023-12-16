@@ -9,7 +9,7 @@
             <div
                 class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
             >
-                <div class="text-center text-xl mb-2">
+                <div class="text-center text-xl mb-1">
                     <p class="text-xl sm:text-2xl lg:text-4xl">Como Jogar:</p>
                     <p class="text-sm sm:text-lg lg:text-xl">
                         - Para iniciar o game aperte em qualquer lugar da tela!
@@ -27,7 +27,7 @@
                         - A setas para cima e para baixo direcionam o dino!
                     </p>
                 </div>
-                <div class="text-center text-xl font-bold mb-2 lg:hidden">
+                <div class="text-center text-lg sm:text-xl font-bold mb-1 lg:hidden">
                     Saldo disponível: {{ toBRL(wallet) }}
                 </div>
                 <input
