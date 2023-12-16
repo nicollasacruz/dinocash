@@ -5,6 +5,7 @@ import BaseTable from "@/Components/BaseTable.vue";
 import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
+
 const columns = [
     { label: "Email", key: "email" },
     { label: "Chave Pix", key: "document" },

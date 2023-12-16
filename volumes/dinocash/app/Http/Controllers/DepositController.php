@@ -29,7 +29,7 @@ class DepositController extends Controller
      */
     public function indexAdmin()
     {
-        $deposits = Deposit::with('user')->get();
+        $deposits = Deposit::where('type', 'paid')->orderBy('updated_at', 'desc')->get();
         $totalToday = Deposit::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
 
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');
