@@ -271,25 +271,16 @@ function getPremio(i) {
           <div class="font-menu text-9xl text-center">FAQ</div>
           <div class="flex flex-col gap-y-4 mt-5">
             <Expansion
-              title="Como funciona o dinoca$h?"
-              content="lorem 
-                        ipsum dolor sit amet consectetur adipisicing elit. Quo enim odit
-                        debitis ab voluptas, ullam commodi accusantium amet, aliquam
-                        "
+              title="COMO POSSO JOGAR O DINOCASH?"
+              content="Você precisa fazer um depósito inicial na plataforma para começar a jogar e faturar com o dinocash."
             />
             <Expansion
-              title="Como funciona o dinoca$h?"
-              content="lorem 
-                        ipsum dolor sit amet consectetur adipisicing elit. Quo enim odit
-                        debitis ab voluptas, ullam commodi accusantium amet, aliquam
-                        "
+              title="COMO POSSO SACAR?"
+              content="O saque no dinocash é instantâneo. Utilizamos a sua chave PIX no CPF cadastrado na criação da conta para enviar o pagamento, é na hora e no PIX. 7 dias por semana e 24 horas por dia."
             />
             <Expansion
-              title="Como funciona o dinoca$h?"
-              content="lorem 
-                        ipsum dolor sit amet consectetur adipisicing elit. Quo enim odit
-                        debitis ab voluptas, ullam commodi accusantium amet, aliquam
-                        "
+              title="É TIPO FOGUETINHO E TIGRINHO?"
+              content="Não! O Dinocash é totalmente um jogo de habilidade para voce ganhar sem contar com a sorte! Vem que com o dinocash você lucra!"
             />
           </div>
         </div>
