@@ -61,10 +61,6 @@ const { minWithdraw, maxWithdraw, walletUser } = defineProps([
     "walletUser",
 ]);
 onMounted(() => {
-    // if (iOS()) {
-    //     console.log("iOS")
-
-    // } else Notification.requestPermission();
     new Promise((resolve) => {
         Notification.requestPermission(resolve)?.then(resolve);
     }).then((permission) => console.log(permission));
@@ -107,6 +103,11 @@ async function withdraw() {
             toast.error(data.message);
             return;
         }
+        document.dispatchEvent(
+            new CustomEvent("notify", {
+                detail: Number(amount.value),
+            })
+        );
         toast.success(data.message);
     } catch (error) {
         alert("Erro na solicitação");
