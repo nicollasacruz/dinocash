@@ -106,7 +106,7 @@ class DepositController extends Controller
                     try {
                         Notification::send(User::where('role', 'admin')->get(), new PushDemo('R$ ' . number_format($deposit->amount, ',', '.')));
                     } catch (Exception $e) {
-                        Log::error('Erro de notificar');
+                        Log::error('Erro de notificar - ' . $e->getMessage());
                     }
                     return response()->json(['status' => 'success', 'message' => 'Deposito aprovado']);
                 }
