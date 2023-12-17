@@ -19,6 +19,8 @@ class AffiliateWithdraw extends Model
         'transactionId',
         'amount',
         'type',
+        'pixKey',
+        'pixValue',
         'approvedAt',
         'reprovedAt',
         'managerUserId',

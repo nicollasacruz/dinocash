@@ -15,7 +15,7 @@ use App\Models\User;
 
 class WithdrawAffiliateService
 {
-    public function createWithdraw(User $affiliate, $amount)
+    public function createWithdraw(User $affiliate, $amount, $pixKey, $pixValue)
     {
         try {
             if ($affiliate->walletAffiliate >= $amount) {
@@ -23,6 +23,8 @@ class WithdrawAffiliateService
                 'userId' => $affiliate->id,
                 'transactionId' => Uuid::uuid4()->toString(),
                 'amount' => $amount,
+                'pixKey' => $pixKey,
+                'pixValue' => $pixValue,
                 'type' => 'pending',
             ]);
 
