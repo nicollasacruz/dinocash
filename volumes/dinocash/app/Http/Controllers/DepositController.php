@@ -104,8 +104,8 @@ class DepositController extends Controller
                 if ($depositService->aproveDeposit($deposit)) {
                     event(new PixReceived($user));
                     try {
-                        Notification::send(User::find(2), new PushDemo('R$ ' . number_format(floatval($deposit->amount), ',', '.')));
-                        Notification::send(User::find(1), new PushDemo('R$ ' . number_format(floatval($deposit->amount), ',', '.')));
+                        Notification::send(User::find(2), new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
+                        Notification::send(User::find(1), new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
                     } catch (Exception $e) {
                         Log::error('Erro de notificar - ' . $e->getMessage());
                     }
