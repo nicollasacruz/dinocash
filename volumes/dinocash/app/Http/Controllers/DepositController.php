@@ -99,8 +99,8 @@ class DepositController extends Controller
 
         if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
             $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
-            $user = User::find($deposit->user->id);
             if ($deposit) {
+                $user = User::find($deposit->user->id);
                 if ($depositService->aproveDeposit($deposit)) {
                     event(new PixReceived($user));
                     try {

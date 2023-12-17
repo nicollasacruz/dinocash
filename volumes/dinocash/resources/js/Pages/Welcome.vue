@@ -223,7 +223,7 @@ function getPremio(i) {
     >
       <span
         class="text-center text-6xl md:text-[130px] font-menu text-gray-800 m-0 p-0"
-        >DINO CA$H</span
+        >Dino ca$h</span
       >
       <span
         class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
