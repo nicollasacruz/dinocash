@@ -9,7 +9,7 @@ use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PushDemo extends Notification
+class PushRevShare extends Notification
 {
 
     use Queueable;
@@ -26,9 +26,9 @@ class PushDemo extends Notification
     public function toWebPush($notifiable, $notification)
     {
         return (new WebPushMessage)
-            ->title("Depósito recebido")
-            ->body("Você recebeu um deposito de {$this->message}")
-            ->icon('../../resources/pwa/nubank-apple-touch-icon.png')
+            ->title("Comissão recebida")
+            ->body("Você recebeu um RevShare de {$this->message}")
+            ->icon('../../resources/pwa/pwa-192x192.png')
             // ->action('View App', 'notification_action')
         ;
     }

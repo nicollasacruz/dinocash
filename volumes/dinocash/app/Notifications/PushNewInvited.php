@@ -9,14 +9,10 @@ use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PushDemo extends Notification
+class PushNewInvited extends Notification
 {
 
     use Queueable;
-    
-    public function __construct(private string $message) {
-        $this->message = $message;
-    }
 
     public function via($notifiable)
     {
@@ -26,9 +22,9 @@ class PushDemo extends Notification
     public function toWebPush($notifiable, $notification)
     {
         return (new WebPushMessage)
-            ->title("Depósito recebido")
-            ->body("Você recebeu um deposito de {$this->message}")
-            ->icon('../../resources/pwa/nubank-apple-touch-icon.png')
+            ->title("Novo usuário cadastrado")
+            ->body("Um novo usuário criou uma conta usando seu link!")
+            ->icon('../../resources/pwa/pwa-192x192.png')
             // ->action('View App', 'notification_action')
         ;
     }

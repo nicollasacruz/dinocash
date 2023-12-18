@@ -5,9 +5,11 @@ namespace App\Observers;
 use App\Models\AffiliateHistory;
 use App\Models\GameHistory;
 use App\Models\Setting;
+use App\Notifications\PushRevShare;
 use App\Services\AffiliateInvoiceService;
 use App\Services\InvoiceService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class GameHistoryObserver
 {
@@ -38,8 +40,9 @@ class GameHistoryObserver
             }
             $affiliate = $gameHistory->user->affiliate;
             if (!$gameHistory->user->isAffiliate && $affiliate->revShare > 0) {
+                $newAmount = number_format($amount * ($affiliate->revShare * $amount == 1 ? 1 : 0.8) / 100, 2, '.', '');
                 AffiliateHistory::create([
-                    'amount' => number_format($amount * ($affiliate->revShare) / 100, 2, '.', ''),
+                    'amount' => $newAmount,
                     'gameId' => $gameHistory->id,
                     'affiliateId' => $gameHistory->user->affiliateId,
                     'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($affiliate))->id,
@@ -48,6 +51,7 @@ class GameHistoryObserver
                 ]);
             }
             Log::info("AffiliateHistory criado com sucesso.");
+            Notification::send($affiliate, new PushRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
 
         } catch (\Exception $e) {
             Log::error("Erro ao criar AffiliateHistory: " . $e->getMessage() . " - " . $e->getFile() . " - " . $e->getLine());

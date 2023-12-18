@@ -4,8 +4,10 @@ namespace App\Observers;
 
 use App\Models\AffiliateHistory;
 use App\Models\Deposit;
+use App\Notifications\PushCPA;
 use App\Services\AffiliateInvoiceService;
 use Log;
+use Notification;
 
 class DepositObserver
 {
@@ -55,5 +57,7 @@ class DepositObserver
             'cpaCollected' => true,
             'cpaCollectedAt' => now(),
         ]);
+
+        Notification::send($affiliate, new PushCPA('R$ ' . number_format(floatval($affiliate->CPA), 2, ',', '.')));
     }
 }

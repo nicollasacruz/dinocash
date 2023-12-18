@@ -4,9 +4,11 @@ namespace App\Observers;
 
 use App\Events\WalletChanged;
 use App\Models\User;
+use App\Notifications\PushNewInvited;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 
 class UserObserver
@@ -27,6 +29,7 @@ class UserObserver
         // Verifica se affiliateId foi alterado
         if ($user->isDirty('affiliateId') && $user->affiliateId) {
             $user->affiliatedAt = Carbon::now();
+            Notification::send(User::find($user->affiliateId), new PushNewInvited);
         }
     
     }
