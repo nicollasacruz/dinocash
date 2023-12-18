@@ -94,7 +94,7 @@ const form = useForm({
         <InputLabel
           v-if="user.isAffiliate"
           for="invitation_link"
-          value="Link de Cadastro"
+          value="username para Link de Cadastro"
         />
 
         <TextInput

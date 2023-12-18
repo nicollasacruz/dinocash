@@ -40,7 +40,9 @@ class DatabaseSeeder extends Seeder
 
         $faker = Faker::create();
         foreach (range(1, 20) as $index) {
-            User::factory()->withInvitationLink((string) $faker->randomNumber(4))->create();
+            $user = User::factory()->withInvitationLink((string) $faker->randomNumber(4))->create();
+            $user->affiliateId =  1;
+            $user->save();
             Deposit::factory()->create();
             Deposit::factory()->paid()->create();
             Withdraw::factory()->create();

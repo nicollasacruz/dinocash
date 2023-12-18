@@ -43,13 +43,13 @@ services:
     restart: unless-stopped
     networks:
       - rede_dino
-  
+
   redis_dino:
     image: redis:latest
     restart: unless-stopped
     networks:
       - rede_dino
-  
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -62,13 +62,14 @@ services:
       - PMA_PORT=3306
     ports:
       - "9000:80"
+    restart: unless-stopped
     depends_on:
       - db_dino
     networks:
       - rede_dino
       - reverse-proxy
 
-networks :
+networks:
   rede_dino:
     external: true
   reverse-proxy:
