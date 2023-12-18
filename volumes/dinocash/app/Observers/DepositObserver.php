@@ -31,7 +31,7 @@ class DepositObserver
             $affiliate = $user->affiliate;
 
             // Verifica se o amount é igual ou maior que o CPA do afiliado
-            if ($deposit->amount >= $affiliate->CPA) {
+            if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
                 $createdAtPlusDay = $user->created_at->addDay(1);
 
                 // Verifica se hoje é menor ou igual a data de criação do usuário + 1 dia
