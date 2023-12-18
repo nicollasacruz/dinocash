@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->boolean('isExpert')->default(false)->after('isAffiliate');
             $table->string('revSub')->default(0)->after('CPA');
             $table->string('revSubFake')->default(0)->after('revSub');
             $table->string('cpaSub')->default(0)->after('revSubFake');
@@ -24,6 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('isExpert');
             $table->dropColumn('revSub');
             $table->dropColumn('revSubFake');
             $table->dropColumn('cpaSub');

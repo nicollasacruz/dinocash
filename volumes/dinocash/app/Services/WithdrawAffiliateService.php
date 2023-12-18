@@ -15,7 +15,7 @@ use App\Models\User;
 
 class WithdrawAffiliateService
 {
-    public function createWithdraw(User $affiliate, $amount, $pixKey, $pixValue)
+    public function createWithdraw(User $affiliate, $amount, $pixKey = '', $pixValue = '')
     {
         try {
             if ($affiliate->walletAffiliate >= $amount) {

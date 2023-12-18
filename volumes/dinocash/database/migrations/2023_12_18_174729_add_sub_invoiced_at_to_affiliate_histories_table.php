@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('affiliate_withdraws', function (Blueprint $table) {
-            $table->string('pixKey')->nullable();
-            $table->string('pixValue')->nullable();
+        Schema::table('affiliate_histories', function (Blueprint $table) {
+            $table->dateTime('subInvoicedAt')->nullable();
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('affiliate_withdraws', function (Blueprint $table) {
-            $table->dropColumn('pixKey');
-            $table->dropColumn('pixValue');
+        Schema::table('affiliate_histories', function (Blueprint $table) {
+            $table->dropColumn('subInvoicedAt');
         });
     }
 };
