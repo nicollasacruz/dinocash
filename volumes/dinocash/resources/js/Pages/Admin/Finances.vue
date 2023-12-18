@@ -13,8 +13,10 @@ const {
   activeSessions,
   totalUsers,
   totalUsersToday,
+  totalUsersTodayWithDeposit,
   balanceAmount,
   depositsAmount,
+  depositsAmountToday,
   withdrawsAmount,
   withdrawsAffiliateAmount,
   walletAmount,
@@ -33,8 +35,10 @@ const {
   "activeSessions",
   "totalUsers",
   "totalUsersToday",
+  "totalUsersTodayWithDeposit",
   "balanceAmount",
   "depositsAmount",
+  "depositsAmountToday",
   "withdrawsAmount",
   "withdrawsAffiliateAmount",
   "walletAmount",
@@ -118,15 +122,11 @@ watch(addictRange, (value) => {
   <Head title="Admin Financeiro" />
 
   <AuthenticatedLayout>
-    <a href="/push" class="btn btn-outline-primary btn-block"
-      >Make a Push Notification!</a
-    >
-
-    <div class="flex lg:flex-row justify-between">
-      <div class="text-4xl text-white font-bold">Financeiro</div>
-      <div class="lg:flex gap-x-5">
+    <div class="flex-col lg:flex-row justify-between max-w-screen">
+      <div class="text-4xl my-2 text-white font-bold">Financeiro</div>
+      <div class="grid-cols-2 lg:flex gap-x-5">
         <TextBox
-          label="Online"
+          label="jogadores Online"
           :value="activeSessions"
           label-text="text-green-500"
         >
@@ -134,7 +134,7 @@ watch(addictRange, (value) => {
             <UserIcon class="w-5 fill-green-500" />
           </template>
         </TextBox>
-        <TextBox label="Cadastros" :value="totalUsers">
+        <TextBox label="Cadastros total" :value="totalUsers">
           <template #icon>
             <UserIcon class="w-5" />
           </template>
@@ -144,13 +144,19 @@ watch(addictRange, (value) => {
             <UserIcon class="w-5" />
           </template>
         </TextBox>
+        <TextBox label="Depositantes Hoje" :value="totalUsersTodayWithDeposit">
+          <template #icon>
+            <UserIcon class="w-5" />
+          </template>
+        </TextBox>
         <TextBox
           label="CAIXA DA CASA"
           :value="toBRL(balanceAmount)"
           value-text="text-center text-green-500"
         />
-        <div class="w-full my-auto mr-6">
+        <div class="w-full lg:my-auto lg:mr-6 my-2 mx-auto">
           <input
+            class=""
             id="datePicker"
             type="text"
             placeholder="Selecione um período"
@@ -168,6 +174,10 @@ watch(addictRange, (value) => {
             :class="{ negative: lucroTotal < 0 }"
           />
           <CurrencyBox label="Total de depósitos" :value="depositsAmount" />
+          <CurrencyBox
+            label="Total de depósitos hoje"
+            :value="depositsAmountToday"
+          />
           <TextBox label="Saude da Casa" :value="houseHealth + '%'" />
         </div>
       </div>

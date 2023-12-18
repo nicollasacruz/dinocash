@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
-use App\Models\GameHistory;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
@@ -38,6 +37,9 @@ class FinanceController extends Controller
             ->where('type', 'paid')
             ->sum('amount');
 
+        $depositsAmountPaidToday = Deposit::where('type', 'paid')->get()->filter(function ($deposit) {
+            return $deposit->updated_at->isToday();
+        })->sum('amount');
 
         $withdrawsAmountPaid = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
@@ -131,13 +133,18 @@ class FinanceController extends Controller
             ->count();
         $totalUsers = User::all()->count();
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
+        $totalUsersTodayWithDeposit = User::whereDate('created_at', Carbon::today())->whereHas('deposits', function ($query) {
+            $query->where('type', 'paid');
+        })->count();
 
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
             'totalUsersToday' => $totalUsersToday,
+            'totalUsersTodayWithDeposit' => $totalUsersTodayWithDeposit,
             'balanceAmount' => $caixaDaCasa,
             'depositsAmount' => $depositsAmountPaid,
+            'depositsAmountToday' => $depositsAmountPaidToday,
             'withdrawsAmount' => $withdrawsAmountPaid,
             'withdrawsAffiliateAmount' => $withdrawsAmountAffiliatePaid,
             'walletAmount' => $walletsAmount,

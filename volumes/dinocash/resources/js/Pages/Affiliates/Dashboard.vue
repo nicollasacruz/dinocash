@@ -198,7 +198,7 @@ function formatAmount() {
           @click="permission"
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
         >
-          Permitir saque fake
+          Permitir notificações
         </button>
       </div>
     </div>
