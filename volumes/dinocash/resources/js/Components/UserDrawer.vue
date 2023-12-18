@@ -67,7 +67,7 @@ const amount = ref(0);
 const wallet = ref(props.wallet);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-  wallet.value = e.user.wallet;
+  wallet.value = e.message.wallet;
 });
 
 const routes = [

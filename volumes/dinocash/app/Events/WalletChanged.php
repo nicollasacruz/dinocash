@@ -16,20 +16,20 @@ class WalletChanged implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    public $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($user)
+    public function __construct($message)
     {
-        $this->user = $user;
+        $this->message = $message;
     }
 
 
     public function broadcastOn()
     {
         // Log::info("USER NO EVENTO   ___    " . $this->user);
-        return ['wallet' . $this->user->id];
+        return ['wallet' . $this->message['id']];
     }
 }

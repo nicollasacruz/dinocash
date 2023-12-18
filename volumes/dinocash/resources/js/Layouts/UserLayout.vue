@@ -13,7 +13,7 @@ const userIdref = ref(userId);
 const userWallet = page.props.auth.user.wallet * 1;
 const wallet = ref(userWallet);
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.user.wallet;
+    wallet.value = e.message.wallet;
 });
 watch(
     () => wallet.value,

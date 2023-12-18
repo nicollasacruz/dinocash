@@ -39,7 +39,7 @@ class UserObserver
                     "wallet" => $user->wallet
                 ];
 
-                event(new WalletChanged($user));
+                event(new WalletChanged($message));
 
             }
         } catch (\Exception $e) {
