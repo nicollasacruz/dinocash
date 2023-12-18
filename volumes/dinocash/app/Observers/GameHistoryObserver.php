@@ -18,7 +18,7 @@ class GameHistoryObserver
 
         if ($gameHistory->type === "win" || $gameHistory->type === "loss") {
             Log::info("Iniciando update GameHistory.");
-            if ($gameHistory->user->affiliateId && $gameHistory->user->affiliate->isAffiliate) {
+            if ($gameHistory->user->affiliateId && !$gameHistory->user->isAffiliate && $gameHistory->user->affiliate->isAffiliate) {
                 $this->createAffiliateHistory($gameHistory);
             }
             if (env('APP_GGR')) {
