@@ -78,7 +78,7 @@ class GameHistoryController extends Controller
             foreach ($gameHistory as $gameHistoryItem) {
                 $gameHistoryItem->update([
                     'type' => 'loss',
-                    'finalAmount' => $gameHistoryItem->amount * -1,
+                    'finalAmount' => number_format($gameHistoryItem->amount * -1, 2,'.',''),
                 ]);
                 Log::error('Partida já iniciada corrigida. - ' . $user->email);
             }
@@ -117,7 +117,7 @@ class GameHistoryController extends Controller
                 foreach ($gameHistories as $gameHistoryItem) {
                     $gameHistoryItem->update([
                         'type' => 'loss',
-                        'finalAmount' => $gameHistoryItem->amount * -1,
+                        'finalAmount' => number_format($gameHistoryItem->amount * -1, 2,'.',''),
                     ]);
                     Log::error('Partida já iniciada corrigida. - ' . $user->email);
                 }
