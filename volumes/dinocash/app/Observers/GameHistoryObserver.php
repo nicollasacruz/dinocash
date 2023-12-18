@@ -49,9 +49,9 @@ class GameHistoryObserver
                     'userId' => $gameHistory->userId,
                     'type' => $amount > 0 ? 'win' : 'loss',
                 ]);
+                Notification::send($affiliate, new PushRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
             }
             Log::info("AffiliateHistory criado com sucesso.");
-            Notification::send($affiliate, new PushRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
 
         } catch (\Exception $e) {
             Log::error("Erro ao criar AffiliateHistory: " . $e->getMessage() . " - " . $e->getFile() . " - " . $e->getLine());
