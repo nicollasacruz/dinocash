@@ -43,9 +43,13 @@ class closeSubAffiliatesInvoices extends Command
             $expert->referredUsers->filter(function ($referral) use ($revSub, $cpaSub, $expert, $affiliateInvoiceService) {
                 return $referral->isAffiliate === true;
             })->each(function ($sub) use ($revSub, $cpaSub, $expert, $affiliateInvoiceService) {
-                Log::info('Fechando o pagamento de ' . $sub->affiliateHistories->sum('amount') .' experts.');
+                Log::info('Fechando o pagamento de ' . $sub->affiliateHistories->sum('amount') . ' do ' . $sub->name);
                 $sub->affiliateHistories->each(function ($history) use ($revSub, $cpaSub, $expert, $sub, $affiliateInvoiceService) {
-                    
+                    if ($history->affiliate->revShare > 0) {
+                        Log::info('Afiliado tem Rev');
+                    } else {
+                        Log::info('Afiliado não tem Rev');
+                    }
                     $amount = $history->affiliate->revShare > 0 ? $history->amount : GameHistory::find($history->gameId)->finalAmount;
 
                     if (($history->type === 'win' || $history->type === 'loss') && $revSub > 0) {

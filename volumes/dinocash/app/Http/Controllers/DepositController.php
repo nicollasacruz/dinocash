@@ -54,11 +54,16 @@ class DepositController extends Controller
         $userId = Auth::user()->id;
         $user = User::find($userId);
         $deposit = $depositService->createDeposit($user, $request->amount);
-
+        if ($deposit) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Deposito gerado com sucesso.',
+                'qrCode' => $deposit->paymentCode,
+            ]);
+        }
         return response()->json([
-            'status' => 'success',
-            'message' => 'Deposito gerado com sucesso.',
-            'qrCode' => $deposit->paymentCode,
+            'status' => 'error',
+            'message' => 'Não foi possivel gerar o depósito.',
         ]);
     }
 
