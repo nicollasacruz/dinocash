@@ -37,20 +37,22 @@ class DepositService
                     ]);
             $result = $response->json('paymentCode');
             Log::alert($result);
-            $deposit = Deposit::create([
-                'userId' => $user->id,
-                'amount' => $amount,
-                'transactionId' => $uuid,
-                'externalId' => $response->json('idTransaction'),
-                'type' => 'pending',
-                'paymentCode' => $result,
-            ]);
+            if ($result) {
+                $deposit = Deposit::create([
+                    'userId' => $user->id,
+                    'amount' => $amount,
+                    'transactionId' => $uuid,
+                    'externalId' => $response->json('idTransaction'),
+                    'type' => 'pending',
+                    'paymentCode' => $result,
+                ]);
 
-            Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
-            return $deposit;
-
+                Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
+                return $deposit;
+            }
+            return null;
         } catch (Exception $e) {
-            Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - '. $e->getFile() .' - '. $e->getLine());
+            Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
             return null;
         }
 
