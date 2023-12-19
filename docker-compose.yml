@@ -43,7 +43,8 @@ services:
     restart: unless-stopped
     networks:
       - rede_dino
-
+      - database
+ 
   redis_dino:
     image: redis:latest
     restart: unless-stopped
@@ -75,3 +76,5 @@ networks:
   reverse-proxy:
     external: true
     name: reverse-proxy
+  database:
+    external: true
