@@ -33,7 +33,7 @@
         </button>
       </div>
       <BaseModal
-        v-model="modal && qrCode"
+        v-model="modal"
         title="Depositar"
         :showFooter="false"
         :showHeader="false"
