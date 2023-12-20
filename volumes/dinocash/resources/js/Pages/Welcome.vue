@@ -3,12 +3,11 @@ import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Expansion from "@/Components/BaseExpansion.vue";
-import Background from "../../../storage/imgs/home-page/home-bg1.jpg";
-import Background1 from "../../../storage/imgs/home-page/background-natal-dinocash.jpg";
+import Background1 from "../../../storage/imgs/home-page/home-bg1.jpg";
+import Background3 from "../../../storage/imgs/home-page/bg-ranking.jpg";
 import Background2 from "../../../storage/imgs/home-page/home-bg2.jpg";
-import Background3 from "../../../storage/imgs/home-page/bg-ranking.png";
 import Background4 from "../../../storage/imgs/home-page/home-bg3.jpg";
-import Background1Mobile from "../../../storage/imgs/home-page/bg1.jpg";
+import Background1Mobile from "../../../storage/imgs/home-page/home-bg1-mobile.jpg";
 import Background3Mobile from "../../../storage/imgs/home-page/bg3.jpg";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import DinoInterrogacao from "../../../storage/imgs/home-page/dino-interrogacao-bg3.svg";
@@ -75,9 +74,11 @@ function getPremio(i) {
     class="section1 h-screen mx-auto items-center p-2 flex flex-col"
     :style="{
       backgroundImage: `url('${
-        windowWidth < 700 ? Background1 : Background1
+        windowWidth < 700 ? Background1Mobile : Background1
       }')`,
-      backgroundSize: 'auto auto',
+      backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
     }"
   >
     <div
@@ -97,18 +98,11 @@ function getPremio(i) {
         {{ __("auth.register") }}
       </Link>
     </div>
-    <!-- <img
-      v-if="!!$page?.props?.auth?.user?.id"
-      :src="DinoLogo"
-      alt="dinoLogo"
-      class="mx-auto w-full max-w-lg my-3 md:my-10"
-    />
     <img
-      v-if="!!!$page?.props?.auth?.user?.id"
       :src="DinoLogo"
       alt="dinoLogo"
-      class="mx-auto w-full max-w-lg my-3 md:my-10"
-    /> -->
+      class="mx-auto w-4/5 lg:w-1/2 my-3 md:my-10"
+    />
     <div class="w-full mx-auto mt-auto">
       <Link
         class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
@@ -135,6 +129,9 @@ function getPremio(i) {
       backgroundImage: `url('${
         windowWidth < 700 ? Background3Mobile : Background3
       }')`,
+      backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
     }"
   >
     <div class="text-center text-white font-menu text-7xl pt-3">
@@ -215,7 +212,12 @@ function getPremio(i) {
   <section
     id="section2"
     class="section2 h-screen mx-auto flex flex-col items-center p-4 pb-5"
-    :style="{ backgroundImage: `url('${Background2}')` }"
+    :style="{
+      backgroundImage: `url('${Background2}')`,
+      backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }"
   >
     <img :src="DinoRoxo" alt="dinoLogo" class="h-[20%] z-10 top-[2%]" />
     <div
@@ -226,7 +228,7 @@ function getPremio(i) {
         >Dino ca$h</span
       >
       <span
-        class="text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-0"
+        class="text-[1.8vh] lg:text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-2"
         >Bem-vindo ao Dinocash, sua principal opção de entretenimento e
         lucratividade em jogos online! Como uma provedora totalmente legalizada
         em Malta, oferecemos uma experiência única e inovadora no mercado.
@@ -255,13 +257,18 @@ function getPremio(i) {
 
   <section
     id="section4"
-    class="section4 h-screen flex flex-col items-center p-4 mx-auto"
+    class="section4 h-screen flex flex-col items-center mx-auto"
   >
     <div
-      class="content mx-auto max-w-[1920px]"
-      :style="{ backgroundImage: `url('${Background4}')` }"
+      class="w-full h-full"
+      :style="{
+        backgroundImage: `url('${Background4}')`,
+        backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }"
     >
-      <div class="flex h-full">
+      <div class="flex items-center justify-center h-full">
         <img
           class="h-[85%] mt-10 mr-10 hidden lg:block"
           :src="DinoInterrogacao"
@@ -324,9 +331,6 @@ function getPremio(i) {
 .content {
   max-width: 1920px;
   height: 100%;
-  background-size: auto 100vh;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .section1 {

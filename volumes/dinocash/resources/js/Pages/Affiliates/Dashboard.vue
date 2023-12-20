@@ -14,6 +14,7 @@ const {
   lossLast30Days,
   profitTotal,
   lossTotal,
+  lossToday,
   revShareTotal,
   profitCPAToday,
   profitCPALast30Days,
@@ -23,6 +24,8 @@ const {
   walletAffiliate,
   revShare,
   CPA,
+  cpaSub,
+  revSub,
   paymentPending,
   countInvited,
 } = defineProps([
@@ -30,6 +33,7 @@ const {
   "profitLast30Days",
   "lossLast30Days",
   "profitTotal",
+  "lossToday",
   "lossTotal",
   "revShareTotal",
   "profitCPAToday",
@@ -40,6 +44,8 @@ const {
   "walletAffiliate",
   "revShare",
   "CPA",
+  "cpaSub",
+  "revSub",
   "paymentPending",
   "countInvited",
 ]);
@@ -126,14 +132,34 @@ function formatAmount() {
       <div class="text-4xl text-white font-bold mb-5">Dashboard</div>
       <!-- <div class="h-64">grafico</div> -->
       <div class="flex gap-x-5 -mt-4">
-        <TextBox label="CPA" :value="toBRL(CPA)" label-text="text-green-500">
+        <TextBox
+          v-if="CPA > 0"
+          label="CPA"
+          :value="toBRL(CPA)"
+          label-text="text-green-500"
+        >
           <template #icon>
             <UserIcon class="w-5 fill-green-500" />
           </template>
         </TextBox>
-        <TextBox label="RevShare" :value="`${revShare}%`">
+        <TextBox v-if="revShare > 0" label="RevShare" :value="`${revShare}%`">
           <template #icon>
             <UserIcon class="w-5" />
+          </template>
+        </TextBox>
+        <TextBox v-if="revSub > 0" label="Sub RevShare" :value="`${revSub}%`">
+          <template #icon>
+            <UserIcon class="w-5" />
+          </template>
+        </TextBox>
+        <TextBox
+          v-if="cpaSub > 0"
+          label="Sub CPA"
+          :value="toBRL(cpaSub)"
+          label-text="text-green-500"
+        >
+          <template #icon>
+            <UserIcon class="w-5 fill-green-500" />
           </template>
         </TextBox>
       </div>
@@ -142,20 +168,38 @@ function formatAmount() {
     <div
       class="grid xs: grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-x-2 gap-y-2 mt-4"
     >
-      <CurrencyBox label="Prejuizo Total" :value="lossTotal" negative />
       <CurrencyBox
-        label="Prejuizo em 30 dias"
-        :value="lossLast30Days"
-        negative
+        v-if="revShare > 0"
+        label="Lucro do dia"
+        :value="profitToday - lossToday"
       />
-      <CurrencyBox label="Lucro do dia" :value="profitToday" />
-      <CurrencyBox label="Lucro em 30 dias" :value="profitLast30Days" />
-      <CurrencyBox label="Lucro Total" :value="profitTotal" />
-      <CurrencyBox label="Lucro CPA do dia" :value="profitCPAToday" />
-      <CurrencyBox label="Lucro CPA 30 dias" :value="profitCPALast30Days" />
-      <CurrencyBox label="Lucro CPA Total" :value="profitCPATotal" />
-      <TextBox label="Convidados" :value="countInvited"></TextBox>
-      <TextBox label="Convidados CPA" :value="countCPA"></TextBox>
+      <CurrencyBox
+        v-if="revShare > 0"
+        label="Lucro em 30 dias"
+        :value="profitLast30Days - lossLast30Days"
+      />
+      <CurrencyBox
+        v-if="revShare > 0"
+        label="Lucro Total"
+        :value="profitTotal - lossTotal"
+      />
+      <CurrencyBox
+        v-if="CPA > 0"
+        label="Lucro CPA do dia"
+        :value="profitCPAToday"
+      />
+      <CurrencyBox
+        v-if="CPA > 0"
+        label="Lucro CPA 30 dias"
+        :value="profitCPALast30Days"
+      />
+      <CurrencyBox
+        v-if="CPA > 0"
+        label="Lucro CPA Total"
+        :value="profitCPATotal"
+      />
+      <TextBox label="Convidados" :value="countInvited" />
+      <TextBox v-if="CPA > 0" label="Convidados CPA" :value="countCPA" />
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
       <TextBox

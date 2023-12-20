@@ -54,7 +54,6 @@ class AffiliatePanelController extends Controller
         $countInvited = User::where('affiliateId', $user->id)->count();
         $revShareTotal = $profitTotal - $lossTotal;
         $paymentPending = $user->affiliateHistories->where('invoicedAt', null)->sum('amount');
-
         return Inertia::render('Affiliates/Dashboard', [
             'profitToday' => $profitToday,
             'profitLast30Days' => $profitLast30Days,
@@ -62,6 +61,7 @@ class AffiliatePanelController extends Controller
             'profitTotal' => $profitTotal,
             'countInvited' => $countInvited,
             'lossTotal' => $lossTotal * 1,
+            'lossToday' => $lossToday * 1,
             'revShareTotal' => $revShareTotal,
             'profitCPAToday' => $profitCPAToday,
             'profitCPALast30Days' => $profitCPALast30Days,
@@ -71,6 +71,8 @@ class AffiliatePanelController extends Controller
             'walletAffiliate' => $user->walletAffiliate,
             'revShare' => $user->revShare,
             'CPA' => $user->CPA,
+            'revSub' => (int)$user->revSub,
+            'cpaSub' => (int)$user->cpaSub,
             'paymentPending' => $paymentPending,
         ]);
     }
@@ -95,6 +97,7 @@ class AffiliatePanelController extends Controller
                 return $history->type === 'win' && $history->updated_at->isToday();
             })
             ->sum('amount');
+            
         $profitLast30Days = $user->affiliateHistories
             ->filter(function ($history) {
                 return $history->type === 'win' && $history->updated_at->isBetween(now()->subDays(30), now());

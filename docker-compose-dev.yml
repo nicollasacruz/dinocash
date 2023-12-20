@@ -41,6 +41,7 @@ services:
     volumes:
       - ./.docker/config/mysql:/etc/mysql/conf.d
       - ./volumes/mysql/data:/var/lib/mysql
+      - ./volumes/mysql/dump:/dump
     restart: unless-stopped
     networks:
       - minha_rede
@@ -65,6 +66,8 @@ services:
       PMA_ARBITRARY: 1
       PMA_HOST: db_dino
       PMA_PORT: 3306
+    volumes:
+      - ./config/php.ini:/usr/local/etc/php/conf.d/99-custom.ini
     ports:
       - "9000:80"
     depends_on:

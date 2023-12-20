@@ -16,8 +16,20 @@
         label-style="font-bold text-xs"
         classes="!h-[40px]"
         :error="errors['isAffiliate']"
-        v-bind="afiliado"
+        v-bind="isAffiliate"
         label="Afiliado"
+        class="p-0"
+        :options="[
+          { value: false, label: 'Não' },
+          { value: true, label: 'Sim' },
+        ]"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        classes="!h-[40px]"
+        :error="errors['isExpert']"
+        v-bind="isExpert"
+        label="Expert"
         class="p-0"
         :options="[
           { value: false, label: 'Não' },
@@ -36,7 +48,7 @@
         classes="!h-[40px]"
         :error="errors['revShare']"
         v-bind="revShare"
-        label="Rev Share%"
+        label="RevShare %"
         v-if="typeForm == 'affiliate'"
       />
       <base-input
@@ -45,6 +57,22 @@
         :error="errors['CPA']"
         v-bind="CPA"
         label="CPA"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        classes="!h-[40px]"
+        :error="errors['revSub']"
+        v-bind="revSub"
+        label="Sub RevShare %"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        classes="!h-[40px]"
+        :error="errors['cpaSub']"
+        v-bind="cpaSub"
+        label="Sub CPA"
         v-if="typeForm == 'affiliate'"
       />
       <base-input
@@ -222,11 +250,15 @@ const validationSchema = yup.object().shape({
   isAffiliate: yup.string().required("Campo obrigatório"),
   wallet: yup.string().required("Saldo é obrigatório"),
 });
+console.log(user, 'user');
 const initialValues = user
   ? {
       email: user.email,
       isAffiliate: user.isAffiliate,
+      isExpert: user.isExpert,
       wallet: user.wallet,
+      revSub: user.revSub,
+      cpaSub: user.cpaSub,
       revShare: user.revShare,
       CPA: user.CPA,
       referralsCounter: user.referralsCounter,
@@ -239,8 +271,11 @@ const { handleSubmit, defineInputBinds, errors } = useForm({
   initialValues,
 });
 const email = defineInputBinds("email");
-const afiliado = defineInputBinds("isAffiliate");
+const isAffiliate = defineInputBinds("isAffiliate");
+const isExpert = defineInputBinds("isExpert");
 const wallet = defineInputBinds("wallet");
+const cpaSub = defineInputBinds("cpaSub");
+const revSub = defineInputBinds("revSub");
 const revShare = defineInputBinds("revShare");
 const CPA = defineInputBinds("CPA");
 const referralsCounter = defineInputBinds("referralsCounter");
@@ -252,6 +287,8 @@ const submit = handleSubmit((values) => {
     invitation_link: values.invitation_link,
     walletAffiliate: values.walletAffiliate,
     revShare: values.revShare,
+    cpaSub: values.cpaSub,
+    revSub: values.revSub,
   };
   emit("submit", values);
 });

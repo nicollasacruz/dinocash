@@ -25,7 +25,6 @@ class UserController extends Controller
      */
     public function modalUserUpdate(Request $request)
     {
-
         $user = User::where('email', $request->email)->first();
 
         $newUserData = $request->json()->all();

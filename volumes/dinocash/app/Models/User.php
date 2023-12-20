@@ -30,6 +30,7 @@ class User extends Authenticatable
         'wallet',
         'walletAffiliate',
         'isAffiliate',
+        'isExpert',
         'affiliateId',
         'affiliatedAt',
         'cpaCollected',
@@ -38,6 +39,8 @@ class User extends Authenticatable
         'referralsCounter',
         'CPA',
         'revShare',
+        'revSub',
+        'cpaSub',
     ];
 
     /**
@@ -59,6 +62,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'isAffiliate' => 'boolean',
+        'isExpert' => 'boolean',
         'wallet' => 'float',
         'walletAffiliate' => 'float',
         'referrals' => 'array',
