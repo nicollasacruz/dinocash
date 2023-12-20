@@ -413,7 +413,7 @@ export default class DinoGame extends GameRunner {
 
         // console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
         if (level >= 2 && level <= 4) {
-            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.05 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.2;
+            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.01 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.1;
             // settings.birdSpeed = settings.bgSpeed * 0.8;
             settings.cactiSpawnRate = this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.9) : settings.cactiSpawnRate;
         } else if (level >= 5) {
