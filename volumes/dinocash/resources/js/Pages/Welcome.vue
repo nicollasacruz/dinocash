@@ -105,13 +105,13 @@ function getPremio(i) {
     />
     <div class="w-full mx-auto mt-auto">
       <Link
-        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
+        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-black boxShadow border-black border-4"
         :href="route('user.play')"
       >
         {{ __("homepage.play-now") }}
       </Link>
       <Link
-        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-roxo-fundo boxShadow border-black border-4"
+        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-black boxShadow border-black border-4"
         :href="route('user.deposito')"
       >
         DEPOSITAR
@@ -134,10 +134,10 @@ function getPremio(i) {
       backgroundRepeat: 'no-repeat',
     }"
   >
-    <div class="text-center text-white font-menu text-7xl pt-3">
+    <div class="text-center text-black font-menu text-7xl pt-3">
       RANKING GLOBAL
     </div>
-    <div class="text-center text-white font-menu text-xl pt-3">
+    <div class="text-center text-black font-menu text-xl pt-3">
       Ranking encerra no dia 31/12/2023 às 23:59h e o valor será creditado nas
       contas dos ganhadores como saldo!
     </div>
@@ -225,7 +225,7 @@ function getPremio(i) {
     >
       <span
         class="text-center text-6xl md:text-[130px] font-menu text-gray-800 m-0 p-0"
-        >Dino ca$h</span
+        >Dino Cash</span
       >
       <span
         class="text-[1.8vh] lg:text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-2"
@@ -241,10 +241,10 @@ function getPremio(i) {
       >
     </div>
     <Link
-      class="mx-auto mt-4 p-3 flex justify-center items-center md:w-[360px] md:h-[100px] bg-verde-claro rounded-lg font-menu text-4xl md:text-[50px] text-roxo-fundo boxShadow border-black border-4"
+      class="mx-auto mt-4 p-3 flex justify-center items-center md:w-[360px] md:h-[100px] bg-verde-claro rounded-lg font-menu text-2xl md:text-[30px] text-black boxShadow border-black border-4"
       :href="route('user.play')"
     >
-      {{ __("homepage.play-now") }}
+      JOGAR AGORA
     </Link>
     <div
       class="h-[50px] mt-6 mb-[200px] bg-roxo-escuro flex items-center rounded-2xl p-[30px]"
@@ -275,8 +275,8 @@ function getPremio(i) {
           alt=""
         />
         <div>
-          <div class="font-menu text-9xl text-center">FAQ</div>
-          <div class="flex flex-col gap-y-4 mt-5">
+          <div class="font-menu text-black text-9xl text-center">FAQ</div>
+          <div class="flex flex-col gap-y-4 mt-5 mx-3 ">
             <Expansion
               title="COMO POSSO JOGAR O DINOCASH?"
               content="Você precisa fazer um depósito inicial na plataforma para começar a jogar e faturar com o dinocash."

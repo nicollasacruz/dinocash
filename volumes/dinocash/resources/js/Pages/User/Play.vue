@@ -2,10 +2,13 @@
   <Head title="Jogar" />
 
   <UserLayouyt v-slot="{ wallet }">
+    <!-- <video id="videoId" class="hidden" controls autoplay muted>
+      <source
+        src="http://techslides.com/demos/sample-videos/small.mp4"
+        type="video/mp4"
+      />
+    </video> -->
     <div class="p-2 lg:px-4 h-full">
-      <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">
-                Jogar
-            </div> -->
       <div
         class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
       >
@@ -172,23 +175,18 @@ async function fetchUpdate() {
     throw error;
   }
 }
+document.addEventListener("DOMContentLoaded", function () {
+  // const videoElement = document.getElementById("videoId");
+  // videoElement.addEventListener("suspend", () => {
+  //   alert("Desative o modo de economia");
+  //   loading.value = true;
+  // });
 
+  // videoElement.addEventListener("play", () => {
+  //   loading.value = false;
+  // });
+});
 async function startGame() {
-  if ('matchMedia' in window) {
-    var mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    if (mediaQuery.matches) {
-        // O dispositivo está em um modo de economia de energia ou redução de movimento
-        alert('O dispositivo pode estar em modo de economia de energia.');
-    } else {
-        // O dispositivo pode não estar em modo de economia de energia
-        console.log('O dispositivo pode não estar em modo de economia de energia.');
-    }
-} else {
-    // matchMedia não é suportado
-    console.log('matchMedia não é suportado.');
-}
-
   loading.value = true;
   try {
     gameId.value = await fetchStore();

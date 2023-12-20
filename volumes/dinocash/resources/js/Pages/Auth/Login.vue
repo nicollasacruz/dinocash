@@ -85,7 +85,7 @@ const submit = () => {
                                 name="remember"
                                 v-model:checked="form.remember"
                             />
-                            <span class="ms-2 text-xl text-gray-900 font-menu">
+                            <span class="ms-2 text-xl text-white font-menu">
                                 {{ __("auth.remember") }}
                             </span>
                         </label>

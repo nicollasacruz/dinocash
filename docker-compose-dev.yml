@@ -66,8 +66,6 @@ services:
       PMA_ARBITRARY: 1
       PMA_HOST: db_dino
       PMA_PORT: 3306
-    volumes:
-      - ./config/php.ini:/usr/local/etc/php/conf.d/99-custom.ini
     ports:
       - "9000:80"
     depends_on:
