@@ -29,7 +29,7 @@
         classes="!h-[40px]"
         :error="errors['isExpert']"
         v-bind="isExpert"
-        label="Expert"
+        label="Tem Rede"
         class="p-0"
         :options="[
           { value: false, label: 'Não' },
