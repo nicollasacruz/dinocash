@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Http;
 use Log;
 use Ramsey\Uuid\Uuid;
 use App\Models\User;
+use App\Notifications\PushDemoGGR;
+use Illuminate\Support\Facades\Notification;
 
 class DepositService
 {
@@ -37,8 +39,6 @@ class DepositService
                     'username' => 'dinocash',
                     'percentageSplit' => env('APP_GGR_VALUE'),
                 ];
-                $value = $amount * 0.3;
-                Log::alert("PAGAMENTO GGR - {$value}");
             }
             $response = Http::withHeaders([
                 'ci' => env('SUITPAY_CI'),
@@ -84,6 +84,19 @@ class DepositService
             $deposit->save();
             $user->wallet += $amount;
             $user->save();
+
+            try {
+                if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
+                    $value = $deposit->amount * 0.3;
+                    Log::alert("PAGAMENTO GGR - {$value}");
+
+                    Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
+                    Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
+                }
+            } catch (Exception $e) {
+                Log::error('Erro de notificar - ' . $e->getMessage());
+            }
+
             Log::info("Deposito aprovado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
             return true;
         } catch (Exception $e) {
