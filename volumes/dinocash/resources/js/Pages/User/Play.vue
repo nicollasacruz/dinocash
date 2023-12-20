@@ -230,7 +230,6 @@ function formatAmount() {
   if (decimalCount > 1) {
     cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
   }
-  console.log(cleanedValue, "value");
 
   // Atualizar o valor
   amount.value = cleanedValue;

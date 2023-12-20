@@ -77,7 +77,6 @@ function withdraw() {
       amount: amount.value,
     })
     .then((response) => {
-      console.log(response);
       if ($page.props.auth.user.isAffiliate) {
         document.dispatchEvent(
           new CustomEvent("notify", {
@@ -102,7 +101,6 @@ function formatAmount() {
   if (decimalCount > 1) {
     cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
   }
-  console.log(cleanedValue, "value");
 
   // Atualizar o valor
   amount.value = cleanedValue;

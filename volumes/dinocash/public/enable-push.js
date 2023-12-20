@@ -19,11 +19,11 @@ function initSW() {
   //register the service worker
   navigator.serviceWorker.register('/sw.js')
     .then(() => {
-      console.log('serviceWorker installed!')
+      // console.log('serviceWorker installed!')
       initPush();
     })
     .catch((err) => {
-      console.log(err)
+      // console.log(err)
     });
 }
 
@@ -64,7 +64,7 @@ function subscribeUser() {
       return registration.pushManager.subscribe(subscribeOptions);
     })
     .then((pushSubscription) => {
-      console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+      // console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
       storePushSubscription(pushSubscription);
     });
 }
@@ -100,9 +100,9 @@ function storePushSubscription(pushSubscription) {
       return res.json();
     })
     .then((res) => {
-      console.log(res)
+      // console.log(res)
     })
     .catch((err) => {
-      console.log(err)
+      // console.log(err)
     });
 }

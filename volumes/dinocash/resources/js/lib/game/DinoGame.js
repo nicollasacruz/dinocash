@@ -23,7 +23,6 @@ export default class DinoGame extends GameRunner {
         this.steps = 0;
         this.amount = 0;
         this.userId = userId;
-        console.log(this.viciosity)
         this.isAffiliate = isAffiliate;
         this.width = null;
         this.height = null;
@@ -32,7 +31,7 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: this.isAffiliate ? 7.5 : this.viciosity ? 9 : 8, // ppf
+            bgSpeed: this.isAffiliate ? 7 : this.viciosity ? 9 : 8, // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa

@@ -95,11 +95,6 @@ const { minWithdraw, maxWithdraw, walletUser } = defineProps([
     "maxWithdraw",
     "walletUser",
 ]);
-onMounted(() => {
-    new Promise((resolve) => {
-        Notification.requestPermission(resolve)?.then(resolve);
-    }).then((permission) => console.log(permission));
-});
 
 const page = usePage();
 
@@ -113,7 +108,6 @@ const showModal = ref(false);
 const pixKey = ref("");
 const pixType = ref("document");
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    console.log(e, "wallet");
     wallet.value = e.message.wallet;
 });
 async function withdraw() {
