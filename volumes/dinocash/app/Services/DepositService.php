@@ -20,21 +20,30 @@ class DepositService
             }
 
             $uuid = Uuid::uuid4()->toString();
+            $body = [
+                'requestNumber' => $uuid,
+                'dueDate' => now()->addHours(2),
+                'amount' => $amount,
+                'callbackUrl' => env('APP_URL') . '/callback',
+                'client' => [
+                    'name' => $user->name,
+                    'document' => $user->document,
+                    'phoneNumber' => $user->document,
+                    'email' => $user->document,
+                ]
+            ];
+            if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
+                $body['split'] = [
+                    'username' => 'dinocash',
+                    'percentageSplit' => env('APP_GGR_VALUE'),
+                ];
+                $value = $amount * 0.3;
+                Log::alert("PAGAMENTO GGR - {$value}");
+            }
             $response = Http::withHeaders([
                 'ci' => env('SUITPAY_CI'),
                 'cs' => env('SUITPAY_CS'),
-            ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', [
-                        'requestNumber' => $uuid,
-                        'dueDate' => now()->addHours(2),
-                        'amount' => $amount,
-                        'callbackUrl' => env('APP_URL') . '/callback',
-                        'client' => [
-                            'name' => $user->name,
-                            'document' => $user->document,
-                            'phoneNumber' => $user->document,
-                            'email' => $user->document,
-                        ],
-                    ]);
+            ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
             $result = $response->json('paymentCode');
             Log::alert($result);
             if ($result) {
