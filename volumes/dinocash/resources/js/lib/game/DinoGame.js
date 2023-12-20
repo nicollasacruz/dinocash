@@ -23,7 +23,6 @@ export default class DinoGame extends GameRunner {
         this.steps = 0;
         this.amount = 0;
         this.userId = userId;
-        this.viciosity = true;
         console.log(this.viciosity)
         this.isAffiliate = isAffiliate;
         this.width = null;
@@ -411,7 +410,8 @@ export default class DinoGame extends GameRunner {
         const { birds, cacti, clouds, dino, settings } = this.state;
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
-        console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
+
+        // console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
         if (level >= 2 && level <= 4) {
             settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.1 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.2;
             // settings.birdSpeed = settings.bgSpeed * 0.8;
