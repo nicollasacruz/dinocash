@@ -40,7 +40,8 @@ class GameHistoryObserver
             }
             $affiliate = $gameHistory->user->affiliate;
             if (!$gameHistory->user->isAffiliate && $affiliate->revShare > 0) {
-                $newAmount = number_format($amount * ($affiliate->revShare * $amount == 1 ? 1 : 0.8) / 100, 2, '.', '');
+                $newAmount = number_format($amount * ($affiliate->revShare / 100) * 0.8 , 2, '.', '');
+                Log::info("AffiliateHistory com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
                 AffiliateHistory::create([
                     'amount' => $newAmount,
                     'gameId' => $gameHistory->id,
