@@ -15,8 +15,7 @@ class GameHistoryObserver
 {
     public function updated(GameHistory $gameHistory)
     {
-
-        if ($gameHistory->type === "win" || $gameHistory->type === "loss") {
+        if (($gameHistory->type === "win" || $gameHistory->type === "loss") && $gameHistory->isDirty("type")) {
             Log::info("Iniciando update GameHistory.");
             if ($gameHistory->user->affiliateId && !$gameHistory->user->isAffiliate && $gameHistory->user->affiliate->isAffiliate) {
                 $this->createAffiliateHistory($gameHistory);

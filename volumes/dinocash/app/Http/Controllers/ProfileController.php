@@ -61,9 +61,7 @@ class ProfileController extends Controller {
 
     public function listAffiliateHistory(Request $request) {
         $userId = $request->query('user');
-        $history = User::find($userId)->join('affiliate_histories', 'users.id', '=', 'affiliate_histories.affiliateId')->where(
-            'affiliate_histories.affiliateId', '=', $userId
-        )->get();
+        $history = User::find($userId)->affiliateHistories->sortByDesc('created_at');
 
         return response()->json(['status' => 'success', 'transactions' => $history]);
     }

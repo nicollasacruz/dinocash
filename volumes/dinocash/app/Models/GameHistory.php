@@ -22,6 +22,7 @@ class GameHistory extends Model
         'finalAmount',
         'type',
         'distance',
+        'subCollectedAt',
     ];
 
     /**

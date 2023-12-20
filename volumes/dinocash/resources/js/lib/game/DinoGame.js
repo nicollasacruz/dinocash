@@ -23,7 +23,8 @@ export default class DinoGame extends GameRunner {
         this.steps = 0;
         this.amount = 0;
         this.userId = userId;
-        this.viciosity = viciosity;
+        this.viciosity = true;
+        console.log(this.viciosity)
         this.isAffiliate = isAffiliate;
         this.width = null;
         this.height = null;
@@ -32,29 +33,29 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: isAffiliate ? 7.5 : viciosity ? 9 : 8, // ppf
+            bgSpeed: this.isAffiliate ? 7.5 : this.viciosity ? 9 : 8, // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
-            cactiSpawnRate: isAffiliate
+            cactiSpawnRate: this.isAffiliate
                 ? 45
-                : viciosity
+                : this.viciosity
                     ? 25
-                    : randInteger(30, 40), // fpa
+                    : randInteger(25, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
-            dinoGravity: isAffiliate
+            dinoGravity: this.isAffiliate
                 ? 0.7
-                : viciosity
-                    ? 0.75
+                : this.viciosity
+                    ? 0.78
                     : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: isAffiliate ? 10 : viciosity ? 9.3 : 9.5, // ppf
+            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9.2 : 9.6, // ppf
             scoreBlinkRate: 20, // fpa
-            scoreIncreaseRate: isAffiliate
+            scoreIncreaseRate: this.isAffiliate
                 ? 7
-                : viciosity
+                : this.viciosity
                     ? 10
                     : randInteger(7, 9), // fpa
         };
@@ -410,27 +411,15 @@ export default class DinoGame extends GameRunner {
         const { birds, cacti, clouds, dino, settings } = this.state;
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
-
-        if (level >= 3 && level <= 4) {
-            if (!this.isAffiliate) {
-                settings.bgSpeed++;
-                settings.birdSpeed = settings.bgSpeed * 0.8;
-            } else {
-                if (level == 4 && !this.isAffiliate) {
-                    settings.bgSpeed++;
-                    settings.birdSpeed = settings.bgSpeed * 0.8;
-                }
-            }
+        console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
+        if (level >= 2 && level <= 4) {
+            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.1 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.2;
+            // settings.birdSpeed = settings.bgSpeed * 0.8;
+            settings.cactiSpawnRate = this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.9) : settings.cactiSpawnRate;
         } else if (level >= 5) {
-            if (!this.isAffiliate && level % 3 === 0) {
-                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
-                settings.birdSpeed = settings.bgSpeed * 0.9;
-                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
-            } else {
-                settings.bgSpeed = Math.ceil(bgSpeed * 1.1);
-                settings.birdSpeed = settings.bgSpeed * 0.9;
-                settings.cactiSpawnRate = Math.floor(cactiSpawnRate * 0.98);
-            }
+            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.1 : this.viciosity ? settings.bgSpeed + 1.2 : settings.bgSpeed * (randInteger(11, 20) / 10);
+            // settings.birdSpeed = settings.bgSpeed * 0.9;
+            settings.cactiSpawnRate = this.isAffiliate ? Math.floor(settings.cactiSpawnRate * 0.99) : this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.8) : Math.floor(settings.cactiSpawnRate * (randInteger(2, 8) / 10));
             if (
                 level >= 8 &&
                 level % 2 === 0 &&
@@ -529,7 +518,6 @@ export default class DinoGame extends GameRunner {
         updateInstances();
         if (steps + 1 >= opacitySteps) {
             content.steps = 90;
-            console.log(content);
             return;
         }
         content.steps++;
@@ -719,10 +707,8 @@ export default class DinoGame extends GameRunner {
     async getAmount() {
         try {
             const response = await axios.get("/user/lastGame");
-            console.log(response, "userId");
             this.amount = response.data.amount * 1;
         } catch (err) {
-            console.log(err, "userId");
         }
     }
     /**

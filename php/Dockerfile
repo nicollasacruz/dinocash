@@ -10,6 +10,8 @@ RUN docker-php-ext-install pdo_mysql zip
 
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
+RUN echo "memory_limit = 6000M" >> /usr/local/etc/php/php.ini
+
 RUN mkdir -p /etc/apt/keyrings
 
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
