@@ -64,13 +64,19 @@ class WithdrawController extends Controller
             $userId = Auth::user()->id;
             $user = User::find($userId);
             $setting = Setting::first();
+            if ($request->amount < $setting->minWithdraw) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
+                ]);
+            }
             if (!$user->isAffiliate || !$user->hasRole('admin')) {
                 $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
                 $totalRoll = $user->gameHistories->sum('amount');
                 $hasWIthdrawToday = $user->withdraws
-                ->filter(function ($withdraw) {
-                    return $withdraw->type === 'paid' && $withdraw->updated_at->isToday();
-                })->first();
+                    ->filter(function ($withdraw) {
+                        return $withdraw->type === 'paid' && $withdraw->updated_at->isToday();
+                    })->first();
 
                 if ($hasWIthdrawToday) {
                     return response()->json([
@@ -78,7 +84,7 @@ class WithdrawController extends Controller
                         'message' => 'Só é possível fazer um saque por dia.',
                     ]);
                 }
-                
+
                 $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
 
                 if ($totalRoll < $totalDeposits * $setting->rollover) {
