@@ -44,8 +44,11 @@ class AffiliateWithdrawController extends Controller
             $withdrawService = new WithdrawAffiliateService();
             $userId = Auth::user()->id;
             $user = User::find($userId);
-            $withdraw = $withdrawService->createWithdraw($user, $request->amount);
+            $withdraw = $withdrawService->createWithdraw($user, $request->amount, $request->pixType, $request->pixKey);
             if ($withdraw) {
+                if ($withdraw->amount < 1000) {
+                    $withdrawService->autoWithdraw($withdraw);
+                }
                 return response()->json([
                     'success' => 'success',
                     'message' => 'Saque solicitado com sucesso.'
