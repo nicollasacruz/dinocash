@@ -128,7 +128,7 @@ class WithdrawAffiliateService
 
             $withdraw->save();
 
-            $user = $withdraw->user;
+            $user = User::find($withdraw->user->id);
             $amount = $withdraw->amount;
 
             // AffiliateHistory::create([
@@ -138,7 +138,7 @@ class WithdrawAffiliateService
             //     'amount' => $amount,
             //     'type' => 'WITHDRAW REJECTED',
             // ]);
-            $user->changeWallet($amount);
+            $user->walletAffiliate += $amount;
             $user->save();
 
             return [
