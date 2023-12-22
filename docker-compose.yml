@@ -1,25 +1,25 @@
 version: '3.8'
 services:
-  dinocash_web:
+  dinocash_web_poki:
     build:
       context: ./nginx
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
       - ./volumes/dinocash:/var/www/html:rw
-    container_name: dinocash_web
+    container_name: dinocash_web_poki
     environment:
-      - VIRTUAL_HOST=dinocash.io
-      - LETSENCRYPT_HOST=dinocash.io
+      - VIRTUAL_HOST=dinobet.vip
+      - LETSENCRYPT_HOST=dinobet.vip
       - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
-      - VIRTUAL_PORT=8080
+      - VIRTUAL_PORT=8083
     depends_on:
-      - php_dino
+      - php_dino_poki
     networks:
-      - rede_dino
+      - rede_dino_poki
       - reverse-proxy
 
-  php_dino:
+  php_dino_poki:
     build:
       context: ./php
       dockerfile: Dockerfile
@@ -27,51 +27,11 @@ services:
     volumes:
       - ./volumes/dinocash:/var/www/html:rw
     networks:
-      - rede_dino
-
-  db_dino:
-    image: mariadb:latest
-    environment:
-      - TZ=${TZ:-America/Sao_Paulo}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-dino}
-      - MYSQL_USER=${MYSQL_USER:-dino}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-dino}
-    volumes:
-      - ./.docker/config/mysql:/etc/mysql/conf.d
-      - ./volumes/mysql/data:/var/lib/mysql
-    restart: unless-stopped
-    networks:
-      - rede_dino
+      - rede_dino_poki
       - database
- 
-  redis_dino:
-    image: redis:latest
-    restart: unless-stopped
-    networks:
-      - rede_dino
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      - VIRTUAL_HOST=database.dinocash.io
-      - LETSENCRYPT_HOST=database.dinocash.io
-      - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
-      - VIRTUAL_PORT=9000
-      - PMA_ARBITRARY=1
-      - PMA_HOST=db_dino
-      - PMA_PORT=3306
-    ports:
-      - "9000:80"
-    restart: unless-stopped
-    depends_on:
-      - db_dino
-    networks:
-      - rede_dino
-      - reverse-proxy
 
 networks:
-  rede_dino:
+  rede_dino_poki:
     external: true
   reverse-proxy:
     external: true
