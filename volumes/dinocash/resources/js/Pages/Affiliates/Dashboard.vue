@@ -180,17 +180,17 @@ function formatAmount() {
     >
       <CurrencyBox
         v-if="revShare > 0"
-        label="Lucro do dia"
+        label="RevShare do dia"
         :value="profitToday - lossToday"
       />
       <CurrencyBox
         v-if="revShare > 0"
-        label="Lucro em 30 dias"
+        label="RevShare em 30 dias"
         :value="profitLast30Days - lossLast30Days"
       />
       <CurrencyBox
         v-if="revShare > 0"
-        label="Lucro Total"
+        label="RevShare Total"
         :value="profitTotal - lossTotal"
       />
       <CurrencyBox

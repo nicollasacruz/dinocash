@@ -38,7 +38,7 @@ export default class DinoGame extends GameRunner {
             cactiSpawnRate: this.isAffiliate
                 ? 45
                 : this.viciosity
-                    ? 25
+                    ? randInteger(15, 25)
                     : randInteger(25, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
@@ -49,7 +49,7 @@ export default class DinoGame extends GameRunner {
                     : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9.2 : 9.6, // ppf
+            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
                 ? 7
