@@ -45,7 +45,6 @@ class DepositService
                 'cs' => env('SUITPAY_CS'),
             ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
             $result = $response->json('paymentCode');
-            Log::alert($result);
             if ($result) {
                 $deposit = Deposit::create([
                     'userId' => $user->id,
