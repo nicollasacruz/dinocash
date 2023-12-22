@@ -32,6 +32,7 @@ class AffiliateController extends Controller
                 $query->where('email', 'LIKE', '%' . $email . '%');
             })
                 ->where('isAffiliate', true)
+                ->limit(30)
                 ->get();
 
             $affiliates->each(function ($affiliate) {
