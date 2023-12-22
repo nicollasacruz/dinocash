@@ -163,10 +163,10 @@ function detectFrameRate() {
     });
 }
 
-setInterval(async () => {
-    const isPowerSavingMode = detectPowerSavingMode();
-    if (isPowerSavingMode) {
-        emit("finishGame", 0);
-    }
-}, 2000);
+// setInterval(async () => {
+//     const isPowerSavingMode = detectPowerSavingMode();
+//     if (isPowerSavingMode) {
+//         emit("finishGame", 0);
+//     }
+// }, 2000);
 </script>
