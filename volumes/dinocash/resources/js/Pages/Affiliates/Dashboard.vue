@@ -92,7 +92,7 @@ function withdraw() {
     toast.error("Saque não pode ser menor ou igual a zero");
     return;
   }
-  if (!pixKey.value && !pixType.value) {
+  if (!pixKey.value || !pixType.value) {
     toast.error("Informe o tipo e a chave pix");
     return;
   }
