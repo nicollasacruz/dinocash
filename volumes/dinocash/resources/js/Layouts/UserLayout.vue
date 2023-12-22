@@ -3,7 +3,7 @@ import { ref, watch, computed } from "vue";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
 import Background from "../../../storage/imgs/home-page/home-bg2.jpg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
-import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
+import logoDinoRoxo from "../../../storage/imgs/home-page/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
 import { usePage } from "@inertiajs/vue3";
 
