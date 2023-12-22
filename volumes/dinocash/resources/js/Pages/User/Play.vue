@@ -2,10 +2,13 @@
     <Head title="Jogar" />
 
     <UserLayouyt v-slot="{ wallet }">
+        <!-- <video id="videoId" class="hidden" controls autoplay muted>
+      <source
+        src="http://techslides.com/demos/sample-videos/small.mp4"
+        type="video/mp4"
+      />
+    </video> -->
         <div class="p-2 lg:px-4 h-full">
-            <!-- <div class="text-center uppercase text-xl lg:text-3xl text-gray-800 mb-4">
-                Jogar
-            </div> -->
             <div
                 class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
             >
@@ -183,7 +186,7 @@ async function fetchUpdate() {
 }
 
 async function startGame() {
-  loading.value = true;
+    loading.value = true;
     const lowPowerMode = await detectPowerSavingMode();
     console.log(lowPowerMode);
     if (lowPowerMode) {
@@ -191,21 +194,21 @@ async function startGame() {
         return;
     }
     try {
-      gameId.value = await fetchStore();
-      if (gameId.value) {
-        const { height, width } = document.body.getBoundingClientRect();
-        isRunning.value = true;
-        clientHeight.value = height;
-        clientWidth.value = width;
-        difficulty.value = true;
-        const div = document.getElementById("root") as HTMLDivElement;
-        div.style.display = "none";
-      }
+        gameId.value = await fetchStore();
+        if (gameId.value) {
+            const { height, width } = document.body.getBoundingClientRect();
+            isRunning.value = true;
+            clientHeight.value = height;
+            clientWidth.value = width;
+            difficulty.value = true;
+            const div = document.getElementById("root") as HTMLDivElement;
+            div.style.display = "none";
+        }
     } catch (error) {
-      console.error("Erro na pesquisa:", error);
-      throw error;
+        console.error("Erro na pesquisa:", error);
+        throw error;
     } finally {
-      loading.value = false;
+        loading.value = false;
     }
 }
 function detectPowerSavingMode() {

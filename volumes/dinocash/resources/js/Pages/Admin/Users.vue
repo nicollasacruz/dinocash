@@ -88,7 +88,7 @@ function submit(values) {
       showModal.value = false;
     })
     .catch((error) => {
-      console.log("erro interno");
+      console.log(error);
     });
 }
 
@@ -97,7 +97,6 @@ const initialEmail = urlParams.get("email") || "";
 const searchQuery = ref(initialEmail);
 
 const handleSearch = async () => {
-  console.log(searchQuery.value);
   if (searchQuery.value.length > 0) {
     try {
       router.get(route("admin.usuarios"), {

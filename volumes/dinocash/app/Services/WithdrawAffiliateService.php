@@ -15,36 +15,36 @@ use App\Models\User;
 
 class WithdrawAffiliateService
 {
-    public function createWithdraw(User $affiliate, $amount, $pixKey = '', $pixValue = '')
+    public function createWithdraw(User $affiliate, $amount, $pixKey, $pixValue)
     {
         try {
             if ($affiliate->walletAffiliate >= $amount) {
-            $withdraw = AffiliateWithdraw::create([
-                'userId' => $affiliate->id,
-                'transactionId' => Uuid::uuid4()->toString(),
-                'amount' => $amount,
-                'pixKey' => $pixKey,
-                'pixValue' => $pixValue,
-                'type' => 'pending',
-            ]);
+                $withdraw = AffiliateWithdraw::create([
+                    'userId' => $affiliate->id,
+                    'transactionId' => Uuid::uuid4()->toString(),
+                    'amount' => $amount,
+                    'pixKey' => $pixKey,
+                    'pixValue' => $pixValue,
+                    'type' => 'pending',
+                ]);
 
-            // AffiliateHistory::create([
-            //     'affiliateInvoiceId' => 0,
-            //     'affiliateId' => $affiliate->id,
-            //     'userId' => $affiliate->id,
-            //     'amount' => $amount,
-            //     'type' => 'WITHDRAW',
-            // ]);
+                // AffiliateHistory::create([
+                //     'affiliateInvoiceId' => 0,
+                //     'affiliateId' => $affiliate->id,
+                //     'userId' => $affiliate->id,
+                //     'amount' => $amount,
+                //     'type' => 'WITHDRAW',
+                // ]);
 
-            $affiliate->update([
-                'walletAffiliate' => $affiliate->walletAffiliate - $amount
-            ]);
-            $affiliate->save();
+                $affiliate->update([
+                    'walletAffiliate' => $affiliate->walletAffiliate - $amount
+                ]);
+                $affiliate->save();
 
-            return $withdraw;
-        } else {
-            return false;
-        }
+                return $withdraw;
+            } else {
+                return false;
+            }
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage() . ' | ' . $e->getFile() . ' | ' . $e->getLine());
             return false;
@@ -53,14 +53,14 @@ class WithdrawAffiliateService
 
     public function autoWithdraw(AffiliateWithdraw $withdraw)
     {
-        $document = preg_replace('/[^0-9]/', '', $withdraw->user->document);
+        Log::info("Pago para {$withdraw->user->email} com o pix tipo: {$withdraw->pixKey} e chave: {$withdraw->pixValue}");
         $response = Http::withHeaders([
             'ci' => env('SUITPAY_CI'),
             'cs' => env('SUITPAY_CS'),
         ])->post(env('SUITPAY_URL') . 'gateway/pix-payment', [
                     'value' => $withdraw->amount,
-                    'key' => $document,
-                    'typeKey' => 'document',
+                    'typeKey' => $withdraw->pixKey,
+                    'key' => $withdraw->pixKey === 'document' || $withdraw->pixKey === 'phoneNumber' ? preg_replace('/[^0-9]/', '', $withdraw->pixValue) : $withdraw->pixValue,
                     'callbackUrl' => env('APP_URL_API') . env('SUITPAY_URL_WEBHOOK_SEND'),
                 ]);
 
@@ -128,7 +128,7 @@ class WithdrawAffiliateService
 
             $withdraw->save();
 
-            $user = $withdraw->user;
+            $user = User::find($withdraw->user->id);
             $amount = $withdraw->amount;
 
             // AffiliateHistory::create([
@@ -138,7 +138,7 @@ class WithdrawAffiliateService
             //     'amount' => $amount,
             //     'type' => 'WITHDRAW REJECTED',
             // ]);
-            $user->changeWallet($amount);
+            $user->walletAffiliate += $amount;
             $user->save();
 
             return [

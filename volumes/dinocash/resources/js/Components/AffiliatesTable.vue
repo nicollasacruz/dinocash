@@ -75,7 +75,7 @@ function submit(values) {
             showModal.value = false;
         })
         .catch((error) => {
-            console.log('erro interno');
+            // console.log('erro interno');
         });
 }
 </script>

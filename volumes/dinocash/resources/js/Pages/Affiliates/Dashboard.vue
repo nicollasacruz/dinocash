@@ -8,6 +8,9 @@ import { toast } from "vue3-toastify";
 import axios from "axios";
 import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
+import BaseModal from "@/Components/BaseModal.vue";
+import BaseInput from "@/Components/BaseInput.vue";
+
 const {
   profitToday,
   profitLast30Days,
@@ -49,6 +52,9 @@ const {
   "paymentPending",
   "countInvited",
 ]);
+const showModal = ref(false);
+const pixKey = ref("");
+const pixType = ref("");
 
 interface ImportMetaEnv {
   APP_URL: string;
@@ -67,8 +73,7 @@ function copy() {
   toast.success("Copiado!");
 }
 const selectedUser = ref(null);
-const showModal = ref(false);
-const amount = ref(0);
+const amount = ref(0.0);
 
 function permission() {
   document.dispatchEvent(
@@ -79,29 +84,35 @@ function permission() {
 }
 
 function withdraw() {
+  if (showModal.value === false) {
+    showModal.value = true;
+    return;
+  }
   if (amount.value <= 0) {
     toast.error("Saque não pode ser menor ou igual a zero");
+    return;
+  }
+  if (!pixKey.value || !pixType.value) {
+    toast.error("Informe o tipo e a chave pix");
     return;
   }
   if (amount.value > walletAffiliate) {
     toast.error("Saque não pode ser maior que o disponível");
     return;
   }
+  console.log(pixKey, pixType, "pix");
   axios
     .post(route("afiliado.saques.store"), {
       amount: amount.value,
+      pixKey: pixKey.value,
+      pixType: pixType.value,
     })
     .then((response) => {
-      console.log(response);
-      if ($page.props.auth.user.isAffiliate) {
-        document.dispatchEvent(
-          new CustomEvent("notify", {
-            detail: Number(amount.value),
-          })
-        );
-      }
       toast.success(response.data.message);
-      window.location.reload();
+      amount.value = 0.0;
+      pixType.value = '';
+      pixKey.value = '';
+      showModal.value = false;
     })
     .catch((error) => {
       toast.error(error.response.data.message);
@@ -117,7 +128,6 @@ function formatAmount() {
   if (decimalCount > 1) {
     cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
   }
-  console.log(cleanedValue, "value");
 
   // Atualizar o valor
   amount.value = cleanedValue;
@@ -170,17 +180,17 @@ function formatAmount() {
     >
       <CurrencyBox
         v-if="revShare > 0"
-        label="Lucro do dia"
+        label="RevShare do dia"
         :value="profitToday - lossToday"
       />
       <CurrencyBox
         v-if="revShare > 0"
-        label="Lucro em 30 dias"
+        label="RevShare em 30 dias"
         :value="profitLast30Days - lossLast30Days"
       />
       <CurrencyBox
         v-if="revShare > 0"
-        label="Lucro Total"
+        label="RevShare Total"
         :value="profitTotal - lossTotal"
       />
       <CurrencyBox
@@ -246,5 +256,42 @@ function formatAmount() {
         </button>
       </div>
     </div>
+    <BaseModal
+      title="Informações do saque"
+      v-model="showModal"
+      @close="showModal = false"
+      v-if="showModal"
+    >
+      <div>
+        <base-input
+          class="px-1"
+          label="Tipo chave pix"
+          type="text"
+          :options="[
+            { value: 'document', label: 'CPF/CNPJ' },
+            { value: 'email', label: 'Email' },
+            { value: 'phoneNumber', label: 'Telefone' },
+            { value: 'randomKey', label: 'Aleatório' },
+          ]"
+          v-model="pixType"
+          @update:value="(e) => (pixType = e.target.value)"
+        />
+        <base-input
+          label="Digite a chave (somente números caso telefone ou cpf)"
+          class="w-full px-1 my-2"
+          size="xl"
+          :value="pixKey"
+          @update:value="(e) => (pixKey = e.target.value)"
+        ></base-input>
+        <div class="flex justify-center">
+          <button
+            class="bg-verde-claro text-black font-menu px-6 py-3 rounded-lg mt-4"
+            @click="withdraw"
+          >
+            SACAR
+          </button>
+        </div>
+      </div>
+    </BaseModal>
   </AffiliateLayout>
 </template>

@@ -105,7 +105,7 @@ async function reject(id: number) {
     toast.success(response.data.message);
   } catch (err) {
     toast.error(err.response.data.message);
-    console.log(err);
+    // console.log(err);
   } finally {
     isButtonDisabled.value = false;
     window.location.reload();

@@ -23,8 +23,6 @@ export default class DinoGame extends GameRunner {
         this.steps = 0;
         this.amount = 0;
         this.userId = userId;
-        this.viciosity = true;
-        console.log(this.viciosity)
         this.isAffiliate = isAffiliate;
         this.width = null;
         this.height = null;
@@ -33,14 +31,14 @@ export default class DinoGame extends GameRunner {
         this.spriteImage = null;
         this.spriteImageData = null;
         this.defaultSettings = {
-            bgSpeed: this.isAffiliate ? 7.5 : this.viciosity ? 9 : 8, // ppf
+            bgSpeed: this.isAffiliate ? 7 : this.viciosity ? 9 : 8, // ppf
             birdSpeed: 12, // ppf
             birdSpawnRate: 340, // fpa
             birdWingsRate: 15, // fpa
             cactiSpawnRate: this.isAffiliate
                 ? 45
                 : this.viciosity
-                    ? 25
+                    ? randInteger(15, 25)
                     : randInteger(25, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
@@ -51,7 +49,7 @@ export default class DinoGame extends GameRunner {
                     : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9.2 : 9.6, // ppf
+            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
                 ? 7
@@ -411,15 +409,16 @@ export default class DinoGame extends GameRunner {
         const { birds, cacti, clouds, dino, settings } = this.state;
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
         const { level } = this.state;
-        console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
+
+        // console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
         if (level >= 2 && level <= 4) {
-            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.1 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.2;
+            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.01 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.1;
             // settings.birdSpeed = settings.bgSpeed * 0.8;
             settings.cactiSpawnRate = this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.9) : settings.cactiSpawnRate;
         } else if (level >= 5) {
-            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.1 : this.viciosity ? settings.bgSpeed + 1.2 : settings.bgSpeed * (randInteger(11, 20) / 10);
+            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.05 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * (randInteger(11, 15) / 10);
             // settings.birdSpeed = settings.bgSpeed * 0.9;
-            settings.cactiSpawnRate = this.isAffiliate ? Math.floor(settings.cactiSpawnRate * 0.99) : this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.8) : Math.floor(settings.cactiSpawnRate * (randInteger(2, 8) / 10));
+            settings.cactiSpawnRate = this.isAffiliate ? Math.floor(settings.cactiSpawnRate * 1.1) : this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.8) : Math.floor(settings.cactiSpawnRate * (randInteger(9, 10) / 10));
             if (
                 level >= 8 &&
                 level % 2 === 0 &&

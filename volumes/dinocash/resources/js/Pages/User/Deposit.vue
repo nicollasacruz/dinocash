@@ -66,7 +66,6 @@ import QRCodeVue3 from "qrcode-vue3";
 import { usePage } from "@inertiajs/vue3";
 
 const { minDeposit, maxDeposit } = defineProps(["minDeposit", "maxDeposit"]);
-console.log(minDeposit, maxDeposit);
 const amount = ref(0);
 const loading = ref(false);
 const modal = ref(false);
@@ -93,7 +92,7 @@ async function startDeposit() {
     qrCode.value = data.qrCode;
     modal.value = true;
   } catch (error) {
-    console.log("erro interno");
+    // console.log(error);
   } finally {
     loading.value = false;
     amount.value = 0;

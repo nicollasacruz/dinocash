@@ -63,7 +63,6 @@ onMounted(() => {
     maxDate: "today",
     dateFormat: "Y-m-d",
     onChange: (selectedDates) => {
-      console.log(selectedDates, "antes");
       // Formatar a data para dd-mm-YYYY
       const formattedStartDate = format(
         new Date(selectedDates[0]),
@@ -81,7 +80,6 @@ onMounted(() => {
       } catch (error) {
         console.error("Erro no filtro:", error);
       }
-      console.log("Datas selecionadas:", formattedStartDate, formattedEndDate);
     },
   });
 });

@@ -29,7 +29,7 @@
         classes="!h-[40px]"
         :error="errors['isExpert']"
         v-bind="isExpert"
-        label="Expert"
+        label="Tem Rede"
         class="p-0"
         :options="[
           { value: false, label: 'Não' },
@@ -250,7 +250,6 @@ const validationSchema = yup.object().shape({
   isAffiliate: yup.string().required("Campo obrigatório"),
   wallet: yup.string().required("Saldo é obrigatório"),
 });
-console.log(user, 'user');
 const initialValues = user
   ? {
       email: user.email,
@@ -319,10 +318,9 @@ function getCommissions(user) {
       data.value = response.data.transactions;
       showData.value = true;
       type.value = "commissions";
-      console.log(response.data);
     })
     .catch((error) => {
-      console.log("erro interno");
+      // console.log("error");
     });
 }
 function getMovements(user) {
@@ -338,7 +336,7 @@ function getMovements(user) {
       type.value = "movements";
     })
     .catch((error) => {
-      console.log("erro interno");
+      // console.log("erro interno");
     });
 }
 function deleteUser(user) {
@@ -348,7 +346,7 @@ function deleteUser(user) {
       // showModal.value = false;
     })
     .catch((error) => {
-      console.log("erro interno");
+      // console.log("erro interno");
     });
 }
 function banTemporary(id) {
@@ -358,7 +356,7 @@ function banTemporary(id) {
       // showModal.value = false;
     })
     .catch((error) => {
-      console.log("erro interno");
+      // console.log("erro interno");
     });
 }
 function banPermanent(id) {
@@ -368,7 +366,7 @@ function banPermanent(id) {
       // showModal.value = false;
     })
     .catch((error) => {
-      console.log("erro interno");
+      // console.log("erro interno");
     });
 }
 function toBRL(value) {
