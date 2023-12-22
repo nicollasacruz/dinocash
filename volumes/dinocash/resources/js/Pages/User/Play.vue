@@ -190,7 +190,7 @@ async function startGame() {
     const lowPowerMode = await detectPowerSavingMode();
     console.log(lowPowerMode);
     if (lowPowerMode) {
-        toast.error("Você está em modo de alta performance!");
+        toast.error("Você está em modo de economia de energia!");
         return;
     }
     try {
