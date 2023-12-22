@@ -57,7 +57,7 @@ class DepositObserver
             'cpaCollected' => true,
             'cpaCollectedAt' => now(),
         ]);
-
+        Log::info("CPA de {$affiliate->CPA} pago para o {$affiliate->email}");
         Notification::send($affiliate, new PushCPA('R$ ' . number_format(floatval($affiliate->CPA), 2, ',', '.')));
     }
 }
