@@ -108,18 +108,19 @@ function withdraw() {
       pixType: pixType.value,
     })
     .then((response) => {
-      window.location.reload().then(
+      window.location.reload().then(() => {
         toast.success(response.data.message);
         amount.value = 0.0;
         pixType.value = '';
         pixKey.value = '';
         showModal.value = false;
-      )
+      });
     })
     .catch((error) => {
       toast.error(error.response.data.message);
     });
 }
+
 
 function formatAmount() {
   // Limpar caracteres não numéricos, exceto o ponto decimal
