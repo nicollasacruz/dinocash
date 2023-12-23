@@ -166,6 +166,7 @@ export default class DinoGame extends GameRunner {
         // insert line break
         div.appendChild(document.createElement("br"));
         div.appendChild(prosperoAno);
+        canvasContainer.appendChild(image);
         canvasContainer.appendChild(canvas);
         canvasContainer.appendChild(div);
         app.prepend(canvasContainer);
