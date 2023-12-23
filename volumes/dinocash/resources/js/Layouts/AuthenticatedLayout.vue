@@ -4,7 +4,7 @@ import { Link, usePage } from "@inertiajs/vue3";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
 import Background from "../../../storage/imgs/admin/bg.jpg";
 import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
-import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
+import logoDino from "../../../storage/imgs/home-page/dino-logo.svg";
 
 const routes = [
   // {
