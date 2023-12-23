@@ -122,6 +122,12 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.setProperty("-ms-user-select", "none");
         canvasContainer.style.setProperty("user-select", "none");
 
+        var windowWidth = window.innerWidth;
+
+        window.addEventListener("resize", (valu) => {
+            windowWidth = window.innerWidth;
+        });
+
         app.style.backgroundImage = `url('${windowWidth < 700 ? bgNatalMobile : bgNatal
             }')`;
         app.style.backgroundSize = windowWidth < 700 ? 'auto 100vh' : 'auto auto';
