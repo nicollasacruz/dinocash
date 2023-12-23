@@ -17,7 +17,7 @@ import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
 import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
 import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
-import logo from "../../../../storage/imgs/user/logo.svg";
+import logo from "../../../../storage/imgs/home-page/dino-logo.svg";
 export default class DinoGame extends GameRunner {
     constructor(width, height, viciosity, isAffiliate, userId) {
         super();
