@@ -17,6 +17,7 @@ import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
 import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
 import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
+import logo from "../../../../storage/imgs/user/logo.svg";
 export default class DinoGame extends GameRunner {
     constructor(width, height, viciosity, isAffiliate, userId) {
         super();
@@ -139,6 +140,9 @@ export default class DinoGame extends GameRunner {
         app.style.setProperty("-moz-user-select", "none");
         app.style.setProperty("-ms-user-select", "none");
         app.style.setProperty("user-select", "none");
+        const image = new Image();
+        image.classList.add("w-24", "lg:w-64");
+        image.src = logo;
         const div = document.createElement("div");
 
         div.classList.add(
