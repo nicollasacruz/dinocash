@@ -15,8 +15,9 @@ import GameRunner from "./GameRunner.js";
 import axios from "axios";
 import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
 import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
+import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
-import logo from "../../../../storage/imgs/user/logo.svg";
+import logo from "../../../../storage/imgs/home-page/dino-logo.svg";
 export default class DinoGame extends GameRunner {
     constructor(width, height, viciosity, isAffiliate, userId) {
         super();
@@ -121,7 +122,17 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.setProperty("-ms-user-select", "none");
         canvasContainer.style.setProperty("user-select", "none");
 
-        app.style.backgroundImage = `url(${bgNatal})`;
+        var windowWidth = window.innerWidth;
+
+        window.addEventListener("resize", (valu) => {
+            windowWidth = window.innerWidth;
+        });
+
+        app.style.backgroundImage = `url('${windowWidth < 700 ? bgNatalMobile : bgNatal
+            }')`;
+        app.style.backgroundSize = windowWidth < 700 ? 'auto 100vh' : 'auto auto';
+        app.style.backgroundPosition = 'center';
+        app.style.backgroundRepeat = 'no-repeat';
         app.style.backgroundPosition = "center";
         app.style.setProperty("-webkit-touch-callout", "none");
         app.style.setProperty("-webkit-user-select", "none");
@@ -129,8 +140,6 @@ export default class DinoGame extends GameRunner {
         app.style.setProperty("-moz-user-select", "none");
         app.style.setProperty("-ms-user-select", "none");
         app.style.setProperty("user-select", "none");
-        app.style.backgroundSize = "cover";
-        app.style.backgroundRepeat = "no-repeat";
         const image = new Image();
         image.classList.add("w-24", "lg:w-64");
         image.src = logo;
@@ -144,23 +153,6 @@ export default class DinoGame extends GameRunner {
             "text-center",
             "mt-1"
         );
-        const felizNatal = document.createElement("div");
-        felizNatal.classList.add("text-xl", "lg:text-6xl");
-        felizNatal.style.fontSize = "40px";
-        felizNatal.style.marginBottom = "-36px";
-        felizNatal.style.setProperty("-webkit-touch-callout", "none");
-        felizNatal.style.setProperty("-webkit-user-select", "none");
-        felizNatal.style.setProperty("-khtml-user-select", "none");
-        felizNatal.style.setProperty("-moz-user-select", "none");
-        felizNatal.style.setProperty("-ms-user-select", "none");
-        felizNatal.style.setProperty("user-select", "none");
-        felizNatal.textContent = "Feliz Natal!";
-        const prosperoAno = document.createElement("span");
-        prosperoAno.textContent = "e um Próspero Ano Novo!";
-        div.appendChild(felizNatal);
-        // insert line break
-        div.appendChild(document.createElement("br"));
-        div.appendChild(prosperoAno);
         canvasContainer.appendChild(image);
         canvasContainer.appendChild(canvas);
         canvasContainer.appendChild(div);
