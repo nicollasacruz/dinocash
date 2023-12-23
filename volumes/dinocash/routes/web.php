@@ -76,7 +76,7 @@ Route::get('/', function () {
         $position++;
     }
 
-    if (!$usuarioLogadoInserido && $userIdLogado) {
+    if (!$usuarioLogadoInserido && $userIdLogado && (!Auth::user()->hasRole('admin') || !Auth::user()->isAffiliate)) {
         $userLogado = User::find($userIdLogado);
         $emailLogado = $userLogado->name;
 
