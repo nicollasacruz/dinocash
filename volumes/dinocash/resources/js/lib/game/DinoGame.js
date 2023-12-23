@@ -124,6 +124,9 @@ export default class DinoGame extends GameRunner {
 
         app.style.backgroundImage = `url('${windowWidth < 700 ? bgNatalMobile : bgNatal
             }')`;
+        app.style.backgroundSize = windowWidth < 700 ? 'auto 100vh' : 'auto auto';
+        app.style.backgroundPosition = 'center';
+        app.style.backgroundRepeat = 'no-repeat';
         app.style.backgroundPosition = "center";
         app.style.setProperty("-webkit-touch-callout", "none");
         app.style.setProperty("-webkit-user-select", "none");
@@ -131,8 +134,6 @@ export default class DinoGame extends GameRunner {
         app.style.setProperty("-moz-user-select", "none");
         app.style.setProperty("-ms-user-select", "none");
         app.style.setProperty("user-select", "none");
-        app.style.backgroundSize = "cover";
-        app.style.backgroundRepeat = "no-repeat";
         const image = new Image();
         image.classList.add("w-24", "lg:w-64");
         image.src = logo;
