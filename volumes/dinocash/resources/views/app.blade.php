@@ -9,10 +9,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/manifest.json" />
     <link rel="manifest" href="/nubank.webmanifest" />
-    <meta name="description" content="Dinocash - Lucrando com suas próprias habilidades">
+    <meta name="description" content="Dinobet - Lucrando com suas próprias habilidades">
     <meta name="keywords"
-        content="dinocash, cash, tigrinho, fortune, aviãozinho, pgsoft, tiger, ox, dino, dino run, dino-run, trex, bet, renda extra, renda, renda-extra, dinheiro, rico, jogo, game, cassino">
-    <title inertia>{{ config('app.name', 'Dinocash | Lucre com a gente') }}</title>
+        content="dinobet, cash, tigrinho, fortune, aviãozinho, pgsoft, tiger, ox, dino, dino run, dino-run, trex, bet, renda extra, renda, renda-extra, dinheiro, rico, jogo, game, cassino">
+    <title inertia>{{ config('app.name', 'Dinobet | Lucre com a gente') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

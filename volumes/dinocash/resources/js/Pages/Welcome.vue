@@ -229,14 +229,14 @@ function getPremio(i) {
       >
       <span
         class="text-[1.8vh] lg:text-[2.2vh] max-h-[60%] font-menu text-gray-800 text-center m-0 p-2"
-        >Bem-vindo ao Dinocash, sua principal opção de entretenimento e
+        >Bem-vindo ao Dinobet, sua principal opção de entretenimento e
         lucratividade em jogos online! Como uma provedora totalmente legalizada
         em Malta, oferecemos uma experiência única e inovadora no mercado.
         Explore um universo de diversão e oportunidades de lucro como nunca
         antes, desafiando seus reflexos em nossos emocionantes jogos. Junte-se a
         nós para uma jornada envolvente, onde o entretenimento se encontra com a
         chance de ganhar grandes recompensas. Venha fazer parte dessa
-        experiência exclusiva no Dinocash, onde a diversão e os ganhos estão ao
+        experiência exclusiva no Dinobet, onde a diversão e os ganhos estão ao
         seu alcance.</span
       >
     </div>
@@ -278,16 +278,16 @@ function getPremio(i) {
           <div class="font-menu text-black text-9xl text-center">FAQ</div>
           <div class="flex flex-col gap-y-4 mt-5 mx-3 ">
             <Expansion
-              title="COMO POSSO JOGAR O DINOCASH?"
-              content="Você precisa fazer um depósito inicial na plataforma para começar a jogar e faturar com o dinocash."
+              title="COMO POSSO JOGAR O DINOBET?"
+              content="Você precisa fazer um depósito inicial na plataforma para começar a jogar e faturar com o Dinobet."
             />
             <Expansion
               title="COMO POSSO SACAR?"
-              content="O saque no dinocash é instantâneo. Utilizamos a sua chave PIX no CPF cadastrado na criação da conta para enviar o pagamento, é na hora e no PIX. 7 dias por semana e 24 horas por dia."
+              content="O saque no Dinobet é instantâneo. Utilizamos a sua chave PIX no CPF cadastrado na criação da conta para enviar o pagamento, é na hora e no PIX. 7 dias por semana e 24 horas por dia."
             />
             <Expansion
               title="É TIPO FOGUETINHO E TIGRINHO?"
-              content="Não! O Dinocash é totalmente um jogo de habilidade para voce ganhar sem contar com a sorte! Vem que com o dinocash você lucra!"
+              content="Não! O Dinobet é totalmente um jogo de habilidade para voce ganhar sem contar com a sorte! Vem que com o Dinobet você lucra!"
             />
           </div>
         </div>
@@ -303,10 +303,10 @@ function getPremio(i) {
     />
     <div class="uppercase text-center font-menu">
       <div class="text-white">
-        Todos os direitos reservados a dinocash - 2023
+        Todos os direitos reservados a dinobet - 2023
       </div>
       <div class="text-[#D1F3B4]">Leia os termos de uso</div>
-      <div class="text-white mt-3">contato@dinocash.io</div>
+      <div class="text-white mt-3">contato@dinobet.vip</div>
     </div>
   </div>
 </template>

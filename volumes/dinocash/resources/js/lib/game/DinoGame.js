@@ -15,6 +15,7 @@ import GameRunner from "./GameRunner.js";
 import axios from "axios";
 import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
 import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
+import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
 import logo from "../../../../storage/imgs/user/logo.svg";
 export default class DinoGame extends GameRunner {
@@ -121,7 +122,8 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.setProperty("-ms-user-select", "none");
         canvasContainer.style.setProperty("user-select", "none");
 
-        app.style.backgroundImage = `url(${bgNatal})`;
+        app.style.backgroundImage = `url('${windowWidth < 700 ? bgNatalMobile : bgNatal
+            }')`;
         app.style.backgroundPosition = "center";
         app.style.setProperty("-webkit-touch-callout", "none");
         app.style.setProperty("-webkit-user-select", "none");

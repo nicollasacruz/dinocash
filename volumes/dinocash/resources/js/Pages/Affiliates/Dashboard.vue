@@ -60,7 +60,7 @@ interface ImportMetaEnv {
   APP_URL: string;
 }
 
-const link = "https://dinocash.io/ref/" + affiliateLink;
+const link = "https://dinobet.vip/ref/" + affiliateLink;
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
