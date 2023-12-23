@@ -108,11 +108,13 @@ function withdraw() {
       pixType: pixType.value,
     })
     .then((response) => {
-      toast.success(response.data.message);
-      amount.value = 0.0;
-      pixType.value = '';
-      pixKey.value = '';
-      showModal.value = false;
+      window.location.reload().then(
+        toast.success(response.data.message);
+        amount.value = 0.0;
+        pixType.value = '';
+        pixKey.value = '';
+        showModal.value = false;
+      )
     })
     .catch((error) => {
       toast.error(error.response.data.message);
