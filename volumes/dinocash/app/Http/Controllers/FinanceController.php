@@ -50,6 +50,15 @@ class FinanceController extends Controller
                     ->where('role', 'user');
             })
             ->sum('amount');
+        $withdrawsAmountPending = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })
+                ->where('type', 'pending')
+                ->whereHas('user', function ($query) {
+                    $query->where('isAffiliate', false)
+                        ->where('role', 'user');
+                })
+                ->sum('amount');
         $withdrawsAmountAffiliatePaid = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
@@ -112,7 +121,7 @@ class FinanceController extends Controller
                 ];
             });
 
-        $caixaDaCasa = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid;
+        $caixaDaCasa = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid - $withdrawsAmountPending;
 
         $lucroTotal = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
 
