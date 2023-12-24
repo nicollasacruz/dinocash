@@ -120,6 +120,9 @@ class FinanceController extends Controller
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
         $gain = $depositsAmountPaid ?? 1;
+        if (env('APP_GGR_DEPOSIT')) {
+            $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
+        }
         $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$pay) {
             Log::info('Vazio ou 0');

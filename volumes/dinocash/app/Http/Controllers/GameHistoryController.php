@@ -47,6 +47,9 @@ class GameHistoryController extends Controller
         ])->sum('amount');
 
         $gain = $depositsAmountPaid ?? 1;
+        if (env('APP_GGR_DEPOSIT')) {
+            $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
+        }
         $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$gain || !$pay) {
             Log::info('Vazio ou 0');
