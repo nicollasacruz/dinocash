@@ -57,11 +57,11 @@ function getTrophy(i) {
 function getPremio(i) {
   switch (i) {
     case 0:
-      return "R$10.000";
+      return "-";
     case 1:
-      return "R$5.000";
+      return "-";
     case 2:
-      return "R$1.000";
+      return "-";
     default:
       return "-";
   }
