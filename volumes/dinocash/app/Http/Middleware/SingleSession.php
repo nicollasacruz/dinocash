@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Support\Facades\Auth;
 use Closure;
@@ -13,8 +14,8 @@ class SingleSession extends Middleware
     public function handle($request, Closure $next, ...$guards)
     {
         $user = Auth::user();
-
-        if ($user) {
+        $user = User::find($user->id);
+        if ($user && $user->role === 'user') {
             $currentSessionId = session()->getId();
 
             // Get all sessions for the user
@@ -24,6 +25,7 @@ class SingleSession extends Middleware
                 // Destroy all sessions except the current one
                 if ($session->id !== $currentSessionId) {
                     $this->destroySession($session->id);
+                    $session->delete();
                 }
             }
         }

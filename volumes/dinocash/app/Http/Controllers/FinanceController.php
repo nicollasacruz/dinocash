@@ -141,7 +141,8 @@ class FinanceController extends Controller
         }
 
         $activeSessions = DB::table('sessions')
-            ->where('last_activity', '>=', now()->subMinutes(5))
+            ->where('last_activity', '>=', now()->subMinutes(1))
+            ->whereNotNull('user_id')
             ->count();
         $totalUsers = User::all()->count();
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
