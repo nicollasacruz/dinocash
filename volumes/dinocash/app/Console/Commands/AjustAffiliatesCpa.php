@@ -40,6 +40,7 @@ class AjustAffiliatesCpa extends Command
                     ->whereNotNull('affiliateId');
             })
             ->get();
+        Log::info('Analisado total de ' . $deposits->count() . ' usuarios');
 
         $deposits->each(function ($deposit) use (&$processedUserIds) {
             $userId = $deposit->userId;
