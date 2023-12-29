@@ -32,24 +32,17 @@ class AjustAffiliatesCpa extends Command
      */
     public function handle()
     {
-        $processedUserIds = [];
-
-        $deposits = Deposit::where('type', 'paid')
-            ->whereHas('user', function ($query) {
-                $query->where('cpaCollected', null)
-                    ->whereNotNull('affiliateId');
-            })
+        $users = User::where('cpaCollected', null)
+            ->whereNotNull('affiliateId')
             ->get();
-        Log::info('Analisado total de ' . $deposits->count() . ' usuarios');
 
-        $deposits->each(function ($deposit) use (&$processedUserIds) {
-            $userId = $deposit->userId;
+        Log::info('Analisado total de ' . $users->count() . ' usuários');
 
-            // Verificar se o usuário já foi processado
-            if (!in_array($userId, $processedUserIds)) {
-                $processedUserIds[] = $userId;
+        $users->each(function ($user) {
+            $deposit = $user->deposits()->where('type', 'paid')->first();
 
-                $affiliate = $deposit->user->affiliate;
+            if ($deposit) {
+                $affiliate = $user->affiliate;
                 if ($affiliate) {
                     $this->createAffiliateHistory($deposit, $affiliate);
                     Log::info("CPA AJUSTADO");
