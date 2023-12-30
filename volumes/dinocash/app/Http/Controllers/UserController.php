@@ -10,13 +10,12 @@ class UserController extends Controller
 {
     public function indexAdmin(Request $request)
     {
-        $email = $request->email;
-        $users = User::when($email, function ($query) use ($email) {
+        $users = User::when($request->email, function ($query, $email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-            ->where('isAffiliate', false)->limit(50)->get();
+            ->where('isAffiliate', false)->paginate(20);
         return Inertia::render('Admin/Users', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 

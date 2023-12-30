@@ -43,6 +43,35 @@ class User extends Authenticatable
         'cpaSub',
     ];
 
+    protected $visible = [
+        'id',
+        'name',
+        'email',
+        'wallet',
+        'walletAffiliate',
+        'contact',
+        'document',
+        'role',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
+        'isAffiliate',
+        'isExpert',
+        'affiliateId',
+        'affiliatedAt',
+        'cpaCollected',
+        'cpaCollectedAt',
+        'invitation_link',
+        'referralsCounter',
+        'referralsDepositsCounter',
+        'CPA',
+        'revSub',
+        'revSubFake',
+        'cpaSub',
+        'revShare',
+    ];
+    
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -288,5 +317,15 @@ class User extends Authenticatable
         return $query->with('deposits')->get()->sum(function ($user) {
             return $user->deposits->where('type', 'paid')->sum('amount');
         });
+    }
+
+        /**
+     * Get the referrals with cpaCollected = true.
+     *
+     * @return int
+     */
+    public function getReferralsDepositsCounterAttribute()
+    {
+        return $this->referredUsers()->where('cpaCollected', true)->count();
     }
 }

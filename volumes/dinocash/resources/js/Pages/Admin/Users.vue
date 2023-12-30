@@ -10,10 +10,13 @@
         class="admin-input"
         placeholder="Digite o email do usuário... "
         v-model="searchQuery"
-        @input="handleSearch()"
       />
     </div>
-    <BaseTable class="table-xs h-3/4" :columns="columns" :rows="users">
+    <BaseTable
+      class="table-xs h-3/4"
+      :columns="columns"
+      :rows="props.users.data"
+    >
       <template #created_at="{ value }">
         <td class="py-0">
           {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
@@ -46,21 +49,27 @@
         </td>
       </template>
     </BaseTable>
+
+    <Paginator :data="props.users" class="mt-4"/>
+
     <BaseModal v-if="showModal" v-model="showModal">
       <UserForm @submit="submit" :user="selectedUser" typeForm="user" />
     </BaseModal>
   </AuthenticatedLayout>
 </template>
+
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref, computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import Paginator from "@/Components/Paginator.vue";
+import { ref, computed, watch } from "vue";
+import { usePage, Link } from "@inertiajs/vue3";
 import UserForm from "@/Components/UserForm.vue";
 import axios from "axios";
 import dayjs from "dayjs";
+import debounce from "lodash/debounce";
 
 const columns = [
   { label: "Data", key: "created_at" },
@@ -74,7 +83,9 @@ const showModal = ref(false);
 const selectedUser = ref(null);
 const page = usePage();
 
-const users = computed(() => page.props.users) as any;
+const props = defineProps({
+  users: Object,
+});
 
 function selectUser(user) {
   showModal.value = true;
@@ -96,22 +107,22 @@ const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
 const searchQuery = ref(initialEmail);
 
-const handleSearch = async () => {
-  if (searchQuery.value.length > 0) {
+watch(
+  searchQuery,
+  debounce((value) => {
     try {
-      router.get(route("admin.usuarios"), {
-        email: searchQuery.value,
-      });
+      router.get(
+        route("admin.usuarios"),
+        { email: value },
+        {
+          preserveState: true,
+        }
+      );
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-    return;
-  }
-  try {
-    router.get(route("admin.usuarios"));
-    searchQuery.value = "";
-  } catch (error) {
-    console.error("Erro na pesquisa:", error);
-  }
-};
+  }, 700)
+);
+
+console.log(props.users, "users");
 </script>

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
-import { ref, defineProps, computed } from "vue";
+import { ref, defineProps, computed, watch } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
 import PaymentsTable from "@/Components/PaymentsTable.vue";
+import Paginator from "@/Components/Paginator.vue";
 import axios from "axios";
+import debounce from "lodash/debounce";
+
 const selectedTab = ref(1);
 const columns = computed(() =>
   selectedTab.value === 1
@@ -13,7 +16,7 @@ const columns = computed(() =>
         { label: "Nome", key: "name" },
         { label: "Email", key: "email" },
         { label: "Saldo", key: "walletAffiliate" },
-        { label: "Saldo Pendente", key: "paymentPending" },
+        // { label: "Saldo Pendente", key: "paymentPending" },
       ]
     : [
         { label: "Nome", key: "name" },
@@ -45,26 +48,22 @@ const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
 const searchQuery = ref(initialEmail);
 
-const handleSearch = async () => {
-  if (searchQuery.value.length > 0) {
+watch(
+  searchQuery,
+  debounce((value) => {
     try {
-      if (searchQuery.value.length >= 3) {
-        router.get(route("admin.afiliados"), {
-          email: searchQuery.value,
-        });
-      }
+      router.get(
+        route("admin.usuarios"),
+        { email: value },
+        {
+          preserveState: true,
+        }
+      );
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-    return;
-  }
-  try {
-    router.get(route("admin.afiliados"));
-    searchQuery.value = "";
-  } catch (error) {
-    console.error("Erro na pesquisa:", error);
-  }
-};
+  }, 700)
+);
 </script>
 
 <template>
@@ -99,7 +98,6 @@ const handleSearch = async () => {
           class="admin-input"
           placeholder="Digite o email do afiliado..."
           v-model="searchQuery"
-          @input="handleSearch"
         />
       </div>
       <div class="flex gap-x-5">
@@ -113,11 +111,16 @@ const handleSearch = async () => {
     <affiliates-table
       v-if="selectedTab === 1"
       :columns="columns"
-      :rows="affiliates"
+      :rows="affiliates.data"
     />
     <payments-table v-else :columns="columns" :rows="paymentsRow" />
+    <Paginator
+      :data="selectedTab === 1 ? affiliates : paymentsRow"
+      class="mt-4"
+    />
   </AuthenticatedLayout>
 </template>
+
 <style>
 .tab-active {
   border-bottom: 2px solid #fff !important;
