@@ -53,7 +53,7 @@ watch(
   debounce((value) => {
     try {
       router.get(
-        route("admin.usuarios"),
+        route("admin.afiliados"),
         { email: value },
         {
           preserveState: true,
