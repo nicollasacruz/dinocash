@@ -86,14 +86,14 @@ class DepositService
 
             try {
                 if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
-                    $value = $deposit->amount * 0.3;
+                    $value = $deposit->amount * (env('APP_GGR_VALUE') / 100);
                     Log::alert("PAGAMENTO GGR - {$value}");
 
-                    Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
-                    Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
+                    Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($value), 2, ',', '.')));
+                    Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($value), 2, ',', '.')));
                 }
             } catch (Exception $e) {
-                Log::error('Erro de notificar - ' . $e->getMessage());
+                Log::error('Erro em notificar - ' . $e->getMessage());
             }
 
             Log::info("Deposito aprovado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
