@@ -60,6 +60,10 @@ interface ImportMetaEnv {
   APP_URL: string;
 }
 
+axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
+  'meta[name="csrf-token"]'
+).content;
+
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
 const toBRL = (value) => {
@@ -111,8 +115,8 @@ function withdraw() {
       window.location.reload().then(() => {
         toast.success(response.data.message);
         amount.value = 0.0;
-        pixType.value = '';
-        pixKey.value = '';
+        pixType.value = "";
+        pixKey.value = "";
         showModal.value = false;
       });
     })
@@ -120,7 +124,6 @@ function withdraw() {
       toast.error(error.response.data.message);
     });
 }
-
 
 function formatAmount() {
   // Limpar caracteres não numéricos, exceto o ponto decimal
@@ -139,6 +142,7 @@ function formatAmount() {
 
 <template>
   <Head title="Afiliados Dashboard" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
 
   <AffiliateLayout>
     <div class="flex-row lg:flex xl:flex justify-between">
