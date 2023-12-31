@@ -32,11 +32,10 @@ class AffiliateController extends Controller
                 $query->where('email', 'LIKE', '%' . $email . '%');
             })
                 ->where('isAffiliate', true)
-                ->limit(10)
-                ->get();
+                ->paginate(10);
 
             $affiliates->each(function ($affiliate) {
-                $affiliate->paymentPending = $affiliate->affiliateHistories->where('invoicedAt', null)->sum('amount');
+                $affiliate->referralsDepositsCounter = $affiliate->referralsDepositsCounter;
             });
 
             $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;

@@ -145,6 +145,9 @@ class FinanceController extends Controller
             ->whereNotNull('user_id')
             ->count();
         $totalUsers = User::all()->count();
+        $totalUsersWithDeposits = User::whereHas('deposits', function ($query) {
+            $query->where('type', 'paid');
+        })->count();        
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
         $totalUsersTodayWithDeposit = User::whereDate('created_at', Carbon::today())->whereHas('deposits', function ($query) {
             $query->where('type', 'paid');
@@ -153,6 +156,7 @@ class FinanceController extends Controller
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
+            'totalUsersWithDeposits' => $totalUsersWithDeposits,
             'totalUsersToday' => $totalUsersToday,
             'totalUsersTodayWithDeposit' => $totalUsersTodayWithDeposit,
             'balanceAmount' => $caixaDaCasa,

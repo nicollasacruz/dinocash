@@ -12,6 +12,7 @@ import { format } from "date-fns";
 const {
   activeSessions,
   totalUsers,
+  totalUsersWithDeposits,
   totalUsersToday,
   totalUsersTodayWithDeposit,
   balanceAmount,
@@ -34,6 +35,7 @@ const {
 } = defineProps([
   "activeSessions",
   "totalUsers",
+  "totalUsersWithDeposits",
   "totalUsersToday",
   "totalUsersTodayWithDeposit",
   "balanceAmount",
@@ -133,6 +135,11 @@ watch(addictRange, (value) => {
           </template>
         </TextBox>
         <TextBox label="Cadastros total" :value="totalUsers">
+          <template #icon>
+            <UserIcon class="w-5" />
+          </template>
+        </TextBox>
+        <TextBox label="Cadastros depositantes" :value="totalUsersWithDeposits">
           <template #icon>
             <UserIcon class="w-5" />
           </template>

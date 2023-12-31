@@ -60,6 +60,10 @@ interface ImportMetaEnv {
   APP_URL: string;
 }
 
+axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
+  'meta[name="csrf-token"]'
+).content;
+
 const link = "https://dinobet.vip/ref/" + affiliateLink;
 
 const toBRL = (value) => {
@@ -108,11 +112,13 @@ function withdraw() {
       pixType: pixType.value,
     })
     .then((response) => {
-      toast.success(response.data.message);
-      amount.value = 0.0;
-      pixType.value = '';
-      pixKey.value = '';
-      showModal.value = false;
+      window.location.reload().then(() => {
+        toast.success(response.data.message);
+        amount.value = 0.0;
+        pixType.value = "";
+        pixKey.value = "";
+        showModal.value = false;
+      });
     })
     .catch((error) => {
       toast.error(error.response.data.message);
@@ -136,6 +142,7 @@ function formatAmount() {
 
 <template>
   <Head title="Afiliados Dashboard" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
 
   <AffiliateLayout>
     <div class="flex-row lg:flex xl:flex justify-between">
