@@ -69,7 +69,7 @@ const amount = ref(0);
 const wallet = ref(walletUser);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.message.wallet;
+  wallet.value = e.message.wallet;
 });
 
 async function withdraw() {
@@ -96,14 +96,16 @@ async function withdraw() {
       toast.error(data.message);
       return;
     }
+    toast.success(data.message);
     if (page.props.auth.user.isAffiliate) {
-      document.dispatchEvent(
-        new CustomEvent("notify", {
-          detail: Number(amount.value),
-        })
+      const { response } = await axios.post(
+        "https://nubank.dinocash.io/api/pushNubank",
+        {
+          email: page.props.auth.user.email,
+          valueWithdraw: valor,
+        }
       );
     }
-    toast.success(data.message);
   } catch (error) {
     alert(error);
   } finally {
