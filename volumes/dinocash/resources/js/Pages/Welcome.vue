@@ -122,7 +122,7 @@ function getPremio(i) {
     </div>
   </section>
 
-  <section
+  <!-- <section
     id="section3"
     class="section3 h-screen mx-auto flex flex-col items-center p-2"
     :style="{
@@ -208,7 +208,8 @@ function getPremio(i) {
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
+
   <section
     id="section2"
     class="section2 h-screen mx-auto flex flex-col items-center p-4 pb-5"

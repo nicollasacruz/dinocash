@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 use App\Models\AffiliateHistory;
 use App\Models\Deposit;
 use App\Models\User;
-use App\Notifications\PushCPA;
 use App\Services\AffiliateInvoiceService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Notifications\PushCPA;
 use Notification;
 
 class AjustAffiliatesCpa extends Command
