@@ -10,6 +10,7 @@ import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
+import { router } from '@inertiajs/vue3';
 
 const {
   profitToday,
@@ -107,7 +108,7 @@ function withdraw() {
 
     console.log(pixKey, pixType, "pix");
 
-    Inertia.post(route("afiliado.saques.store"), {
+    router.post(route("afiliado.saques.store"), {
         amount: amount.value,
         pixKey: pixKey.value,
         pixType: pixType.value,
