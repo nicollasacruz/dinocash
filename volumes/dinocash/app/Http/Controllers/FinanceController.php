@@ -121,9 +121,9 @@ class FinanceController extends Controller
                 ];
             });
 
-        $caixaDaCasa = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid - $withdrawsAmountPending;
+        $caixaDaCasa = $depositsAmountPaid * 0.965 - $withdrawsAmountPaid * 0.98 - $withdrawsAmountAffiliatePaid * 0.98 - $withdrawsAmountPending;
 
-        $lucroTotal = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
+        $lucroTotal = $depositsAmountPaid * 0.965 - $withdrawsAmountPaid * 0.98 - $withdrawsAmountAffiliatePaid * 0.98 - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
@@ -160,10 +160,10 @@ class FinanceController extends Controller
             'totalUsersToday' => $totalUsersToday,
             'totalUsersTodayWithDeposit' => $totalUsersTodayWithDeposit,
             'balanceAmount' => $caixaDaCasa,
-            'depositsAmount' => $depositsAmountPaid,
-            'depositsAmountToday' => $depositsAmountPaidToday,
-            'withdrawsAmount' => $withdrawsAmountPaid,
-            'withdrawsAffiliateAmount' => $withdrawsAmountAffiliatePaid,
+            'depositsAmount' => $depositsAmountPaid * 0.965,
+            'depositsAmountToday' => $depositsAmountPaidToday * 0.965,
+            'withdrawsAmount' => $withdrawsAmountPaid * 0.98,
+            'withdrawsAffiliateAmount' => $withdrawsAmountAffiliatePaid * 0.98,
             'walletAmount' => $walletsAmount,
             'walletAffiliateAmount' => $walletsAfilliateAmount,
             'walletsAfilliatePending' => $walletsAfilliatePending,

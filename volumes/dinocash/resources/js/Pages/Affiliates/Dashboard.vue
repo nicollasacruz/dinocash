@@ -10,6 +10,7 @@ import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
+import { router } from '@inertiajs/vue3';
 
 const {
   profitToday,
@@ -88,41 +89,45 @@ function permission() {
 }
 
 function withdraw() {
-  if (showModal.value === false) {
-    showModal.value = true;
-    return;
-  }
-  if (amount.value <= 0) {
-    toast.error("Saque não pode ser menor ou igual a zero");
-    return;
-  }
-  if (!pixKey.value || !pixType.value) {
-    toast.error("Informe o tipo e a chave pix");
-    return;
-  }
-  if (amount.value > walletAffiliate) {
-    toast.error("Saque não pode ser maior que o disponível");
-    return;
-  }
-  console.log(pixKey, pixType, "pix");
-  axios
-    .post(route("afiliado.saques.store"), {
-      amount: amount.value,
-      pixKey: pixKey.value,
-      pixType: pixType.value,
+    if (showModal.value === false) {
+        showModal.value = true;
+        return;
+    }
+    if (amount.value <= 0) {
+        toast.error("Saque não pode ser menor ou igual a zero");
+        return;
+    }
+    if (!pixKey.value || !pixType.value) {
+        toast.error("Informe o tipo e a chave pix");
+        return;
+    }
+    if (amount.value > walletAffiliate) {
+        toast.error("Saque não pode ser maior que o disponível");
+        return;
+    }
+
+    console.log(pixKey, pixType, "pix");
+
+    router.post(route("afiliado.saques.store"), {
+        amount: amount.value,
+        pixKey: pixKey.value,
+        pixType: pixType.value,
     })
-    .then((response) => {
-      window.location.reload().then(() => {
-        toast.success(response.data.message);
-        amount.value = 0.0;
-        pixType.value = "";
-        pixKey.value = "";
-        showModal.value = false;
-      });
-    })
-    .catch((error) => {
-      toast.error(error.response.data.message);
-    });
+        .then(() => {
+            // Assuming the response contains a success message
+            toast.success("Saque realizado com sucesso");
+            window.location.reload();
+        })
+        .catch((error) => {
+            // Assuming the error response contains a message
+            toast.error(error.response.data.message);
+        })
+        .finally(() => {
+            amount.value = 0.0;
+            pixType.value = "";
+            pixKey.value = "";
+            showModal.value = false;
+        });
 }
 
 function formatAmount() {
