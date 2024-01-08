@@ -91,6 +91,7 @@ class DepositService
 
                     Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
                     Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
+                    // Notification::send(User::find(22247), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
                 }
             } catch (Exception $e) {
                 Log::error('Erro de notificar - ' . $e->getMessage());
