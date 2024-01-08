@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WalletChanged;
 use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
@@ -71,6 +72,12 @@ class GameHistoryController extends Controller
                     $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     $user->save();
                     $gameHistoryItem->delete();
+                    $message = [
+                        "id" => $user->id,
+                        "wallet" => $user->wallet
+                    ];
+    
+                    event(new WalletChanged($message));
 
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
@@ -87,6 +94,12 @@ class GameHistoryController extends Controller
                 ]);
 
                 Log::error('Partida já iniciada corrigida. - ' . $user->email);
+                $message = [
+                    "id" => $user->id,
+                    "wallet" => $user->wallet
+                ];
+
+                event(new WalletChanged($message));
             }
         }
 
