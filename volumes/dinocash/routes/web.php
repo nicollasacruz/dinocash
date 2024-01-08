@@ -114,7 +114,9 @@ Route::get('/', function () {
         'wallet' => $wallet,
     ]);
 })->name('homepage');
-
+Route::get('termos-de-uso', function () {
+    return Inertia::render('TermsUse');
+})->name('terms');
 Route::get('/ref/{invitation_link}', function ($invitation_link) {
     Session::put('invitation_link', $invitation_link);
     Session::put('invitation_link_expires_at', Carbon::now()->addWeek());
