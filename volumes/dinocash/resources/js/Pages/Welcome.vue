@@ -306,7 +306,7 @@ function getPremio(i) {
       <div class="text-white">
         Todos os direitos reservados a dinocash - 2023
       </div>
-      <div class="text-[#D1F3B4]"><a :href="route("terms")">Leia os termos de uso e politica de privacidade</a></div>
+      <div class="text-[#D1F3B4]"><a :href="route('terms')">Leia os termos de uso e politica de privacidade</a></div>
       <div class="text-white mt-3">contato@dinocash.io</div>
     </div>
   </div>
