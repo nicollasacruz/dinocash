@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WalletChanged;
 use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
@@ -63,27 +64,42 @@ class GameHistoryController extends Controller
         }
 
         $user = User::find(Auth::user()->id);
+        if ($user) {
+            $gameHistory = $user->gameHistories->where('type', 'pending');
+            if ($gameHistory) {
+                foreach ($gameHistory as $gameHistoryItem) {
 
-        $gameHistory = $user->gameHistories->where('type', 'pending');
-        if ($gameHistory) {
-            foreach ($gameHistory as $gameHistoryItem) {
-                $user->update([
-                    'wallet' => $user->wallet + ($gameHistoryItem->amount * 1),
-                ]);
-                $user->save();
-                $gameHistoryItem->delete();
-                Log::error('Partida já iniciada. - ' . $user->email);
+                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    $user->save();
+                    $gameHistoryItem->delete();
+                    $message = [
+                        "id" => $user->id,
+                        "wallet" => $user->wallet
+                    ];
+    
+                    event(new WalletChanged($message));
+
+                    Log::error('Partida já iniciada. - ' . $user->email);
+                }
             }
         }
 
         $gameHistory = $user->gameHistories->where('type', 'gaming');
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
+
                 $gameHistoryItem->update([
                     'type' => 'loss',
-                    'finalAmount' => number_format($gameHistoryItem->amount * -1, 2,'.',''),
+                    'finalAmount' => number_format($gameHistoryItem->amount * -1, 2, '.', ''),
                 ]);
+
                 Log::error('Partida já iniciada corrigida. - ' . $user->email);
+                $message = [
+                    "id" => $user->id,
+                    "wallet" => $user->wallet
+                ];
+
+                event(new WalletChanged($message));
             }
         }
 
@@ -108,7 +124,8 @@ class GameHistoryController extends Controller
             $gameHistories = $user->gameHistories->where('type', 'pending');
             if ($gameHistories) {
                 foreach ($gameHistories as $gameHistoryItem) {
-                    $user->changeWallet($gameHistoryItem->amount);
+                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    $user->save();
                     $gameHistoryItem->delete();
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
@@ -120,12 +137,12 @@ class GameHistoryController extends Controller
                 foreach ($gameHistories as $gameHistoryItem) {
                     $gameHistoryItem->update([
                         'type' => 'loss',
-                        'finalAmount' => number_format($gameHistoryItem->amount * -1, 2,'.',''),
+                        'finalAmount' => number_format($gameHistoryItem->amount * -1, 2, '.', ''),
                     ]);
                     Log::error('Partida já iniciada corrigida. - ' . $user->email);
                 }
             }
-            
+
 
             $user->changeWallet($request->amount * -1);
             $user->save();
@@ -183,7 +200,7 @@ class GameHistoryController extends Controller
 
             if (!$request->distance) {
                 Log::error('Partida zerada erro');
-                $user->changeWallet($gameHistory->amount);
+                $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
                 $user->save();
                 $gameHistory->delete();
                 return response()->json([
