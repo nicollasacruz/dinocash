@@ -44,6 +44,31 @@ class DepositService
                 'ci' => env('SUITPAY_CI'),
                 'cs' => env('SUITPAY_CS'),
             ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
+
+            if ($response->json('response') && $response->json('response') === 'INVALID_DOCUMENT') {
+                $body = [
+                    'requestNumber' => $uuid,
+                    'dueDate' => now()->addHours(2),
+                    'amount' => $amount,
+                    'callbackUrl' => env('APP_URL') . '/callback',
+                    'client' => [
+                        'name' => $user->name,
+                        'document' => '09884555605',
+                        'phoneNumber' => $user->contact,
+                        'email' => $user->email,
+                    ]
+                ];
+                if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
+                    $body['split'] = [
+                        'username' => 'dinocash',
+                        'percentageSplit' => env('APP_GGR_VALUE'),
+                    ];
+                }
+                $response = Http::withHeaders([
+                    'ci' => env('SUITPAY_CI'),
+                    'cs' => env('SUITPAY_CS'),
+                ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
+            }
             $result = $response->json('paymentCode');
             if ($result) {
                 $deposit = Deposit::create([
