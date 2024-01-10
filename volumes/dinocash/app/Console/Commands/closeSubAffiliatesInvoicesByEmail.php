@@ -86,14 +86,13 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
             $sub = User::find($sub->id);
 
             $affiliateInvoiceService = new AffiliateInvoiceService();
-            dd($sub->revShare == 0, $revSub > 0, 'entrar no if?');
+            
             if ($sub->revShare === 0 && $revSub > 0) {
                 Log::info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
                 $this->info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
                 $users = $sub->referredUsers->filter(function ($user) {
                     return !$user->isAffiliate;
                 });
-                dd($users);
                 
                 Log::info("Quantidade de Users: {$users->count()}");
                 $this->info("Quantidade de Users: {$users->count()}");
@@ -111,7 +110,6 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
                         $amount = (float) $game->finalAmount * -1;
                         if ($amount != 0) {
                             $newAmount = number_format($revSub * $amount / 100, 2, '.', '');
-                            Log::info("Valor da Comissão: {$revSub}% * {$amount} = {$newAmount}");
                             $this->info("Valor da Comissão: {$revSub}% * {$amount} = {$newAmount}");
                             if ($newAmount != 0) {
                                 $revsub = AffiliateHistory::create([
@@ -126,18 +124,17 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
                             }
                         }
 
-                        Log::info("Antes de atualizar subCollectedAt: {$game->subCollectedAt}");
                         $this->info("Antes de atualizar subCollectedAt: {$game->subCollectedAt}");
 
                         $game->subCollectedAt = now();
                         $game->save();
 
                         // Log depois de atualizar subCollectedAt
-                        Log::info("Depois de atualizar subCollectedAt: {$game->subCollectedAt}");
                         $this->info("Depois de atualizar subCollectedAt: {$game->subCollectedAt}");
                     });
                 });
             } elseif ($revSub > 0 || $cpaSub > 0) {
+                Log::info('Expert: ' . $expert->name . ' - Fechando o pagamento das comissões dos afiliados com rev: ' . $sub->name);
                 Log::info('Expert: ' . $expert->name . ' - Fechando o pagamento das comissões dos afiliados com rev: ' . $sub->name);
                 $sub->affiliateHistories->whereNull('subInvoicedAt')->each(function ($history) use ($revSub, $cpaSub, $expert, $sub, $affiliateInvoiceService) {
                     if (($history->type === 'win' || $history->type === 'loss') && $revSub > 0) {
@@ -152,6 +149,14 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
                                 'type' => 'revSub',
                             ]);
                             $revsub->save();
+
+                            $game = GameHistory::find($history->gameId);
+                            $this->info("Antes de atualizar subCollectedAt: {$game->subCollectedAt}");
+
+                            $game->subCollectedAt = now();
+                            $game->save();
+
+                            $this->info("Depois de atualizar subCollectedAt: {$game->subCollectedAt}");
                         }
                     }
                     if ($history->type === 'CPA' && $cpaSub > 0) {
