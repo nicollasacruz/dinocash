@@ -92,10 +92,10 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
                 $users = $sub->referredUsers->filter(function ($user) {
                     return $user->isAffiliate === false;
                 });
+                dd($users);
                 
                 Log::info("Quantidade de Users: {$users->count()}");
                 $this->info("Quantidade de Users: {$users->count()}");
-                dd($users);
 
                 $users->each(function ($user) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
                     $gameHistories = $user->gameHistories->filter(function ($historyUser) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
