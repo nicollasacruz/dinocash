@@ -66,8 +66,8 @@ class closeSubAffiliatesInvoices extends Command
 
     private function closeSubPayments(User $sub, User $expert)
     {
-        $revSub = $expert->revSub;
-        $cpaSub = $expert->cpaSub;
+        $revSub = (float)$expert->revSub;
+        $cpaSub = (int)$expert->cpaSub;
 
         $affiliateInvoiceService = new AffiliateInvoiceService();
         if ($sub->revShare == 0 && $revSub > 0) {
@@ -80,9 +80,9 @@ class closeSubAffiliatesInvoices extends Command
                     return ($historyUser->type === 'win' || $historyUser->type === 'loss') && $historyUser->subCollectedAt === null;
                 });
                 $gameHistories->each(function ($game) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
-                    $amount = $game->finalAmount * -1;
+                    $amount = (float)$game->finalAmount * -1;
                     if ($amount != 0) {
-                        $newAmount = number_format($revSub * $amount / 100, 2, '.', '');
+                        $newAmount = number_format($revSub * ($amount / 100), 2, '.', '');
                         if ($newAmount != 0) {
                             $revsub = AffiliateHistory::create([
                                 'amount' => $newAmount,
