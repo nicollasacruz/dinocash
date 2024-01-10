@@ -31,7 +31,7 @@ class SendSmsDisparoPro extends Command
 
         $token = "Bearer " . env('TOKEN_DISPARO_PRO');
         $msgArray = [];
-        $chunkSize = 5000;
+        $chunkSize = 500;
 
         foreach ($users as $user) {
             $contact = $this->cleanAndFormatContact($user->contact);
