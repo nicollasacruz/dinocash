@@ -302,7 +302,7 @@ watch(addictRange, (value) => {
               class="text-xs pt-1"
               v-for="{ email, totalCount } in topAffiliatesCPA"
             >
-              <div class="text-white text-lg">
+              <div class="text-white">
                 {{ email }} - {{ totalCount }} convidados
               </div>
             </div>
