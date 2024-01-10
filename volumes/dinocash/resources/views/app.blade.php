@@ -38,24 +38,9 @@
     navigator.serviceWorker.register("/sw.js");
     document.addEventListener('notify', function ({ detail }) {
         initSW();
-        // Notification.requestPermission().then((result) => {
-        //     if (result === "granted") {
-        //         setTimeout(() => {
-        //             navigator.serviceWorker.ready.then((registration) => {
-        //                 const value = detail.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
-        //                 registration.showNotification("Transferência recebida", {
-        //                     body: `Você recebeu uma transferência de ${value} de Suitpay Instituicao de Pagamentos Ltda.`,
-        //                     icon: "/nubank-apple-touch-icon.png",
-        //                     vibrate: [200, 100, 200, 100, 200, 100, 200],
-        //                     tag: "vibration-sample",
-        //                 });
-        //             });
-        //         }, 10000)
-        //     }
-        // });
     });
-
 </script>
+
 <!-- Meta Pixel Code -->
 <script>
     !function (f, b, e, v, n, t, s) {

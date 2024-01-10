@@ -50,6 +50,15 @@ class FinanceController extends Controller
                     ->where('role', 'user');
             })
             ->sum('amount');
+        $withdrawsAmountPending = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
+                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
+            })
+                ->where('type', 'pending')
+                ->whereHas('user', function ($query) {
+                    $query->where('isAffiliate', false)
+                        ->where('role', 'user');
+                })
+                ->sum('amount');
         $withdrawsAmountAffiliatePaid = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
@@ -112,14 +121,17 @@ class FinanceController extends Controller
                 ];
             });
 
-        $caixaDaCasa = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid;
+        $caixaDaCasa = $depositsAmountPaid * 0.965 - $withdrawsAmountPaid * 0.98 - $withdrawsAmountAffiliatePaid * 0.98 - $withdrawsAmountPending;
 
-        $lucroTotal = $depositsAmountPaid - $withdrawsAmountPaid - $withdrawsAmountAffiliatePaid - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
+        $lucroTotal = $depositsAmountPaid * 0.965 - $withdrawsAmountPaid * 0.98 - $withdrawsAmountAffiliatePaid * 0.98 - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
 
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
         $gain = $depositsAmountPaid ?? 1;
+        if (env('APP_GGR_DEPOSIT')) {
+            $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
+        }
         $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$pay) {
             Log::info('Vazio ou 0');
@@ -132,6 +144,9 @@ class FinanceController extends Controller
             ->where('last_activity', '>=', now()->subMinutes(5))
             ->count();
         $totalUsers = User::all()->count();
+        $totalUsersWithDeposits = User::whereHas('deposits', function ($query) {
+            $query->where('type', 'paid');
+        })->count();        
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
         $totalUsersTodayWithDeposit = User::whereDate('created_at', Carbon::today())->whereHas('deposits', function ($query) {
             $query->where('type', 'paid');
@@ -140,13 +155,14 @@ class FinanceController extends Controller
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
+            'totalUsersWithDeposits' => $totalUsersWithDeposits,
             'totalUsersToday' => $totalUsersToday,
             'totalUsersTodayWithDeposit' => $totalUsersTodayWithDeposit,
             'balanceAmount' => $caixaDaCasa,
-            'depositsAmount' => $depositsAmountPaid,
-            'depositsAmountToday' => $depositsAmountPaidToday,
-            'withdrawsAmount' => $withdrawsAmountPaid,
-            'withdrawsAffiliateAmount' => $withdrawsAmountAffiliatePaid,
+            'depositsAmount' => $depositsAmountPaid * 0.965,
+            'depositsAmountToday' => $depositsAmountPaidToday * 0.965,
+            'withdrawsAmount' => $withdrawsAmountPaid * 0.98,
+            'withdrawsAffiliateAmount' => $withdrawsAmountAffiliatePaid * 0.98,
             'walletAmount' => $walletsAmount,
             'walletAffiliateAmount' => $walletsAfilliateAmount,
             'walletsAfilliatePending' => $walletsAfilliatePending,

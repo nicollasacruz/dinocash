@@ -76,7 +76,7 @@ Route::get('/', function () {
         $position++;
     }
 
-    if (!$usuarioLogadoInserido && $userIdLogado) {
+    if (!$usuarioLogadoInserido && $userIdLogado && (!Auth::user()->hasRole('admin') || !Auth::user()->isAffiliate)) {
         $userLogado = User::find($userIdLogado);
         $emailLogado = $userLogado->name;
 
@@ -114,7 +114,9 @@ Route::get('/', function () {
         'wallet' => $wallet,
     ]);
 })->name('homepage');
-
+Route::get('termos-de-uso', function () {
+    return Inertia::render('TermsUse');
+})->name('terms');
 Route::get('/ref/{invitation_link}', function ($invitation_link) {
     Session::put('invitation_link', $invitation_link);
     Session::put('invitation_link_expires_at', Carbon::now()->addWeek());

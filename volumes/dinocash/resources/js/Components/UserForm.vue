@@ -86,6 +86,14 @@
       <base-input
         label-style="font-bold text-xs"
         classes="!h-[40px]"
+        :error="errors['referralsDepositsCounter']"
+        v-bind="referralsDepositsCounter"
+        label="Cadastros depositantes"
+        v-if="typeForm == 'affiliate'"
+      />
+      <base-input
+        label-style="font-bold text-xs"
+        classes="!h-[40px]"
         :error="errors['walletAffiliate']"
         v-bind="walletAffiliate"
         label="Valor de comissão"
@@ -261,6 +269,7 @@ const initialValues = user
       revShare: user.revShare,
       CPA: user.CPA,
       referralsCounter: user.referralsCounter,
+      referralsDepositsCounter: user.referralsDepositsCounter,
       walletAffiliate: user.walletAffiliate,
       invitation_link: user.invitation_link,
     }
@@ -278,13 +287,15 @@ const revSub = defineInputBinds("revSub");
 const revShare = defineInputBinds("revShare");
 const CPA = defineInputBinds("CPA");
 const referralsCounter = defineInputBinds("referralsCounter");
+const referralsDepositsCounter = defineInputBinds("referralsDepositsCounter");
 const walletAffiliate = defineInputBinds("walletAffiliate");
 const invitation_link = defineInputBinds("invitation_link");
+console.log(user, 'usuario');
 const submit = handleSubmit((values) => {
   const payload = {
     CPA: values.CPA,
     invitation_link: values.invitation_link,
-    walletAffiliate: values.walletAffiliate,
+    // walletAffiliate: values.walletAffiliate,
     revShare: values.revShare,
     cpaSub: values.cpaSub,
     revSub: values.revSub,

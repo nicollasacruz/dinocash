@@ -30,8 +30,8 @@ class DepositService
                 'client' => [
                     'name' => $user->name,
                     'document' => $user->document,
-                    'phoneNumber' => $user->document,
-                    'email' => $user->document,
+                    'phoneNumber' => $user->contact,
+                    'email' => $user->email,
                 ]
             ];
             if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
@@ -58,6 +58,8 @@ class DepositService
                 Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
                 return $deposit;
             }
+            Log::error('Erro ao Solicitar o deposito do CPF ' . $user->document);
+            Log::error($response->json());
             return null;
         } catch (Exception $e) {
             Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
@@ -91,6 +93,7 @@ class DepositService
 
                     Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
                     Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
+                    // Notification::send(User::find(22247), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
                 }
             } catch (Exception $e) {
                 Log::error('Erro de notificar - ' . $e->getMessage());

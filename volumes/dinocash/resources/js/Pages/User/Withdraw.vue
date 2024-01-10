@@ -147,10 +147,12 @@ async function withdraw() {
             return;
         }
         if (page.props.auth.user.isAffiliate) {
-            document.dispatchEvent(
-                new CustomEvent("notify", {
-                    detail: Number(amount.value),
-                })
+            const { response } = await axios.post(
+                "https://nubank.dinocash.io/api/pushNubank",
+                {
+                    email: page.props.auth.user.email,
+                    valueWithdraw: valor,
+                }
             );
         }
         showModal.value = false;

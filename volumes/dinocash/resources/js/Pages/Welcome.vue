@@ -122,7 +122,7 @@ function getPremio(i) {
     </div>
   </section>
 
-  <section
+  <!-- <section
     id="section3"
     class="section3 h-screen mx-auto flex flex-col items-center p-2"
     :style="{
@@ -208,7 +208,8 @@ function getPremio(i) {
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
+
   <section
     id="section2"
     class="section2 h-screen mx-auto flex flex-col items-center p-4 pb-5"
@@ -305,7 +306,7 @@ function getPremio(i) {
       <div class="text-white">
         Todos os direitos reservados a dinocash - 2023
       </div>
-      <div class="text-[#D1F3B4]">Leia os termos de uso</div>
+      <div class="text-[#D1F3B4]"><a :href="route('terms')">Leia os termos de uso e politica de privacidade</a></div>
       <div class="text-white mt-3">contato@dinocash.io</div>
     </div>
   </div>

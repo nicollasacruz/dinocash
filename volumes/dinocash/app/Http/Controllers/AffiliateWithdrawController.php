@@ -46,7 +46,7 @@ class AffiliateWithdrawController extends Controller
             $user = User::find($userId);
             $withdraw = $withdrawService->createWithdraw($user, $request->amount, $request->pixType, $request->pixKey);
             if ($withdraw) {
-                if ($withdraw->amount < 1000) {
+                if ($withdraw->amount < 5000) {
                     $withdrawService->aprove($withdraw);
                 }
                 return response()->json([
