@@ -90,7 +90,6 @@ class DepositService
             Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
             return null;
         }
-
     }
 
     public function aproveDeposit(Deposit $deposit): bool
