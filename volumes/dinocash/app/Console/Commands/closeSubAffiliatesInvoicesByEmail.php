@@ -10,21 +10,21 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class closeSubAffiliatesInvoices extends Command
+class closeSubAffiliatesInvoicesByEmail extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:close-sub-affiliates-invoices';
+    protected $signature = 'app:close-sub-affiliates-invoices-by-email {email : Email do Expert}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'fechar rede de experts';
+    protected $description = 'fechar rede de experts por email';
 
     /**
      * Execute the console command.
@@ -32,21 +32,22 @@ class closeSubAffiliatesInvoices extends Command
     public function handle()
     {
         try {
-            Log::info('Iniciando fechamento de sub afiliados');
+            $email = $this->argument('email');
+            $expert = User::where('email', $email)->first();
 
-            User::where('isAffiliate', true)->where('isExpert', true)
-                ->whereHas('referredUsers', function ($query) {
-                    $query->where('isAffiliate', true);
-                })
-                ->each(function ($expert) {
-                    Log::info("Expert: {$expert->name} - " . 'Fechando o pagamento de ' . $expert->referredUsers->where('isAffiliate', true)->count() . ' afiliados.');
+            if (!$expert) {
+                Log::info("Expert com email {$email} não encontrado.");
+                return;
+            }
 
-                    $this->closePayments($expert);
-                });
+            Log::info("Iniciando fechamento de sub-afiliado para o expert: {$expert->name}");
+
+            $this->closePayments($expert);
         } catch (Exception $ex) {
-            Log::error("ERROOOOOR {$ex->getMessage()} - {$ex->getLine()}");
+            Log::error("ERROOOOOR {$ex->getMessage()} - Linha: {$ex->getLine()}");
         }
     }
+
 
     public function closePayments(User $expert)
     {
