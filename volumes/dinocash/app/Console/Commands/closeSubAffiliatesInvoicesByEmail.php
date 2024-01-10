@@ -86,11 +86,12 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
             $sub = User::find($sub->id);
 
             $affiliateInvoiceService = new AffiliateInvoiceService();
+            dd($sub->revShare == 0 && $revSub > 0, 'entrar no if?');
             if ($sub->revShare == 0 && $revSub > 0) {
                 Log::info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
                 $this->info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
                 $users = $sub->referredUsers->filter(function ($user) {
-                    return $user->isAffiliate === false;
+                    return !$user->isAffiliate;
                 });
                 dd($users);
                 
