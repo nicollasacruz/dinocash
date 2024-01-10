@@ -191,11 +191,6 @@ watch(addictRange, (value) => {
         <div class="text-2xl text-red-500 mb-4 font-bold">Prejuízos</div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2">
           <CurrencyBox
-            label="Saldo de Carteiras"
-            :value="walletAmount * -1"
-            negative
-          />
-          <CurrencyBox
             label="Saldo de Comissões a pagar"
             :value="walletAffiliateAmount * -1"
             negative
@@ -203,6 +198,11 @@ watch(addictRange, (value) => {
           <CurrencyBox
             label="Saldo de Comissões pendentes"
             :value="walletsAfilliatePending * -1"
+            negative
+          />
+          <CurrencyBox
+            label="Saldo de Carteiras"
+            :value="walletAmount * -1"
             negative
           />
           <CurrencyBox
