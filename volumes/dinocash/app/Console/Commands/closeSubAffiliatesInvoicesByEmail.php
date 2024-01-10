@@ -83,8 +83,10 @@ class CloseSubAffiliatesInvoicesByEmail extends Command
         try {
             $revSub = (float) $expert->revSub;
             $cpaSub = (int) $expert->cpaSub;
+            $sub = User::find($sub->id);
 
             $affiliateInvoiceService = new AffiliateInvoiceService();
+            dd($revSub, $cpaSub, $sub);
             if ($sub->revShare == 0 && $revSub > 0) {
                 Log::info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
                 $this->info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
