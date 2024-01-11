@@ -154,10 +154,7 @@ const rows = withdraws.data.map((withdraw) => {
         </td>
       </template>
     </BaseTable>
-    <Paginator
-      :data="rows"
-      class="mt-4"
-    />
     <BaseModal v-model="showModal"> teste </BaseModal>
+    <Paginator :data="withdraws" class="mt-4" />
   </AuthenticatedLayout>
 </template>
