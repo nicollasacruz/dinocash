@@ -37,9 +37,11 @@ class AppServiceProvider extends ServiceProvider
         
         if($this->app->environment('production')) {
             URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS','on');
         }
         if($this->app->environment('local') && env('ENV') === 'servidor') {
             URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS','on');
         }
         User::observe(UserObserver::class);
         GameHistory::observe(GameHistoryObserver::class);
