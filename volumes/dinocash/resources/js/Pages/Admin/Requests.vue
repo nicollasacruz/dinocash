@@ -71,7 +71,7 @@ const { withdraws, totalToday, totalAmount } = defineProps([
   "totalAmount",
   "totalToday",
 ]);
-const rows = withdraws.map((withdraw) => {
+const rows = withdraws.data.map((withdraw) => {
   return {
     ...withdraw,
     email: withdraw.user?.email,
