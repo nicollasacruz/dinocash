@@ -225,6 +225,7 @@ Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->gro
     Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.saques');
     Route::post('/saques', [AffiliateWithdrawController::class, 'store'])->name('afiliado.saques.store');
     Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');
+    Route::get('/historico-sub', [AffiliatePanelController::class, 'subHistoryAffiliate'])->name('afiliado.historico-sub');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.faturas');
 });
 Route::post('/', [ProfileController::class, 'edit'])->name('logout');

@@ -10,19 +10,21 @@ import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
-import { router } from '@inertiajs/vue3';
+import { router } from "@inertiajs/vue3";
 
 const {
   profitToday,
   profitLast30Days,
-  lossLast30Days,
   profitTotal,
-  lossTotal,
+  profitSubRev,
   lossToday,
+  lossLast30Days,
+  lossTotal,
   revShareTotal,
   profitCPAToday,
   profitCPALast30Days,
   profitCPATotal,
+  profitSubCPATotal,
   countCPA,
   affiliateLink,
   walletAffiliate,
@@ -37,12 +39,14 @@ const {
   "profitLast30Days",
   "lossLast30Days",
   "profitTotal",
+  "profitSubRev",
   "lossToday",
   "lossTotal",
   "revShareTotal",
   "profitCPAToday",
   "profitCPALast30Days",
   "profitCPATotal",
+  "profitSubCPATotal",
   "countCPA",
   "affiliateLink",
   "walletAffiliate",
@@ -89,45 +93,46 @@ function permission() {
 }
 
 function withdraw() {
-    if (showModal.value === false) {
-        showModal.value = true;
-        return;
-    }
-    if (amount.value <= 0) {
-        toast.error("Saque não pode ser menor ou igual a zero");
-        return;
-    }
-    if (!pixKey.value || !pixType.value) {
-        toast.error("Informe o tipo e a chave pix");
-        return;
-    }
-    if (amount.value > walletAffiliate) {
-        toast.error("Saque não pode ser maior que o disponível");
-        return;
-    }
+  if (showModal.value === false) {
+    showModal.value = true;
+    return;
+  }
+  if (amount.value <= 0) {
+    toast.error("Saque não pode ser menor ou igual a zero");
+    return;
+  }
+  if (!pixKey.value || !pixType.value) {
+    toast.error("Informe o tipo e a chave pix");
+    return;
+  }
+  if (amount.value > walletAffiliate) {
+    toast.error("Saque não pode ser maior que o disponível");
+    return;
+  }
 
-    console.log(pixKey, pixType, "pix");
+  console.log(pixKey, pixType, "pix");
 
-    router.post(route("afiliado.saques.store"), {
-        amount: amount.value,
-        pixKey: pixKey.value,
-        pixType: pixType.value,
+  router
+    .post(route("afiliado.saques.store"), {
+      amount: amount.value,
+      pixKey: pixKey.value,
+      pixType: pixType.value,
     })
-        .then(() => {
-            // Assuming the response contains a success message
-            toast.success("Saque realizado com sucesso");
-            window.location.reload();
-        })
-        .catch((error) => {
-            // Assuming the error response contains a message
-            toast.error(error.response.data.message);
-        })
-        .finally(() => {
-            amount.value = 0.0;
-            pixType.value = "";
-            pixKey.value = "";
-            showModal.value = false;
-        });
+    .then(() => {
+      // Assuming the response contains a success message
+      toast.success("Saque realizado com sucesso");
+      window.location.reload();
+    })
+    .catch((error) => {
+      // Assuming the error response contains a message
+      toast.error(error.response.data.message);
+    })
+    .finally(() => {
+      amount.value = 0.0;
+      pixType.value = "";
+      pixKey.value = "";
+      showModal.value = false;
+    });
 }
 
 function formatAmount() {
@@ -206,6 +211,11 @@ function formatAmount() {
         :value="profitTotal - lossTotal"
       />
       <CurrencyBox
+        v-if="revSub > 0"
+        label="Sub RevShare Total"
+        :value="profitSubRev"
+      />
+      <CurrencyBox
         v-if="CPA > 0"
         label="Lucro CPA do dia"
         :value="profitCPAToday"
@@ -219,6 +229,11 @@ function formatAmount() {
         v-if="CPA > 0"
         label="Lucro CPA Total"
         :value="profitCPATotal"
+      />
+      <CurrencyBox
+        v-if="cpaSub > 0"
+        label="Lucro Sub CPA Total"
+        :value="profitSubCPATotal"
       />
       <TextBox label="Convidados" :value="countInvited" />
       <TextBox v-if="CPA > 0" label="Convidados CPA" :value="countCPA" />
