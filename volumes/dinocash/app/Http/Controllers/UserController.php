@@ -34,4 +34,19 @@ class UserController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Usuário atualizado com sucesso.']);
     }
+
+    public function deleteUser(Request $request)
+    {
+        User::find($request->userId)->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Usuário apagado com sucesso.']);
+    }
+
+    public function banUser(Request $request)
+    {
+        $user = User::find($request->userId);
+        $user->bannedAt = now();
+        $user->save();
+        return response()->json(['status' => 'success', 'message' => 'Usuário banido com sucesso.']);
+    }
 }
