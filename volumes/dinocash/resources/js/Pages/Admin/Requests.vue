@@ -7,8 +7,9 @@ import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 import axios from "axios";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import Paginator from "@/Components/Paginator.vue";
 
 const columns = [
   { label: "Email", key: "email" },
@@ -29,26 +30,26 @@ const getStatus = (status) => {
 
 async function approveWithdraw(withdrawId) {
   try {
-    const { data } = await axios.post(route('admin.saque.aprovar'), {
-        withdraw: withdrawId,
+    const { data } = await axios.post(route("admin.saque.aprovar"), {
+      withdraw: withdrawId,
     });
-    if (data.success === 'error') {
+    if (data.success === "error") {
       toast.error(data.message);
       return;
     }
     toast.success("Saque aprovado com sucesso!");
     window.location.reload();
   } catch (error) {
-        console.log('erro interno');
+    console.log("erro interno");
   }
 }
 
 async function reject(withdrawId) {
   try {
-    const { data } = await axios.post(route('admin.saque.rejeitar'), {
-        withdraw: withdrawId,
+    const { data } = await axios.post(route("admin.saque.rejeitar"), {
+      withdraw: withdrawId,
     });
-    if (data.success === 'error') {
+    if (data.success === "error") {
       toast.error(data.message);
       return;
     }
@@ -77,7 +78,6 @@ const rows = withdraws.map((withdraw) => {
     pix: withdraw.user?.document,
   };
 });
-
 </script>
 
 <template>
@@ -154,6 +154,10 @@ const rows = withdraws.map((withdraw) => {
         </td>
       </template>
     </BaseTable>
+    <Paginator
+      :data="rows"
+      class="mt-4"
+    />
     <BaseModal v-model="showModal"> teste </BaseModal>
   </AuthenticatedLayout>
 </template>
