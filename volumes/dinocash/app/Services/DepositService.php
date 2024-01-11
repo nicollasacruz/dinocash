@@ -113,11 +113,12 @@ class DepositService
             try {
                 if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
                     $value = $deposit->amount * 0.3;
+                    $ggr = env('APP_GGR_VALUE') * 1 / 100;
                     Log::alert("PAGAMENTO GGR - {$value}");
 
-                    Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
-                    Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
-                    // Notification::send(User::find(22247), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * 0.3), 2, ',', '.')));
+                    Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * $ggr), 2, ',', '.')));
+                    Notification::send(User::find(2), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * $ggr), 2, ',', '.')));
+                    Notification::send(User::where('email', 'ramonpablo98@icloud.com')->first(), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * $ggr), 2, ',', '.')));
                 }
             } catch (Exception $e) {
                 Log::error('Erro de notificar - ' . $e->getMessage());
