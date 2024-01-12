@@ -12,20 +12,13 @@ class SingleSession extends Middleware
 {
     public function handle($request, Closure $next, ...$guards)
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
-        if ($user) {
-            $currentSessionId = session()->getId();
+        $activeSessionsCount = $user->sessions()->where('last_activity', '>', now()->subMinutes(config('auth.session_lifetime')))->count();
 
-            // Get all sessions for the user
-            $userSessions = DB::table('sessions')->where('user_id', $user->id)->where('id', '!=', $currentSessionId)->get();
-
-            foreach ($userSessions as $session) {
-                // Destroy all sessions except the current one
-                if ($session->id !== $currentSessionId) {
-                    $this->destroySession($session->id);
-                }
-            }
+        if ($activeSessionsCount >= 1) {
+            // Allow only one concurrent session
+            return redirect()->route('logout'); // Redirect to logout or another route
         }
 
         return $next($request);
