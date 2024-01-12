@@ -47,7 +47,7 @@ class GameHistoryObserver
             $affiliate = $gameHistory->user->affiliate;
             if ($affiliate->revShare > 0) {
                 $newAmount = number_format($amount * $affiliate->revShare / 100, 2, '.', '');
-                Log::info("AffiliateHistory com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
+                Log::info("AffiliateHistory REV com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
                 AffiliateHistory::create([
                     'amount' => $newAmount,
                     'gameId' => $gameHistory->id,
@@ -65,7 +65,7 @@ class GameHistoryObserver
             }
             Log::info("AffiliateHistory criado com sucesso.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Erro ao criar AffiliateHistory: " . $e->getMessage() . " - " . $e->getFile() . " - " . $e->getLine());
         }
     }
@@ -79,7 +79,7 @@ class GameHistoryObserver
             $affiliateInvoiceService = new AffiliateInvoiceService();
             $newAmount = number_format($revSub * $amount / 100, 2, '.', '');
             if ($newAmount != 0) {
-                $revsub = AffiliateHistory::create([
+                $revSubHistory = AffiliateHistory::create([
                     'amount' => $newAmount,
                     'affiliateId' => $rede->id,
                     'gameId' => $game->id,
@@ -87,10 +87,10 @@ class GameHistoryObserver
                     'userId' => $sub->id,
                     'type' => 'revSub',
                 ]);
-                $revsub->save();
+                $revSubHistory->save();
             }
         }
-
+        Log::info("AffiliateHistory SUB REV com amount de: {$amount} - {$revSub}% e comissão de R$ {$newAmount}");
         Notification::send($rede, new PushSubRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
     }
 

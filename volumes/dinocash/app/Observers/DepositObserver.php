@@ -28,7 +28,7 @@ class DepositObserver
 
             $user->changeWallet($deposit->amount);
             $user->save();
-            
+
             // Verifica se o userId tem um affiliateId e o CpaCollected é falso
             if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
                 $affiliate = $user->affiliate;
@@ -73,6 +73,7 @@ class DepositObserver
                 'type' => 'cpaSub',
             ]);
             $subcpaHistory->save();
+            Log::info("Sub CPA de {$cpaSub} pago para o {$rede->email}");
             Notification::send($rede, new PushSubCPA('R$ ' . number_format(floatval($cpaSub), 2, ',', '.')));
         }
     }
