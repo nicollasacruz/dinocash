@@ -26,6 +26,8 @@ WORKDIR /var/www/html
 
 RUN chown -R appuser:appuser /var/www/html
 
+RUN chmod 777 -R storage bootstrap
+
 USER appuser
 
 EXPOSE 5173

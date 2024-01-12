@@ -1,25 +1,25 @@
 version: '3.8'
 services:
-  dinocash_web:
+  dinocash_web_coronel:
     build:
       context: ./nginx
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
       - ./volumes/dinocash:/var/www/html:rw
-    container_name: dinocash_web
+    container_name: dinocash_web_coronel
     environment:
       - VIRTUAL_HOST=dinocash.site
       - LETSENCRYPT_HOST=dinocash.site
       - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
-      - VIRTUAL_PORT=8080
+      - VIRTUAL_PORT=8091
     depends_on:
-      - php_dino
+      - php_dino_coronel
     networks:
-      - rede_dino
+      - rede_dino_coronel
       - reverse-proxy
 
-  php_dino:
+  php_dino_coronel:
     build:
       context: ./php
       dockerfile: Dockerfile
@@ -27,10 +27,11 @@ services:
     volumes:
       - ./volumes/dinocash:/var/www/html:rw
     networks:
-      - rede_dino
+      - rede_dino_coronel
+      - database
 
 networks:
-  rede_dino:
+  rede_dino_junior:
     external: true
   reverse-proxy:
     external: true
