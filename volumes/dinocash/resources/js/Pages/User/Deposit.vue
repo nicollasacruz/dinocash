@@ -16,6 +16,8 @@
         />
 
         <div class="mt-4 text-lg">
+          <div>Valor do Depósito:</div>
+          <div class="py-1">{{ toBRL(amount) }}</div>
           <div>Depósito mínimo: {{ toBRL(minDeposit) }}</div>
           <div>Depósito maximo: {{ toBRL(maxDeposit) }}</div>
         </div>
