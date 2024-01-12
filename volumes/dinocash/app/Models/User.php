@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Session;
 use Laravel\Sanctum\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 
@@ -209,11 +208,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(AffiliateHistory::class, 'affiliateId');
     }
-
-    public function sessions()
-{
-    return $this->hasMany(Session::class);
-}
 
     public function createDeposit($amount, $uuid, $paymentCode): Deposit
     {
