@@ -113,7 +113,7 @@ function getPremio(i) {
     <img
       :src="DinoLogo"
       alt="dinoLogo"
-      class="mx-auto w-3/5 lg:w-[70vh] my-3 md:my-10"
+      class="mx-auto w-3/5 md:w-[60vh] my-3 md:my-10"
     />
     <div class="w-full mx-auto mt-auto">
       <Link
