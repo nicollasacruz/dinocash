@@ -39,7 +39,7 @@ const props = defineProps({
       backgroundImage: `url('${
         windowWidth < 700 ? Background1Mobile : Background1
       }')`,
-      backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
+      backgroundSize: windowWidth < 700 ? '100vw auto' : 'auto auto',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
     }"

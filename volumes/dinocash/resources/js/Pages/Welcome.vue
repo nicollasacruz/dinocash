@@ -78,7 +78,7 @@ function getPremio(i) {
       backgroundImage: `url('${
         windowWidth < 700 ? Background1Mobile : Background1
       }')`,
-      backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
+      backgroundSize: windowWidth < 700 ? '100vw auto' : 'auto auto',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
     }"
@@ -98,13 +98,13 @@ function getPremio(i) {
       class="mx-auto h-20 sm:h-24 flex justify-center bg-roxo-escuro w-[280px] md:w-[430px] rounded-2xl"
     >
       <Link
-        class="flex-1 flex justify-center items-center ml-3 my-auto md:w-[200px] h-[80%] font-menu text-xl md:text-3xl text-verde-claro"
+        class="flex-1 flex justify-center items-center ml-3 my-auto md:w-[200px] h-[80%] font-menu text-lg md:text-3xl text-verde-claro"
         :href="route('login')"
         >{{ __("auth.login") }}</Link
       >
 
       <Link
-        class="flex-1 flex justify-center items-center mr-3 my-auto md:w-[200px] h-[80%] bg-verde-claro rounded-lg font-menu text-xl md:text-3xl text-roxo-escuro"
+        class="flex-1 flex justify-center items-center mr-3 my-auto md:w-[200px] h-[80%] bg-verde-claro rounded-lg font-menu text-lg md:text-3xl text-roxo-escuro"
         :href="route('register')"
       >
         {{ __("auth.register") }}
@@ -113,22 +113,22 @@ function getPremio(i) {
     <img
       :src="DinoLogo"
       alt="dinoLogo"
-      class="mx-auto w-4/5 lg:w-1/2 my-3 md:my-10"
+      class="mx-auto w-3/5 lg:w-[70vh] my-3 md:my-10"
     />
     <div class="w-full mx-auto mt-auto">
       <Link
-        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-black boxShadow border-black border-4"
+        class="mx-auto mb-4 flex justify-center items-center py-2 lg:py-0 lg:w-[280px] lg:h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-black boxShadow border-black border-4"
         :href="route('user.play')"
       >
         {{ __("homepage.play-now") }}
       </Link>
       <Link
-        class="mx-auto mb-4 flex justify-center items-center w-[280px] h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-black boxShadow border-black border-4"
+        class="mx-auto mb-4 flex justify-center items-center py-2 lg:py-0 lg:w-[280px] lg:h-[80px] bg-verde-claro rounded-lg font-menu text-3xl text-black boxShadow border-black border-4"
         :href="route('user.deposito')"
       >
         DEPOSITAR
       </Link>
-      <div class="mx-auto mb-[10vh] text-xl font-menu text-white text-center">
+      <div class="mx-auto mb-[5vh] text-xl font-menu text-white text-center">
         {{ __("homepage.register-tip") }}
       </div>
     </div>
@@ -234,7 +234,7 @@ function getPremio(i) {
   >
     <img :src="DinoRoxo" alt="dinoLogo" class="h-[20%] z-10 top-[2%]" />
     <div
-      class="-mt-5 mb-auto mr-2 flex flex-col items-center md:w-[60%] bg-white rounded-3xl border-black border-[10px] boxShadow pb-5"
+      class="mt-5 lg:-mt-5 mb-auto mr-2 flex flex-col items-center md:w-[60%] bg-white rounded-3xl border-black border-[10px] boxShadow pb-5"
     >
       <span
         class="text-center text-6xl md:text-[130px] font-menu text-gray-800 m-0 p-0"
