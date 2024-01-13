@@ -1,6 +1,7 @@
 <template>
     <teleport to="#app">
         <div
+            v-if="gameReady"
             id="info-text"
             class="start-game-text w-screen text-center font-menu"
         >
@@ -52,7 +53,12 @@ document.addEventListener("finishGame", ({ detail }) => {
     emit("finishGame", detail);
     // destroy game instance
 });
-game.start().catch(console.error);
+
+const gameReady = ref(false);
+
+game.start().then(() => {
+    gameReady.value = true;
+}).catch(console.error);
 
 const touchStartCallback = ({ touches }) => {
     // if (touches.length === 1) {
