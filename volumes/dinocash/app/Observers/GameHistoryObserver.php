@@ -48,7 +48,7 @@ class GameHistoryObserver
             if ($affiliate->revShare > 0) {
                 $newAmount = number_format($amount * $affiliate->revShare / 100, 2, '.', '');
                 Log::info("AffiliateHistory REV com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
-                AffiliateHistory::create([
+                $history = AffiliateHistory::create([
                     'amount' => $newAmount,
                     'gameId' => $gameHistory->id,
                     'affiliateId' => $gameHistory->user->affiliateId,
@@ -57,6 +57,23 @@ class GameHistoryObserver
                     'type' => $amount > 0 ? 'win' : 'loss',
                 ]);
                 Notification::send($affiliate, new PushRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
+                $rede = $affiliate->affiliate;
+                if ($rede) {
+                    $revSub = (float) $rede->revSub / 100;
+                    $amount = $history->amount;
+                    if ($amount != 0 && $newAmount = number_format($revSub * $amount, 2, '.', '')) {
+                        $revsub = AffiliateHistory::create([
+                            'amount' => $newAmount,
+                            'affiliateId' => $rede->id,
+                            'gameId' => $history->gameId,
+                            'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($rede))->id,
+                            'userId' => $affiliate->id,
+                            'type' => 'revSub',
+                        ]);
+                        $revsub->save();
+                    }
+                    Notification::send($rede, new PushSubRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
+                }
             } else {
                 $rede = $affiliate->affiliate;
                 if ($rede && $rede->revSub > 0) {
