@@ -48,8 +48,7 @@ class GameHistoryObserver
             if ($affiliate->revShare > 0) {
                 $newAmount = number_format($amount * $affiliate->revShare / 100, 2, '.', '');
 
-                Log::info("AffiliateHistory REV com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
-
+                
                 $history = AffiliateHistory::create([
                     'amount' => $newAmount,
                     'gameId' => $gameHistory->id,
@@ -58,6 +57,7 @@ class GameHistoryObserver
                     'userId' => $gameHistory->userId,
                     'type' => $amount > 0 ? 'win' : 'loss',
                 ]);
+                Log::info("AffiliateHistory REV com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
 
                 Notification::send($affiliate, new PushRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
 
@@ -76,6 +76,7 @@ class GameHistoryObserver
                             'type' => 'revSub',
                         ]);
                         $revsub->save();
+                        Log::info("Create SubRevShare COM REV criado com sucesso.");
                         Log::info("AffiliateHistory SUB REV com amount de: {$amount} - {$revSub}% e comissão de R$ {$newAmount}");
                     }
 
@@ -112,10 +113,10 @@ class GameHistoryObserver
                 ]);
                 $revSubHistory->save();
                 Log::info("createSubRevShare Sem REV criado com sucesso.");
+                Log::info("AffiliateHistory SUB REV com amount de: {$amount} - {$revSub}% e comissão de R$ {$newAmount}");
+                Notification::send($rede, new PushSubRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
             }
         }
-        Log::info("AffiliateHistory SUB REV com amount de: {$amount} - {$revSub}% e comissão de R$ {$newAmount}");
-        Notification::send($rede, new PushSubRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
     }
 
     public function createGgrHistory(GameHistory $gameHistory): void
@@ -137,7 +138,7 @@ class GameHistoryObserver
 
                 Log::info("GGR - Transação adicionada com sucesso à Invoice {$invoice->id}.");
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("GGR - Erro ao processar função createGgrHistory da Invoice {$invoice->id}: " . $e->getMessage());
         }
     }
