@@ -31,7 +31,10 @@ class WithdrawController extends Controller
                         $query2->where('email', 'LIKE', '%' . $email . '%');
                     });
             }
-        ])->get();
+        ])
+        ->orderBy('created_at', 'desc')
+        ->paginate(20);
+
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
 
         $depositsAmountCaixa = Deposit::where('type', 'paid')->sum('amount');

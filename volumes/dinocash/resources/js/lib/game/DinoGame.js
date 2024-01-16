@@ -408,9 +408,9 @@ export default class DinoGame extends GameRunner {
             // settings.birdSpeed = settings.bgSpeed * 0.8;
             settings.cactiSpawnRate = this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.9) : settings.cactiSpawnRate;
         } else if (level >= 5) {
-            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.05 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * (randInteger(11, 15) / 10);
+            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.03 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * (randInteger(11, 15) / 10);
             // settings.birdSpeed = settings.bgSpeed * 0.9;
-            settings.cactiSpawnRate = this.isAffiliate ? Math.floor(settings.cactiSpawnRate * 1.1) : this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.8) : Math.floor(settings.cactiSpawnRate * (randInteger(9, 10) / 10));
+            settings.cactiSpawnRate = this.isAffiliate ? Math.floor(settings.cactiSpawnRate * 1) : this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.8) : Math.floor(settings.cactiSpawnRate * (randInteger(9, 10) / 10));
             if (
                 level >= 8 &&
                 level % 2 === 0 &&

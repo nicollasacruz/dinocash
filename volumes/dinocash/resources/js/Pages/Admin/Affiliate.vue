@@ -26,8 +26,8 @@ const columns = computed(() =>
         { label: "Status", key: "type" },
       ]
 );
-const { affiliates, affiliatesWithdraws, affiliatesWithdrawsList } =
-  defineProps(["affiliates", "affiliatesWithdraws", "affiliatesWithdrawsList"]);
+const { affiliates, affiliatesWithdrawsToday, affiliatesWithdrawsList } =
+  defineProps(["affiliates", "affiliatesWithdrawsToday", "affiliatesWithdrawsList"]);
 const paymentsRow = affiliatesWithdrawsList
   ? affiliatesWithdrawsList.map((payment) => {
       return {
@@ -103,7 +103,7 @@ watch(
       <div class="flex gap-x-5">
         <TextBox
           label="total de saques hoje"
-          :value="toBRL(affiliatesWithdraws)"
+          :value="toBRL(affiliatesWithdrawsToday)"
           value-text="text-center text-red-500"
         />
       </div>

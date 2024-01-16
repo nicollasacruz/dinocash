@@ -20,7 +20,7 @@ class CloseAffiliateInvoicesCommand extends Command {
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Fechamento fatura de afiliados';
 
     /**
      * Execute the console command.

@@ -88,18 +88,17 @@ class GameHistoryController extends Controller
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
 
-                $gameHistoryItem->update([
-                    'type' => 'loss',
-                    'finalAmount' => number_format($gameHistoryItem->amount * -1, 2, '.', ''),
-                ]);
-
-                Log::error('Partida já iniciada corrigida. - ' . $user->email);
+                $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                $user->save();
+                $gameHistoryItem->delete();
                 $message = [
                     "id" => $user->id,
                     "wallet" => $user->wallet
                 ];
 
                 event(new WalletChanged($message));
+
+                Log::error('Partida já iniciada. - ' . $user->email);
             }
         }
 
@@ -135,11 +134,18 @@ class GameHistoryController extends Controller
 
             if ($gameHistories) {
                 foreach ($gameHistories as $gameHistoryItem) {
-                    $gameHistoryItem->update([
-                        'type' => 'loss',
-                        'finalAmount' => number_format($gameHistoryItem->amount * -1, 2, '.', ''),
-                    ]);
-                    Log::error('Partida já iniciada corrigida. - ' . $user->email);
+
+                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    $user->save();
+                    $gameHistoryItem->delete();
+                    $message = [
+                        "id" => $user->id,
+                        "wallet" => $user->wallet
+                    ];
+    
+                    event(new WalletChanged($message));
+
+                    Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
 

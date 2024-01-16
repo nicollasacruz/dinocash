@@ -33,8 +33,21 @@ class AffiliateWithdrawController extends Controller
             }
         ])->get();
 
+        $affiliatesWithdrawsToday = AffiliateWithdraw::with([
+            'user' => function ($query) use ($email) {
+                $query
+                    ->where('isAffiliate', true)
+                    ->when($email, function ($query2) use ($email) {
+                        $query2->where('email', 'LIKE', '%' . $email . '%');
+                    });
+            }
+        ])
+        ->whereDate('updated_at', Carbon::today())
+        ->sum('amount');
+
         return Inertia::render('Requests', [
             'affiliateWithdraws' => $affiliateWithdraws,
+            'affiliatesWithdrawsToday' => $affiliatesWithdrawsToday
         ]);
     }
 

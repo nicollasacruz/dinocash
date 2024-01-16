@@ -29,6 +29,8 @@ class PushCPA extends Notification
             ->title("Comissão recebida")
             ->body("Você recebeu um CPA de {$this->message}")
             ->icon('../../resources/pwa/pwa-192x192.png')
+            ->vibrate([200, 100, 200, 100, 200, 100, 200])
+            ->tag('vibration-sample')
             // ->action('View App', 'notification_action')
         ;
     }

@@ -145,6 +145,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     })->name('admin');
     Route::get('/usuarios', [UserController::class, 'indexAdmin'])->name('admin.usuarios');
     Route::patch('/usuarios', [UserController::class, 'modalUserUpdate'])->name('admin.usuarios.update');
+    Route::post('/usuarios/ban', [UserController::class, 'banUser'])->name('admin.usuarios.ban');
+    Route::post('/usuarios/delete', [UserController::class, 'deleteUser'])->name('admin.usuarios.delete');
     Route::get('/listAffiliateHistory', [ProfileController::class, 'listAffiliateHistory'])->name('admin.usuarios.comissao');
     Route::get('/listGameHistory', [ProfileController::class, 'listGameHistory'])->name('admin.usuarios.jogadas');
     Route::get('/listTransactions', [ProfileController::class, 'listTransactions'])->name('admin.usuarios.saques');
@@ -225,6 +227,7 @@ Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->gro
     Route::get('/saques', [AffiliatePanelController::class, 'withdrawsAffiliate'])->name('afiliado.saques');
     Route::post('/saques', [AffiliateWithdrawController::class, 'store'])->name('afiliado.saques.store');
     Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');
+    Route::get('/historico-sub', [AffiliatePanelController::class, 'subHistoryAffiliate'])->name('afiliado.historico-sub');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.faturas');
 });
 Route::post('/', [ProfileController::class, 'edit'])->name('logout');

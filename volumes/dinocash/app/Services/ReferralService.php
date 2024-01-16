@@ -44,4 +44,16 @@ class ReferralService
             ->limit(10)
             ->get();
     }
+
+    public function getTopSubReferralsByCPA(User $affiliate)
+    {
+        return AffiliateHistory::join('users as subAffiliate', 'affiliate_histories.affiliateId', '=', 'subAffiliate.id')
+        ->where('affiliate_histories.type', 'CPA')
+        ->where('subAffiliate.affiliateId', $affiliate->id)
+        ->selectRaw('subAffiliate.email, COUNT(affiliate_histories.id) as totalCount')
+        ->groupBy('subAffiliate.email')
+        ->orderByDesc('totalCount')
+        ->get();    
+    }
+    
 }

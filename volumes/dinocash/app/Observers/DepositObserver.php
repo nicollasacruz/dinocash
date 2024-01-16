@@ -5,7 +5,9 @@ namespace App\Observers;
 use App\Models\AffiliateHistory;
 use App\Models\Deposit;
 use App\Notifications\PushCPA;
+use App\Notifications\PushSubCPA;
 use App\Services\AffiliateInvoiceService;
+use Exception;
 use Log;
 use Notification;
 
@@ -15,27 +17,30 @@ class DepositObserver
     {
         if ($deposit->isDirty('type') && $deposit->type === 'paid' && $deposit->getOriginal('type') === 'pending') {
             $this->processPaidDeposit($deposit);
-            Log::info("DepositObserver - Deposito aprovado : ". number_format($deposit->amount, 2, '.', '') . " - " . $deposit->user->email . ".");
+            Log::info("DepositObserver - Deposito aprovado : " . number_format($deposit->amount, 2, '.', '') . " - " . $deposit->user->email . ".");
         }
     }
 
     private function processPaidDeposit(Deposit $deposit)
     {
-        $user = $deposit->user;
+        try {
+            $user = $deposit->user;
 
-        $user->changeWallet($deposit->amount);
-        $user->save();
+            $user->changeWallet($deposit->amount);
+            $user->save();
 
-        // Verifica se o userId tem um affiliateId e o CpaCollected é falso
-        if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
-            $affiliate = $user->affiliate;
+            // Verifica se o userId tem um affiliateId e o CpaCollected é falso
+            if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
+                $affiliate = $user->affiliate;
 
-            // Verifica se o amount é igual ou maior que o CPA do afiliado
-            if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
+                // Verifica se o amount é igual ou maior que o CPA do afiliado
+                if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
 
-                // Verifica se hoje é menor ou igual a data de criação do usuário + 1 dia
                     $this->createAffiliateHistory($deposit, $affiliate);
+                }
             }
+        } catch (Exception $e) {
+            Log::error("Error processPaidDeposit - CPA {$user->affiliate->email}  -   {$e->getMessage()}");
         }
     }
 
@@ -56,5 +61,20 @@ class DepositObserver
         ]);
         Log::info("CPA de {$affiliate->CPA} pago para o {$affiliate->email}");
         Notification::send($affiliate, new PushCPA('R$ ' . number_format(floatval($affiliate->CPA), 2, ',', '.')));
+
+        $rede = $affiliate->affiliate;
+        if ($rede && $rede->cpaSub > 0) {
+            $cpaSub = $rede->cpaSub;
+            $subcpaHistory = AffiliateHistory::create([
+                'amount' => number_format($cpaSub, 2, '.', ''),
+                'affiliateId' => $rede->id,
+                'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($rede))->id,
+                'userId' => $affiliate->id,
+                'type' => 'cpaSub',
+            ]);
+            $subcpaHistory->save();
+            Log::info("Sub CPA de {$cpaSub} pago para o {$rede->email}");
+            Notification::send($rede, new PushSubCPA('R$ ' . number_format(floatval($cpaSub), 2, ',', '.')));
+        }
     }
 }

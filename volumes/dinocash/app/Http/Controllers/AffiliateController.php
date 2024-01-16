@@ -38,11 +38,22 @@ class AffiliateController extends Controller
                 $affiliate->referralsDepositsCounter = $affiliate->referralsDepositsCounter;
             });
 
-            $affiliateWithdraws = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+            // $affiliatesWithdrawsToday = $affiliateWithdrawsList ? $affiliateWithdrawsList->sum('amount') : 0;
+            $affiliatesWithdrawsToday = AffiliateWithdraw::with([
+                'user' => function ($query) use ($email) {
+                    $query
+                        ->where('isAffiliate', true)
+                        ->when($email, function ($query2) use ($email) {
+                            $query2->where('email', 'LIKE', '%' . $email . '%');
+                        });
+                }
+            ])
+            ->whereDate('updated_at', Carbon::today())
+            ->sum('amount');
 
             return Inertia::render('Admin/Affiliate', [
                 'affiliates' => $affiliates,
-                'affiliatesWithdraws' => $affiliateWithdraws,
+                'affiliatesWithdrawsToday' => $affiliatesWithdrawsToday,
                 'affiliatesWithdrawsList' => $affiliateWithdrawsList,
             ]);
         } catch (Exception $e) {

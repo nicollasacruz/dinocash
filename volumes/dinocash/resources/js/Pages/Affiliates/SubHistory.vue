@@ -14,7 +14,10 @@ const columns = [
   { label: "Nº Fatura", key: "affiliateInvoiceId" },
   { label: "Faturado Em", key: "invoicedAt" },
 ];
-const { affiliateHistory } = defineProps(["affiliateHistory"]);
+const { affiliateHistory, topSubAffiliatesCPA } = defineProps([
+  "affiliateHistory",
+  "topSubAffiliatesCPA",
+]);
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
     style: "currency",
@@ -39,13 +42,27 @@ const rows = [];
 </script>
 
 <template>
-  <Head title="Afiliado Comissões" />
+  <Head title="SubAfiliado Comissões" />
 
   <AffiliateLayout>
+    <div class="box p-2 mt-2">
+      <div class="text-green-500 text-center font-bold text-xs uppercase mb-2">
+        Afiliados que mais trouxeram cadastros
+      </div>
+      <div class="grid-cols-2">
+        <div
+          class="text-xs pt-1"
+          v-for="{ email, totalCount } in topSubAffiliatesCPA"
+        >
+          <div class="text-white">
+            {{ email }} - {{ totalCount }} convidados
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="text-4xl text-white font-bold mb-3">
       Histórico de pagamentos
     </div>
-
     <BaseTable
       hide-actions
       :columns="columns"
@@ -78,9 +95,8 @@ const rows = [];
             <div
               class="badge w-24 rounded-sm border-0 text-xs font-bold text-white"
               :class="{
-                'bg-red-600': value === 'loss',
-                'bg-green-600': value === 'win',
-                'bg-green-800': value === 'CPA',
+                'bg-green-600': value === 'revSub',
+                'bg-green-800': value === 'cpaSub',
               }"
             >
               {{ getStatus(value) }}

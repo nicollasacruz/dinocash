@@ -10,21 +10,21 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class closeSubAffiliatesInvoices extends Command
+class CloseSubAffiliatesInvoicesByEmail extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:close-sub-affiliates-invoices';
+    protected $signature = 'app:close-sub-affiliates-invoices-by-email {email : Email do Expert}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'fechar rede de experts';
+    protected $description = 'Fechar fatura de sub afiliados para um expert específico por email';
 
     /**
      * Execute the console command.
@@ -32,36 +32,50 @@ class closeSubAffiliatesInvoices extends Command
     public function handle()
     {
         try {
-            Log::info('Iniciando fechamento de sub afiliados');
+            $email = $this->argument('email');
+            $expert = User::where('email', $email)->first();
 
-            User::where('isAffiliate', true)->where('isExpert', true)
-                ->whereHas('referredUsers', function ($query) {
-                    $query->where('isAffiliate', true);
-                })
-                ->each(function ($expert) {
-                    Log::info("Expert: {$expert->name} - " . 'Fechando o pagamento de ' . $expert->referredUsers->where('isAffiliate', true)->count() . ' afiliados.');
+            if (!$expert) {
+                Log::info("Expert com email {$email} não encontrado.");
+                $this->info("Expert com email {$email} não encontrado.");
+                return;
+            }
 
-                    $this->closePayments($expert);
-                });
+            Log::info("Iniciando fechamento de sub-afiliado para o expert: {$expert->name}");
+
+            $this->closePayments($expert);
         } catch (Exception $ex) {
-            Log::error("ERROOOOOR {$ex->getMessage()} - {$ex->getLine()}");
+            Log::error("ERROOOOOR {$ex->getMessage()} - Linha: {$ex->getLine()}");
         }
     }
 
     public function closePayments(User $expert)
     {
-        Log::info('Fechando o expert ' . $expert->name);
+        try {
+            Log::info('Fechando o expert ' . $expert->name);
+            $this->info('Fechando o expert ' . $expert->name);
 
-        if (!$expert->cpaSub && !$expert->revSub) {
-            Log::info("Expert: {$expert->name} - Fechando sem comissão");
-            return;
+            if (!$expert->cpaSub && !$expert->revSub) {
+                Log::info("Expert: {$expert->name} - Fechando sem comissão");
+                $this->info("Expert: {$expert->name} - Fechando sem comissão");
+                return;
+            }
+
+            $subAffiliates = $expert->referredUsers->filter(function ($sub) {
+                return $sub->isAffiliate;
+            });
+
+            // Log da quantidade de subaffiliates
+            Log::info("Quantidade de Subaffiliates: {$subAffiliates->count()}");
+            $this->info("Quantidade de Subaffiliates: {$subAffiliates->count()}");
+
+            $subAffiliates->each(function ($sub) use ($expert) {
+                $this->closeSubPayments($sub, $expert);
+            });
+        } catch (Exception $ex) {
+            Log::error("ERROOOOOR closePayments {$ex->getMessage()} - Linha: {$ex->getLine()}");
+            $this->error("ERROOOOOR closePayments {$ex->getMessage()} - Linha: {$ex->getLine()}");
         }
-
-        $expert->referredUsers->filter(function ($sub) {
-            return $sub->isAffiliate;
-        })->each(function ($sub) use ($expert) {
-            $this->closeSubPayments($sub, $expert);
-        });
     }
 
     private function closeSubPayments(User $sub, User $expert)
@@ -79,7 +93,7 @@ class closeSubAffiliatesInvoices extends Command
                 $users = $sub->referredUsers->filter(function ($user) {
                     return !$user->isAffiliate;
                 });
-
+                
                 Log::info("Quantidade de Users: {$users->count()}");
                 $this->info("Quantidade de Users: {$users->count()}");
 
