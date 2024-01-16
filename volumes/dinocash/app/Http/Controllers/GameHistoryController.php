@@ -71,13 +71,15 @@ class GameHistoryController extends Controller
 
                     $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     $user->save();
-                    $gameHistoryItem->affiliateHistories->delete();
+                    $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                        $affiliateHistory->delete();
+                    });
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
                         "wallet" => $user->wallet
                     ];
-    
+
                     event(new WalletChanged($message));
 
                     Log::error('Partida já iniciada. - ' . $user->email);
@@ -91,7 +93,9 @@ class GameHistoryController extends Controller
 
                 $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                 $user->save();
-                $gameHistoryItem->affiliateHistories->delete();
+                $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                    $affiliateHistory->delete();
+                });
                 $gameHistoryItem->delete();
                 $message = [
                     "id" => $user->id,
@@ -127,7 +131,9 @@ class GameHistoryController extends Controller
                 foreach ($gameHistories as $gameHistoryItem) {
                     $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     $user->save();
-                    $gameHistoryItem->affiliateHistories->delete();
+                    $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                        $affiliateHistory->delete();
+                    });
                     $gameHistoryItem->delete();
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
@@ -140,13 +146,15 @@ class GameHistoryController extends Controller
 
                     $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     $user->save();
-                    $gameHistoryItem->affiliateHistories->delete();
+                    $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                        $affiliateHistory->delete();
+                    });
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
                         "wallet" => $user->wallet
                     ];
-    
+
                     event(new WalletChanged($message));
 
                     Log::error('Partida já iniciada. - ' . $user->email);
