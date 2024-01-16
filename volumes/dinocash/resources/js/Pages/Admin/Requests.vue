@@ -10,6 +10,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import Paginator from "@/Components/Paginator.vue";
+import debounce from "lodash/debounce";
 
 const columns = [
   { label: "Email", key: "email" },
@@ -18,6 +19,28 @@ const columns = [
   { label: "Data", key: "updated_at" },
   { label: "Status", key: "type" },
 ];
+
+const urlParams = new URLSearchParams(window.location.search);
+const initialEmail = urlParams.get("email") || "";
+const searchQuery = ref(initialEmail);
+
+watch(
+  searchQuery,
+  debounce((value) => {
+    try {
+      router.get(
+        route("admin.afiliados"),
+        { email: value },
+        {
+          preserveState: true,
+        }
+      );
+    } catch (error) {
+      console.error("Erro na pesquisa:", error);
+    }
+  }, 700)
+);
+
 const showModal = ref(false);
 const getStatus = (status) => {
   switch (status) {
