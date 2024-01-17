@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import Paginator from "@/Components/Paginator.vue";
+import debounce from "lodash/debounce";
 
 const columns = [
   { label: "Email", key: "email" },
@@ -18,6 +19,28 @@ const columns = [
   { label: "Data", key: "updated_at" },
   { label: "Status", key: "type" },
 ];
+
+const urlParams = new URLSearchParams(window.location.search);
+const initialEmail = urlParams.get("email") || "";
+const searchQuery = ref(initialEmail);
+
+watch(
+  searchQuery,
+  debounce((value) => {
+    try {
+      router.get(
+        route("admin.saque"),
+        { email: value },
+        {
+          preserveState: true,
+        }
+      );
+    } catch (error) {
+      console.error("Erro na pesquisa:", error);
+    }
+  }, 700)
+);
+
 const showModal = ref(false);
 const getStatus = (status) => {
   switch (status) {
@@ -91,7 +114,8 @@ const rows = withdraws.data.map((withdraw) => {
         <input
           type="text"
           class="admin-input"
-          placeholder="Digite o email do usuário... "
+          placeholder="Digite o email do usuário..."
+          v-model="searchQuery"
         />
       </div>
       <!-- <div class="flex gap-x-5">

@@ -28,7 +28,7 @@ class PushDemoGGR extends Notification
         return (new WebPushMessage)
             ->title("GGR recebido")
             ->body("Você recebeu um GGR de {$this->message}")
-            ->icon('../../resources/pwa/nubank-apple-touch-icon.png')
+            ->icon('../../resources/pwa/apple-touch-icon.png')
             // ->action('View App', 'notification_action')
         ;
     }

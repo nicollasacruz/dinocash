@@ -6,6 +6,7 @@ use Carbon\Traits\Timestamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GameHistory extends Model
 {
@@ -33,14 +34,19 @@ class GameHistory extends Model
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
+    /**
+     * Get the affiliateHistories that GameHistory have.
+     */
+    public function affiliateHistories(): HasMany
+    {
+        return $this->hasMany(AffiliateHistory::class, 'gameId');
+    }
 
-    // Adicionando um escopo local para filtrar os registros do tipo 'win'
     public function scopeWins($query)
     {
         return $query->where('type', 'win');
     }
 
-    // Adicionando um escopo local para filtrar os registros do tipo 'loss'
     public function scopeLosses($query)
     {
         return $query->where('type', 'loss');
