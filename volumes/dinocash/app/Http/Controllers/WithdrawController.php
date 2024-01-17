@@ -32,7 +32,7 @@ class WithdrawController extends Controller
                     });
             }
         ])
-        ->where('type','!=', 'reject')
+        ->whereNot('type', 'rejected')
         ->orderBy('type', 'desc')
         ->paginate(30);
 
