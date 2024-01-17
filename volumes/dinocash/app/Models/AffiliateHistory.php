@@ -38,6 +38,16 @@ class AffiliateHistory extends Model
     }
 
     /**
+     * Define the "gameHistory" relationship.
+     *
+     * @return BelongsTo
+     */
+    public function gameHistory(): BelongsTo
+    {
+        return $this->belongsTo(GameHistory::class, 'gameId');
+    }
+
+    /**
      * Define the "affiliate" relationship.
      *
      * @return BelongsTo
