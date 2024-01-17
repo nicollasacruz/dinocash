@@ -74,51 +74,51 @@ class closeSubAffiliatesInvoices extends Command
             $affiliateInvoiceService = new AffiliateInvoiceService();
             
             if ($sub->revShare === 0 && $revSub > 0) {
-                Log::info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
-                $this->info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
-                $users = $sub->referredUsers->filter(function ($user) {
-                    return !$user->isAffiliate;
-                });
+                // Log::info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
+                // $this->info("Expert: {$expert->name} - Fechando o pagamento das comissões dos afiliados sem rev: {$sub->name}");
+                // $users = $sub->referredUsers->filter(function ($user) {
+                //     return !$user->isAffiliate;
+                // });
 
-                Log::info("Quantidade de Users: {$users->count()}");
-                $this->info("Quantidade de Users: {$users->count()}");
+                // Log::info("Quantidade de Users: {$users->count()}");
+                // $this->info("Quantidade de Users: {$users->count()}");
 
-                $users->each(function ($user) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
-                    $gameHistories = $user->gameHistories->filter(function ($historyUser) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
-                        return ($historyUser->type === 'win' || $historyUser->type === 'loss') && $historyUser->subCollectedAt === null;
-                    });
+                // $users->each(function ($user) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
+                //     $gameHistories = $user->gameHistories->filter(function ($historyUser) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
+                //         return ($historyUser->type === 'win' || $historyUser->type === 'loss') && $historyUser->subCollectedAt === null;
+                //     });
 
-                    Log::info("Quantidade de GameHistories: {$gameHistories->count()}");
-                    $this->info("Quantidade de GameHistories: {$gameHistories->count()}");
+                //     Log::info("Quantidade de GameHistories: {$gameHistories->count()}");
+                //     $this->info("Quantidade de GameHistories: {$gameHistories->count()}");
 
-                    $gameHistories->each(function ($game) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
-                        $game = GameHistory::find($game->id);
-                        $amount = (float) $game->finalAmount * -1;
-                        if ($amount != 0) {
-                            $newAmount = number_format($revSub * $amount / 100, 2, '.', '');
-                            $this->info("Valor da Comissão: {$revSub}% * {$amount} = {$newAmount}");
-                            if ($newAmount != 0) {
-                                $revsub = AffiliateHistory::create([
-                                    'amount' => $newAmount,
-                                    'affiliateId' => $expert->id,
-                                    'gameId' => $game->id,
-                                    'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($expert))->id,
-                                    'userId' => $sub->id,
-                                    'type' => 'revSub',
-                                ]);
-                                $revsub->save();
-                            }
-                        }
+                //     $gameHistories->each(function ($game) use ($revSub, $expert, $affiliateInvoiceService, $sub) {
+                //         $game = GameHistory::find($game->id);
+                //         $amount = (float) $game->finalAmount * -1;
+                //         if ($amount != 0) {
+                //             $newAmount = number_format($revSub * $amount / 100, 2, '.', '');
+                //             $this->info("Valor da Comissão: {$revSub}% * {$amount} = {$newAmount}");
+                //             if ($newAmount != 0) {
+                //                 $revsub = AffiliateHistory::create([
+                //                     'amount' => $newAmount,
+                //                     'affiliateId' => $expert->id,
+                //                     'gameId' => $game->id,
+                //                     'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($expert))->id,
+                //                     'userId' => $sub->id,
+                //                     'type' => 'revSub',
+                //                 ]);
+                //                 $revsub->save();
+                //             }
+                //         }
 
-                        $this->info("Antes de atualizar subCollectedAt: {$game->subCollectedAt}");
+                //         $this->info("Antes de atualizar subCollectedAt: {$game->subCollectedAt}");
 
-                        $game->subCollectedAt = now();
-                        $game->save();
+                //         $game->subCollectedAt = now();
+                //         $game->save();
 
-                        // Log depois de atualizar subCollectedAt
-                        $this->info("Depois de atualizar subCollectedAt: {$game->subCollectedAt}");
-                    });
-                });
+                //         // Log depois de atualizar subCollectedAt
+                //         $this->info("Depois de atualizar subCollectedAt: {$game->subCollectedAt}");
+                //     });
+                // });
             } elseif ($revSub > 0 || $cpaSub > 0) {
                 Log::info('Expert: ' . $expert->name . ' - Fechando o pagamento das comissões dos afiliados com rev: ' . $sub->name);
                 Log::info('Expert: ' . $expert->name . ' - Fechando o pagamento das comissões dos afiliados com rev: ' . $sub->name);
@@ -145,16 +145,16 @@ class closeSubAffiliatesInvoices extends Command
                             $this->info("Depois de atualizar subCollectedAt: {$game->subCollectedAt}");
                         }
                     }
-                    if ($history->type === 'CPA' && $cpaSub > 0) {
-                        $subcpa = AffiliateHistory::create([
-                            'amount' => number_format($cpaSub, 2, '.', ''),
-                            'affiliateId' => $expert->id,
-                            'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($expert))->id,
-                            'userId' => $sub->id,
-                            'type' => 'cpaSub',
-                        ]);
-                        $subcpa->save();
-                    }
+                    // if ($history->type === 'CPA' && $cpaSub > 0) {
+                    //     $subcpa = AffiliateHistory::create([
+                    //         'amount' => number_format($cpaSub, 2, '.', ''),
+                    //         'affiliateId' => $expert->id,
+                    //         'affiliateInvoiceId' => ($affiliateInvoiceService->getInvoice($expert))->id,
+                    //         'userId' => $sub->id,
+                    //         'type' => 'cpaSub',
+                    //     ]);
+                    //     $subcpa->save();
+                    // }
                     $history->subInvoicedAt = now();
                     $history->save();
                 });

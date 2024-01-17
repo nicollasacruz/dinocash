@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\BannedCheck;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -41,6 +42,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\InertiaGlobalPropsMiddleware::class,
+            BannedCheck::class,
         ],
 
         'api' => [

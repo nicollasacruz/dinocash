@@ -28,7 +28,7 @@ class PushDemo extends Notification
         return (new WebPushMessage)
             ->title("Depósito recebido")
             ->body("Você recebeu um deposito de {$this->message}")
-            ->icon('../../resources/pwa/nubank-apple-touch-icon.png')
+            ->icon('../../resources/pwa/apple-touch-icon.png')
             // ->action('View App', 'notification_action')
         ;
     }
