@@ -23,17 +23,15 @@ class WithdrawController extends Controller
     public function indexAdmin(Request $request)
     {
         $email = $request->email;
-        $withdraws = Withdraw::with([
-            'user' => function ($query) use ($email) {
-                $query->where('isAffiliate', false);
-
-                if ($email) {
-                    $query->where('email', 'LIKE', '%' . $email . '%');
+        $withdraws = Withdraw::with('user')
+            ->when($email, function ($query) use ($email) {
+                $query->whereHas('user', function ($userQuery) use ($email) {
+                    $userQuery->where('email', 'LIKE', '%' . $email . '%')->where('isAffiliate', false);
+                });
+            }, function ($query) use ($email) {
+                if (!$email) {
+                    $query->whereNot('type', 'rejected');
                 }
-            }
-        ])
-            ->when(!$email, function ($query) {
-                $query->whereNot('type', 'rejected');
             })
             ->orderBy('type', 'desc')
             ->orderBy('created_at', 'desc')
