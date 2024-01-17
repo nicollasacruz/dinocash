@@ -31,7 +31,7 @@ services:
       - database
 
 networks:
-  rede_dino_junior:
+  rede_dino_coronel:
     external: true
   reverse-proxy:
     external: true
