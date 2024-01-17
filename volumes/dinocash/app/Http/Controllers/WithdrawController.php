@@ -23,19 +23,27 @@ class WithdrawController extends Controller
     public function indexAdmin(Request $request)
     {
         $email = $request->email;
-        $withdraws = Withdraw::with([
-            'user' => function ($query) use ($email) {
-                $query
-                    ->where('isAffiliate', false)
-                    ->when($email, function ($query2) use ($email) {
-                        $query2->where('email', 'LIKE', '%' . $email . '%');
-                    });
-            }
-        ])
-        ->whereNot('type', 'rejected')
-        ->orderBy('type', 'desc')
-        ->orderBy('created_at', 'desc')
-        ->paginate(30);
+        if ($email) {
+            $withdraws = Withdraw::with([
+                'user' => function ($query) use ($email) {
+                    $query->where('email', 'LIKE', '%' . $email . '%');
+                }
+            ])
+            ->orderBy('type', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(30);
+        } else {
+            $withdraws = Withdraw::with([
+                'user' => function ($query) use ($email) {
+                    $query
+                        ->where('isAffiliate', false);
+                }
+            ])
+            ->whereNot('type', 'rejected')
+            ->orderBy('type', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(30);
+        }
 
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
 
