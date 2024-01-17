@@ -32,7 +32,8 @@ class WithdrawController extends Controller
                     });
             }
         ])
-        ->orderBy('created_at', 'desc')
+        ->whereNot('type', 'reject')
+        ->orderBy('type', 'desc')
         ->paginate(30);
 
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
