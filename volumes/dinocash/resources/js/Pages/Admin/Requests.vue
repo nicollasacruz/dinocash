@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
 import { ref, defineProps, watch } from "vue";
