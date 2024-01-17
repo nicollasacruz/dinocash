@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 import axios from "axios";
