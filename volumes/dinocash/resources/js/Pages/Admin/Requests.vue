@@ -29,7 +29,7 @@ watch(
   debounce((value) => {
     try {
       router.get(
-        route("admin.afiliados"),
+        route("admin.saque"),
         { email: value },
         {
           preserveState: true,
@@ -114,7 +114,8 @@ const rows = withdraws.data.map((withdraw) => {
         <input
           type="text"
           class="admin-input"
-          placeholder="Digite o email do usuário... "
+          placeholder="Digite o email do usuário..."
+          v-model="searchQuery"
         />
       </div>
       <!-- <div class="flex gap-x-5">
