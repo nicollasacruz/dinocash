@@ -16,7 +16,7 @@ class BannedCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->bannedAt !== null) {
+        if (auth()->check() && auth()->user()->bannedAt !== null) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
