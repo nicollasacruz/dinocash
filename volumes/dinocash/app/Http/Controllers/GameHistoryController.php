@@ -126,6 +126,12 @@ class GameHistoryController extends Controller
                     'message' => 'Não tem saldo na carteira',
                 ], 500);
             }
+            if ($request->amount < 1) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Aposta não pode ser menor que 0',
+                ], 500);
+            }
             $gameHistories = $user->gameHistories->where('type', 'pending');
             if ($gameHistories) {
                 foreach ($gameHistories as $gameHistoryItem) {
