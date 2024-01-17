@@ -15,6 +15,8 @@ import DinoRoxo from "../../../storage/imgs/home-page/dino-roxo.svg";
 import firstPlace from "../../../storage/imgs/home-page/ranking/1.svg";
 import secondPlace from "../../../storage/imgs/home-page/ranking/2.svg";
 import thirdPlace from "../../../storage/imgs/home-page/ranking/3.svg";
+import BaseModal from "../Components/BaseModal.vue";
+
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
   defineProps({
     canLogin: {
@@ -81,6 +83,16 @@ function getPremio(i) {
       backgroundRepeat: 'no-repeat',
     }"
   >
+    <!-- <base-modal v-if="$page.props.errors.banned" class="box"> -->
+    <div
+      v-if="$page.props.errors.banned"
+      class="absolute box p-6 text-red-500 text-6xl uppercase font-bold flex items-center justify-center"
+      style="background-color: rgba(0, 0, 0, 0.8)"
+    >
+      {{ $page.props.errors.banned }}
+    </div>
+
+    <!-- </base-modal> -->
     <div
       v-if="!!!$page?.props?.auth?.user?.id"
       class="mx-auto h-20 sm:h-24 flex justify-center bg-roxo-escuro w-[280px] md:w-[430px] rounded-2xl"
@@ -277,7 +289,7 @@ function getPremio(i) {
         />
         <div>
           <div class="font-menu text-black text-9xl text-center">FAQ</div>
-          <div class="flex flex-col gap-y-4 mt-5 mx-3 ">
+          <div class="flex flex-col gap-y-4 mt-5 mx-3">
             <Expansion
               title="COMO POSSO JOGAR O DINOBET?"
               content="Você precisa fazer um depósito inicial na plataforma para começar a jogar e faturar com o Dinobet."
@@ -306,7 +318,11 @@ function getPremio(i) {
       <div class="text-white">
         Todos os direitos reservados a dinobet - 2023
       </div>
-      <div class="text-[#D1F3B4]"><a :href="route('terms')">Leia os termos de uso e politica de privacidade</a></div>
+      <div class="text-[#D1F3B4]">
+        <a :href="route('terms')"
+          >Leia os termos de uso e politica de privacidade</a
+        >
+      </div>
       <div class="text-white mt-3">contato@dinobet.vip</div>
     </div>
   </div>

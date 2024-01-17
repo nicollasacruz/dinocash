@@ -350,36 +350,40 @@ function getMovements(user) {
       // console.log("erro interno");
     });
 }
-function deleteUser(user) {
+
+function deleteUser(userId) {
   axios
-    .delete("/admin/afiliados/" + user)
+    .post(route("admin.usuarios.delete"), userId)
     .then((response) => {
-      // showModal.value = false;
+      showModal.value = false;
     })
     .catch((error) => {
-      // console.log("erro interno");
+      console.log(error);
     });
 }
-function banTemporary(id) {
+
+function banTemporary(userId) {
   axios
-    .post("/admin/banTemporary/" + id)
+    .post(route("admin.usuarios.ban"), userId)
     .then((response) => {
-      // showModal.value = false;
+      showModal.value = false;
     })
     .catch((error) => {
-      // console.log("erro interno");
+      console.log(error);
     });
 }
-function banPermanent(id) {
+
+function banPermanent(userId) {
   axios
-    .post("/admin/banPermanent/" + id)
+    .post(route("admin.usuarios.ban"), userId)
     .then((response) => {
-      // showModal.value = false;
+      showModal.value = false;
     })
     .catch((error) => {
-      // console.log("erro interno");
+      console.log(error);
     });
 }
+
 function toBRL(value) {
   return Number(value).toLocaleString("pt-br", {
     style: "currency",

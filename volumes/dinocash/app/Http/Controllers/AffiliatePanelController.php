@@ -191,7 +191,7 @@ class AffiliatePanelController extends Controller
                     ->orWhere('type', 'loss');
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20);
 
         return Inertia::render('Affiliates/History', [
             'affiliateHistory' => $affiliateHistory,
@@ -221,7 +221,7 @@ class AffiliatePanelController extends Controller
                     ->orWhere('type', 'cpaSub');
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20);
         $topAffiliatesCPA = $referralService->getTopSubReferralsByCPA($user);
 
 

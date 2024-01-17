@@ -60,7 +60,7 @@ const drawer = ref(false);
                 <!-- Page content here -->
                 <bars3-icon
                     @click="drawer = !drawer"
-                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-white"
+                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-black"
                 />
                 <img
                     :src="logoDinoRoxo"

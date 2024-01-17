@@ -9,7 +9,7 @@ use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PushRevShare extends Notification
+class PushSubRevShare extends Notification
 {
 
     use Queueable;
@@ -27,7 +27,7 @@ class PushRevShare extends Notification
     {
         return (new WebPushMessage)
             ->title("Comissão recebida")
-            ->body("Você recebeu um RevShare de {$this->message}")
+            ->body("Você recebeu um Sub RevShare de {$this->message}")
             ->icon('../../resources/pwa/pwa-192x192.png')
             ->vibrate([200, 100, 200, 100, 200, 100, 200])
             ->tag('vibration-sample')

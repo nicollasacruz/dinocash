@@ -69,6 +69,7 @@ class User extends Authenticatable
         'revSubFake',
         'cpaSub',
         'revShare',
+        'bannedAt',
     ];
     
 

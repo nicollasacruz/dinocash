@@ -5,6 +5,7 @@ import BaseTable from "@/Components/BaseTable.vue";
 import { defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
+import Paginator from "@/Components/Paginator.vue";
 
 const columns = [
   { label: "Data", key: "updated_at" },
@@ -65,7 +66,7 @@ const rows = [];
     <BaseTable
       hide-actions
       :columns="columns"
-      :rows="affiliateHistory"
+      :rows="affiliateHistory.data"
       class="table-xs mt-6 h-3/4"
     >
       <template #updated_at="{ value }">
@@ -104,5 +105,6 @@ const rows = [];
         </td>
       </template>
     </BaseTable>
+    <Paginator :data="affiliateHistory" class="mt-4" />
   </AffiliateLayout>
 </template>
