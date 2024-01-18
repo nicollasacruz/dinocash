@@ -17,17 +17,21 @@ import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
 import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
 import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
+import coroa from "../../../../storage/imgs/user/coroa.png";
+
 import logo from "../../../../storage/imgs/home-page/dino-logo.svg";
+
 export default class DinoGame extends GameRunner {
     constructor(width, height, viciosity, isAffiliate, userId) {
         super();
+        this.preloadImages();
         this.steps = 0;
         this.amount = 0;
         this.userId = userId;
         this.isAffiliate = isAffiliate;
         this.width = null;
         this.height = null;
-        this.canvas = this.createCanvas(width, height);
+        this.canvas = this.mountCanvas(width, height);
         this.canvasCtx = this.canvas.getContext("2d");
         this.spriteImage = null;
         this.spriteImageData = null;
@@ -39,15 +43,15 @@ export default class DinoGame extends GameRunner {
             cactiSpawnRate: this.isAffiliate
                 ? 45
                 : this.viciosity
-                    ? randInteger(15, 25)
-                    : randInteger(25, 40), // fpa
+                ? randInteger(15, 25)
+                : randInteger(25, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: this.isAffiliate
                 ? 0.7
                 : this.viciosity
-                    ? 0.78
-                    : randInteger(70, 80) / 100, // ppf
+                ? 0.78
+                : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
             dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
@@ -55,8 +59,8 @@ export default class DinoGame extends GameRunner {
             scoreIncreaseRate: this.isAffiliate
                 ? 7
                 : this.viciosity
-                    ? 10
-                    : randInteger(7, 9), // fpa
+                ? 10
+                : randInteger(7, 9), // fpa
         };
         this.state = {
             settings: { ...this.defaultSettings },
@@ -76,18 +80,23 @@ export default class DinoGame extends GameRunner {
                 value: 0,
             },
             gorro: null,
+            coroa: null,
         };
     }
 
-    // ref for canvas pixel density:
-    // https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio#correcting_resolution_in_a_%3Ccanvas%3E
-    createCanvas(width, height) {
+    async preloadImages() {
+        const [_, spriteImage] = await Promise.all([
+            this.preloadGorro(),
+            loadImage("/sprite.png"),
+            loadFont("/PressStart2P-Regular.ttf", "PressStart2P"),
+        ]);
+        this.spriteImage = spriteImage;
+        this.spriteImageData = getImageData(spriteImage);
+    }
+    createCanvas() {
+        const { width, height } = this;
         const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
         const scale = window.devicePixelRatio;
-
-        this.width = width;
-        this.height = height;
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
         canvas.width = Math.floor(width * scale);
@@ -100,11 +109,10 @@ export default class DinoGame extends GameRunner {
         canvas.style.setProperty("-moz-user-select", "none");
         canvas.style.setProperty("-ms-user-select", "none");
         canvas.style.setProperty("user-select", "none");
-        // shadow bottom with margin left
         canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
-        ctx.scale(scale, scale);
-        const app = document.getElementById("app");
-        // create div to center canvas
+        return canvas;
+    }
+    createCanvasContainer() {
         const canvasContainer = document.createElement("div");
         canvasContainer.id = "canvasContainer";
         canvasContainer.style.display = "flex";
@@ -121,18 +129,19 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.setProperty("-moz-user-select", "none");
         canvasContainer.style.setProperty("-ms-user-select", "none");
         canvasContainer.style.setProperty("user-select", "none");
-
-        var windowWidth = window.innerWidth;
-
-        window.addEventListener("resize", (valu) => {
-            windowWidth = window.innerWidth;
-        });
-
-        app.style.backgroundImage = `url('${windowWidth < 700 ? bgNatalMobile : bgNatal
-            }')`;
-        app.style.backgroundSize = windowWidth < 700 ? 'auto 100vh' : 'auto auto';
-        app.style.backgroundPosition = 'center';
-        app.style.backgroundRepeat = 'no-repeat';
+        return canvasContainer;
+    }
+    createApp() {
+        const scale = window.devicePixelRatio;
+        const windowWidth = window.innerWidth;
+        const app = document.getElementById("app");
+        app.style.backgroundImage = `url('${
+            windowWidth < 700 ? bgNatalMobile : bgNatal
+        }')`;
+        app.style.backgroundSize =
+            windowWidth < 700 ? "auto 100vh" : "auto auto";
+        app.style.backgroundPosition = "center";
+        app.style.backgroundRepeat = "no-repeat";
         app.style.backgroundPosition = "center";
         app.style.setProperty("-webkit-touch-callout", "none");
         app.style.setProperty("-webkit-user-select", "none");
@@ -140,11 +149,16 @@ export default class DinoGame extends GameRunner {
         app.style.setProperty("-moz-user-select", "none");
         app.style.setProperty("-ms-user-select", "none");
         app.style.setProperty("user-select", "none");
+        return app;
+    }
+    createLogo() {
         const image = new Image();
         image.classList.add("w-24", "lg:w-64");
         image.src = logo;
+        return image;
+    }
+    createText() {
         const div = document.createElement("div");
-
         div.classList.add(
             "font-menu",
             "text-[#3B2B45]",
@@ -153,29 +167,39 @@ export default class DinoGame extends GameRunner {
             "text-center",
             "mt-1"
         );
+        return div;
+    }
+    mountCanvas(width, height) {
+        this.width = width;
+        this.height = height;
+        const scale = window.devicePixelRatio;
+        const canvas = this.createCanvas();
+        const ctx = canvas.getContext("2d");
+        ctx.scale(scale, scale);
+        const canvasContainer = this.createCanvasContainer();
+        const image = this.createLogo();
+        const app = this.createApp();
+        const div = this.createText();
         canvasContainer.appendChild(image);
         canvasContainer.appendChild(canvas);
         canvasContainer.appendChild(div);
         app.prepend(canvasContainer);
         return canvas;
     }
-    async preloadImages() {
-        const gorroImage = new Image();
-        gorroImage.src = gorro;
-
+    async preloadGorro(content) {
+        const gorroImg = new Image();
+        const coroaImg = new Image();
+        coroaImg.src = coroa;
+        gorroImg.src = gorro;
+        coroaImg.style.fill = "#FFFFFF";
         await new Promise((resolve) => {
-            gorroImage.onload = resolve;
+            coroaImg.onload = resolve;
+            gorroImg.onload = resolve;
         });
-
-        this.state.gorro = gorroImage;
+        this.state.gorro = gorroImg;
+        this.state.coroa = coroaImg;
     }
-
-    setupUI() {
-        const container = document.getElementById("buttonContainer");
-        if (container) {
-            return;
-            document.removeChild(container);
-        }
+    createButtonContainer() {
         const buttonContainer = document.createElement("div");
         buttonContainer.id = "buttonContainer";
         buttonContainer.style.position = "absolute";
@@ -189,7 +213,9 @@ export default class DinoGame extends GameRunner {
         buttonContainer.style.width = "100%";
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "center";
-
+        return buttonContainer;
+    }
+    createFinishButton() {
         const finishButton = document.createElement("button");
         finishButton.style.padding = "8px";
         finishButton.style.fontSize = "25px";
@@ -208,14 +234,11 @@ export default class DinoGame extends GameRunner {
         finishButton.style.setProperty("-moz-user-select", "none");
         finishButton.style.setProperty("-ms-user-select", "none");
         finishButton.style.setProperty("user-select", "none");
-        // Adicione a sombra à caixa
         finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.webkitBoxShadow =
             "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
         finishButton.style.mozBoxShadow =
             "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
-
-        // Adicione margens à caixa para se parecer com o botão fornecido
         finishButton.style.margin = "auto";
         finishButton.style.marginBottom = "4px"; // Ajuste conforme necessário
         finishButton.addEventListener("click", () => {
@@ -225,74 +248,60 @@ export default class DinoGame extends GameRunner {
             document.dispatchEvent(eventoModificacao);
             this.endGame();
         });
-        const canvasContainer = document.getElementById("canvasContainer");
-        if (canvasContainer) {
-            buttonContainer.appendChild(finishButton);
-            canvasContainer.appendChild(buttonContainer);
-        }
+        return finishButton;
     }
-
-    async preload() {
-        this.preloadImages();
+    setupUI() {
+        const hasContainer = document.getElementById("buttonContainer");
+        if (hasContainer) {
+            return;
+        }
+        const buttonContainer = this.createButtonContainer();
+        const finishButton = this.createFinishButton();
+        const canvasContainer = document.getElementById("canvasContainer");
+        buttonContainer.appendChild(finishButton);
+        canvasContainer.appendChild(buttonContainer);
+    }
+    createDino() {
         const { settings } = this.state;
-        const [spriteImage] = await Promise.all([
-            loadImage("/sprite.png"),
-            loadFont("/PressStart2P-Regular.ttf", "PressStart2P"),
-        ]);
-        this.spriteImage = spriteImage;
-        this.spriteImageData = getImageData(spriteImage);
         const dino = new Dino(this.spriteImageData);
-
         dino.legsRate = settings.dinoLegsRate;
         dino.lift = settings.dinoLift;
         dino.gravity = settings.dinoGravity;
         dino.x = 25;
         dino.baseY = this.height - settings.dinoGroundOffset;
+        return dino;
+    }
+    async preload() {
+        const dino = this.createDino();
         this.state.dino = dino;
         this.state.groundY = this.height - sprites.ground.h / 2;
     }
 
     onFrame() {
         const { state } = this;
-
-        setTimeout(() => {
-            this.drawBackground();
-        });
-        // this.drawFPS()
-        this.drawGround();
-        this.drawClouds();
-        this.drawDino();
-        this.drawScore();
-        this.drawSantaHat();
+        this.drawBackground();
         if (state.isRunning) {
+            this.drawClouds();
+            this.drawGround();
+            this.drawDino();
+            this.drawScore();
+            this.drawHat();
             this.setupUI();
-
             this.drawCacti();
-
-            // if (state.level > randInteger(2, 5)) {
-            //     this.drawBirds();
-            // }
-
-            if (state.dino.hits([state.cacti[0], state.birds[0]])) {
+            const hasDinoColided = state.dino.hits([
+                state.cacti[0],
+                state.birds[0],
+            ]);
+            if (hasDinoColided) {
                 playSound("game-over");
                 state.gameOver = true;
             }
-
             if (state.gameOver) {
                 this.endGame();
-                const eventoModificacao = new CustomEvent("endGame", {
-                    detail: this.state.score.value,
-                });
-                document.dispatchEvent(eventoModificacao);
-            } else {
-                this.updateScore();
-            }
+            } else this.updateScore();
 
-            if (state.finishGame) {
-                this.endGame();
-            } else {
-                this.updateScore();
-            }
+            if (state.finishGame) this.endGame();
+            else this.updateScore();
         }
     }
 
@@ -326,13 +335,6 @@ export default class DinoGame extends GameRunner {
                 }
                 break;
             }
-
-            // case "finish": {
-            //     if (state.isRunning) {
-            //         state.finishGame = true;
-            //     }
-            //     break;
-            // }
         }
     }
 
@@ -362,39 +364,18 @@ export default class DinoGame extends GameRunner {
         });
         this.preload();
         this.start();
-        // this.setupUI();
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "flex";
     }
 
     endGame() {
-        const iconSprite = sprites.replayIcon;
-        const padding = 15;
-
-        this.paintText(
-            "G A M E  O V E R",
-            this.width / 2,
-            this.height / 2 - padding,
-            {
-                font: "PressStart2P",
-                size: "12px",
-                align: "center",
-                baseline: "bottom",
-                color: "#535353",
-            }
-        );
-
-        this.paintSprite(
-            "replayIcon",
-            this.width / 2 - iconSprite.w / 4,
-            this.height / 2 - iconSprite.h / 4 + padding
-        );
-
         this.state.isRunning = false;
-        this.drawScore();
-        this.stop();
+        const eventoModificacao = new CustomEvent("endGame", {
+            detail: this.state.score.value,
+        });
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "none";
+        document.dispatchEvent(eventoModificacao);
     }
 
     increaseDifficulty() {
@@ -404,13 +385,29 @@ export default class DinoGame extends GameRunner {
 
         // console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
         if (level >= 2 && level <= 4) {
-            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.01 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * 1.1;
+            settings.bgSpeed = this.isAffiliate
+                ? settings.bgSpeed * 1.01
+                : this.viciosity
+                ? settings.bgSpeed + 1
+                : settings.bgSpeed * 1.1;
             // settings.birdSpeed = settings.bgSpeed * 0.8;
-            settings.cactiSpawnRate = this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.9) : settings.cactiSpawnRate;
+            settings.cactiSpawnRate = this.viciosity
+                ? Math.floor(settings.cactiSpawnRate * 0.9)
+                : settings.cactiSpawnRate;
         } else if (level >= 5) {
-            settings.bgSpeed = this.isAffiliate ? settings.bgSpeed * 1.03 : this.viciosity ? settings.bgSpeed + 1 : settings.bgSpeed * (randInteger(11, 15) / 10);
+            settings.bgSpeed = this.isAffiliate
+                ? settings.bgSpeed * 1.03
+                : this.viciosity
+                ? settings.bgSpeed + 1
+                : settings.bgSpeed * (randInteger(11, 15) / 10);
             // settings.birdSpeed = settings.bgSpeed * 0.9;
-            settings.cactiSpawnRate = this.isAffiliate ? Math.floor(settings.cactiSpawnRate * 1) : this.viciosity ? Math.floor(settings.cactiSpawnRate * 0.8) : Math.floor(settings.cactiSpawnRate * (randInteger(9, 10) / 10));
+            settings.cactiSpawnRate = this.isAffiliate
+                ? Math.floor(settings.cactiSpawnRate * 1)
+                : this.viciosity
+                ? Math.floor(settings.cactiSpawnRate * 0.8)
+                : Math.floor(
+                      settings.cactiSpawnRate * (randInteger(9, 10) / 10)
+                  );
             if (
                 level >= 8 &&
                 level % 2 === 0 &&
@@ -468,7 +465,10 @@ export default class DinoGame extends GameRunner {
     }
     animate({ content }) {
         const { steps, width, height, canvasCtx } = content;
-        const { dino, cacti } = content.state;
+        const { dino, cacti, score } = content.state;
+        const isFirst = score.value >= 500 && score.value < 1000;
+        const startColor = isFirst ? "#f7f7f7" : "#ebd234";
+        const endColor = isFirst ? "#FFA500" : " #FF6F6F";
         const updateInstances = () => {
             content.paintSprite(dino.sprite, dino.x, dino.y);
             content.drawGround();
@@ -476,43 +476,27 @@ export default class DinoGame extends GameRunner {
             content.drawScore();
             this.paintInstances(cacti);
         };
-        // calculate the current opacity as a percentage
-        //     of opacityStep/opacitySteps
-
         updateInstances();
         const opacitySteps = 90;
-        var opacity = 100 * (steps / 90);
-        if (steps >= opacitySteps - 1) {
+        const loopSteps = isFirst ? steps : steps - 90;
+        var opacity = 100 * (loopSteps / 90);
+        if (loopSteps >= opacitySteps - 1) {
             opacity = 100;
         }
-        // clear the canvas
         canvasCtx.clearRect(0, 0, width, height);
-
-        // draw with the starting color using a lessening opacity
         canvasCtx.globalAlpha = (100 - opacity) / 100;
-        canvasCtx.fillStyle = "#f7f7f7";
+        canvasCtx.fillStyle = startColor;
         canvasCtx.fillRect(0, 0, width, height);
-        // canvasCtx.strokeRect(0, 0, width, height);
-
-        // draw with the ending color using a increasing opacity
         canvasCtx.globalAlpha = opacity / 100;
-        canvasCtx.fillStyle = "#FFA500";
+        canvasCtx.fillStyle = endColor;
         canvasCtx.fillRect(0, 0, width, height);
-        // canvasCtx.strokeRect(0, 0, width, height);
-        // content.drawDino();
-
-        // clean up, reset globalAlpha to it's default of 1.00
         canvasCtx.globalAlpha = 1.0;
-
-        // return if all steps have been played
-
         updateInstances();
-        if (steps + 1 >= opacitySteps) {
-            content.steps = 90;
+        if (loopSteps + 1 >= opacitySteps) {
+            content.steps = isFirst ? 90 : 180;
             return;
         }
         content.steps++;
-        // otherwise request another frame
         requestAnimationFrame(() =>
             this.animate({
                 content,
@@ -528,8 +512,15 @@ export default class DinoGame extends GameRunner {
             this.animate({
                 content: this,
             });
-        } else if (steps >= 90) {
+        } else if (state.score.value === 1000) {
+            this.animate({
+                content: this,
+            });
+        } else if (steps === 90) {
             this.canvasCtx.fillStyle = "#ebd234";
+            this.canvasCtx.fillRect(0, 0, this.width, this.height);
+        } else if (steps === 180) {
+            this.canvasCtx.fillStyle = "#f25c5c";
             this.canvasCtx.fillRect(0, 0, this.width, this.height);
         }
     }
@@ -561,18 +552,29 @@ export default class DinoGame extends GameRunner {
 
         content.progressInstances(clouds);
         if (content.frameCount % settings.cloudSpawnRate === 0) {
-            const newCloud = new Cloud();
-            newCloud.speed = settings.bgSpeed;
-            newCloud.x = content.width;
-            newCloud.y = randInteger(20, 80);
-            clouds.push(newCloud);
+            // randomly either do or don't add cloud
+            if (randBoolean()) {
+                const newCloud = new Cloud();
+                newCloud.speed = settings.bgSpeed;
+                newCloud.x = content.width;
+                newCloud.y = randInteger(20, 80);
+                newCloud.fillStyle = "#535353"
+                clouds.push(newCloud);
+            }
         }
+
+        // Defina a cor preta antes de desenhar as nuvens
+        content.canvasCtx.fillStyle = "#000000";
+
+        // Desenhe as instâncias das nuvens
         content.paintInstances(clouds);
+
+        // Restaure a cor original (se necessário)
+        // content.canvasCtx.fillStyle = "#f7f7f7";  // ou qualquer outra cor de fundo
     }
 
     drawDino(content = this) {
         const { dino } = content.state;
-
         dino.nextFrame();
         content.paintSprite(dino.sprite, dino.x, dino.y);
     }
@@ -619,13 +621,16 @@ export default class DinoGame extends GameRunner {
         }
         content.paintInstances(birds);
     }
-    drawSantaHat(content = this) {
-        const santaHatImage = content.state.gorro;
+    drawHat(content = this) {
+        const isWinner = this.state.score.value > 500;
+        const hatX = isWinner ? 13 : 10;
+        const hatY = isWinner ? 24 : 18;
         const { dino } = content.state;
+        const hatImage = isWinner ? content.state.coroa : content.state.gorro;
         content.canvasCtx.drawImage(
-            santaHatImage,
-            dino.x + 10,
-            dino.y - 18,
+            hatImage,
+            dino.x + hatX,
+            dino.y - hatY,
             30,
             30
         );
@@ -658,9 +663,8 @@ export default class DinoGame extends GameRunner {
         }
 
         if (shouldDraw) {
-            // draw the background behind it in case this is called
-            // at a time where the background isn't re-drawn (i.e. in `endGame`)
-            if (this.state.score.value >= 500) canvasCtx.fillStyle = "#ebd234";
+            if (this.steps === 90) canvasCtx.fillStyle = "#ebd234";
+            if (this.steps >= 180) canvasCtx.fillStyle = "#f25c5c";
             else canvasCtx.fillStyle = "#f7f7f7";
             canvasCtx.fillRect(
                 this.width - fontSize * 5,
@@ -679,18 +683,12 @@ export default class DinoGame extends GameRunner {
         }
     }
 
-    /**
-     * For each instance in the provided array, calculate the next
-     * frame and remove any that are no longer visible
-     * @param {Actor[]} instances
-     */
     progressInstances(instances) {
         for (let i = instances.length - 1; i >= 0; i--) {
             const instance = instances[i];
 
             instance.nextFrame();
             if (instance.rightX <= 0) {
-                // remove if off screen
                 instances.splice(i, 1);
             }
         }
@@ -699,12 +697,9 @@ export default class DinoGame extends GameRunner {
         try {
             const response = await axios.get("/user/lastGame");
             this.amount = response.data.amount * 1;
-        } catch (err) {
-        }
+        } catch (err) {}
     }
-    /**
-     * @param {Actor[]} instances
-     */
+
     paintInstances(instances) {
         for (const instance of instances) {
             this.paintSprite(instance.sprite, instance.x, instance.y);
