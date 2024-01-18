@@ -201,17 +201,17 @@
       <table v-else class="table table-xs">
         <thead>
           <tr>
+            <th>Data do Deposito</th>
             <th>Status</th>
             <th>Valor</th>
-            <th>Data Aprovação</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in data" :key="item.id">
+              {{ dayjs(item.updated_at).format("DD/MM/YYYY HH:mm") }}
             <td>{{ item.type }}</td>
             <td>{{ toBRL(item.amount) }}</td>
             <td>
-              {{ dayjs(item.updated_at).format("DD/MM/YYYY HH:mm") }}
             </td>
           </tr>
         </tbody>
