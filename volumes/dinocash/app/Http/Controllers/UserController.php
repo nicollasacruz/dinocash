@@ -11,13 +11,17 @@ class UserController extends Controller
     public function indexAdmin(Request $request)
     {
         $users = User::when($request->email, function ($query, $email) {
-            $query->where('email', 'LIKE', '%' . $email . '%');
-        })
-            ->where('isAffiliate', false)->paginate(20);
+                $query->where('email', 'LIKE', '%' . $email . '%');
+            })
+            ->where('isAffiliate', false)
+            ->orderByRaw('CAST(wallet AS DECIMAL(10,2)) DESC')
+            ->paginate(20);
+    
         return Inertia::render('Admin/Users', [
             'users' => $users,
         ]);
     }
+    
 
     /**
      * Update the user's profile information.
