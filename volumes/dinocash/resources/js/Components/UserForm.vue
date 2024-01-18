@@ -169,6 +169,7 @@
       <table v-if="type === 'history'" class="table table-xs">
         <thead>
           <tr>
+            <th>Data</th>
             <th>Tipo</th>
             <th>Valor</th>
             <th>Distancia</th>
@@ -176,6 +177,7 @@
         </thead>
         <tbody>
           <tr v-for="item in data" :key="item.id">
+            <td>{{ dayjs(item.created_at).format("DD/MM/YYYY HH:mm") }}</td>
             <td>{{ item.type }}</td>
             <td>{{ toBRL(item.amount) }}</td>
             <td>{{ item.distance }}</td>
@@ -208,11 +210,12 @@
         </thead>
         <tbody>
           <tr v-for="item in data" :key="item.id">
-              {{ dayjs(item.updated_at).format("DD/MM/YYYY HH:mm") }}
+            {{
+              dayjs(item.updated_at).format("DD/MM/YYYY HH:mm")
+            }}
             <td>{{ item.type }}</td>
             <td>{{ toBRL(item.amount) }}</td>
-            <td>
-            </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -290,7 +293,7 @@ const referralsCounter = defineInputBinds("referralsCounter");
 const referralsDepositsCounter = defineInputBinds("referralsDepositsCounter");
 const walletAffiliate = defineInputBinds("walletAffiliate");
 const invitation_link = defineInputBinds("invitation_link");
-console.log(user, 'usuario');
+console.log(user, "usuario");
 const submit = handleSubmit((values) => {
   const payload = {
     CPA: values.CPA,
