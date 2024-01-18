@@ -350,40 +350,52 @@ function getMovements(user) {
       type.value = "movements";
     })
     .catch((error) => {
-      // console.log("erro interno");
+      console.log("erro interno", error);
     });
 }
 
 function deleteUser(userId) {
   axios
-    .post(route("admin.usuarios.delete"), userId)
+    .post(route("admin.usuarios.delete"), {
+      params: {
+        userId,
+      },
+    })
     .then((response) => {
       showModal.value = false;
     })
     .catch((error) => {
-      console.log(error);
+      console.log("erro interno", error);
     });
 }
 
 function banTemporary(userId) {
   axios
-    .post(route("admin.usuarios.ban"), userId)
+    .post(route("admin.usuarios.ban"), {
+      params: {
+        userId,
+      },
+    })
     .then((response) => {
       showModal.value = false;
     })
     .catch((error) => {
-      console.log(error);
+      console.log("erro interno", error);
     });
 }
 
 function banPermanent(userId) {
   axios
-    .post(route("admin.usuarios.ban"), userId)
+    .post(route("admin.usuarios.ban"), {
+      params: {
+        userId,
+      },
+    })
     .then((response) => {
       showModal.value = false;
     })
     .catch((error) => {
-      console.log(error);
+      console.log("erro interno", error);
     });
 }
 
