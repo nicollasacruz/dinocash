@@ -231,6 +231,9 @@ import { useForm } from "vee-validate";
 import { defineProps, defineEmits, ref } from "vue";
 import axios from "axios";
 import dayjs from "dayjs";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 const { user, typeForm } = defineProps(["user", "typeForm"]);
 const showData = ref(false);
 const data = ref(null);
@@ -293,6 +296,7 @@ const referralsCounter = defineInputBinds("referralsCounter");
 const referralsDepositsCounter = defineInputBinds("referralsDepositsCounter");
 const walletAffiliate = defineInputBinds("walletAffiliate");
 const invitation_link = defineInputBinds("invitation_link");
+
 console.log(user, "usuario");
 const submit = handleSubmit((values) => {
   const payload = {
@@ -363,6 +367,7 @@ function deleteUser(userId) {
     })
     .then((response) => {
       showModal.value = false;
+      toast.success(response.data.message);
     })
     .catch((error) => {
       console.log("erro interno", error);
@@ -378,6 +383,7 @@ function banTemporary(userId) {
     })
     .then((response) => {
       showModal.value = false;
+      toast.success(response.data.message);
     })
     .catch((error) => {
       console.log("erro interno", error);
@@ -393,6 +399,7 @@ function banPermanent(userId) {
     })
     .then((response) => {
       showModal.value = false;
+      toast.success(response.data.message);
     })
     .catch((error) => {
       console.log("erro interno", error);
@@ -406,4 +413,3 @@ function toBRL(value) {
   });
 }
 </script>
-```
