@@ -366,7 +366,6 @@ function deleteUser(userId) {
       },
     })
     .then((response) => {
-      showModal.value = false;
       toast.success(response.data.message);
     })
     .catch((error) => {
@@ -382,7 +381,6 @@ function banTemporary(userId) {
       },
     })
     .then((response) => {
-      showModal.value = false;
       toast.success(response.data.message);
     })
     .catch((error) => {
@@ -398,7 +396,6 @@ function banPermanent(userId) {
       },
     })
     .then((response) => {
-      showModal.value = false;
       toast.success(response.data.message);
     })
     .catch((error) => {
