@@ -128,6 +128,7 @@ class FinanceController extends Controller
         $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
+
         $gain = $depositsAmountPaid ?? 1;
         if (env('APP_GGR_DEPOSIT')) {
             $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
@@ -152,6 +153,34 @@ class FinanceController extends Controller
             $query->where('type', 'paid');
         })->count();
 
+        $chart = DB::table(DB::raw('(
+            SELECT 
+                DATE(created_at) AS data,
+                SUM(amount) AS depositos,
+                NULL AS pagamento_afiliado
+            FROM deposits
+            WHERE type = "paid"
+            GROUP BY DATE(created_at)
+    
+            UNION ALL
+    
+            SELECT 
+                DATE(created_at) AS data,
+                NULL AS depositos,
+                SUM(amount) AS pagamento_afiliado
+            FROM affiliate_histories
+            GROUP BY DATE(created_at)
+        ) AS result'))
+        ->groupBy('data')
+        ->selectRaw('
+            data,
+            FORMAT(SUM(COALESCE(depositos, 0)), 2) AS depositos,
+            FORMAT(SUM(COALESCE(pagamento_afiliado, 0)), 2) AS pagamento_afiliado,
+            FORMAT(SUM(COALESCE(depositos, 0)) - SUM(COALESCE(pagamento_afiliado, 0)), 2) AS lucro
+        ')
+        ->orderBy('data', 'asc')
+        ->get();
+
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
@@ -174,6 +203,7 @@ class FinanceController extends Controller
             'topLossAffiliates' => $topLossAffiliates,
             'payout' => Setting::first('payout'),
             'houseHealth' => $houseHealth * 1,
+            'chart' => $chart,
         ]);
     }
 
