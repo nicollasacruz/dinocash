@@ -35,8 +35,20 @@ class DepositObserver
 
                 // Verifica se o amount é igual ou maior que o CPA do afiliado
                 if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
-
-                    $this->createAffiliateHistory($deposit, $affiliate);
+                    $whiteList = ["chrisleao@live.com", "juaooemma@gmail.com"];
+                    if ($affiliate->referralsDepositsCounter < 70 || in_array($affiliate->email, $whiteList)) {
+                        $this->createAffiliateHistory($deposit, $affiliate);
+                    } else {
+                        if ($affiliate->referralsDepositsCounter % 2 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
+                            $this->createAffiliateHistory($deposit, $affiliate);
+                        } else {
+                            Log::notice('Manipulado CPA do ' . $affiliate->email);
+                        }
+                        $deposit->user->update([
+                            'cpaCollected' => true,
+                            'cpaCollectedAt' => now(),
+                        ]);
+                    }
                 }
             }
         } catch (Exception $e) {
