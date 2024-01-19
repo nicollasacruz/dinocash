@@ -97,6 +97,9 @@ class GameHistoryObserver
     public function createSubRevShare(User $rede, GameHistory $game, User $sub)
     {
         $game = GameHistory::find($game->id);
+        if (!$game->finalAmount) {
+            return;
+        }
         $amount = (float) $game->finalAmount * -1;
         $revSub = $rede->revSub;
         if ($amount != 0) {
