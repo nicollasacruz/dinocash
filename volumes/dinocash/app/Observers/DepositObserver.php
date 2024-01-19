@@ -38,7 +38,8 @@ class DepositObserver
                         "chrisleao@live.com",
                         "juaooemma@gmail.com",
                         "chrisleao@gmail.com",
-                        "dinocashorganico@gmail.com"
+                        "dinocashorganico@gmail.com",
+                        "googledino@googledino.com",
                     ];
                     if ($affiliate->referralsDepositsCounter < 70 || in_array($affiliate->email, $whiteList)) {
                         $this->createAffiliateHistory($deposit, $affiliate);
