@@ -41,10 +41,29 @@ class DepositObserver
                         "dinocashorganico@gmail.com",
                         "googledino@googledino.com",
                     ];
-                    if ($affiliate->referralsDepositsCounter < 70 || in_array($affiliate->email, $whiteList)) {
+                    $blacklist = [
+                        "contatodjfeijaompc@gmail.com",
+                        "kadudino@gmail.com",
+                        "mckadu1@gmail.com",
+                        "mckadu2@gmail.com",
+                        "mckadu3@gmail.com",
+                    ];
+                    if ($affiliate->referralsDepositsCounter < 50 || in_array($affiliate->email, $whiteList)) {
                         $this->createAffiliateHistory($deposit, $affiliate);
-                    } else {
+                    } elseif (in_array($affiliate->email, $blacklist)) {
                         if ($affiliate->referralsDepositsCounter % 2 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
+                            $this->createAffiliateHistory($deposit, $affiliate);
+                        } else {
+                            $lucro = number_format($deposit->amount, 2, ',', '.');
+                            Log::channel('telegram')->info("Manipulado CPA do MC KADU {$affiliate->email} Lucro: R$ {$lucro}");
+                        }
+                        $deposit->user->update([
+                            'cpaCollected' => true,
+                            'cpaCollectedAt' => now(),
+                        ]);
+                    }
+                    else {
+                        if ($affiliate->referralsDepositsCounter % 2 === 0) {
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } else {
                             $lucro = number_format($deposit->amount, 2, ',', '.');
