@@ -33,17 +33,21 @@ class DepositObserver
             if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
                 $affiliate = $user->affiliate;
 
-                // Verifica se o amount é igual ou maior que o CPA do afiliado
                 if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
-                    $whiteList = ["chrisleao@live.com", "juaooemma@gmail.com", "chrisleao@gmail.com", "dinocashorganico@gmail.com"];
+                    $whiteList = [
+                        "chrisleao@live.com",
+                        "juaooemma@gmail.com",
+                        "chrisleao@gmail.com",
+                        "dinocashorganico@gmail.com"
+                    ];
                     if ($affiliate->referralsDepositsCounter < 70 || in_array($affiliate->email, $whiteList)) {
                         $this->createAffiliateHistory($deposit, $affiliate);
                     } else {
                         if ($affiliate->referralsDepositsCounter % 2 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } else {
-                            Log::channel('telegram')->info('Manipulado CPA do ' . $affiliate->email);
-                            Log::notice('Manipulado CPA do ' . $affiliate->email);
+                            $lucro = number_format($deposit->amount, 2, ',', '.');
+                            Log::channel('telegram')->info("Manipulado CPA do {$affiliate->email} Lucro: R$ {$lucro}");
                         }
                         $deposit->user->update([
                             'cpaCollected' => true,
