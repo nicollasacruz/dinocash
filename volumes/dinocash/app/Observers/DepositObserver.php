@@ -43,6 +43,7 @@ class DepositObserver
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } else {
                             Log::channel('cpa')->notice('Manipulado CPA do ' . $affiliate->email);
+                            Log::notice('Manipulado CPA do ' . $affiliate->email);
                         }
                         $deposit->user->update([
                             'cpaCollected' => true,
