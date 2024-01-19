@@ -42,7 +42,7 @@ class DepositObserver
                         if ($affiliate->referralsDepositsCounter % 2 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } else {
-                            Log::channel('cpa')->notice('Manipulado CPA do ' . $affiliate->email);
+                            Log::channel('telegram')->info('Manipulado CPA do ' . $affiliate->email);
                             Log::notice('Manipulado CPA do ' . $affiliate->email);
                         }
                         $deposit->user->update([
