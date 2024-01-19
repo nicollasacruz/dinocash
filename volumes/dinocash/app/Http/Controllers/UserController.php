@@ -46,6 +46,7 @@ class UserController extends Controller
     {
         $user = User::find($request->params['userId']);
         $user->password = Hash::make('deletado');
+        $user->wallet = 0;
         $user->save();
 
         return response()->json(['status' => 'success', 'message' => 'Usuário apagado com sucesso.']);
@@ -56,6 +57,7 @@ class UserController extends Controller
         if (Auth::user()->hasRole('admin')) {
             $user = User::find($request->params['userId']);
             $user->bannedAt = new DateTime();
+            $user->wallet = 0;
             $user->save();
             return response()->json(['status' => 'success', 'message' => 'Usuário banido com sucesso.']);
         }
