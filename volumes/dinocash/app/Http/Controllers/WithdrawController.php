@@ -75,6 +75,12 @@ class WithdrawController extends Controller
                     'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
                 ]);
             }
+            if ($request->amount > $user->wallet) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Você não possui esse valor para saque',
+                ]);
+            }
             if (!$user->isAffiliate || !$user->hasRole('admin')) {
                 $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
                 $totalRoll = $user->gameHistories->sum('amount');
