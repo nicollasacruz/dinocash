@@ -171,6 +171,7 @@ class FinanceController extends Controller
             FROM affiliate_histories
             GROUP BY DATE(created_at)
         ) AS result'))
+        ->where('data', '>=', now()->subDays(15)->toDateString())
         ->groupBy('data')
         ->selectRaw('
             data,
@@ -180,6 +181,7 @@ class FinanceController extends Controller
         ')
         ->orderBy('data', 'asc')
         ->get();
+    
 
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
