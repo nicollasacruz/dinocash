@@ -215,8 +215,14 @@ class FinanceController extends Controller
             'payout' => ['required', 'integer', 'max:100'],
         ]);
 
-        Setting::update([
+        Setting::find(1)->update([
             'payout' => $request->payout,
         ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Viciosidade ajustada com sucesso',
+            // 'token' => $hashString,
+        ]); 
     }
 }
