@@ -169,6 +169,7 @@
       <table v-if="type === 'history'" class="table table-xs">
         <thead>
           <tr>
+            <th>Data</th>
             <th>Tipo</th>
             <th>Valor</th>
             <th>Distancia</th>
@@ -176,6 +177,7 @@
         </thead>
         <tbody>
           <tr v-for="item in data" :key="item.id">
+            <td>{{ dayjs(item.created_at).format("DD/MM/YYYY HH:mm") }}</td>
             <td>{{ item.type }}</td>
             <td>{{ toBRL(item.amount) }}</td>
             <td>{{ item.distance }}</td>
@@ -201,18 +203,19 @@
       <table v-else class="table table-xs">
         <thead>
           <tr>
+            <th>Data do Deposito</th>
             <th>Status</th>
             <th>Valor</th>
-            <th>Data Aprovação</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in data" :key="item.id">
+            {{
+              dayjs(item.updated_at).format("DD/MM/YYYY HH:mm")
+            }}
             <td>{{ item.type }}</td>
             <td>{{ toBRL(item.amount) }}</td>
-            <td>
-              {{ dayjs(item.updated_at).format("DD/MM/YYYY HH:mm") }}
-            </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -228,6 +231,9 @@ import { useForm } from "vee-validate";
 import { defineProps, defineEmits, ref } from "vue";
 import axios from "axios";
 import dayjs from "dayjs";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 const { user, typeForm } = defineProps(["user", "typeForm"]);
 const showData = ref(false);
 const data = ref(null);
@@ -290,7 +296,8 @@ const referralsCounter = defineInputBinds("referralsCounter");
 const referralsDepositsCounter = defineInputBinds("referralsDepositsCounter");
 const walletAffiliate = defineInputBinds("walletAffiliate");
 const invitation_link = defineInputBinds("invitation_link");
-console.log(user, 'usuario');
+
+console.log(user, "usuario");
 const submit = handleSubmit((values) => {
   const payload = {
     CPA: values.CPA,
@@ -347,40 +354,52 @@ function getMovements(user) {
       type.value = "movements";
     })
     .catch((error) => {
-      // console.log("erro interno");
+      console.log("erro interno", error);
     });
 }
 
 function deleteUser(userId) {
   axios
-    .post(route("admin.usuarios.delete"), userId)
+    .post(route("admin.usuarios.delete"), {
+      params: {
+        userId,
+      },
+    })
     .then((response) => {
-      showModal.value = false;
+      toast.success(response.data.message);
     })
     .catch((error) => {
-      console.log(error);
+      console.log("erro interno", error);
     });
 }
 
 function banTemporary(userId) {
   axios
-    .post(route("admin.usuarios.ban"), userId)
+    .post(route("admin.usuarios.ban"), {
+      params: {
+        userId,
+      },
+    })
     .then((response) => {
-      showModal.value = false;
+      toast.success(response.data.message);
     })
     .catch((error) => {
-      console.log(error);
+      console.log("erro interno", error);
     });
 }
 
 function banPermanent(userId) {
   axios
-    .post(route("admin.usuarios.ban"), userId)
+    .post(route("admin.usuarios.ban"), {
+      params: {
+        userId,
+      },
+    })
     .then((response) => {
-      showModal.value = false;
+      toast.success(response.data.message);
     })
     .catch((error) => {
-      console.log(error);
+      console.log("erro interno", error);
     });
 }
 
@@ -391,4 +410,3 @@ function toBRL(value) {
   });
 }
 </script>
-```

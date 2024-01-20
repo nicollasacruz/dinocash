@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import BaseTable from "@/Components/BaseTable.vue";
 import BaseModal from "@/Components/BaseModal.vue";
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -29,7 +29,7 @@ watch(
   debounce((value) => {
     try {
       router.get(
-        route("admin.afiliados"),
+        route("admin.saque"),
         { email: value },
         {
           preserveState: true,
@@ -114,7 +114,8 @@ const rows = withdraws.data.map((withdraw) => {
         <input
           type="text"
           class="admin-input"
-          placeholder="Digite o email do usuário... "
+          placeholder="Digite o email do usuário..."
+          v-model="searchQuery"
         />
       </div>
       <!-- <div class="flex gap-x-5">

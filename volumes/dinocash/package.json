@@ -21,6 +21,7 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@canvasjs/vue-charts": "^1.0.1",
         "@heroicons/vue": "^2.0.18",
         "@vee-validate/yup": "^4.12.2",
         "date-fns": "^2.30.0",

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Deposit;
+use App\Models\GameHistory;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -68,17 +70,13 @@ class ProfileController extends Controller {
 
     public function listGameHistory(Request $request) {
         $userId = $request->query('user');
-        $history = User::find($userId)->join('game_histories', 'users.id', '=', 'game_histories.userId')->where(
-            'users.id', '=', $userId
-        )->get();
+        $history = GameHistory::where('userId', $userId)->orderByDesc('created_at')->get();
         return response()->json(['status' => 'success', 'history' => $history]);
     }
 
     public function listTransactions(Request $request) {
         $userId = $request->query('user');
-        $withdraws = User::find($userId)->join('withdraws', 'users.id', '=', 'withdraws.userId')->where(
-            'users.id', '=', $userId
-        )->get();
+        $withdraws = Deposit::where('userId', $userId)->orderByDesc('created_at')->get();
         
         return response()->json(['status' => 'success', 'history' => $withdraws]);
     }

@@ -41,7 +41,7 @@ class ReferralService
             ->selectRaw('affiliate.email, COUNT(affiliate_histories.id) as totalCount')
             ->groupBy('affiliate.email')
             ->orderByDesc('totalCount')
-            ->limit(10)
+            ->limit(20)
             ->get();
     }
 

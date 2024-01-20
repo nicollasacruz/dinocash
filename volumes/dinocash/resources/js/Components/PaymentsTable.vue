@@ -44,12 +44,7 @@
     </template>
     <template #amount="{ value }">
       <td>
-        {{
-          value.toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-          })
-        }}
+        {{ toBRL(value) }}
       </td>
     </template>
     <template #isAffiliate="{ value }">
@@ -112,4 +107,11 @@ async function reject(id: number) {
   }
   return "";
 }
+
+const toBRL = (value) => {
+  return Number(value).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
+};
 </script>
