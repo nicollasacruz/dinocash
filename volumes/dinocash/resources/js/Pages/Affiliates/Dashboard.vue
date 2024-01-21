@@ -11,6 +11,7 @@ import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
 import { router } from "@inertiajs/vue3";
+import { Money3Component } from "v-money3";
 
 const {
   profitToday,
@@ -133,6 +134,22 @@ async function withdraw() {
     toast.error("Não foi possível realizar o saque");
   }
 }
+
+const moneyConfig = {
+  prefix: "R$ ",
+  suffix: "",
+  thousands: ".",
+  decimal: ",",
+  precision: 2,
+  disableNegative: true,
+  disabled: false,
+  min: 20,
+  max: null,
+  allowBlank: false,
+  minimumNumberOfCharacters: 0,
+  shouldRound: true,
+  focusOnRight: false,
+};
 </script>
 
 <template>
@@ -250,8 +267,8 @@ async function withdraw() {
           class="col-span-2 admin-input mt-3"
           id="withdrawAmount"
           v-model="amount"
-          v-mask="'R$ #.##0,00'"
         />
+        <money3 v-model.number="amount" v-bind="config"></money3>
         <button
           @click="withdraw"
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
