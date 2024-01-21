@@ -112,7 +112,7 @@ function withdraw() {
 
   console.log(pixKey, pixType, "pix");
 
-  router
+  await axios
     .post(route("afiliado.saques.store"), {
       amount: amount.value,
       pixKey: pixKey.value,
