@@ -11,8 +11,6 @@ import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
 import { router } from "@inertiajs/vue3";
-import 'vue-inputmask/dist/vue3-inputmask.css';
-import Inputmask from 'inputmask';
 
 const {
   profitToday,
@@ -73,9 +71,6 @@ axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
 ).content;
 console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
-const im = Inputmask({ alias: 'currency', prefix: 'R$ ', placeholder: '' });
-im.mask('#withdrawAmount');
-
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
 const toBRL = (value) => {
@@ -118,20 +113,24 @@ async function withdraw() {
   }
 
   console.log(pixKey, pixType, "pix");
+  const withdrawAmount = parseFloat(
+    amount.value.replace("R$ ", "").replace(",", ".")
+  );
+
   try {
     const response = await axios.post(route("afiliado.saques.store"), {
-      amount: amount.value,
+      amount: withdrawAmount,
       pixKey: pixKey.value,
       pixType: pixType.value,
     });
     toast.success("Saque realizado com sucesso");
-    carteira.value = carteira.value - amount.value;
+    carteira.value = carteira.value - withdrawAmount;
     amount.value = 0.0;
     pixType.value = "";
     pixKey.value = "";
     showModal.value = false;
   } catch (error) {
-    toast.error("Não foi possivel realizar o saque");
+    toast.error("Não foi possível realizar o saque");
   }
 }
 </script>
@@ -251,7 +250,7 @@ async function withdraw() {
           class="col-span-2 admin-input mt-3"
           id="withdrawAmount"
           v-model="amount"
-          v-mask="'R$ num'"
+          v-mask="'R$ #.##0,00'"
         />
         <button
           @click="withdraw"
