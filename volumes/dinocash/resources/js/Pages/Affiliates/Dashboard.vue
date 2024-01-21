@@ -62,6 +62,7 @@ const showModal = ref(false);
 const pixKey = ref("");
 const pixType = ref("");
 const carteira = ref(walletAffiliate);
+const withdrawButtonVisible = ref(true);
 
 interface ImportMetaEnv {
   APP_URL: string;
@@ -114,12 +115,13 @@ async function withdraw() {
   }
 
   const withdrawAmountString = amount.value.toString();
-  console.log('amount string', withdrawAmountString);
+  console.log("amount string", withdrawAmountString);
   const withdrawAmount = parseFloat(
     withdrawAmountString.replace("R$ ", "").replace(",", ".")
   );
 
   try {
+    withdrawButtonVisible.value = false;
     const response = await axios.post(route("afiliado.saques.store"), {
       amount: withdrawAmount,
       pixKey: pixKey.value,
@@ -131,6 +133,7 @@ async function withdraw() {
     pixType.value = "";
     pixKey.value = "";
     showModal.value = false;
+    withdrawButtonVisible.value = true;
   } catch (error) {
     toast.error("Não foi possível realizar o saque");
   }
@@ -317,6 +320,7 @@ const moneyConfig = {
         ></base-input>
         <div class="flex justify-center">
           <button
+            v-if="withdrawButtonVisible"
             class="bg-verde-claro text-black font-menu px-6 py-3 rounded-lg mt-4"
             @click="withdraw"
           >
