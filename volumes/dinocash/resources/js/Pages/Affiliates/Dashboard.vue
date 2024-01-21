@@ -68,7 +68,9 @@ interface ImportMetaEnv {
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
-
+console.log('tokio', document.querySelector(
+  'meta[name="csrf-token"]'
+).content)
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
 const toBRL = (value) => {
@@ -112,8 +114,7 @@ function withdraw() {
 
   console.log(pixKey, pixType, "pix");
 
-  await axios
-    .post(route("afiliado.saques.store"), {
+  await axios.post(route("afiliado.saques.store"), {
       amount: amount.value,
       pixKey: pixKey.value,
       pixType: pixType.value,
