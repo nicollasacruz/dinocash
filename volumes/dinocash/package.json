@@ -21,6 +21,7 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@canvasjs/vue-charts": "^1.0.1",
         "@heroicons/vue": "^2.0.18",
         "@vee-validate/yup": "^4.12.2",
         "date-fns": "^2.30.0",
@@ -33,6 +34,7 @@
         "qrcode-pix": "5.0.0",
         "qrcode-vue3": "^1.6.8",
         "screen-orientation": "^1.0.3",
+        "v-money3": "^3.24.0",
         "vee-validate": "^4.12.2",
         "vue-the-mask": "^0.11.1",
         "vue3-toastify": "^0.1.14",

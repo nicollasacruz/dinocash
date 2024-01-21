@@ -32,6 +32,7 @@ const {
   topAffiliatesCPA,
   payout,
   houseHealth,
+  chart,
 } = defineProps([
   "activeSessions",
   "totalUsers",
@@ -55,6 +56,7 @@ const {
   "topAffiliatesCPA",
   "payout",
   "houseHealth",
+  "chart",
 ]);
 
 const addictRange = ref(payout.payout / 5);
@@ -115,6 +117,78 @@ function toBRL(value) {
 const showButton = ref(false);
 watch(addictRange, (value) => {
   showButton.value = true;
+});
+
+const formattedData = chart.map((item) => ({
+  label: item.data,
+  depositos: parseFloat(item.depositos.replace(",", "")),
+  pagamento_afiliado: parseFloat(item.pagamento_afiliado.replace(",", "")),
+  lucro: parseFloat(item.lucro.replace(",", "")),
+}));
+
+const options = ref({
+  theme: "dark2",
+  exportEnabled: true,
+  title: {
+    text: "Lucro sobre afiliados",
+  },
+  axisY: {
+    title: "Valor",
+  },
+  toolTip: {
+    shared: true,
+  },
+  legend: {
+    cursor: "pointer",
+    itemclick: function (e) {
+      if (typeof e.dataSeries.visible === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      } else {
+        e.dataSeries.visible = true;
+      }
+      e.chart.render();
+    },
+  },
+  data: [
+    // {
+    //   type: "line",
+    //   name: "Depositos",
+    //   showInLegend: true,
+    //   color: "blue",
+    //   // toolTipContent: "<img src=\"https://canvasjs.com/wp-content/uploads/images/gallery/javascript-column-bar-charts/germany.png\" style=\"height:11px;width:18px;\"> {name}: {y}",
+    //   dataPoints: formattedData.map((item) => ({
+    //     label: item.label,
+    //     y: item.depositos,
+    //   })),
+    // },
+    {
+      type: "line",
+      name: "Pagamento Afiliado",
+      showInLegend: true,
+      color: "red",
+      // toolTipContent: "<img src=\"https://canvasjs.com/wp-content/uploads/images/gallery/javascript-column-bar-charts/uk.png\" style=\"height:11px;width:18px;\"> {name}: {y}",
+      dataPoints: formattedData.map((item) => ({
+        label: item.label,
+        y: item.pagamento_afiliado,
+      })),
+    },
+    {
+      type: "line",
+      name: "Lucro",
+      showInLegend: true,
+      color: "green",
+      // toolTipContent: "<img src=\"https://canvasjs.com/wp-content/uploads/images/gallery/javascript-column-bar-charts/uk.png\" style=\"height:11px;width:18px;\"> {name}: {y}",
+      dataPoints: formattedData.map((item) => ({
+        label: item.label,
+        y: item.lucro,
+      })),
+    },
+  ],
+});
+
+const styleOptions = ref({
+  width: "100%",
+  height: "360px",
 });
 </script>
 
@@ -309,6 +383,9 @@ watch(addictRange, (value) => {
           </div>
         </div>
       </div>
+
+      <CanvasJSChart class="mt-2" :options="options" :styles="styleOptions" />
+
       <div class="mt-4">
         <div class="text-2xl text-white font-bold mb-2">Viciosidade</div>
         <div>
@@ -336,7 +413,6 @@ watch(addictRange, (value) => {
             </button>
           </div>
         </div>
-
         <div class="py-3 px-5 text-xs mt-1 box">
           Esta opção definirá se o jogo vai lucrar ou pagar
         </div>

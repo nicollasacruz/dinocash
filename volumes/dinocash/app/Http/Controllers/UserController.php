@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -13,11 +16,15 @@ class UserController extends Controller
         $users = User::when($request->email, function ($query, $email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-            ->where('isAffiliate', false)->paginate(20);
+            ->where('isAffiliate', false)
+            ->orderByRaw('CAST(wallet AS DECIMAL(10,2)) DESC')
+            ->paginate(20);
+
         return Inertia::render('Admin/Users', [
             'users' => $users,
         ]);
     }
+
 
     /**
      * Update the user's profile information.
@@ -37,16 +44,23 @@ class UserController extends Controller
 
     public function deleteUser(Request $request)
     {
-        User::find($request->userId)->delete();
+        $user = User::find($request->params['userId']);
+        $user->password = Hash::make('deletado');
+        $user->wallet = 0;
+        $user->save();
 
         return response()->json(['status' => 'success', 'message' => 'Usuário apagado com sucesso.']);
     }
 
     public function banUser(Request $request)
     {
-        $user = User::find($request->userId);
-        $user->bannedAt = now();
-        $user->save();
-        return response()->json(['status' => 'success', 'message' => 'Usuário banido com sucesso.']);
+        if (Auth::user()->hasRole('admin')) {
+            $user = User::find($request->params['userId']);
+            $user->bannedAt = new DateTime();
+            $user->wallet = 0;
+            $user->save();
+            return response()->json(['status' => 'success', 'message' => 'Usuário banido com sucesso.']);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Não autorizado.']);
     }
 }

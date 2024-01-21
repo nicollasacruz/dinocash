@@ -141,6 +141,12 @@ class GameHistoryController extends Controller
                         $affiliateHistory->delete();
                     });
                     $gameHistoryItem->delete();
+                    $message = [
+                        "id" => $user->id,
+                        "wallet" => $user->wallet
+                    ];
+    
+                    event(new WalletChanged($message));
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
@@ -170,6 +176,13 @@ class GameHistoryController extends Controller
 
             $user->changeWallet($request->amount * -1);
             $user->save();
+            
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet
+            ];
+
+            event(new WalletChanged($message));
 
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2, '.', ''),
