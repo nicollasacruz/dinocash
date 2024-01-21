@@ -6,7 +6,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
+import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";
 
 defineProps({
     canResetPassword: {
