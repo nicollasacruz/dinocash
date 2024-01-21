@@ -129,22 +129,15 @@ async function fetchStore() {
       );
       return;
     }
-    await axios
-      .post(route("user.play.store"), {
-        amount: amount.value,
-      })
-      .then((response) => {
-        const result = response.data.gameHistory.id;
-        toast.success("Partida iniciada com sucesso");
-        return result;
-      })
-      .catch((error) => {
-        toast.error("Partida não iniciada");
-      });
+    const response = await axios.post(route("user.play.store"), {
+      amount: amount.value,
+    });
+    const result = response.data.gameHistory.id;
+    toast.success("Partida iniciada com sucesso");
+    return result;
   } catch (error) {
-    console.error("Erro na pesquisa:", error);
-
-    throw error;
+    toast.error("Partida não iniciada");
+    console.error("Erro na partida:", error);
   }
 }
 

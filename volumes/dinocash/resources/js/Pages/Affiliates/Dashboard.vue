@@ -68,9 +68,7 @@ interface ImportMetaEnv {
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
-console.log('tokio', document.querySelector(
-  'meta[name="csrf-token"]'
-).content)
+console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
 const toBRL = (value) => {
@@ -113,27 +111,21 @@ function withdraw() {
   }
 
   console.log(pixKey, pixType, "pix");
-
-  await axios.post(route("afiliado.saques.store"), {
+  try {
+    const response = await axios.post(route("afiliado.saques.store"), {
       amount: amount.value,
       pixKey: pixKey.value,
       pixType: pixType.value,
-    })
-    .then(() => {
-      // Assuming the response contains a success message
-      toast.success("Saque realizado com sucesso");
-      window.location.reload();
-    })
-    .catch((error) => {
-      // Assuming the error response contains a message
-      toast.error(error.response.data.message);
-    })
-    .finally(() => {
-      amount.value = 0.0;
-      pixType.value = "";
-      pixKey.value = "";
-      showModal.value = false;
     });
+    toast.success("Saque realizado com sucesso");
+    walletAffiliate = walletAffiliate - amount.value
+    amount.value = 0.0;
+    pixType.value = "";
+    pixKey.value = "";
+    showModal.value = false;
+  } catch (error) {
+    toast.error("Não foi possivel realizar o saque");
+  }
 }
 
 function formatAmount() {
