@@ -288,6 +288,7 @@ export default class DinoGame extends GameRunner {
             this.drawHat();
             this.setupUI();
             this.drawCacti();
+            this.drawFPS()
             const hasDinoColided = state.dino.hits([
                 state.cacti[0],
                 state.birds[0],
@@ -367,9 +368,10 @@ export default class DinoGame extends GameRunner {
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "flex";
         setInterval(async () => {
-            const isPowerSavingMode = detectPowerSavingMode();
+            const isPowerSavingMode = await this.detectPowerSavingMode();
+            console.log(isPowerSavingMode)
             if (isPowerSavingMode) {
-                this.endGame()
+                this.endGame();
             }
         }, 2000);
     }
@@ -461,9 +463,7 @@ export default class DinoGame extends GameRunner {
     }
 
     detectPowerSavingMode() {
-        // for iOS/iPadOS Safari, and maybe MacBook macOS Safari (not tested)
         if (/(iP(?:hone|ad|od)|Mac OS X)/.test(navigator.userAgent)) {
-            // In Low Power Mode, cumulative delay effect happens on setInterval()
             return new Promise((resolve) => {
                 let fps = 60;
                 let interval = 1000 / fps;
@@ -485,14 +485,10 @@ export default class DinoGame extends GameRunner {
                 }, interval);
             });
         }
-        // for Safari, Chromium, and maybe future Firefox
-        return detectFrameRate().then((frameRate) => {
-            // In Battery Saver Mode frameRate will be about 30fps or 20fps,
-            // otherwise frameRate will be closed to monitor refresh rate (typically 60Hz)
-            if (frameRate < 34) {
+        return this.detectFrameRate().then((frameRate) => {
+            if (frameRate < 25) {
                 return true;
             }
-            // FIXME fallback to regard as Low Power Mode when battery power is low (down to 20%)
             else if (navigator.getBattery) {
                 return navigator.getBattery().then((battery) => {
                     return !battery.charging && battery.level <= 0.2
@@ -699,14 +695,16 @@ export default class DinoGame extends GameRunner {
         const hatX = isWinner ? 13 : 10;
         const hatY = isWinner ? 24 : 18;
         const { dino } = content.state;
-        const hatImage = isWinner ? content.state.coroa : content.state.gorro;
-        content.canvasCtx.drawImage(
-            hatImage,
-            dino.x + hatX,
-            dino.y - hatY,
-            30,
-            30
-        );
+        if (isWinner) {
+            const hatImage = content.state.coroa;
+            content.canvasCtx.drawImage(
+                hatImage,
+                dino.x + hatX,
+                dino.y - hatY,
+                30,
+                30
+            );
+        }
     }
     drawScore(content = this) {
         const { canvasCtx, state } = content;
