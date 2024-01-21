@@ -8,7 +8,7 @@ import Background3 from "../../../storage/imgs/home-page/bg-ranking.jpg";
 import Background2 from "../../../storage/imgs/home-page/home-bg2.jpg";
 import Background4 from "../../../storage/imgs/home-page/home-bg3.jpg";
 import Background1Mobile from "../../../storage/imgs/home-page/home-bg1-mobile.jpg";
-import Background3Mobile from "../../../storage/imgs/home-page/bg3.jpg";
+import Background3Mobile from "../../../storage/imgs/home-page/home-bg3.jpg";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import DinoInterrogacao from "../../../storage/imgs/home-page/dino-interrogacao-bg3.svg";
 import DinoRoxo from "../../../storage/imgs/home-page/dino-roxo.svg";
