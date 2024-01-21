@@ -113,9 +113,10 @@ async function withdraw() {
     return;
   }
 
-  console.log(pixKey, pixType, "pix");
+  const withdrawAmountString = amount.value.toString();
+  console.log('amount string', withdrawAmountString);
   const withdrawAmount = parseFloat(
-    amount.value.replace("R$ ", "").replace(",", ".")
+    withdrawAmountString.replace("R$ ", "").replace(",", ".")
   );
 
   try {
