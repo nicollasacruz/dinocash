@@ -60,6 +60,7 @@ const {
 const showModal = ref(false);
 const pixKey = ref("");
 const pixType = ref("");
+const carteira = ref(walletAffiliate);
 
 interface ImportMetaEnv {
   APP_URL: string;
@@ -105,7 +106,7 @@ async function withdraw() {
     toast.error("Informe o tipo e a chave pix");
     return;
   }
-  if (amount.value > walletAffiliate) {
+  if (amount.value > carteira) {
     toast.error("Saque não pode ser maior que o disponível");
     return;
   }
@@ -118,7 +119,7 @@ async function withdraw() {
       pixType: pixType.value,
     });
     toast.success("Saque realizado com sucesso");
-    walletAffiliate = walletAffiliate - amount.value
+    carteira.value = carteira - amount.value
     amount.value = 0.0;
     pixType.value = "";
     pixKey.value = "";
@@ -255,7 +256,7 @@ function formatAmount() {
         ></CurrencyBox>
         <CurrencyBox
           label="Valor disponível"
-          :value="walletAffiliate"
+          :value="carteira"
         ></CurrencyBox>
         <input
           class="col-span-2 admin-input mt-3"
