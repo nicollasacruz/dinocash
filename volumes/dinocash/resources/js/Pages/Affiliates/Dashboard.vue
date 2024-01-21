@@ -11,6 +11,8 @@ import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
 import { router } from "@inertiajs/vue3";
+import 'vue-inputmask/dist/vue3-inputmask.css';
+import Inputmask from 'inputmask';
 
 const {
   profitToday,
@@ -70,6 +72,10 @@ axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
 console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
+
+const im = Inputmask({ alias: 'currency', prefix: 'R$ ', placeholder: '' });
+im.mask('#withdrawAmount');
+
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
 const toBRL = (value) => {
@@ -119,7 +125,7 @@ async function withdraw() {
       pixType: pixType.value,
     });
     toast.success("Saque realizado com sucesso");
-    carteira.value = carteira.value - amount.value
+    carteira.value = carteira.value - amount.value;
     amount.value = 0.0;
     pixType.value = "";
     pixKey.value = "";
@@ -127,20 +133,6 @@ async function withdraw() {
   } catch (error) {
     toast.error("Não foi possivel realizar o saque");
   }
-}
-
-function formatAmount() {
-  // Limpar caracteres não numéricos, exceto o ponto decimal
-  let cleanedValue = amount.value.replace(/[^\d.]/g, "");
-
-  // Permitir apenas um ponto decimal
-  const decimalCount = cleanedValue.split(".").length - 1;
-  if (decimalCount > 1) {
-    cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
-  }
-
-  // Atualizar o valor
-  amount.value = cleanedValue;
 }
 </script>
 
@@ -254,14 +246,12 @@ function formatAmount() {
           label="Valor pendente"
           :value="paymentPending"
         ></CurrencyBox>
-        <CurrencyBox
-          label="Valor disponível"
-          :value="carteira"
-        ></CurrencyBox>
+        <CurrencyBox label="Valor disponível" :value="carteira"></CurrencyBox>
         <input
           class="col-span-2 admin-input mt-3"
+          id="withdrawAmount"
           v-model="amount"
-          @input="formatAmount"
+          v-mask="'R$ num'"
         />
         <button
           @click="withdraw"
