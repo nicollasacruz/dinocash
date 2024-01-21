@@ -143,7 +143,7 @@ const moneyConfig = {
   precision: 2,
   disableNegative: true,
   disabled: false,
-  min: 20,
+  min: null,
   max: null,
   allowBlank: false,
   minimumNumberOfCharacters: 0,
