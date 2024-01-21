@@ -92,7 +92,7 @@ function permission() {
   );
 }
 
-function withdraw() {
+function async withdraw() {
   if (showModal.value === false) {
     showModal.value = true;
     return;
