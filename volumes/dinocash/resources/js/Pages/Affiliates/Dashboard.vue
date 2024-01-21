@@ -11,6 +11,7 @@ import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
 import { router } from "@inertiajs/vue3";
+import { Money3Component } from "v-money3";
 
 const {
   profitToday,
@@ -60,6 +61,8 @@ const {
 const showModal = ref(false);
 const pixKey = ref("");
 const pixType = ref("");
+const carteira = ref(walletAffiliate);
+const withdrawButtonVisible = ref(true);
 
 interface ImportMetaEnv {
   APP_URL: string;
@@ -68,6 +71,7 @@ interface ImportMetaEnv {
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
+console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
@@ -92,7 +96,7 @@ function permission() {
   );
 }
 
-function withdraw() {
+async function withdraw() {
   if (showModal.value === false) {
     showModal.value = true;
     return;
@@ -105,49 +109,51 @@ function withdraw() {
     toast.error("Informe o tipo e a chave pix");
     return;
   }
-  if (amount.value > walletAffiliate) {
+  if (amount.value > carteira) {
     toast.error("Saque não pode ser maior que o disponível");
     return;
   }
 
-  console.log(pixKey, pixType, "pix");
+  const withdrawAmountString = amount.value.toString();
+  console.log("amount string", withdrawAmountString);
+  const withdrawAmount = parseFloat(
+    withdrawAmountString.replace("R$ ", "").replace(",", ".")
+  );
 
-  router
-    .post(route("afiliado.saques.store"), {
-      amount: amount.value,
+  try {
+    withdrawButtonVisible.value = false;
+    const response = await axios.post(route("afiliado.saques.store"), {
+      amount: withdrawAmount,
       pixKey: pixKey.value,
       pixType: pixType.value,
-    })
-    .then(() => {
-      // Assuming the response contains a success message
-      toast.success("Saque realizado com sucesso");
-      window.location.reload();
-    })
-    .catch((error) => {
-      // Assuming the error response contains a message
-      toast.error(error.response.data.message);
-    })
-    .finally(() => {
-      amount.value = 0.0;
-      pixType.value = "";
-      pixKey.value = "";
-      showModal.value = false;
     });
-}
-
-function formatAmount() {
-  // Limpar caracteres não numéricos, exceto o ponto decimal
-  let cleanedValue = amount.value.replace(/[^\d.]/g, "");
-
-  // Permitir apenas um ponto decimal
-  const decimalCount = cleanedValue.split(".").length - 1;
-  if (decimalCount > 1) {
-    cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
+    toast.success("Saque realizado com sucesso");
+    carteira.value = carteira.value - withdrawAmount;
+    amount.value = 0.0;
+    pixType.value = "";
+    pixKey.value = "";
+    showModal.value = false;
+    withdrawButtonVisible.value = true;
+  } catch (error) {
+    toast.error("Não foi possível realizar o saque");
   }
-
-  // Atualizar o valor
-  amount.value = cleanedValue;
 }
+
+const moneyConfig = {
+  prefix: "R$ ",
+  suffix: "",
+  thousands: ".",
+  decimal: ",",
+  precision: 2,
+  disableNegative: true,
+  disabled: false,
+  min: null,
+  max: null,
+  allowBlank: false,
+  minimumNumberOfCharacters: 0,
+  shouldRound: true,
+  focusOnRight: false,
+};
 </script>
 
 <template>
@@ -260,14 +266,16 @@ function formatAmount() {
           label="Valor pendente"
           :value="paymentPending"
         ></CurrencyBox>
-        <CurrencyBox
-          label="Valor disponível"
-          :value="walletAffiliate"
-        ></CurrencyBox>
-        <input
+        <CurrencyBox label="Valor disponível" :value="carteira"></CurrencyBox>
+        <!-- <input
           class="col-span-2 admin-input mt-3"
+          id="withdrawAmount"
           v-model="amount"
-          @input="formatAmount"
+        /> -->
+        <money3
+          class="col-span-2 admin-input mt-3"
+          v-model.number="amount"
+          v-bind="moneyConfig"
         />
         <button
           @click="withdraw"
@@ -312,6 +320,7 @@ function formatAmount() {
         ></base-input>
         <div class="flex justify-center">
           <button
+            v-if="withdrawButtonVisible"
             class="bg-verde-claro text-black font-menu px-6 py-3 rounded-lg mt-4"
             @click="withdraw"
           >
