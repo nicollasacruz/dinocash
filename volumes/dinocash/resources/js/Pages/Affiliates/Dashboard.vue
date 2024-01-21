@@ -119,7 +119,7 @@ async function withdraw() {
       pixType: pixType.value,
     });
     toast.success("Saque realizado com sucesso");
-    carteira.value = carteira - amount.value
+    carteira.value = carteira.value - amount.value
     amount.value = 0.0;
     pixType.value = "";
     pixKey.value = "";
