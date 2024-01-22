@@ -73,7 +73,7 @@ axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
 ).content;
 console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
-const link = "https://dinocash.io/ref/" + affiliateLink;
+const link = "https://dinobet.vip/ref/" + affiliateLink;
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
@@ -97,6 +97,7 @@ function permission() {
 }
 
 async function withdraw() {
+  console.log("amount string", amount.value);
   if (showModal.value === false) {
     showModal.value = true;
     return;
@@ -115,7 +116,6 @@ async function withdraw() {
   }
 
   const withdrawAmountString = amount.value.toString();
-  console.log("amount string", withdrawAmountString);
   const withdrawAmount = parseFloat(
     withdrawAmountString.replace("R$ ", "").replace(",", ".")
   );
