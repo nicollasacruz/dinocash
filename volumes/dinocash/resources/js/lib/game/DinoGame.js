@@ -371,7 +371,7 @@ export default class DinoGame extends GameRunner {
             const isPowerSavingMode = await this.detectPowerSavingMode();
             console.log(isPowerSavingMode)
             if (isPowerSavingMode) {
-                this.endGame();
+                this.lockGame();
             }
         }, 2000);
     }
