@@ -179,7 +179,7 @@
           <tr v-for="item in data" :key="item.id">
             <td>{{ dayjs(item.created_at).format("DD/MM/YYYY HH:mm") }}</td>
             <td>{{ item.type }}</td>
-            <td>{{ toBRL(item.amount) }}</td>
+            <td>{{ toBRL(item.finalAmount) }}</td>
             <td>{{ item.distance }}</td>
           </tr>
         </tbody>
