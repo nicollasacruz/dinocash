@@ -73,7 +73,7 @@ function getPremio(i) {
 <template>
   <section
     id="section1"
-    class="section1 h-[100dvh] mx-auto items-center p-2 flex flex-col"
+    class="section1 h-screen mx-auto items-center p-2 flex flex-col"
     :style="{
       backgroundImage: `url('${
         windowWidth < 700 ? Background1Mobile : Background1
@@ -136,7 +136,7 @@ function getPremio(i) {
 
   <!-- <section
     id="section3"
-    class="section3 h-[100dvh] mx-auto flex flex-col items-center p-2"
+    class="section3 h-screen mx-auto flex flex-col items-center p-2"
     :style="{
       backgroundImage: `url('${
         windowWidth < 700 ? Background3Mobile : Background3
@@ -224,7 +224,7 @@ function getPremio(i) {
 
   <section
     id="section2"
-    class="section2 h-[100dvh] mx-auto flex flex-col items-center p-4 pb-5"
+    class="section2 h-screen mx-auto flex flex-col items-center p-4 pb-5"
     :style="{
       backgroundImage: `url('${Background2}')`,
       backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'auto auto',
@@ -270,7 +270,7 @@ function getPremio(i) {
 
   <section
     id="section4"
-    class="section4 h-[100dvh] flex flex-col items-center mx-auto"
+    class="section4 h-screen flex flex-col items-center mx-auto"
   >
     <div
       class="w-full h-full"

@@ -66,7 +66,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="h-[100dvh] text-montserrat flex">
+    <div class="h-screen text-montserrat flex">
       <div class="drawer col-auto lg:w-80 z-10 absolute lg:relative">
         <input
           v-model="drawer"
