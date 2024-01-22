@@ -40,8 +40,8 @@ class DepositObserver
                         "googledino@googledino.com",
                     ];
                     $blacklist = [
-                        "chrisleao@live.com",
-                        "chrisleao@gmail.com",
+                        // "chrisleao@live.com",
+                        // "chrisleao@gmail.com",
                         "contatodjfeijaompc@gmail.com",
                         "kadudino@gmail.com",
                         "mckadu1@gmail.com",
