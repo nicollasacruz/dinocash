@@ -50,7 +50,7 @@ const drawer = ref(false);
                 </div>
             </div>
             <div
-                class="drawer-content h-[100dvh] flex flex-col relative flex-1 px-4 py-2 lg:px-10 lg:py-8"
+                class="drawer-content h-[80dvh] flex flex-col relative flex-1 px-4 py-2 lg:px-10 lg:py-8"
                 :style="{
                     'background-image': `url('${Background}')`,
                     'background-size': 'cover',
