@@ -70,6 +70,9 @@ axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
 ).content;
 
 const link = "https://dinocash.site/ref/" + affiliateLink;
+if (!affiliateLink) {
+  link = "https://dinocash.io/ref/" + affiliateLink;
+}
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
