@@ -246,7 +246,7 @@ export default class DinoGame extends GameRunner {
                 detail: this.state.score.value,
             });
             document.dispatchEvent(eventoModificacao);
-            this.endGame();
+            // this.endGame();
         });
         return finishButton;
     }
