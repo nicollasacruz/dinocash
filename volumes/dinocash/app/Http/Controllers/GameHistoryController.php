@@ -240,6 +240,7 @@ class GameHistoryController extends Controller
                 $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
                 $user->save();
                 $gameHistory->type = 'locked';
+                $gameHistory->finalAmount = 0;
                 $gameHistory->save();
 
                 return response()->json([
