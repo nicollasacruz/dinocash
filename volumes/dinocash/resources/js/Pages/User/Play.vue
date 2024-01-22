@@ -172,6 +172,7 @@ async function fetchUpdate() {
     });
 
     const result = response.data;
+    alert(result);
     return result;
   } catch (error) {
     console.error("Erro na pesquisa:", error);
