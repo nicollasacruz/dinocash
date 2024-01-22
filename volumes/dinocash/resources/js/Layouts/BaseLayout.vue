@@ -43,7 +43,7 @@ const props = defineProps({
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
     }"
-    class="w-screen h-screen bg-[#6c567c] p-3 flex flex-col"
+    class="w-screen h-[100dvh] bg-[#6c567c] p-3 flex flex-col"
     :class="homepage ? '' : 'overflow-hidden'"
   >
     <div id="menu">
