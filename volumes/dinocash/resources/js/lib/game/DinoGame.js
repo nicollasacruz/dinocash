@@ -386,6 +386,16 @@ export default class DinoGame extends GameRunner {
         document.dispatchEvent(eventoModificacao);
     }
 
+    lockGame() {
+        this.state.isRunning = false;
+        const eventoModificacao = new CustomEvent("lockGame", {
+            detail: this.state.score.value,
+        });
+        const canvasContainer = document.getElementById("canvasContainer");
+        canvasContainer.style.display = "none";
+        document.dispatchEvent(eventoModificacao);
+    }
+
     increaseDifficulty() {
         const { birds, cacti, clouds, dino, settings } = this.state;
         const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;

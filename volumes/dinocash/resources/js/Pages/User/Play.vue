@@ -59,6 +59,7 @@
         :isAffiliate="isAffiliate"
         @end-game="handleEndGame"
         @finish-game="handleFinishGame"
+        @lock-game="handleLockGame"
         :active="isRunning"
         :height="clientHeight"
         :width="clientWidth"
@@ -113,7 +114,10 @@ const type = ref("loss");
 const loading = ref(false);
 function handleButtonClick() {
   endGame.value = false;
-  location.reload();
+  // location.reload();
+  if ($page.props.errors.locked) {
+    toast.error($page.props.errors.banlockedned)
+  }
 }
 
 async function fetchStore() {
@@ -276,6 +280,16 @@ const handleFinishGame = (pontuation) => {
   endGame.value = true;
   score.value = pontuation;
   type.value = "win";
+  const div = document.getElementById("root") as HTMLDivElement;
+  div.style.display = "block";
+  fetchUpdate();
+};
+
+const handleLockGame = (pontuation) => {
+  isRunning.value = false;
+  endGame.value = true;
+  score.value = pontuation;
+  type.value = "locked";
   const div = document.getElementById("root") as HTMLDivElement;
   div.style.display = "block";
   fetchUpdate();
