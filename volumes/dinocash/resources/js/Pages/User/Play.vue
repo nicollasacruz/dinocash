@@ -116,9 +116,6 @@ function handleButtonClick() {
   endGame.value = false;
   amount.value = 0;
   // location.reload();
-  if ($page.props.errors.locked) {
-    toast.error($page.props.errors.locked);
-  }
 }
 
 async function fetchStore() {
