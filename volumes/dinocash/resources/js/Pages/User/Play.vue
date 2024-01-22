@@ -172,7 +172,9 @@ async function fetchUpdate() {
     });
 
     const result = response.data;
-
+    if (result.errors?.locked) {
+      toast.error("Você está em modo de economia de energia!");
+    }
     return result;
   } catch (error) {
     console.log("Erro na pesquisa:", error);

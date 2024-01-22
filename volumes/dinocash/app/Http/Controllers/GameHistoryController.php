@@ -227,17 +227,6 @@ class GameHistoryController extends Controller
             $gameHistory = $user->gameHistories->where('type', 'gaming')
                 ->where('id', $request->gameId)->first();
 
-            Log::error('Partida zerada erro  /  ' . $request->type);
-            if ($request->type === 'locked') {
-                $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
-                $user->save();
-                $gameHistory->type = 'locked';
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Partida bloqueada por uso de economia de energia.',
-                ])->withErrors(['locked' => 'Partida bloqueada por uso de economia de energia.']);
-            }
-
             if (!$gameHistory) {
                 Log::error('Partida não encontrada.');
                 return response()->json([
@@ -245,6 +234,22 @@ class GameHistoryController extends Controller
                     'message' => 'Partida não encontrada.',
                 ]);
             }
+
+            if ($request->type === 'locked') {
+                Log::error('Partida com bug / ' . $user->email);
+                $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
+                $user->save();
+                $gameHistory->type = 'locked';
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Partida bloqueada por uso de economia de energia.',
+                    'errors' => [
+                        'locked' => 'Partida bloqueada por uso de economia de energia.',
+                    ],
+                ]);
+            }
+
 
             if (!$request->distance) {
                 Log::error('Partida zerada erro');
