@@ -22,8 +22,8 @@
             {{ dayjs(updated_at).format("DD/MM/YYYY HH:mm:ss") }}
           </div>
           <div>{{ distance }} M</div>
-          <div :class="type === 'win' ? 'text-green-500' : type === 'win' ? 'text-red-500' : 'text-gray-400'">
-            {{ type === "win" ? "GANHOU" :type === "loss" ? "PERDEU" : "BLOQUEADO" }}
+          <div :class="type === 'win' ? 'text-green-500' : type === 'loss' ? 'text-red-500' : 'text-gray-400'">
+            {{ type === "win" ? "GANHOU" :type === "loss" ? "PERDEU" : "BUG" }}
           </div>
           <div>
             {{ toBRL(finalAmount) }}
