@@ -145,7 +145,7 @@ class GameHistoryController extends Controller
                         "id" => $user->id,
                         "wallet" => $user->wallet
                     ];
-    
+
                     event(new WalletChanged($message));
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
@@ -176,7 +176,7 @@ class GameHistoryController extends Controller
 
             $user->changeWallet($request->amount * -1);
             $user->save();
-            
+
             $message = [
                 "id" => $user->id,
                 "wallet" => $user->wallet
@@ -227,16 +227,8 @@ class GameHistoryController extends Controller
             $gameHistory = $user->gameHistories->where('type', 'gaming')
                 ->where('id', $request->gameId)->first();
 
-            if (!$gameHistory) {
-                Log::error('Partida não encontrada.');
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Partida não encontrada.',
-                ]);
-            }
-
+            Log::error('Partida zerada erro  /  ' . $request->type);
             if ($request->type === 'locked') {
-                Log::error('Partida zerada erro');
                 $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
                 $user->save();
                 $gameHistory->type = 'locked';
@@ -244,6 +236,14 @@ class GameHistoryController extends Controller
                     'status' => 'error',
                     'message' => 'Partida bloqueada por uso de economia de energia.',
                 ])->withErrors(['locked' => 'Partida bloqueada por uso de economia de energia.']);
+            }
+
+            if (!$gameHistory) {
+                Log::error('Partida não encontrada.');
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Partida não encontrada.',
+                ]);
             }
 
             if (!$request->distance) {
