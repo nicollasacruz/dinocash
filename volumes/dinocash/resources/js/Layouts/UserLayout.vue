@@ -23,7 +23,7 @@ const drawer = ref(false);
 
 <template>
     <div id="root">
-        <div class="h-screen font-menu flex">
+        <div class="h-[100dvh] font-menu flex">
             <div class="drawer col-auto lg:w-96 z-10 absolute lg:hidden">
                 <input
                     v-model="drawer"
