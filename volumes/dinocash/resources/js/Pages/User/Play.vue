@@ -114,9 +114,10 @@ const type = ref("loss");
 const loading = ref(false);
 function handleButtonClick() {
   endGame.value = false;
+  amount.value = 0;
   // location.reload();
   if ($page.props.errors.locked) {
-    toast.error($page.props.errors.banlockedned)
+    toast.error($page.props.errors.locked);
   }
 }
 
