@@ -56,7 +56,7 @@ class CheckDepositsPending extends Command
             );
             $res = $client->sendAsync($request)->wait();
             $status = json_decode($res->getBody(), true);
-            if ($status === "PAID") {
+            if ($status === "PAID_OUT") {
                 if ($depositService->aproveDeposit($deposit)) {
                     try {
                         event(new PixReceived($deposit->user));
