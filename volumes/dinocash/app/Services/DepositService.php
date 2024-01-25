@@ -112,8 +112,8 @@ class DepositService
 
             try {
                 if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
-                    $value = $deposit->amount * 0.3;
                     $ggr = env('APP_GGR_VALUE') * 1 / 100;
+                    $value = $deposit->amount * $ggr;
                     Log::alert("PAGAMENTO GGR - {$value}");
 
                     Notification::send(User::find(1), new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * $ggr), 2, ',', '.')));
