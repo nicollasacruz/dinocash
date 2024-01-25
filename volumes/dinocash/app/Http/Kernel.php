@@ -44,7 +44,7 @@ class Kernel extends HttpKernel
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\InertiaGlobalPropsMiddleware::class,
             BannedCheck::class,
-            RateLimitMiddleware::class,
+            // RateLimitMiddleware::class,
         ],
 
         'api' => [
