@@ -35,7 +35,7 @@ class CheckDepositsPending extends Command
      */
     public function handle(DepositService $depositService)
     {
-        $deposits = Deposit::where('type', 'pending')->get();
+        $deposits = Deposit::where('type', 'pending')->orderBy('created_at', 'desc')->get();
         $client = new Client();
         $i = 1;
         foreach ($deposits as $deposit) {
@@ -70,7 +70,7 @@ class CheckDepositsPending extends Command
                     }
                 }
             } else {
-                $this->info('Deposito não pago');
+                $this->info('Deposito não pago  ' . $status);
             }
         }
     }
