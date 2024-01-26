@@ -112,6 +112,7 @@ class GameHistoryController extends Controller
             "isAffiliate" => $user->isAffiliate,
             "viciosidade" => $viciosidade,
             "walletUser" => $user->wallet,
+            "maxAmmount" => $settings->maxAmountPlay
         ]);
     }
 
