@@ -8,7 +8,7 @@
 
 <br><br>A equipe do jogo ("nós" ou "Empresa") está comprometida em proteger a sua privacidade. Ao acessar ou usar o Jogo, você concorda com os termos desta política de privacidade.
 <br>1.1. Conta do Usuário e Pagamentos:
-<br>1.1.1. Para acessar o Jogo, você deve criar uma conta de usuário e concordar em fazer um depósito financeiro como condição de entrada. O valor do depósito é determinado pela Dinocash e pode ser alterado a qualquer momento.
+<br>1.1.1. Para acessar o Jogo, você deve criar uma conta de usuário e concordar em fazer um depósito financeiro como condição de entrada. O valor do depósito minimo é determinado pela Dinocash e pode ser alterado a qualquer momento.
 
 <br>1.1.2. Você é responsável por garantir que as informações da sua conta sejam precisas e atualizadas. Não compartilhe sua conta com terceiros.
 
@@ -19,7 +19,9 @@
 
 <br>1.2.2. Você não deve usar o Jogo para atividades ilegais, incluindo fraudes, hacking ou qualquer forma de trapaça.
 
-<br>1.2.3. A Dinocash reserva o direito de suspender ou encerrar sua conta a seu critério se você violar estes Termos.
+<br>1.2.3. Você deve movimentar um minimo de 2 vezes o seu depósito para sacar o valor, pois o mesmo é feito dessa forma para não ocorrer nenhum tipo de lavagem de dinheiro atravéz da plataforma.
+
+<br>1.2.4. A Dinocash reserva o direito de suspender ou encerrar sua conta a seu critério se você violar estes Termos.
 
 <br><br>1.3. Propriedade Intelectual:
 <br>1.3.1. Todos os direitos autorais, marcas registradas e outros direitos de propriedade intelectual relacionados ao Jogo são de propriedade exclusiva da Dinocash.

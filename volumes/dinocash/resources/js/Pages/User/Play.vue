@@ -8,26 +8,68 @@
         type="video/mp4"
       />
     </video> -->
-    <div class="p-2 lg:px-4 h-full">
-      <div
-        class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
-      >
-        <div class="text-center text-xl mb-1">
-          <p class="text-xl sm:text-2xl lg:text-4xl">Como Jogar:</p>
-          <p class="text-sm sm:text-lg lg:text-xl">
-            - Para iniciar o game aperte em qualquer lugar da tela!
-          </p>
-          <p class="text-sm sm:text-lg lg:text-xl">
-            - Para pular aperte com um dedo na tela e para abaixar, pressione
-            com dois dedos.
-          </p>
-          <p class="text-sm sm:text-lg lg:text-xl">Para computadores:</p>
-          <p class="text-sm sm:text-lg lg:text-xl">
-            - Para iniciar o game aperte a seta para cima ou a barra de espaço!
-          </p>
-          <p class="text-sm sm:text-lg lg:text-xl">
-            - A setas para cima e para baixo direcionam o dino!
-          </p>
+        <div class="p-2 lg:px-4 h-full">
+            <div
+                class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
+            >
+                <div class="text-center text-xl mb-1">
+                    <p class="text-xl sm:text-2xl lg:text-4xl">Como Jogar:</p>
+                    <p class="text-sm sm:text-lg lg:text-xl">
+                        - Para iniciar o game aperte em qualquer lugar da tela!
+                    </p>
+                    <p class="text-sm sm:text-lg lg:text-xl">
+                        - Para pular aperte com um dedo na tela e para abaixar,
+                        pressione com dois dedos.
+                    </p>
+                    <p class="text-sm sm:text-lg lg:text-xl">
+                        Para computadores:
+                    </p>
+                    <p class="text-sm sm:text-lg lg:text-xl">
+                        - Para iniciar o game aperte a seta para cima ou a barra
+                        de espaço!
+                    </p>
+                    <p class="text-sm sm:text-lg lg:text-xl">
+                        - A setas para cima e para baixo direcionam o dino!
+                    </p>
+                </div>
+                <div
+                    class="text-center text-lg sm:text-xl font-bold mb-1 lg:hidden"
+                >
+                    Saldo disponível: {{ toBRL(wallet) }}
+                </div>
+                <input
+                    type="text"
+                    class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
+                    placeholder="Digite o valor da aposta"
+                    v-model="amount"
+                    @input="formatAmount"
+                />
+                <div class="text-center">Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}</div>
+                <div class="text-center">
+                    Aposta máxima: {{ toBRL(maxAmmount) }}
+                </div>
+                <button
+                    class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+                    @click="startGame"
+                    :disabled="loading || !amount"
+                >
+                    <div v-if="loading">
+                        <span class="loading loading-spinner loading-sm"></span>
+                    </div>
+                    <div v-else>Jogar</div>
+                </button>
+            </div>
+            <GameCluster
+                :amount="userId"
+                v-if="isRunning"
+                :viciosidade="viciosidade"
+                :isAffiliate="isAffiliate"
+                @end-game="handleEndGame"
+                @finish-game="handleFinishGame"
+                :active="isRunning"
+                :height="clientHeight"
+                :width="clientWidth"
+            />
         </div>
         <div class="text-center text-lg sm:text-xl font-bold mb-1 lg:hidden">
           Saldo disponível: {{ toBRL(wallet) }}
@@ -92,9 +134,10 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const { viciosidade, isAffiliate } = defineProps([
-  "viciosidade",
-  "isAffiliate",
+const { viciosidade, isAffiliate, maxAmmount } = defineProps([
+    "viciosidade",
+    "isAffiliate",
+    "maxAmmount",
 ]);
 const finishGame = ref(false);
 const page = usePage();
