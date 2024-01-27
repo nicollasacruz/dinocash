@@ -44,9 +44,9 @@
                     v-model="amount"
                     @input="formatAmount"
                 />
-                <div class="text-center">Aposta mínima: R$ 1,00</div>
+                <div class="text-center">Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}</div>
                 <div class="text-center">
-                    Aposta máxima: R$ {{ toBRL(maxAmmount) }}
+                    Aposta máxima: {{ toBRL(maxAmmount) }}
                 </div>
                 <button
                     class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
