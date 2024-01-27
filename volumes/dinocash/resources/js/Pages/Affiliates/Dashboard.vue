@@ -10,6 +10,7 @@ import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
+import BaseSelect from "@/Components/BaseSelect.vue";
 import { router } from "@inertiajs/vue3";
 import { Money3Component } from "v-money3";
 
@@ -60,7 +61,7 @@ const {
 ]);
 const showModal = ref(false);
 const pixKey = ref("");
-const pixType = ref("");
+const pixType = ref("document");
 const carteira = ref(walletAffiliate);
 const withdrawButtonVisible = ref(true);
 
@@ -96,11 +97,14 @@ function permission() {
   );
 }
 
-async function withdraw() {
-  if (showModal.value === false) {
+function openModal() {
+  if (showModal.value === false && amount.value > 0) {
     showModal.value = true;
     return;
   }
+}
+
+async function withdraw() {
   if (amount.value <= 0) {
     toast.error("Saque não pode ser menor ou igual a zero");
     return;
@@ -115,7 +119,6 @@ async function withdraw() {
   }
 
   const withdrawAmountString = amount.value.toString();
-  console.log("amount string", withdrawAmountString);
   const withdrawAmount = parseFloat(
     withdrawAmountString.replace("R$ ", "").replace(",", ".")
   );
@@ -130,8 +133,6 @@ async function withdraw() {
     toast.success("Saque realizado com sucesso");
     carteira.value = carteira.value - withdrawAmount;
     amount.value = 0.0;
-    pixType.value = "";
-    pixKey.value = "";
     showModal.value = false;
     withdrawButtonVisible.value = true;
   } catch (error) {
@@ -154,6 +155,10 @@ const moneyConfig = {
   shouldRound: true,
   focusOnRight: false,
 };
+
+function setPixType(selected) {
+  pixType.value = selected;
+}
 </script>
 
 <template>
@@ -278,7 +283,7 @@ const moneyConfig = {
           v-bind="moneyConfig"
         />
         <button
-          @click="withdraw"
+          @click="openModal"
           class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase"
         >
           Solicitar saque de comissões
@@ -298,29 +303,28 @@ const moneyConfig = {
       v-if="showModal"
     >
       <div>
-        <base-input
-          class="px-1"
-          label="Tipo chave pix"
-          type="text"
-          :options="[
-            { value: 'document', label: 'CPF/CNPJ' },
-            { value: 'email', label: 'Email' },
-            { value: 'phoneNumber', label: 'Telefone' },
-            { value: 'randomKey', label: 'Aleatório' },
-          ]"
+        <select
+          @change="setPixType(pixType)"
           v-model="pixType"
-          @update:value="(e) => (pixType = e.target.value)"
-        />
+          class="px-1 text-center select w-full bordered bg-[#151515] min-h-[40px] h-[40px]"
+        >
+          <option value="document">CPF/CNPJ</option>
+          <option value="email">Email</option>
+          <option value="phoneNumber">Telefone</option>
+          <option value="randomKey">Aleatório</option>
+        </select>
+
         <base-input
           label="Digite a chave (somente números caso telefone ou cpf)"
           class="w-full px-1 my-2"
           size="xl"
           :value="pixKey"
+          v-if="pixType"
           @update:value="(e) => (pixKey = e.target.value)"
         ></base-input>
         <div class="flex justify-center">
           <button
-            v-if="withdrawButtonVisible"
+            v-if="withdrawButtonVisible && pixType && pixKey"
             class="bg-verde-claro text-black font-menu px-6 py-3 rounded-lg mt-4"
             @click="withdraw"
           >
