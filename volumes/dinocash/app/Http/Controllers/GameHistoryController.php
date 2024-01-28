@@ -99,7 +99,7 @@ class GameHistoryController extends Controller
                 $gameHistoryItem->delete();
                 $message = [
                     "id" => $user->id,
-                    "wallet" => $user->wallet
+                    "wallet" => $user->wallet + $user->bonusWallet
                 ];
 
                 event(new WalletChanged($message));
@@ -111,7 +111,7 @@ class GameHistoryController extends Controller
         return Inertia::render('User/Play', [
             "isAffiliate" => $user->isAffiliate,
             "viciosidade" => $viciosidade,
-            "walletUser" => $user->wallet,
+            "walletUser" => $user->wallet + $user->bonusWallet,
             "maxAmmount" => $settings->maxAmountPlay
         ]);
     }
@@ -121,7 +121,7 @@ class GameHistoryController extends Controller
         try {
             $request->amount = (floatval($request->amount));
             $user = User::find(Auth::user()->id);
-            if (($user->wallet < $request->amount)) {
+            if (($user->wallet + $user->bonusWallet < $request->amount)) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Não tem saldo na carteira',
@@ -144,7 +144,7 @@ class GameHistoryController extends Controller
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
-                        "wallet" => $user->wallet
+                        "wallet" => $user->wallet + $user->bonusWallet
                     ];
 
                     event(new WalletChanged($message));
@@ -165,7 +165,7 @@ class GameHistoryController extends Controller
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
-                        "wallet" => $user->wallet
+                        "wallet" => $user->wallet + $user->bonusWallet
                     ];
 
                     event(new WalletChanged($message));
@@ -180,15 +180,16 @@ class GameHistoryController extends Controller
 
             $message = [
                 "id" => $user->id,
-                "wallet" => $user->wallet
+                "wallet" => $user->wallet + $user->bonusWallet
             ];
 
             event(new WalletChanged($message));
-
+            $amountType = $user->isAffiliate ? 'fake' : ($user->wallet >= $request->amount ? 'real' : 'bonus');
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2, '.', ''),
                 'userId' => $user->id,
                 'type' => 'pending',
+                'amountType' => $amountType,
             ]);
             $hashString = hash('sha256', $gameHistory->id . $user->id . 'dinocash');
 

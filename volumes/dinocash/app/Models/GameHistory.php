@@ -24,6 +24,7 @@ class GameHistory extends Model
         'amountType',
         'type',
         'distance',
+        'amountType',
         'subCollectedAt',
     ];
 
