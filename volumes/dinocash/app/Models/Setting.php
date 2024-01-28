@@ -20,6 +20,7 @@ class Setting extends Model
         'minDeposit',
         'maxDeposit',
         'rollover',
+        'rolloverBonus',
         'defaultCPA',
         'defaultRevShare',
         'affiliatePayGGR',

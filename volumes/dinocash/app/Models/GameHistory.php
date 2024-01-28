@@ -21,6 +21,7 @@ class GameHistory extends Model
         'userId',
         'amount',
         'finalAmount',
+        'amountType',
         'type',
         'distance',
         'subCollectedAt',

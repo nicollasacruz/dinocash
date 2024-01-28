@@ -70,6 +70,7 @@ class User extends Authenticatable
         'cpaSub',
         'revShare',
         'bannedAt',
+        'bonusWallet',
     ];
     
 
@@ -95,6 +96,7 @@ class User extends Authenticatable
         'isExpert' => 'boolean',
         'wallet' => 'float',
         'walletAffiliate' => 'float',
+        'bonusWallet' => 'float',
         'referrals' => 'array',
         'affiliatedAt' => 'datetime',
         'cpaCollected' => 'boolean',
