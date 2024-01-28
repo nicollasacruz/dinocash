@@ -77,15 +77,18 @@ const form = useForm({
           value="Saldo da Carteira"
         />
 
-        <TextInput
-          v-if="user.isAffiliate"
-          id="wallet"
-          type="number"
-          class="mt-1 block w-full"
-          v-model="form.wallet"
-          required
-          autofocus
-        />
+<TextInput
+  v-if="user.isAffiliate"
+  id="wallet"
+  type="number"
+  step="0.01"
+  class="mt-1 block w-full"
+  v-model="form.wallet"
+  required
+  autofocus
+  pattern="\d+(\.\d{1,2})?"
+/>
+
 
         <InputError class="mt-2" :message="form.errors.wallet" />
       </div>
