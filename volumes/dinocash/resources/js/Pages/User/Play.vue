@@ -140,8 +140,8 @@ async function fetchStore() {
     toast.success("Partida iniciada com sucesso");
     return result;
   } catch (error) {
-    toast.error("Partida não iniciada");
-    console.error("Erro na partida:", error);
+    toast.error(error.response.data.message);
+    console.error("Erro na partida:", error.response.data.message);
   }
 }
 

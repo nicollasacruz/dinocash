@@ -213,7 +213,7 @@ class User extends Authenticatable
 
     public function bonusCampaings(): HasMany
     {
-        return $this->hasMany(BonusCampaign::class);
+        return $this->hasMany(BonusCampaign::class, 'userId');
     }
 
     public function createDeposit($amount, $uuid, $paymentCode): Deposit

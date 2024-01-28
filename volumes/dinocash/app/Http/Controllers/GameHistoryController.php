@@ -219,7 +219,13 @@ class GameHistoryController extends Controller
             if ($user->wallet > 0) {
                 $user->changeWallet($request->amount * -1);
             } else {
-                $bonus = $user->bonus->where('status', 'active')->first();
+                if ($request->amount > Setting::first()->maxAmountPlayBonus) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Não é possível apostar mais que R$' . number_format(Setting::first()->maxAmountPlayBonus, 2, ',', '.') . ' com o bônus',
+                    ], 500);
+                }
+                $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 BonusWalletChange::create([
                     'bonusCampaignId' => $bonus->id,
                     'amountOld' => $user->bonusWallet,

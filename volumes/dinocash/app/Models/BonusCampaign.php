@@ -26,11 +26,11 @@ class BonusCampaign extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'userId');
     }
 
     public function bonusWalletChanges(): HasMany
     {
-        return $this->hasMany(BonusWalletChange::class);
+        return $this->hasMany(BonusWalletChange::class, 'bonusCampaignId');
     }
 }

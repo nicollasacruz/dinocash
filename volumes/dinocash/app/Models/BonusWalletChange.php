@@ -20,6 +20,6 @@ class BonusWalletChange extends Model
 
     public function bonusCampaign(): BelongsTo
     {
-        return $this->belongsTo(BonusCampaign::class);
+        return $this->belongsTo(BonusCampaign::class, 'bonusCampaignId');
     }
 }
