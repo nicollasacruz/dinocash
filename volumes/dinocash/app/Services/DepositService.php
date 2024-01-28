@@ -165,7 +165,7 @@ class DepositService
                 'bonusCampaignId' => $bonus->id,
                 'amountOld' => $user->bonusWallet,
                 'amountNew' => $user->bonusWallet + $amountBonus,
-                'type' => 'CREDIT',
+                'type' => 'credit',
             ]);
 
             $user->bonusWallet += $amountBonus;
