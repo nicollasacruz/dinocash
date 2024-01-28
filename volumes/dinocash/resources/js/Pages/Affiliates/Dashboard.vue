@@ -136,7 +136,7 @@ async function withdraw() {
     showModal.value = false;
     withdrawButtonVisible.value = true;
   } catch (error) {
-    toast.error("Não foi possível realizar o saque");
+    toast.error(error.response.data.message);
   }
 }
 
