@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->integer('maxDepositBonusToUser')->default(1)->after('maxAutoPayWithdraw');
+        Schema::table('bonus_wallet_changes', function (Blueprint $table) {
+            $table->string('type')->after('amountNew');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('maxDepositBonusToUser');
+        Schema::table('bonus_wallet_changes', function (Blueprint $table) {
+            $table->dropColumn('type');
         });
     }
 };

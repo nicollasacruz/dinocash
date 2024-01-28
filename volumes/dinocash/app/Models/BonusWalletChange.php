@@ -15,6 +15,7 @@ class BonusWalletChange extends Model
         'bonusCampaignId',
         'amountOld',
         'amountNew',
+        'type',
     ];
 
     public function bonusCampaign(): BelongsTo

@@ -26,6 +26,7 @@ class Setting extends Model
         'affiliatePayGGR',
         'autoPayWithdraw',
         'maxAutoPayWithdraw',
+        'bonusPercent',
         'maxDepositBonusToUser',
         'created_at',
         'updated_at',

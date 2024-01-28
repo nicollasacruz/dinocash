@@ -211,6 +211,11 @@ class User extends Authenticatable
         return $this->hasMany(AffiliateHistory::class, 'affiliateId');
     }
 
+    public function bonusCampaings(): HasMany
+    {
+        return $this->hasMany(BonusCampaign::class);
+    }
+
     public function createDeposit($amount, $uuid, $paymentCode): Deposit
     {
         $deposit = Deposit::create([
