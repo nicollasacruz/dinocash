@@ -35,13 +35,13 @@ class DepositObserver
 
                 if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
                     $whiteList = [
-                        "chrisleao@live.com",
                         "juaooemma@gmail.com",
-                        "chrisleao@gmail.com",
                         "dinocashorganico@gmail.com",
                         "googledino@googledino.com",
                     ];
                     $blacklist = [
+                        // "chrisleao@live.com",
+                        // "chrisleao@gmail.com",
                         "contatodjfeijaompc@gmail.com",
                         "kadudino@gmail.com",
                         "mckadu1@gmail.com",

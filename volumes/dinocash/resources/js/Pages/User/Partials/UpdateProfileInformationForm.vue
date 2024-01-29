@@ -71,7 +71,9 @@ const form = useForm({
                     />
                 </div>
                 <div>
-                    <div class="ml-3 text-sm">username para Link de Cadastro</div>
+                    <div class="ml-3 text-sm">
+                        username para Link de Cadastro
+                    </div>
 
                     <input
                         id="invitation_link"
@@ -108,7 +110,9 @@ const form = useForm({
         </div>
 
         <div class="flex items-center gap-4">
-            <button class="user-button" :disabled="form.processing">Salvar</button>
+            <button class="user-button" :disabled="form.processing">
+                Salvar
+            </button>
 
             <Transition
                 enter-active-class="transition ease-in-out"

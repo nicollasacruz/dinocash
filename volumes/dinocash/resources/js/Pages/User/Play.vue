@@ -47,7 +47,7 @@
                     @input="formatAmount"
                 />
                 <button
-                    class="user-button mt-4 md:mt-0 "
+                    class="user-button mt-4 md:mt-0"
                     @click="startGame"
                     :disabled="loading || !amount"
                 >
@@ -57,9 +57,12 @@
                     <div v-else>Jogar</div>
                 </button>
             </div>
-            <div class="text-sm">Aposta mínima: R$ 1,00</div>
-            <div class="text-sm">Aposta máxima: R$ 1000,00</div>
-
+            <div class="text-left">
+                Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}
+            </div>
+            <div class="text-left">
+                Aposta máxima: {{ toBRL(maxAmmount) }}
+            </div>
             <GameCluster
                 :amount="userId"
                 v-if="isRunning"
@@ -103,9 +106,10 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const { viciosidade, isAffiliate } = defineProps([
+const { viciosidade, isAffiliate, maxAmmount } = defineProps([
     "viciosidade",
     "isAffiliate",
+    "maxAmmount",
 ]);
 const finishGame = ref(false);
 const page = usePage();

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\BannedCheck;
+use App\Http\Middleware\RateLimitMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -43,6 +44,7 @@ class Kernel extends HttpKernel
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\InertiaGlobalPropsMiddleware::class,
             BannedCheck::class,
+            // RateLimitMiddleware::class,
         ],
 
         'api' => [
@@ -74,6 +76,5 @@ class Kernel extends HttpKernel
         'session.check' => \App\Http\Middleware\UpdateUserActivity::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'isAffiliate' => \App\Http\Middleware\IsAffiliateMiddleware::class,
-        'singleSession' => \App\Http\Middleware\SingleSession::class,
     ];
 }
