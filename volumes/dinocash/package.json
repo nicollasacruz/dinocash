@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@canvasjs/vue-charts": "^1.0.1",
-        "@heroicons/vue": "^2.0.18",
+        "@heroicons/vue": "^2.1.1",
         "@vee-validate/yup": "^4.12.2",
         "date-fns": "^2.30.0",
         "dayjs": "^1.11.10",

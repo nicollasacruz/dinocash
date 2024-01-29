@@ -196,7 +196,12 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposito.destroy');
-
+    Route::get('/alterar-icone', function () {
+        return Inertia::render('User/ChangeIcon');
+    })->name('user.alterar_icone');
+    Route::get('/shop', function () {
+        return Inertia::render('User/Shop');
+    })->name('user.shop');
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');

@@ -1,28 +1,17 @@
 <template>
-  <Head title="Perfil" />
-  <UserLayout>
-    <div class="p-3 px-8">
-      <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-          <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+    <Head title="Perfil" />
+    <UserLayout>
+        <div class="lg:p-6 lg:px-16 p-3">
+            <div class="text-5xl text-verde-escuro font-extrabold font-menu">
+                Perfil
+            </div>
             <UpdateProfileInformationForm
-              :must-verify-email="mustVerifyEmail"
-              :status="status"
-              class="max-w-xl"
+                :must-verify-email="mustVerifyEmail"
+                :status="status"
             />
-          </div>
-
-          <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <UpdatePasswordForm class="max-w-xl" />
-          </div>
-
-          <!-- <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <DeleteUserForm class="max-w-xl" />
-          </div> -->
+            <UpdatePasswordForm />
         </div>
-      </div>
-    </div>
-  </UserLayout>
+    </UserLayout>
 </template>
 
 <script setup lang="ts">
@@ -37,12 +26,12 @@ import UpdateProfileInformationForm from "../User/Partials/UpdateProfileInformat
 import { Head } from "@inertiajs/vue3";
 
 defineProps({
-  mustVerifyEmail: {
-    type: Boolean,
-  },
-  status: {
-    type: String,
-  },
+    mustVerifyEmail: {
+        type: Boolean,
+    },
+    status: {
+        type: String,
+    },
 });
 
 const loading = ref(false);
@@ -51,19 +40,19 @@ const newPassword = ref("");
 const newPasswordConfirmation = ref("");
 
 async function changePassword() {
-  loading.value = true;
-  try {
-    const payload = {
-      current_password: currentPassword.value,
-      password: newPassword.value,
-      password_confirmation: newPasswordConfirmation.value,
-    };
-    const { data } = await axios.put(route("password.update"), payload);
-    toast.success("Senha alterada com sucesso!");
-  } catch (error) {
-    alert(error.response.data.message);
-  } finally {
-    loading.value = false;
-  }
+    loading.value = true;
+    try {
+        const payload = {
+            current_password: currentPassword.value,
+            password: newPassword.value,
+            password_confirmation: newPasswordConfirmation.value,
+        };
+        const { data } = await axios.put(route("password.update"), payload);
+        toast.success("Senha alterada com sucesso!");
+    } catch (error) {
+        alert(error.response.data.message);
+    } finally {
+        loading.value = false;
+    }
 }
 </script>

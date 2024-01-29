@@ -18,11 +18,20 @@
         @apply btn btn-xs mx-auto w-full text-[0.6rem];
     }
     .drawer-button {
-        @apply text-lg bg-gray-700 px-4 rounded-md py-[6px];
+        @apply text-lg bg-[#0D0713] px-4 rounded-md py-[6px];
     }
     .start-game-text {
         position: absolute;
         top: 50%;
         font-size: 25px;
+    }
+    .user-input {
+        @apply bg-[#1C1328] border-2 border-roxo rounded-2xl py-3;
+    }
+    .user-button {
+        @apply py-2 bg-verde-escuro text-black px-10 rounded-xl font-menu md:text-3xl
+    }
+    .lp-button {
+        @apply py-2 bg-verde text-[#441C5B] px-5 rounded-xl font-menu text-xl md:text-2xl flex justify-center items-center
     }
 }

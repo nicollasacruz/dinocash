@@ -6,95 +6,37 @@
             <div
                 class="text-5xl mb-5 text-verde-escuro font-extrabold font-menu"
             >
-                Sacar
+                Loja
             </div>
-            <div class="flex-col flex gap-y-4">
-                <input
-                    type="number"
-                    class="max-w-xs user-input w-full"
-                    placeholder="Digite o valor da aposta"
-                    v-model="amount"
-                    :min="minWithdraw"
-                    :max="maxWithdraw"
-                />
-                <div class="text-lg lg:text-xl font-bold">
-                    <div>
-                        Saldo disponível:
-                        <b class="text-verde-escuro">{{ toBRL(wallet) }}</b>
-                    </div>
-                </div>
-                <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="" />
-                <button
-                    @click="showModal = true"
-                    class="py-2 px-10 user-button max-w-sm"
-                    :disabled="loading"
-                >
-                    <div v-if="loading">
-                        <span class="loading loading-spinner loading-sm"></span>
-                    </div>
-                    <div v-else>Sacar</div>
-                </button>
-
-                <div class="mt-2 lg:mt-4 text-sm md:text-md">
-                    Saques serão enviados em até 12 horas úteis após a
-                    solicitação da retirada. <br />
-                    Os saques serão enviados na chave pix do CPF cadastrado.
-                </div>
+            <div class="mb-5 text-sm md:text-md">
+                Adquira ícones exclusivos para deixar o seu perfil ainda mais
+                com a sua cara. <br />
+                A loja de ícones é renovada a cada segunda-feira.
+            </div>
+            <div class="grid grid-cols-3 md:grid-cols-5 gap-4 justify-center">
+                <IconCard v-for="i in 10" :key="i" :preco="Math.random() * 9" />
+            </div>
+            <div class="text-sm md:text-md mt-5">
+                Para adquirir um ícone, basta clicar sob o ícone desejado e
+                escanear o OR Code via pix com a câmera de seu celular,
+                diretamente no seu aplicativo bancário. O ícone sera enviado a
+                sua conta assim que o pagamento for compensado. Importante:
+                ícones não são reembolsáveis.
             </div>
         </div>
         <Loading :loading="loading" />
     </UserLayouyt>
-    <BaseModal
-        title="Informações do saque"
-        v-model="showModal"
-        @close="showModal = false"
-        v-if="showModal"
-    >
-        <div>
-            <base-input
-                class="px-1"
-                label="Tipo chave pix"
-                type="text"
-                :options="[
-                    { value: 'document', label: 'CPF/CNPJ' },
-                    { value: 'email', label: 'Email' },
-                    { value: 'phoneNumber', label: 'Telefone' },
-                    { value: 'randomKey', label: 'Aleatório' },
-                ]"
-                v-model="pixType"
-                :value="pixType"
-                @update:value="(e) => (pixType = e.target.value)"
-            />
-            <base-input
-                label="Digite a chave (somente números caso telefone ou cpf)"
-                class="w-full px-1 my-2"
-                size="xl"
-                :value="pixKey"
-                @update:value="(e) => (pixKey = e.target.value)"
-            ></base-input>
-            <div class="flex justify-center">
-                <button
-                    class="bg-verde-claro text-black font-menu px-6 py-3 rounded-lg mt-4"
-                    @click="withdraw"
-                >
-                    SACAR
-                </button>
-            </div>
-        </div>
-    </BaseModal>
 </template>
 
 <script setup lang="ts">
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
-import dayjs from "dayjs";
-import { computed, ref, defineProps, onMounted } from "vue";
-import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
+import { computed, ref, defineProps } from "vue";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { number } from "yup";
 import { usePage } from "@inertiajs/vue3";
+import IconCard from "./IconCard.vue";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
 const { minWithdraw, maxWithdraw, walletUser } = defineProps([

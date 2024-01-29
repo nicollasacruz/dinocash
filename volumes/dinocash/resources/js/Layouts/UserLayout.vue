@@ -6,6 +6,7 @@ import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
 import { usePage } from "@inertiajs/vue3";
+import UserHeader from "@/Components/UserHeader.vue";
 
 const page = usePage();
 const userId = computed(() => page.props.auth.user.id);
@@ -15,9 +16,6 @@ const wallet = ref(userWallet);
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
     wallet.value = e.message.wallet;
 });
-watch(
-    () => wallet.value,
-);
 const drawer = ref(false);
 </script>
 
@@ -50,7 +48,7 @@ const drawer = ref(false);
                 </div>
             </div>
             <div
-                class="drawer-content h-screen flex flex-col relative flex-1 px-4 py-2 lg:px-10 lg:py-8"
+                class="drawer-content h-screen flex flex-col relative flex-1"
                 :style="{
                     'background-image': `url('${Background}')`,
                     'background-size': 'cover',
@@ -58,25 +56,21 @@ const drawer = ref(false);
                 }"
             >
                 <!-- Page content here -->
-                <bars3-icon
-                    @click="drawer = !drawer"
-                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-black"
+                <UserHeader
+                    @toggle="drawer = !drawer"
+                    :wallet="wallet"
+                    :name="$page.props.auth.user.name"
                 />
-                <img
-                    :src="logoDinoRoxo"
-                    class="mx-auto mb-5 w-36 lg:w-64"
-                    alt=""
-                />
-                <div class="flex gap-x-6 force-height">
+                <div class="flex gap-x-6 h-[93%] p-3 py-2 lg:px-10 lg:py-8">
                     <UserDrawer
                         :wallet="wallet"
                         @close="drawer = false"
                         class="hidden lg:block"
                     />
                     <div
-                        class="border-8 border-black bg-white rounded-xl flex-1 overflow-x-auto"
+                        class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
                     >
-                        <slot :wallet="wallet"/>
+                        <slot :wallet="wallet" />
                     </div>
                 </div>
             </div>
@@ -89,5 +83,9 @@ const drawer = ref(false);
     @media (min-width: 1024px) {
         height: calc(100vh - 200px);
     }
+}
+.font-lighter {
+    font-family: "FF-Mark", sans-serif;
+    src: url("/resources/css/FF-Mark/MarkPro-Thin.otf") format("opentype");
 }
 </style>

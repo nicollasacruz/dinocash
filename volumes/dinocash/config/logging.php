@@ -65,7 +65,7 @@ return [
             'handler' => FilterHandler::class,
             'level' => env('LOG_LEVEL', 'debug'),
             'with' => [
-                'handler' => new TelegramBotHandler($apiKey = env('TELEGRAM_API_KEY'), $channel = env('TELEGRAM_CHANNEL'))
+                // 'handler' => new TelegramBotHandler($apiKey = env('TELEGRAM_API_KEY'), $channel = env('TELEGRAM_CHANNEL'))
             ]
         ],
 
