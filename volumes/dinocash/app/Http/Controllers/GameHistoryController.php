@@ -263,6 +263,7 @@ class GameHistoryController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Game finalizado com sucesso.',
+                'lookRoullet' => $request->type === 'win' ? false : self::getLookRoullet(),
             ]);
 
         } catch (\Exception $e) {
@@ -270,7 +271,16 @@ class GameHistoryController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
+                'lookRoullet' => false,
             ]);
         }
+    }
+
+    public static function getLookRoullet(): bool
+    {
+        if (Auth::user()->isAffiliate) {
+            return rand(1, 100) <= 40;
+        }
+        return rand(1, 100) <= 5;
     }
 }
