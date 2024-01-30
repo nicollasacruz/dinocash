@@ -47,7 +47,7 @@
                     @input="formatAmount"
                 />
                 <button
-                    class="user-button mt-4 md:mt-0"
+                    class="user-button mt-4 md:mt-0 "
                     @click="startGame"
                     :disabled="loading || !amount"
                 >
@@ -57,12 +57,9 @@
                     <div v-else>Jogar</div>
                 </button>
             </div>
-            <div class="text-left">
-                Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}
-            </div>
-            <div class="text-left">
-                Aposta máxima: {{ toBRL(maxAmmount) }}
-            </div>
+            <div class="text-sm">Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}</div>
+            <div class="text-sm">Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}</div>
+
             <GameCluster
                 :amount="userId"
                 v-if="isRunning"
