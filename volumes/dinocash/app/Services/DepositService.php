@@ -96,7 +96,7 @@ class DepositService
         }
     }
 
-    public function aproveDeposit(Deposit $deposit): bool
+    public function aproveDeposit(Deposit $deposit, BonusService $bonusService): bool
     {
         try {
             $user = User::find($deposit->user->id);
@@ -114,9 +114,7 @@ class DepositService
             $user->wallet += $amount;
             $user->save();
 
-            if ($deposit->hasBonus && $user->bonusCampaings()->count() < Setting::first()->maxDepositBonusToUser) {
-                $this->createBonusDeposit($deposit);
-            }
+            $bonusService->createBonusDeposit($deposit);
 
             try {
                 if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
