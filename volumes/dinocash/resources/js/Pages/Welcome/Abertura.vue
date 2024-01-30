@@ -1,7 +1,7 @@
 <template>
     <section
         id="section1"
-        class="section1 h-screen mx-auto items-center pt-4 px-4 md:p-2 flex flex-col"
+        class="section1 h-screen mx-auto items-center pt-4 px-4 md:p-2 flex flex-col relative"
         :style="{
             backgroundImage: `url('${
                 windowWidth < 700 ? bgMobile : background
@@ -18,61 +18,66 @@
         >
             {{ $page.props.errors.banned }}
         </div>
+        <div class="flex flex-col items-center md:flex-row">
+            <div class="my-3 md:my-10 lg:w-[550px] px-3 flex-1">
+                <div class="flex sm:justify-center lg:justify-start">
+                    <img
+                        :src="DinoLogo"
+                        alt="dinoLogo"
+                        class="w-full sm:w-80 lg:w-10/12 -ml-2"
+                    />
+                </div>
+                <div class="md:text-lg">
+                    Seja bem-vindo(a) ao <b class="text-verde">DinoCash!</b
+                    ><br />
+                    O jogo que você não precisa <br class="hidden" />
+                    contar com a sua <br class="hidden lg:block" />
+                    sorte,
+                    <span class="text-verde">
+                        apenas <br class="hidden" />
+                        com sua habilidade.
+                    </span>
+                </div>
+                <div
+                    v-if="!!!$page?.props?.auth?.user?.id"
+                    class="w-full mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
+                >
+                    <Link
+                        class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
+                        :href="route('login')"
+                        >{{ __("auth.login") }}</Link
+                    >
 
-        <div class="my-3 md:my-10 lg:w-[550px] px-3">
-            <div class="flex sm:justify-center lg:justify-start">
-                <img
-                    :src="DinoLogo"
-                    alt="dinoLogo"
-                    class="w-full sm:w-80 lg:w-10/12 -ml-2"
-                />
-            </div>
-            <div class="text-white text-lg">
-                Seja bem-vindo(a) ao <b class="text-verde">DinoCash!</b><br />
-                O jogo que você não precisa <br class="hidden" />
-                contar com a sua <br class="hidden lg:block" />
-                sorte,
-                <span class="text-verde">
-                    apenas <br class="hidden" />
-                    com sua habilidade.
-                </span>
-            </div>
-            <div
-                v-if="!!!$page?.props?.auth?.user?.id"
-                class="w-full mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
-            >
-                <Link
-                    class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
-                    :href="route('login')"
-                    >{{ __("auth.login") }}</Link
+                    <Link
+                        class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
+                        :href="route('register')"
+                    >
+                        {{ __("auth.register") }}
+                    </Link>
+                </div>
+                <div
+                    class="w-full mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
+                    v-else
                 >
-
-                <Link
-                    class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
-                    :href="route('register')"
-                >
-                    {{ __("auth.register") }}
-                </Link>
+                    <Link
+                        class="md:mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
+                        :href="route('user.deposito')"
+                    >
+                        DEPOSITAR
+                    </Link>
+                    <Link
+                        class="md:mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
+                        :href="route('user.play')"
+                    >
+                        {{ __("homepage.play-now") }}
+                    </Link>
+                </div>
+                <div class="mb-[10vh] md:text-lg text-start mt-3">
+                    {{ __("homepage.register-tip") }}
+                </div>
             </div>
-            <div
-                class="w-full mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
-                v-else
-            >
-                <Link
-                    class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
-                    :href="route('user.deposito')"
-                >
-                    DEPOSITAR
-                </Link>
-                <Link
-                    class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
-                    :href="route('user.play')"
-                >
-                    {{ __("homepage.play-now") }}
-                </Link>
-            </div>
-            <div class="mb-[10vh] text-lg text-white text-start mt-3">
-                {{ __("homepage.register-tip") }}
+            <div class="absolute bottom-0 md:relative w-52 md:w-[500px]">
+                <img :src="DinoHome" alt="" class=" md:mt-16" />
             </div>
         </div>
     </section>
@@ -82,6 +87,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import background from "../../../../storage/imgs/home-page/bg.jpg";
 import bgMobile from "../../../../storage/imgs/home-page/bg-mobile.jpg";
+import DinoHome from "../../../../storage/imgs/home-page/dino-home.svg";
 
 import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";
 

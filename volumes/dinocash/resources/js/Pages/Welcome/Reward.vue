@@ -9,14 +9,18 @@
             backgroundRepeat: 'no-repeat',
         }"
     >
-        <div class="text-4xl md:text-6xl text-verde font-menu text-center md:text-right mb-5">
+        <div
+            class="text-4xl md:text-6xl text-verde font-menu text-center md:text-right lg:mr-40 "
+        >
             Recompensas
         </div>
-        <div class="flex flex-col items-center md:flex-row">
-            <div class="md:flex-1 w-full bg-white h-52 md:mr-5 mb-3"></div>
-            <div class="flex flex-1 w-full justify-end">
+        <div class="flex flex-col items-center md:items-start md:flex-row lg:mr-40">
+            <div class="flex-1 w-full md:mr-5 flex justify-center md:justify-end">
+                <img :src="reward" class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-8" />
+            </div>
+            <div class="flex justify-center md:justify-end w-full md:w-auto">
                 <div
-                    class="md:text-lg max-h-[60%] text-right mt-5 text-white mb-2 w-96 md:max-w-md"
+                    class="md:text-lg max-h-[60%] text-right mb-2 w-96 md:max-w-md md:mt-5"
                 >
                     <div>
                         Jogue DinoCash e ganhe recompensas exclusivas, são
@@ -43,6 +47,8 @@
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import background from "../../../../storage/imgs/home-page/bg.jpg";
+import reward from "../../../../storage/imgs/home-page/reward.svg";
+
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
     defineProps({
         canLogin: {

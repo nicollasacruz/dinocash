@@ -14,7 +14,7 @@
         <div class="text-5xl md:text-6xl text-verde font-menu text-start">Dino Cash</div>
         <div class="flex flex-col lg:flex-row">
             <div
-                class="text-sm md:text-lg max-h-[60%] text-justify mt-3 md:mt-5 text-white flex-1 mb-2 lg:mr-5"
+                class="text-sm md:text-lg max-h-[60%] text-justify mt-3 md:mt-5 flex-1 mb-2 lg:mr-5"
             >
                 Bem-vindo ao Dinocash, sua principal opção de entretenimento e
                 lucratividade em jogos online! Como uma provedora totalmente
