@@ -159,22 +159,6 @@ const moneyConfig = {
 function setPixType(selected) {
   pixType.value = selected;
 }
-
-const moneyConfig = {
-  prefix: "R$ ",
-  suffix: "",
-  thousands: ".",
-  decimal: ",",
-  precision: 2,
-  disableNegative: true,
-  disabled: false,
-  min: null,
-  max: null,
-  allowBlank: false,
-  minimumNumberOfCharacters: 0,
-  shouldRound: true,
-  focusOnRight: false,
-};
 </script>
 
 <template>
