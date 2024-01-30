@@ -17,11 +17,9 @@ class SingleSession extends Middleware
         if ($user) {
             $currentSessionId = session()->getId();
 
-            // Get all sessions for the user
             $userSessions = DB::table('sessions')->where('user_id', $user->id)->where('id', '!=', $currentSessionId)->get();
 
             foreach ($userSessions as $session) {
-                // Destroy all sessions except the current one
                 if ($session->id !== $currentSessionId) {
                     $this->destroySession($session->id);
                 }

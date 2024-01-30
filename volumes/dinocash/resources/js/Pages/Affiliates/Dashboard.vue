@@ -74,7 +74,7 @@ axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
 ).content;
 console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
-const link = "https://dinocash.io/ref/" + affiliateLink;
+const link = "https://dinobet.vip/ref/" + affiliateLink;
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
@@ -119,7 +119,6 @@ async function withdraw() {
   }
 
   const withdrawAmountString = amount.value.toString();
-  console.log("amount string", withdrawAmountString);
   const withdrawAmount = parseFloat(
     withdrawAmountString.replace("R$ ", "").replace(",", ".")
   );
@@ -134,13 +133,31 @@ async function withdraw() {
     toast.success("Saque realizado com sucesso");
     carteira.value = carteira.value - withdrawAmount;
     amount.value = 0.0;
-    pixType.value = "";
-    pixKey.value = "";
     showModal.value = false;
     withdrawButtonVisible.value = true;
   } catch (error) {
     toast.error("Não foi possível realizar o saque");
   }
+}
+
+const moneyConfig = {
+  prefix: "R$ ",
+  suffix: "",
+  thousands: ".",
+  decimal: ",",
+  precision: 2,
+  disableNegative: true,
+  disabled: false,
+  min: null,
+  max: null,
+  allowBlank: false,
+  minimumNumberOfCharacters: 0,
+  shouldRound: true,
+  focusOnRight: false,
+};
+
+function setPixType(selected) {
+  pixType.value = selected;
 }
 
 const moneyConfig = {

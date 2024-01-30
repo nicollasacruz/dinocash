@@ -128,8 +128,9 @@ const score = ref(0);
 const type = ref("loss");
 const loading = ref(false);
 function handleButtonClick() {
-    endGame.value = false;
-    location.reload();
+  endGame.value = false;
+  amount.value = 0;
+  location.reload();
 }
 
 async function fetchStore() {
@@ -155,6 +156,23 @@ async function fetchStore() {
         toast.error("Partida não iniciada");
         console.error("Erro na partida:", error);
     }
+    if (amount.value > page.props.settings.maxAmountPlay) {
+      toast.error(
+        "Valor não pode ser maior que " +
+          toBRL(page.props.settings.maxAmountPlay)
+      );
+      return;
+    }
+    const response = await axios.post(route("user.play.store"), {
+      amount: amount.value,
+    });
+    const result = response.data.gameHistory.id;
+    toast.success("Partida iniciada com sucesso");
+    return result;
+  } catch (error) {
+    toast.error(error.response.data.message);
+    console.error("Erro na partida:", error.response.data.message);
+  }
 }
 
 async function generateSHA256Hash(input) {
@@ -182,13 +200,14 @@ async function fetchUpdate() {
             token: hash,
         });
 
-        const result = response.data;
-        return result;
-    } catch (error) {
-        console.error("Erro na pesquisa:", error);
-
-        throw error;
+    const result = response.data;
+    if (result.errors?.locked) {
+      toast.error("Você está em modo de economia de energia!");
     }
+    return result;
+  } catch (error) {
+    console.log("Erro na pesquisa:", error);
+  }
 }
 
 async function startGame() {
@@ -297,6 +316,16 @@ const handleFinishGame = (pontuation) => {
     const div = document.getElementById("root") as HTMLDivElement;
     div.style.display = "block";
     fetchUpdate();
+};
+
+const handleLockGame = (pontuation) => {
+  isRunning.value = false;
+  endGame.value = true;
+  score.value = pontuation;
+  type.value = "locked";
+  const div = document.getElementById("root") as HTMLDivElement;
+  div.style.display = "block";
+  fetchUpdate();
 };
 
 function toBRL(value) {

@@ -17,6 +17,7 @@ class Deposit extends Model
         'amount',
         'type',
         'paymentCode',
+        'hasBonus',
         'approvedAt',
         'externalId',
     ];

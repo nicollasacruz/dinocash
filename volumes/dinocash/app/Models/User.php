@@ -70,6 +70,7 @@ class User extends Authenticatable
         'cpaSub',
         'revShare',
         'bannedAt',
+        'bonusWallet',
     ];
     
 
@@ -95,6 +96,7 @@ class User extends Authenticatable
         'isExpert' => 'boolean',
         'wallet' => 'float',
         'walletAffiliate' => 'float',
+        'bonusWallet' => 'float',
         'referrals' => 'array',
         'affiliatedAt' => 'datetime',
         'cpaCollected' => 'boolean',
@@ -207,6 +209,11 @@ class User extends Authenticatable
     public function affiliateHistories()
     {
         return $this->hasMany(AffiliateHistory::class, 'affiliateId');
+    }
+
+    public function bonusCampaings(): HasMany
+    {
+        return $this->hasMany(BonusCampaign::class, 'userId');
     }
 
     public function createDeposit($amount, $uuid, $paymentCode): Deposit

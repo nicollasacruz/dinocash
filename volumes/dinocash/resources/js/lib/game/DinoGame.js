@@ -246,7 +246,7 @@ export default class DinoGame extends GameRunner {
                 detail: this.state.score.value,
             });
             document.dispatchEvent(eventoModificacao);
-            this.endGame();
+            // this.endGame();
         });
         return finishButton;
     }
@@ -371,7 +371,7 @@ export default class DinoGame extends GameRunner {
             const isPowerSavingMode = await this.detectPowerSavingMode();
             console.log(isPowerSavingMode)
             if (isPowerSavingMode) {
-                this.endGame();
+                this.lockGame();
             }
         }, 2000);
     }
@@ -379,6 +379,16 @@ export default class DinoGame extends GameRunner {
     endGame() {
         this.state.isRunning = false;
         const eventoModificacao = new CustomEvent("endGame", {
+            detail: this.state.score.value,
+        });
+        const canvasContainer = document.getElementById("canvasContainer");
+        canvasContainer.style.display = "none";
+        document.dispatchEvent(eventoModificacao);
+    }
+
+    lockGame() {
+        this.state.isRunning = false;
+        const eventoModificacao = new CustomEvent("lockGame", {
             detail: this.state.score.value,
         });
         const canvasContainer = document.getElementById("canvasContainer");

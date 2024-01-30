@@ -29,7 +29,7 @@ const props = defineProps({
     isAffiliate: Boolean,
     amount: Number,
 });
-const emit = defineEmits(["endGame", "finishGame"]);
+const emit = defineEmits(["endGame", "finishGame", "lockGame"]);
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
 const width = windowWidth < 650 ? windowWidth : 650;
@@ -50,6 +50,10 @@ document.addEventListener("endGame", ({ detail }) => {
 });
 document.addEventListener("finishGame", ({ detail }) => {
     emit("finishGame", detail);
+    // destroy game instance
+});
+document.addEventListener("lockGame", ({ detail }) => {
+    emit("lockGame", detail);
     // destroy game instance
 });
 game.start().catch(console.error);
