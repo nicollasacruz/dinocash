@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\WalletChanged;
-use App\Models\AffiliateHistory;
-use App\Models\AffiliateWithdraw;
+use App\Models\BonusWalletChange;
 use App\Models\Deposit;
 use App\Models\GameHistory;
 use App\Models\Setting;
@@ -30,24 +29,11 @@ class GameHistoryController extends Controller
                 $query->where('isAffiliate', false);
             })
             ->sum('amount');
-        $withdrawsAmountAffiliatePaid = AffiliateWithdraw::where('type', 'paid')
-            ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false);
-            })
-            ->sum('amount');
 
         $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
 
-        $walletsAfilliateAmount = User::where('role', 'user')->where('isAffiliate', true)->sum('walletAffiliate');
-
-        $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)->with([
-            'affiliate' => function ($query) {
-                $query
-                    ->where('role', 'user');
-            }
-        ])->sum('amount');
-
         $gain = $depositsAmountPaid ?? 1;
+
         if (env('APP_GGR_DEPOSIT')) {
             $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
         }
@@ -68,8 +54,20 @@ class GameHistoryController extends Controller
             $gameHistory = $user->gameHistories->where('type', 'pending');
             if ($gameHistory) {
                 foreach ($gameHistory as $gameHistoryItem) {
-
-                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    if ($gameHistory->amountType !== 'bonus') {
+                        $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    } else {
+                        $bonus = $user->bonus->where('status', 'active')->first();
+                        BonusWalletChange::create([
+                            'bonusCampaignId' => $bonus->id,
+                            'amountOld' => $user->bonusWallet,
+                            'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                            'type' => 'game pending error',
+                        ]);
+                        $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
+                        $bonus->save();
+                        $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                    }
                     $user->save();
                     $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
                         $affiliateHistory->delete();
@@ -91,7 +89,20 @@ class GameHistoryController extends Controller
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
 
-                $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                if ($gameHistory->amountType !== 'bonus') {
+                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                } else {
+                    $bonus = $user->bonus->where('status', 'active')->first();
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                        'type' => 'game gaming error',
+                    ]);
+                    $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
+                    $bonus->save();
+                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                }
                 $user->save();
                 $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
                     $affiliateHistory->delete();
@@ -99,7 +110,7 @@ class GameHistoryController extends Controller
                 $gameHistoryItem->delete();
                 $message = [
                     "id" => $user->id,
-                    "wallet" => $user->wallet
+                    "wallet" => $user->wallet + $user->bonusWallet
                 ];
 
                 event(new WalletChanged($message));
@@ -111,7 +122,7 @@ class GameHistoryController extends Controller
         return Inertia::render('User/Play', [
             "isAffiliate" => $user->isAffiliate,
             "viciosidade" => $viciosidade,
-            "walletUser" => $user->wallet,
+            "walletUser" => $user->wallet + $user->bonusWallet,
             "maxAmmount" => $settings->maxAmountPlay
         ]);
     }
@@ -120,23 +131,42 @@ class GameHistoryController extends Controller
     {
         try {
             $request->amount = (floatval($request->amount));
-            $user = User::find(Auth::user()->id);
-            if (($user->wallet < $request->amount)) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Não tem saldo na carteira',
-                ], 500);
-            }
-            if ($request->amount < 1) {
+            if ($request->amount <= 0) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Aposta não pode ser menor que 0',
                 ], 500);
             }
+            $user = User::find(Auth::user()->id);
+            if (($user->wallet + $user->bonusWallet < $request->amount)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Não tem saldo na carteira',
+                ], 500);
+            }
+            if (($user->wallet + $user->bonusWallet >= $request->amount && $user->wallet > 0 && $user->wallet < $request->amount)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Use primeiro o saldo da carteira antes de usar o bônus',
+                ], 500);
+            }
             $gameHistories = $user->gameHistories->where('type', 'pending');
             if ($gameHistories) {
                 foreach ($gameHistories as $gameHistoryItem) {
-                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    if ($gameHistoryItem->amountType !== 'bonus') {
+                        $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    } else {
+                        $bonus = $user->bonus->where('status', 'active')->first();
+                        BonusWalletChange::create([
+                            'bonusCampaignId' => $bonus->id,
+                            'amountOld' => $user->bonusWallet,
+                            'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                            'type' => 'game pending error',
+                        ]);
+                        $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
+                        $bonus->save();
+                        $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                    }
                     $user->save();
                     $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
                         $affiliateHistory->delete();
@@ -144,9 +174,9 @@ class GameHistoryController extends Controller
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
-                        "wallet" => $user->wallet
+                        "wallet" => $user->wallet + $user->bonusWallet
                     ];
-    
+
                     event(new WalletChanged($message));
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
@@ -157,7 +187,20 @@ class GameHistoryController extends Controller
             if ($gameHistories) {
                 foreach ($gameHistories as $gameHistoryItem) {
 
-                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    if ($gameHistoryItem->amountType !== 'bonus') {
+                        $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                    } else {
+                        $bonus = $user->bonus->where('status', 'active')->first();
+                        BonusWalletChange::create([
+                            'bonusCampaignId' => $bonus->id,
+                            'amountOld' => $user->bonusWallet,
+                            'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                            'type' => 'game gaming error',
+                        ]);
+                        $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
+                        $bonus->save();
+                        $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                    }
                     $user->save();
                     $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
                         $affiliateHistory->delete();
@@ -165,7 +208,7 @@ class GameHistoryController extends Controller
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
-                        "wallet" => $user->wallet
+                        "wallet" => $user->wallet + $user->bonusWallet
                     ];
 
                     event(new WalletChanged($message));
@@ -173,22 +216,40 @@ class GameHistoryController extends Controller
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
-
-
-            $user->changeWallet($request->amount * -1);
+            if ($user->wallet > 0) {
+                $user->changeWallet($request->amount * -1);
+            } else {
+                if ($request->amount > Setting::first()->maxAmountPlayBonus) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Não é possível apostar mais que R$' . number_format(Setting::first()->maxAmountPlayBonus, 2, ',', '.') . ' com o bônus',
+                    ], 500);
+                }
+                $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                BonusWalletChange::create([
+                    'bonusCampaignId' => $bonus->id,
+                    'amountOld' => $user->bonusWallet,
+                    'amountNew' => $user->bonusWallet - $request->amount,
+                    'type' => 'game start',
+                ]);
+                $bonus->amountMovement += $request->amount;
+                $bonus->save();
+                $user->bonusWallet -= $request->amount;
+            }
             $user->save();
-            
+
             $message = [
                 "id" => $user->id,
-                "wallet" => $user->wallet
+                "wallet" => $user->wallet + $user->bonusWallet
             ];
 
             event(new WalletChanged($message));
-
+            $amountType = $user->isAffiliate ? 'fake' : ($user->wallet >= $request->amount ? 'real' : 'bonus');
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2, '.', ''),
                 'userId' => $user->id,
                 'type' => 'pending',
+                'amountType' => $amountType,
             ]);
             $hashString = hash('sha256', $gameHistory->id . $user->id . 'dinocash');
 
@@ -211,7 +272,7 @@ class GameHistoryController extends Controller
             $request->validate([
                 'distance' => ['required', 'integer', 'min:0'],
                 'gameId' => ['required', 'integer', 'min:0'],
-                'type' => ['required', 'string', 'in:win,loss'],
+                'type' => ['required', 'string', 'in:win,loss,locked'],
                 'token' => ['required', 'string'],
             ]);
 
@@ -236,9 +297,53 @@ class GameHistoryController extends Controller
                 ]);
             }
 
+            if ($request->type === 'locked') {
+                Log::error('Partida com bug / ' . $user->email);
+                if ($gameHistory->amountType !== 'bonus') {
+                    $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
+                } else {
+                    $bonus = $user->bonus->where('status', 'active')->first();
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => $user->bonusWallet + $gameHistory->amount,
+                        'type' => 'game refunded',
+                    ]);
+                    $bonus->amountMovement -= ($gameHistory->amount * 1);
+                    $bonus->save();
+                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistory->amount * 1));
+                }
+                $user->save();
+                $gameHistory->type = 'locked';
+                $gameHistory->finalAmount = 0;
+                $gameHistory->save();
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Partida bloqueada por uso de economia de energia.',
+                    'errors' => [
+                        'locked' => 'Partida bloqueada por uso de economia de energia.',
+                    ],
+                ]);
+            }
+
+
             if (!$request->distance) {
                 Log::error('Partida zerada erro');
-                $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
+                if ($gameHistory->amountType !== 'bonus') {
+                    $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
+                } else {
+                    $bonus = $user->bonus->where('status', 'active')->first();
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => $user->bonusWallet + $gameHistory->amount,
+                        'type' => 'game zero error',
+                    ]);
+                    $bonus->amountMovement -= ($gameHistory->amount * 1);
+                    $bonus->save();
+                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistory->amount * 1));
+                }
                 $user->save();
                 $gameHistory->delete();
                 return response()->json([
@@ -250,7 +355,18 @@ class GameHistoryController extends Controller
             $finalAmount = $gameHistory->amount * -1;
             if ($request->type === 'win') {
                 $finalAmount = (($gameHistory->amount / 500) * $request->distance);
-                $user->changeWallet((($gameHistory->amount / 500) * $request->distance));
+                if ($gameHistory->amountType !== 'bonus') {
+                    $user->changeWallet((($gameHistory->amount / 500) * $request->distance));
+                } else {
+                    $bonus = $user->bonus->where('status', 'active')->first();
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => $user->bonusWallet + $finalAmount,
+                        'type' => 'game ended',
+                    ]);
+                    $user->bonusWallet += $finalAmount;
+                }
                 $user->save();
             }
 
@@ -263,14 +379,23 @@ class GameHistoryController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Game finalizado com sucesso.',
+                'lookRoullet' => $request->type === 'win' ? false : self::getLookRoullet(),
             ]);
-
         } catch (\Exception $e) {
             Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
+                'lookRoullet' => false,
             ]);
         }
+    }
+
+    public static function getLookRoullet(): bool
+    {
+        if (Auth::user()->isAffiliate) {
+            return rand(1, 100) <= 40;
+        }
+        return rand(1, 100) <= 5;
     }
 }

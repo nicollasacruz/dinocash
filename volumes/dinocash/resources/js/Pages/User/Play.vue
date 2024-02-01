@@ -47,7 +47,7 @@
                     @input="formatAmount"
                 />
                 <button
-                    class="user-button mt-4 md:mt-0"
+                    class="user-button mt-4 md:mt-0 "
                     @click="startGame"
                     :disabled="loading || !amount"
                 >
@@ -57,12 +57,9 @@
                     <div v-else>Jogar</div>
                 </button>
             </div>
-            <div class="text-left">
-                Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}
-            </div>
-            <div class="text-left">
-                Aposta máxima: {{ toBRL(maxAmmount) }}
-            </div>
+            <div class="text-sm">Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}</div>
+            <div class="text-sm">Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}</div>
+
             <GameCluster
                 :amount="userId"
                 v-if="isRunning"
@@ -107,9 +104,9 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const { viciosidade, isAffiliate, maxAmmount } = defineProps([
-    "viciosidade",
-    "isAffiliate",
-    "maxAmmount",
+  "viciosidade",
+  "isAffiliate",
+  "maxAmmount",
 ]);
 const finishGame = ref(false);
 const page = usePage();
@@ -128,196 +125,206 @@ const score = ref(0);
 const type = ref("loss");
 const loading = ref(false);
 function handleButtonClick() {
-    endGame.value = false;
-    location.reload();
+  endGame.value = false;
+  amount.value = 0;
+  // location.reload();
 }
 
 async function fetchStore() {
-    try {
-        if (amount.value < 1) {
-            toast.error("Valor deve ser maior que R$1,00!");
-            return;
-        }
-        if (amount.value > page.props.settings.maxAmountPlay) {
-            toast.error(
-                "Valor não pode ser maior que " +
-                    toBRL(page.props.settings.maxAmountPlay)
-            );
-            return;
-        }
-        const response = await axios.post(route("user.play.store"), {
-            amount: amount.value,
-        });
-        const result = response.data.gameHistory.id;
-        toast.success("Partida iniciada com sucesso");
-        return result;
-    } catch (error) {
-        toast.error("Partida não iniciada");
-        console.error("Erro na partida:", error);
+  try {
+    if (amount.value < 1) {
+      toast.error("Valor deve ser maior que R$1,00!");
+      return;
     }
+    if (amount.value > page.props.settings.maxAmountPlay) {
+      toast.error(
+        "Valor não pode ser maior que " +
+          toBRL(page.props.settings.maxAmountPlay)
+      );
+      return;
+    }
+    const response = await axios.post(route("user.play.store"), {
+      amount: amount.value,
+    });
+    const result = response.data.gameHistory.id;
+    toast.success("Partida iniciada com sucesso");
+    return result;
+  } catch (error) {
+    toast.error(error.response.data.message);
+    console.error("Erro na partida:", error.response.data.message);
+  }
 }
 
 async function generateSHA256Hash(input) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(input);
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
 
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-        .map((byte) => byte.toString(16).padStart(2, "0"))
-        .join("");
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 
-    return hashHex;
+  return hashHex;
 }
 
 async function fetchUpdate() {
-    try {
-        const hash = await generateSHA256Hash(
-            `${gameId.value}${userId.value}dinocash`
-        );
-        const response = await axios.patch(route("user.play.update"), {
-            distance: score.value,
-            gameId: gameId.value,
-            type: type.value,
-            token: hash,
-        });
+  try {
+    const hash = await generateSHA256Hash(
+      `${gameId.value}${userId.value}dinocash`
+    );
+    const response = await axios.patch(route("user.play.update"), {
+      distance: score.value,
+      gameId: gameId.value,
+      type: type.value,
+      token: hash,
+    });
 
-        const result = response.data;
-        return result;
-    } catch (error) {
-        console.error("Erro na pesquisa:", error);
-
-        throw error;
+    const result = response.data;
+    if (result.errors?.locked) {
+      toast.error("Você está em modo de economia de energia!");
     }
+    return result;
+  } catch (error) {
+    console.log("Erro na pesquisa:", error);
+  }
 }
 
 async function startGame() {
-    loading.value = true;
-    const lowPowerMode = await detectPowerSavingMode();
-    console.log(lowPowerMode);
-    if (lowPowerMode) {
-        toast.error("Você está em modo de economia de energia!");
-        return;
+  loading.value = true;
+  const lowPowerMode = await detectPowerSavingMode();
+  console.log(lowPowerMode);
+  if (lowPowerMode) {
+    toast.error("Você está em modo de economia de energia!");
+    return;
+  }
+  try {
+    gameId.value = await fetchStore();
+    if (gameId.value) {
+      const { height, width } = document.body.getBoundingClientRect();
+      isRunning.value = true;
+      clientHeight.value = height;
+      clientWidth.value = width;
+      difficulty.value = true;
+      const div = document.getElementById("root") as HTMLDivElement;
+      div.style.display = "none";
     }
-    try {
-        gameId.value = await fetchStore();
-        if (gameId.value) {
-            const { height, width } = document.body.getBoundingClientRect();
-            isRunning.value = true;
-            clientHeight.value = height;
-            clientWidth.value = width;
-            difficulty.value = true;
-            const div = document.getElementById("root") as HTMLDivElement;
-            div.style.display = "none";
-        }
-    } catch (error) {
-        console.error("Erro na pesquisa:", error);
-        throw error;
-    } finally {
-        loading.value = false;
-    }
+  } catch (error) {
+    console.error("Erro na pesquisa:", error);
+    throw error;
+  } finally {
+    loading.value = false;
+  }
 }
 function detectPowerSavingMode() {
-    // for iOS/iPadOS Safari, and maybe MacBook macOS Safari (not tested)
-    if (/(iP(?:hone|ad|od)|Mac OS X)/.test(navigator.userAgent)) {
-        // In Low Power Mode, cumulative delay effect happens on setInterval()
-        return new Promise((resolve) => {
-            let fps = 60;
-            let interval = 1000 / fps;
-            let numFrames = 30;
-            let startTime = performance.now();
-            let i = 0;
-            let handle = setInterval(() => {
-                if (i < numFrames) {
-                    i++;
-                    return;
-                }
-                clearInterval(handle);
-                let actualInterval =
-                    (performance.now() - startTime) / numFrames;
-                let ratio = actualInterval / interval; // 1.3x or more in Low Power Mode, 1.1x otherwise
-                // alert(actualInterval+' '+interval);
-                console.log(actualInterval, interval, ratio);
-                resolve(ratio > 1.3);
-            }, interval);
-        });
-    }
-    // for Safari, Chromium, and maybe future Firefox
-    return detectFrameRate().then((frameRate) => {
-        // In Battery Saver Mode frameRate will be about 30fps or 20fps,
-        // otherwise frameRate will be closed to monitor refresh rate (typically 60Hz)
-        if (frameRate < 34) {
-            return true;
+  // for iOS/iPadOS Safari, and maybe MacBook macOS Safari (not tested)
+  if (/(iP(?:hone|ad|od)|Mac OS X)/.test(navigator.userAgent)) {
+    // In Low Power Mode, cumulative delay effect happens on setInterval()
+    return new Promise((resolve) => {
+      let fps = 60;
+      let interval = 1000 / fps;
+      let numFrames = 30;
+      let startTime = performance.now();
+      let i = 0;
+      let handle = setInterval(() => {
+        if (i < numFrames) {
+          i++;
+          return;
         }
-        // FIXME fallback to regard as Low Power Mode when battery power is low (down to 20%)
-        else if (navigator.getBattery) {
-            return navigator.getBattery().then((battery) => {
-                return !battery.charging && battery.level <= 0.2 ? true : false;
-            });
-        }
-        return undefined;
+        clearInterval(handle);
+        let actualInterval = (performance.now() - startTime) / numFrames;
+        let ratio = actualInterval / interval; // 1.3x or more in Low Power Mode, 1.1x otherwise
+        // alert(actualInterval+' '+interval);
+        console.log(actualInterval, interval, ratio);
+        resolve(ratio > 1.3);
+      }, interval);
     });
+  }
+  // for Safari, Chromium, and maybe future Firefox
+  return detectFrameRate().then((frameRate) => {
+    // In Battery Saver Mode frameRate will be about 30fps or 20fps,
+    // otherwise frameRate will be closed to monitor refresh rate (typically 60Hz)
+    if (frameRate < 34) {
+      return true;
+    }
+    // FIXME fallback to regard as Low Power Mode when battery power is low (down to 20%)
+    else if (navigator.getBattery) {
+      return navigator.getBattery().then((battery) => {
+        return !battery.charging && battery.level <= 0.2 ? true : false;
+      });
+    }
+    return undefined;
+  });
 }
 
 function detectFrameRate() {
-    return new Promise((resolve) => {
-        let numFrames = 30;
-        let startTime = performance.now();
-        let i = 0;
-        let tick = () => {
-            if (i < numFrames) {
-                i++;
-                requestAnimationFrame(tick);
-                return;
-            }
-            let frameRate =
-                numFrames / ((performance.now() - startTime) / 1000);
-            resolve(frameRate);
-        };
-        requestAnimationFrame(() => {
-            tick();
-        });
+  return new Promise((resolve) => {
+    let numFrames = 30;
+    let startTime = performance.now();
+    let i = 0;
+    let tick = () => {
+      if (i < numFrames) {
+        i++;
+        requestAnimationFrame(tick);
+        return;
+      }
+      let frameRate = numFrames / ((performance.now() - startTime) / 1000);
+      resolve(frameRate);
+    };
+    requestAnimationFrame(() => {
+      tick();
     });
+  });
 }
 const handleEndGame = (pontuation) => {
-    isRunning.value = false;
-    endGame.value = true;
-    score.value = pontuation;
-    type.value = "loss";
-    const div = document.getElementById("root") as HTMLDivElement;
-    div.style.display = "block";
-    fetchUpdate();
+  isRunning.value = false;
+  endGame.value = true;
+  score.value = pontuation;
+  type.value = "loss";
+  const div = document.getElementById("root") as HTMLDivElement;
+  div.style.display = "block";
+  fetchUpdate();
 };
 
 const handleFinishGame = (pontuation) => {
-    isRunning.value = false;
-    endGame.value = true;
-    score.value = pontuation;
-    type.value = "win";
-    const div = document.getElementById("root") as HTMLDivElement;
-    div.style.display = "block";
-    fetchUpdate();
+  isRunning.value = false;
+  endGame.value = true;
+  score.value = pontuation;
+  type.value = "win";
+  const div = document.getElementById("root") as HTMLDivElement;
+  div.style.display = "block";
+  fetchUpdate();
+};
+
+const handleLockGame = (pontuation) => {
+  isRunning.value = false;
+  endGame.value = true;
+  score.value = pontuation;
+  type.value = "locked";
+  const div = document.getElementById("root") as HTMLDivElement;
+  div.style.display = "block";
+  fetchUpdate();
 };
 
 function toBRL(value) {
-    return Number(value).toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL",
-    });
+  return Number(value).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
 }
 
 function formatAmount() {
-    // Limpar caracteres não numéricos, exceto o ponto decimal
-    let cleanedValue = amount.value.replace(/[^\d.]/g, "");
+  // Limpar caracteres não numéricos, exceto o ponto decimal
+  let cleanedValue = amount.value.replace(/[^\d.]/g, "");
 
-    // Permitir apenas um ponto decimal
-    const decimalCount = cleanedValue.split(".").length - 1;
-    if (decimalCount > 1) {
-        cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
-    }
-    console.log(cleanedValue, "value");
+  // Permitir apenas um ponto decimal
+  const decimalCount = cleanedValue.split(".").length - 1;
+  if (decimalCount > 1) {
+    cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
+  }
+  console.log(cleanedValue, "value");
 
-    // Atualizar o valor
-    amount.value = cleanedValue;
+  // Atualizar o valor
+  amount.value = cleanedValue;
 }
 </script>

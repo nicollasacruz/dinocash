@@ -22,10 +22,12 @@ class GameHistoryObserver
             if (($gameHistory->type === "win" || $gameHistory->type === "loss") && $gameHistory->isDirty("type")) {
                 Log::info("Iniciando update GameHistory.");
                 if ($gameHistory->user->affiliateId && !$gameHistory->user->isAffiliate && $gameHistory->user->affiliate->isAffiliate) {
-                    $this->createAffiliateHistory($gameHistory);
+                    if ($gameHistory->amountType == 'real') {
+                        $this->createAffiliateHistory($gameHistory);
+                    }
                 }
                 if (env('APP_GGR')) {
-                    $this->createGgrHistory($gameHistory);
+                    // $this->createGgrHistory($gameHistory);
                 }
             }
         } catch (Exception $e) {
@@ -48,7 +50,7 @@ class GameHistoryObserver
             if ($affiliate->revShare > 0) {
                 $newAmount = number_format($amount * $affiliate->revShare / 100, 2, '.', '');
 
-                
+
                 $history = AffiliateHistory::create([
                     'amount' => $newAmount,
                     'gameId' => $gameHistory->id,

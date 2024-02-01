@@ -161,7 +161,7 @@ async function withdraw() {
         showModal.value = false;
         toast.success(data.message);
     } catch (error) {
-        alert(error);
+        console.log(error);
     } finally {
         amount.value = 0.0;
         pixType.value = "";

@@ -22,10 +22,10 @@ export default {
                 "verde-claro": "#d6f8b8",
                 "roxo-fundo": "#6c567b",
                 "roxo-escuro": "#3b2b45",
-                verde: "#93FA38",
+                "verde": "#93FA38",
                 "verde-escuro": "#00E68E",
                 "roxo-claro": "#D1C6E8",
-                roxo: "#392747",
+                "roxo": "#392747",
             },
             dropShadow: {
                 xl: "10px 10px 0px 0px rgba(0, 0, 0, 0.75)",
