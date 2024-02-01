@@ -8,32 +8,28 @@
             backgroundPosition: windowWidth < 700 ? 'bottom' : 'center',
             backgroundRepeat: 'no-repeat',
         }"
-        class="h-screen px-3 py-8 lg:px-14"
+        class="h-screen px-3 py-8 lg:px-14 relative"
     >
-        <div class="text-5xl md:text-6xl font-menu mb-1 xl:mb-6 ml-4 text-verde">
+        <div
+            class="text-5xl md:text-6xl font-menu mb-1 xl:mb-6 ml-4 text-verde"
+        >
             Ranking
             <span class="hidden md:inline"> Global </span>
-        </div> 
+        </div>
         <div class="grid grid-cols-3 h-[80%]">
-            <div class="hidden xl:block col-span-1"></div>
+            <div class="hidden xl:block col-span-1  ">
+                <img
+                    :src="DinoTrofeu"
+                    alt="dinoLogo"
+                    class="max-w-xl mt-auto absolute bottom-0"
+                />
+            </div>
             <div
                 class="col-span-3 xl:col-span-2 h-full flex-2 p-1 px-3 mt-3 mb-auto mr-2 flex flex-col items-center bg-[#2A1236] rounded-3xl border-roxo border-4 shadow-xl text-white"
             >
                 <div class="flex w-full h-full">
-                    <div class="hidden w-60 xl:flex flex-col">
-                        <div
-                            class="flex justify-center items-end mx-auto mt-14"
-                        >
-                            <img class="w-7" :src="thirdPlace" />
-                            <img class="w-24" :src="firstPlace" />
-                            <img class="w-7" :src="secondPlace" />
-                        </div>
-                        <img
-                            :src="DinoRoxo"
-                            alt="dinoLogo"
-                            class="h-60 -ml-10 mt-auto"
-                        />
-                    </div>
+                    <div class="w-32 hidden xl:block"></div>
+
                     <div class="flex flex-col w-full">
                         <div
                             class="grid grid-cols-4 md:grid-cols-3 md:gap-x-0 gap-y-1 font-menu md:text-xl mt-5 text-verde uppercase text-xs sm:text-md"
@@ -98,6 +94,13 @@
                     </div>
                 </div>
             </div>
+            <div class="xl:hidden lg:mt-20 col-span-3 xl:col-span-1 flex justify-center">
+                <img
+                    :src="DinoTrofeu"
+                    alt="dinoLogo"
+                    class="max-w-[210px]  mt-auto absolute bottom-0"
+                />
+            </div>
         </div>
     </section>
 </template>
@@ -106,6 +109,8 @@
 import { ref } from "vue";
 import Background from "../../../../storage/imgs/home-page/bg.jpg";
 import bgMobile from "../../../../storage/imgs/home-page/bg-mobile.jpg";
+import DinoTrofeu from "../../../../storage/imgs/home-page/dino-trofeu.svg";
+
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
     defineProps({
         canLogin: {

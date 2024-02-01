@@ -110,4 +110,7 @@ const getStatus = (status) => {
             </template>
         </BaseTable>
     </AuthenticatedLayout>
+    <div class="lg:mt-10 hidden border-verde">
+
+    </div>
 </template>

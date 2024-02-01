@@ -27,7 +27,9 @@
                 experiência exctusiva no Dinocash, onde a diversão e 05 ganhos ,
                 estão ao seu alcance.
             </div>
-            <div class="lg:flex-1 bg-white h-52"></div>
+            <div class="lg:flex-1  h-52">
+                <img :src="dinoPlataforma" alt="">
+            </div>
         </div>
     </section>
 </template>
@@ -36,6 +38,7 @@
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import bgMobile from "../../../../storage/imgs/home-page/bg-mobile.jpg";
+import dinoPlataforma from "../../../../storage/imgs/home-page/dino-plataforma.svg";
 
 import background from "../../../../storage/imgs/home-page/bg.jpg";
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =

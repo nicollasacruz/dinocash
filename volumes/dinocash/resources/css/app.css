@@ -28,6 +28,9 @@
     .user-input {
         @apply bg-[#1C1328] border-2 border-roxo rounded-2xl py-3;
     }
+    .login-input {
+        @apply !bg-[#17101F] !rounded-2xl !py-3 input-lg;
+    }
     .user-button {
         @apply py-2 bg-verde-escuro text-black px-10 rounded-xl font-menu md:text-3xl
     }

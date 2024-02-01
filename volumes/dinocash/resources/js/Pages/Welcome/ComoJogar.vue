@@ -6,28 +6,30 @@
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
         }"
-        class="h-screen pt-8 lg:p-8 lg:px-14"
+        class="h-screen pt-8 lg:p-8 lg:px-14 relative"
     >
-        <div class="flex">
-            <div class="flex-1 hidden lg:block"></div>
+        <div
+            class="text-4xl sm:text-5xl pl-3 md:text-6xl font-menu mb-3 md:mb-5 lg:mb-8 text-verde lg:text-right relative"
+        >
+            Como Jogar?
+        </div>
+        <div class="flex flex-col-reverse lg:flex-row">
+            <div class="flex-1  justify-center flex  w-full">
+                <img :src="dinoJogar" class="w-56 lg:w-96 absolute bottom-0" />
+            </div>
             <div class="flex-1">
                 <div
-                    class="text-5xl pl-3 md:text-6xl font-menu mb-5 lg:mb-8 text-verde lg:text-right"
-                >
-                    Como Jogar?
-                </div>
-                <div
-                    class="flex mb-5 items-start px-3"
+                    class="flex mb-3 md:mb-5 items-start px-3"
                     v-for="(instruction, i) in instructions"
                     :key="i"
                 >
                     <div
-                        class="w-11 h-11 shrink-0 font-menu rounded text-center bg-verde pt-1 text-roxo text-4xl flex items-center justify-center mr-5"
+                        class="w-9 h-9 lg:w-11 lg:h-11 shrink-0 font-menu rounded text-center bg-verde pt-1 text-roxo text-3xl md:text-4xl flex items-center justify-center mr-5"
                     >
                         {{ i + 1 }}
                     </div>
 
-                    <div class="md:text-lg -mt-2">
+                    <div class="text-sm sm:text-sm md:text-lg -mt-2">
                         {{ instruction }}
                     </div>
                 </div>
@@ -39,7 +41,8 @@
 <script setup>
 import { ref } from "vue";
 import background from "../../../../storage/imgs/home-page/bg.jpg";
-
+import dinoJogar from "../../../../storage/imgs/home-page/dino-jogar.svg";
+console.log(dinoJogar);
 const instructions = [
     "Faça seu cadastro, ou então faça login se você já tem uma conta cadastrada no Dino Cash.",
     "Faça um depósito de no mínimo R$30,00 e no máximo R$10.000,00 para iniciar a sua jornada.",

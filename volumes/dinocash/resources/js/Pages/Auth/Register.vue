@@ -48,15 +48,12 @@ const isDocumentNumberValid = (document) => {
                 >
                     {{ status }}
                 </div>
-                <form
-                    @submit.prevent="submit"
-                    class="mx-auto lg:w-[40%]"
-                >
+                <form @submit.prevent="submit" class="mx-auto lg:w-[40%]">
                     <div>
                         <TextInput
                             id="name"
                             type="text"
-                            class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
+                            class="mt-1 block w-full login-input border-none placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
                             v-model="form.name"
                             required
                             autofocus
@@ -71,7 +68,7 @@ const isDocumentNumberValid = (document) => {
                         <TextInput
                             id="email"
                             type="email"
-                            class="mt-1 block w-full placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
+                            class="mt-1 block w-full login-input border-none placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
                             v-model="form.email"
                             required
                             autocomplete="username"
@@ -85,7 +82,7 @@ const isDocumentNumberValid = (document) => {
                         <TextInput
                             id="contact"
                             type="text"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full login-input border-none"
                             v-model="form.contact"
                             required
                             autocomplete="contact"
@@ -114,7 +111,7 @@ const isDocumentNumberValid = (document) => {
                         <TextInput
                             id="document"
                             type="text"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full login-input border-none"
                             v-model="form.document"
                             required
                             autocomplete="document"
@@ -142,7 +139,7 @@ const isDocumentNumberValid = (document) => {
                         <TextInput
                             id="password"
                             type="password"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full login-input border-none"
                             v-model="form.password"
                             required
                             autocomplete="new-password"
@@ -159,7 +156,7 @@ const isDocumentNumberValid = (document) => {
                         <TextInput
                             id="password_confirmation"
                             type="password"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full login-input border-none"
                             v-model="form.password_confirmation"
                             required
                             autocomplete="new-password"
@@ -173,21 +170,21 @@ const isDocumentNumberValid = (document) => {
                     </div>
 
                     <div
-                        class="flex flex-col items-center justify-center mt-3 mx-auto"
+                        class="flex flex-col items-center justify-center mt-5 mx-auto"
                     >
                         <PrimaryButton
-                            class="mb-2 md:mb-4 flex justify-center items-center md:w-72 md:h-16 bg-verde-claro rounded-lg font-menu text-xl md:text-2xl text-black boxShadow border-black border-4"
+                            class="!bg-verde flex justify-center items-center w-full py-4 text-xl capitalize rounded-xl user-button"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
                             {{ __("auth.register") }}
                         </PrimaryButton>
-                        <Link
+                        <!-- <Link
                             :href="route('login')"
                             class="mx-auto font-menu underline text-xl md:text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             {{ __("auth.already-registered") }}
-                        </Link>
+                        </Link> -->
                     </div>
                 </form>
             </div>

@@ -101,7 +101,7 @@ export default class DinoGame extends GameRunner {
         canvas.style.height = height + "px";
         canvas.width = Math.floor(width * scale);
         canvas.height = Math.floor(height * scale);
-        canvas.style.border = "8px solid #303B69";
+        canvas.style.border = "8px solid #91FA3D";
         canvas.style.borderRadius = "8px";
         canvas.style.setProperty("-webkit-touch-callout", "none");
         canvas.style.setProperty("-webkit-user-select", "none");
@@ -109,7 +109,7 @@ export default class DinoGame extends GameRunner {
         canvas.style.setProperty("-moz-user-select", "none");
         canvas.style.setProperty("-ms-user-select", "none");
         canvas.style.setProperty("user-select", "none");
-        canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
+        // canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
         return canvas;
     }
     createCanvasContainer() {
@@ -153,7 +153,7 @@ export default class DinoGame extends GameRunner {
     }
     createLogo() {
         const image = new Image();
-        image.classList.add("w-24", "lg:w-64");
+        image.classList.add("w-48", "lg:w-80", "-mt-4");
         image.src = logo;
         return image;
     }
@@ -219,13 +219,14 @@ export default class DinoGame extends GameRunner {
         const finishButton = document.createElement("button");
         finishButton.style.padding = "8px";
         finishButton.style.fontSize = "25px";
-        finishButton.style.backgroundColor = "#d6f8b8";
+
+        finishButton.style.backgroundColor = "#91FA3D";
         finishButton.style.color = "black";
         finishButton.style.fontWeight = 500;
         finishButton.style.fontFamily = "Upheavtt, sans-serif";
         finishButton.style.minWidth = "350px";
         finishButton.style.maxWidth = "90%";
-        finishButton.style.border = "2px solid #000";
+        // finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.style.borderRadius = "8px";
         finishButton.style.setProperty("-webkit-touch-callout", "none");
@@ -234,13 +235,7 @@ export default class DinoGame extends GameRunner {
         finishButton.style.setProperty("-moz-user-select", "none");
         finishButton.style.setProperty("-ms-user-select", "none");
         finishButton.style.setProperty("user-select", "none");
-        finishButton.style.boxShadow = "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
-        finishButton.style.webkitBoxShadow =
-            "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
-        finishButton.style.mozBoxShadow =
-            "10px 10px 0px 0px rgba(0, 0, 0, 0.85)";
-        finishButton.style.margin = "auto";
-        finishButton.style.marginBottom = "4px"; // Ajuste conforme necessário
+        finishButton.classList.add('mx-auto', 'mt-5', 'lg:mt-10', 'mb-2')
         finishButton.addEventListener("click", () => {
             const eventoModificacao = new CustomEvent("finishGame", {
                 detail: this.state.score.value,
@@ -257,9 +252,14 @@ export default class DinoGame extends GameRunner {
         }
         const buttonContainer = this.createButtonContainer();
         const finishButton = this.createFinishButton();
+        // finishButton.textContent = `Recolher lucro: R$${(
+        //     (parseFloat(this.state.score.value) / 500) *
+        //     this.amount
+        // ).toFixed(2)}`;
         const canvasContainer = document.getElementById("canvasContainer");
         buttonContainer.appendChild(finishButton);
         canvasContainer.appendChild(buttonContainer);
+        // const button = document.querySelector("button");
     }
     createDino() {
         const { settings } = this.state;
@@ -280,15 +280,16 @@ export default class DinoGame extends GameRunner {
     onFrame() {
         const { state } = this;
         this.drawBackground();
+        
         if (state.isRunning) {
+            this.setupUI();
             this.drawClouds();
             this.drawGround();
             this.drawDino();
             this.drawScore();
             this.drawHat();
-            this.setupUI();
             this.drawCacti();
-            this.drawFPS()
+            this.drawFPS();
             const hasDinoColided = state.dino.hits([
                 state.cacti[0],
                 state.birds[0],
@@ -369,7 +370,7 @@ export default class DinoGame extends GameRunner {
         canvasContainer.style.display = "flex";
         setInterval(async () => {
             const isPowerSavingMode = await this.detectPowerSavingMode();
-            console.log(isPowerSavingMode)
+            console.log(isPowerSavingMode);
             if (isPowerSavingMode) {
                 this.endGame();
             }
@@ -450,7 +451,7 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `Clique aqui para sacar: R$${(
+            button.textContent = `Recolher Lucro: R$${(
                 (parseFloat(this.state.score.value) / 500) *
                 this.amount
             ).toFixed(2)}`;
@@ -488,8 +489,7 @@ export default class DinoGame extends GameRunner {
         return this.detectFrameRate().then((frameRate) => {
             if (frameRate < 25) {
                 return true;
-            }
-            else if (navigator.getBattery) {
+            } else if (navigator.getBattery) {
                 return navigator.getBattery().then((battery) => {
                     return !battery.charging && battery.level <= 0.2
                         ? true

@@ -8,12 +8,12 @@
                     height="120"
                     :src="fotoPerfil"
                 />
-                <Link
+                <!-- <Link
                     :href="route('user.alterar_icone')"
                     class="absolute top-0 right-0 bg-verde-escuro p-[1px] rounded-sm cursor-pointer"
                 >
                     <PencilSquareIcon class="w-5 fill-black" />
-                </Link>
+                </Link> -->
             </div>
             <div class="text-xs lg:text-xs text-gray-400 mt-2">
                 Seja bem-vindo(a)
@@ -111,11 +111,11 @@ const routes = [
         route: "user.movimentacao",
         icon: monitor,
     },
-    {
-        label: "Loja",
-        route: "user.shop",
-        icon: cart,
-    },
+    // {
+    //     label: "Loja",
+    //     route: "user.shop",
+    //     icon: cart,
+    // },
     {
         label: "Sacar",
         route: "user.saque",

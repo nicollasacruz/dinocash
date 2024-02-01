@@ -2,7 +2,7 @@
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import { Link } from "@inertiajs/vue3";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
-import Background1 from "../../../storage/imgs/home-page/home-bg1.jpg";
+import Background1 from "../../../storage/imgs/user/bg-login.jpg";
 import BackgroundMobile from "../../../storage/imgs/home-page/home-bg1-mobile.jpg";
 
 function isMobile() {
@@ -119,7 +119,7 @@ const props = defineProps({
       :src="DinoLogo"
       alt="dinoLogo"
       v-if="!homepage"
-      class="h-[16%] my-3 md:my-4 mx-auto"
+      class="h-[14%] my-3 md:mb-5 md:mt-8 mx-auto"
     />
 
     <slot class="" />

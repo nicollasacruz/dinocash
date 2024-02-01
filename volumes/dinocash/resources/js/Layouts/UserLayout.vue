@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
-import Background from "../../../storage/imgs/home-page/home-bg2.jpg";
+import Background from "../../../storage/imgs/user/bg-login.jpg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
