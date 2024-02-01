@@ -49,6 +49,7 @@ class User extends Authenticatable
         'email',
         'wallet',
         'walletAffiliate',
+        'freespin',
         'contact',
         'document',
         'role',

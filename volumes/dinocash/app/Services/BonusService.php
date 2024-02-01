@@ -10,6 +10,7 @@ use Exception;
 use Log;
 use App\Models\User;
 use App\Notifications\PushDemoGGR;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 class BonusService
@@ -17,7 +18,7 @@ class BonusService
     public function createBonusDeposit(Deposit $deposit): bool
     {
         if (!$deposit->hasBonus || $deposit->user->bonusCampaings()->where('status', 'active')->count() >= Setting::first()->maxDepositBonusToUser) {
-            return;
+            return false;
         }
 
         try {
@@ -51,27 +52,18 @@ class BonusService
 
             return true;
         } catch (Exception $e) {
-            Log::error('Erro de notificar - ' . $e->getMessage());
+            Log::channel('telegram')->error('Erro de notificar - ' . $e->getMessage());
             return false;
         }
     }
 
-    public function createBonusLooked(User $user, $amount, $bonusPercent): bool
+    public function createBonusLooked(User $user, $amountBonus): bool
     {
         try {
-            $bonusRollover = Setting::first()->rolloverBonus;
-            $amountBonus = $amount * $bonusPercent / 100;
-            if 
-            $bonus = BonusCampaign::create([
-                'amount' => $amountBonus,
-                'amountMovement' => 0,
-                'bonusPercent' => $bonusPercent,
-                'rollover' =>  $bonusRollover,
-                'userId' => $user->id,
-                'type' => 'look',
-                'status' => 'active',
-                'expireAt' => now()->addDays(30),
-            ]);
+            $bonus = $this->getBonusCampaingActive();
+            if ($bonus->type === 'bonus') {
+                $bonus->type = 'roulletBonus';
+            }
 
             BonusWalletChange::create([
                 'bonusCampaignId' => $bonus->id,
@@ -82,11 +74,57 @@ class BonusService
 
             $user->bonusWallet += $amountBonus;
             $user->save();
+            $bonus->save();
 
             return true;
         } catch (Exception $e) {
-            Log::error('Erro de notificar - ' . $e->getMessage());
+            Log::channel('telegram')->error('Erro de createBonusLooked - ' . $e->getMessage());
             return false;
         }
+    }
+
+    public function createFreeSpin(int $value): bool
+    {
+        try {
+            $user = User::find(Auth::user()->id);
+            $bonus = $this->getBonusCampaingActive();
+            $settingsAmountFreeSpin = Setting::first()->amountFreeSpin;
+            if ($bonus->type === 'bonus') {
+                $bonus->type = 'freespin';
+            }
+            $amountFreeSpin = floatval($settingsAmountFreeSpin * $value);
+            $bonus->amount += $amountFreeSpin;
+            $user->freespin += $value;
+            $bonus->save();
+            $user->save();
+
+            return true;
+        } catch (Exception $e) {
+            Log::channel('telegram')->error('Erro de createFreeSpin - ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getBonusCampaingActive(): BonusCampaign
+    {
+        $user = User::find(Auth::user()->id);
+
+        $bonus = $user->bonusCampaings->where('status', 'active')->first();
+
+        if (!$bonus) {
+            $bonusRollover = Setting::first()->rolloverBonus;
+            $bonus = BonusCampaign::create([
+                'amount' => 0,
+                'amountMovement' => 0,
+                'bonusPercent' => 0,
+                'rollover' =>  $bonusRollover,
+                'userId' => $user->id,
+                'type' => 'bonus',
+                'status' => 'active',
+                'expireAt' => now()->addDays(30),
+            ]);
+        }
+
+        return $bonus;
     }
 }

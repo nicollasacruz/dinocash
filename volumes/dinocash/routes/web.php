@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\GameHistoryController;
+use App\Http\Controllers\LookRoulleteController;
 use App\Http\Controllers\PushController;
 use App\Http\Controllers\UserController;
 use App\Models\GameHistory;
@@ -192,6 +193,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
 
+    Route::post('/recolher-recompensa', [LookRoulleteController::class, 'getRoulleteReward'])->name('user.recompensa.roleta');
+    
     Route::get('/deposito', [DepositController::class, 'index'])->name('user.deposito');
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
