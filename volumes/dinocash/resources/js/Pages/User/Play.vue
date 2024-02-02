@@ -127,7 +127,7 @@ const loading = ref(false);
 function handleButtonClick() {
   endGame.value = false;
   amount.value = 0;
-  // location.reload();
+  location.reload();
 }
 
 async function fetchStore() {

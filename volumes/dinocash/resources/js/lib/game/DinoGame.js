@@ -18,6 +18,8 @@ import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
 import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
 import coroa from "../../../../storage/imgs/user/coroa.png";
+import moon from "../../../../storage/imgs/user/moon.svg";
+import sol from "../../../../storage/imgs/user/sol.svg";
 
 import logo from "../../../../storage/imgs/home-page/dino-logo.svg";
 
@@ -57,7 +59,7 @@ export default class DinoGame extends GameRunner {
             dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
-                ? 7
+                ? 1
                 : this.viciosity
                 ? 10
                 : randInteger(7, 9), // fpa
@@ -81,13 +83,17 @@ export default class DinoGame extends GameRunner {
             },
             gorro: null,
             coroa: null,
+            sol: null,
+            lua: null,
         };
     }
 
     async preloadImages() {
+        const dia = false; //Math.random() >= 0.5;
+        const spriteName = dia ? "/sprite.png" : "/sprite2.png";
         const [_, spriteImage] = await Promise.all([
             this.preloadGorro(),
-            loadImage("/sprite.png"),
+            loadImage(spriteName),
             loadFont("/PressStart2P-Regular.ttf", "PressStart2P"),
         ]);
         this.spriteImage = spriteImage;
@@ -189,15 +195,23 @@ export default class DinoGame extends GameRunner {
     async preloadGorro(content) {
         const gorroImg = new Image();
         const coroaImg = new Image();
+        const solImg = new Image();
+        const luaImg = new Image();
+        solImg.src = sol;
+        luaImg.src = moon;
         coroaImg.src = coroa;
         gorroImg.src = gorro;
         coroaImg.style.fill = "#FFFFFF";
         await new Promise((resolve) => {
             coroaImg.onload = resolve;
             gorroImg.onload = resolve;
+            solImg.onload = resolve;
+            luaImg.onload = resolve;
         });
         this.state.gorro = gorroImg;
         this.state.coroa = coroaImg;
+        this.state.sol = solImg;
+        this.state.lua = luaImg;
     }
     createButtonContainer() {
         const buttonContainer = document.createElement("div");
@@ -219,14 +233,12 @@ export default class DinoGame extends GameRunner {
         const finishButton = document.createElement("button");
         finishButton.style.padding = "8px";
         finishButton.style.fontSize = "25px";
-
         finishButton.style.backgroundColor = "#91FA3D";
         finishButton.style.color = "black";
         finishButton.style.fontWeight = 500;
         finishButton.style.fontFamily = "Upheavtt, sans-serif";
         finishButton.style.minWidth = "350px";
         finishButton.style.maxWidth = "90%";
-        // finishButton.style.border = "2px solid #000";
         finishButton.style.cursor = "pointer";
         finishButton.style.borderRadius = "8px";
         finishButton.style.setProperty("-webkit-touch-callout", "none");
@@ -235,7 +247,7 @@ export default class DinoGame extends GameRunner {
         finishButton.style.setProperty("-moz-user-select", "none");
         finishButton.style.setProperty("-ms-user-select", "none");
         finishButton.style.setProperty("user-select", "none");
-        finishButton.classList.add('mx-auto', 'mt-5', 'lg:mt-10', 'mb-2')
+        finishButton.classList.add("mx-auto", "mt-5", "lg:mt-10", "mb-2");
         finishButton.addEventListener("click", () => {
             const eventoModificacao = new CustomEvent("finishGame", {
                 detail: this.state.score.value,
@@ -252,14 +264,9 @@ export default class DinoGame extends GameRunner {
         }
         const buttonContainer = this.createButtonContainer();
         const finishButton = this.createFinishButton();
-        // finishButton.textContent = `Recolher lucro: R$${(
-        //     (parseFloat(this.state.score.value) / 500) *
-        //     this.amount
-        // ).toFixed(2)}`;
         const canvasContainer = document.getElementById("canvasContainer");
         buttonContainer.appendChild(finishButton);
         canvasContainer.appendChild(buttonContainer);
-        // const button = document.querySelector("button");
     }
     createDino() {
         const { settings } = this.state;
@@ -280,7 +287,7 @@ export default class DinoGame extends GameRunner {
     onFrame() {
         const { state } = this;
         this.drawBackground();
-        
+
         if (state.isRunning) {
             this.setupUI();
             this.drawClouds();
@@ -289,7 +296,7 @@ export default class DinoGame extends GameRunner {
             this.drawScore();
             this.drawHat();
             this.drawCacti();
-            this.drawFPS();
+            // this.drawFPS();
             const hasDinoColided = state.dino.hits([
                 state.cacti[0],
                 state.birds[0],
@@ -545,8 +552,8 @@ export default class DinoGame extends GameRunner {
         const { steps, width, height, canvasCtx } = content;
         const { dino, cacti, score } = content.state;
         const isFirst = score.value >= 500 && score.value < 1000;
-        const startColor = isFirst ? "#f7f7f7" : "#ebd234";
-        const endColor = isFirst ? "#FFA500" : " #FF6F6F";
+        const startColor = isFirst ? "#f7f7f7" : "#222";
+        const endColor = isFirst ? "#222" : " #f7f7f7";
         const updateInstances = () => {
             content.paintSprite(dino.sprite, dino.x, dino.y);
             content.drawGround();
@@ -596,10 +603,10 @@ export default class DinoGame extends GameRunner {
                 content: this,
             });
         } else if (steps === 90) {
-            this.canvasCtx.fillStyle = "#ebd234";
+            this.canvasCtx.fillStyle = "#222";
             this.canvasCtx.fillRect(0, 0, this.width, this.height);
         } else if (steps === 180) {
-            this.canvasCtx.fillStyle = "#f25c5c";
+            this.canvasCtx.fillStyle = "#f7f7f7";
             this.canvasCtx.fillRect(0, 0, this.width, this.height);
         }
     }
@@ -716,11 +723,26 @@ export default class DinoGame extends GameRunner {
             );
         }
     }
+    drawSun(content = this) {
+        const isWinner = this.state.score.value > 500;
+        const hatX = isWinner ? 13 : 10;
+        const hatY = isWinner ? 24 : 18;
+        const { dino } = content.state;
+        // if (isWinner) {
+        const sunImage = content.state.coroa;
+        content.canvasCtx.drawImage(
+            hatImage,
+            dino.x + hatX,
+            dino.y - hatY,
+            30,
+            30
+        );
+        // }
+    }
     drawScore(content = this) {
         const { canvasCtx, state } = content;
         const { isRunning, score, settings } = state;
         const fontSize = 14;
-        let shouldDraw = true;
         let drawValue = score.value;
 
         if (isRunning && score.isBlinking) {
@@ -743,25 +765,23 @@ export default class DinoGame extends GameRunner {
             }
         }
 
-        if (shouldDraw) {
-            if (this.steps === 90) canvasCtx.fillStyle = "#ebd234";
-            if (this.steps >= 180) canvasCtx.fillStyle = "#f25c5c";
-            else canvasCtx.fillStyle = "#f7f7f7";
-            canvasCtx.fillRect(
-                this.width - fontSize * 5,
-                0,
-                fontSize * 5,
-                fontSize
-            );
-
-            this.paintText((drawValue + "").padStart(5, "0"), this.width, 0, {
-                font: "PressStart2P",
-                size: `${fontSize}px`,
-                align: "right",
-                baseline: "top",
-                color: "#535353",
-            });
-        }
+        if (this.steps === 90) canvasCtx.fillStyle = "#222";
+        if (this.steps >= 180) canvasCtx.fillStyle = "#f4f4f4";
+        else canvasCtx.fillStyle = "#f4f4f4";
+        canvasCtx.fillRect(
+            this.width - fontSize * 5,
+            0,
+            fontSize * 5,
+            fontSize
+        );
+        const color = this.steps === 90 ? "#f4f4f4" : "#535353";
+        this.paintText((drawValue + "").padStart(5, "0"), this.width, 0, {
+            font: "PressStart2P",
+            size: `${fontSize}px`,
+            align: "right",
+            baseline: "top",
+            color,
+        });
     }
 
     progressInstances(instances) {
