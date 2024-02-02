@@ -59,7 +59,7 @@ export default class DinoGame extends GameRunner {
             dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
-                ? 1
+                ? 3
                 : this.viciosity
                 ? 10
                 : randInteger(7, 9), // fpa
@@ -295,6 +295,7 @@ export default class DinoGame extends GameRunner {
             this.drawDino();
             this.drawScore();
             this.drawHat();
+            this.drawSun();
             this.drawCacti();
             // this.drawFPS();
             const hasDinoColided = state.dino.hits([
@@ -724,25 +725,15 @@ export default class DinoGame extends GameRunner {
         }
     }
     drawSun(content = this) {
-        const isWinner = this.state.score.value > 500;
-        const hatX = isWinner ? 13 : 10;
-        const hatY = isWinner ? 24 : 18;
-        const { dino } = content.state;
-        // if (isWinner) {
-        const sunImage = content.state.coroa;
-        content.canvasCtx.drawImage(
-            hatImage,
-            dino.x + hatX,
-            dino.y - hatY,
-            30,
-            30
-        );
-        // }
+        const sunImage =
+            this.steps === 90 ? content.state.lua : content.state.sol;
+        content.canvasCtx.drawImage(sunImage, 20, 10, 30, 30);
     }
     drawScore(content = this) {
         const { canvasCtx, state } = content;
         const { isRunning, score, settings } = state;
         const fontSize = 14;
+        let shouldDraw = true;
         let drawValue = score.value;
 
         if (isRunning && score.isBlinking) {
@@ -764,24 +755,28 @@ export default class DinoGame extends GameRunner {
                 }
             }
         }
+        if (shouldDraw) {
+            if (this.steps === 90) {
+                console.log("ok black");
 
-        if (this.steps === 90) canvasCtx.fillStyle = "#222";
-        if (this.steps >= 180) canvasCtx.fillStyle = "#f4f4f4";
-        else canvasCtx.fillStyle = "#f4f4f4";
-        canvasCtx.fillRect(
-            this.width - fontSize * 5,
-            0,
-            fontSize * 5,
-            fontSize
-        );
-        const color = this.steps === 90 ? "#f4f4f4" : "#535353";
-        this.paintText((drawValue + "").padStart(5, "0"), this.width, 0, {
-            font: "PressStart2P",
-            size: `${fontSize}px`,
-            align: "right",
-            baseline: "top",
-            color,
-        });
+                canvasCtx.fillStyle = "#222222";
+            } else if (this.steps >= 180) canvasCtx.fillStyle = "#f4f4f4";
+            else canvasCtx.fillStyle = "#f4f4f4";
+            canvasCtx.fillRect(
+                this.width - fontSize * 5,
+                0,
+                fontSize * 5,
+                fontSize
+            );
+            const color = this.steps === 90 ? "#f4f4f4" : "#535353";
+            this.paintText((drawValue + "").padStart(5, "0"), this.width, 0, {
+                font: "PressStart2P",
+                size: `${fontSize}px`,
+                align: "right",
+                baseline: "top",
+                color,
+            });
+        }
     }
 
     progressInstances(instances) {
