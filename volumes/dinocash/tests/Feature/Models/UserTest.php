@@ -40,7 +40,7 @@ test('return users of the affiliate', function () {
 test('change wallet of the user ', function () {
     $user = User::factory()->create();
     $user->wallet = 0.1;
-    $user->changeWallet(0.2);
+    $user->changeWallet(0.2, 'test');
     $wallet = $user->wallet;
     $this->assertSame($wallet, 0.3);
 });

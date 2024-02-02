@@ -6,7 +6,6 @@ use App\Models\BonusCampaign;
 use App\Models\BonusWalletChange;
 use App\Models\Deposit;
 use App\Models\Setting;
-use App\Models\WalletTransaction;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Log;
@@ -96,23 +95,17 @@ class DepositService
         }
     }
 
-    public function aproveDeposit(Deposit $deposit, BonusService $bonusService): bool
+    public function aproveDeposit(Deposit $deposit): bool
     {
         try {
+            $bonusService = new BonusService();
             $user = User::find($deposit->user->id);
             $amount = $deposit->amount;
 
-            WalletTransaction::create([
-                'userId' => $deposit->userId,
-                'oldValue' => $user->wallet,
-                'newValue' => $user->wallet + $amount,
-                'type' => 'DEPOSIT',
-            ]);
-
             $deposit->type = 'paid';
             $deposit->save();
-            $user->wallet += $amount;
-            $user->save();
+            // $user->changeWallet($amount);
+            // $user->save();
 
             $bonusService->createBonusDeposit($deposit);
 

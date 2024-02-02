@@ -129,8 +129,14 @@ class User extends Authenticatable
         $this->attributes['isAffiliate'] = true;
     }
 
-    public function changeWallet($value)
+    public function changeWallet($value, $type)
     {
+        WalletTransaction::create([
+            'userId' => $this->id,
+            'oldValue' => $this->wallet,
+            'newValue' => $this->wallet + $value,
+            'type' => $type,
+        ]);
         return $this->wallet = number_format($this->wallet + $value, 2, '.', '');
     }
 

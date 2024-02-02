@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Jobs\ProcessAutoWithdraw;
-use App\Models\WalletTransaction;
 use App\Models\Withdraw;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -24,16 +22,9 @@ class WithdrawService
                     'amount' => $amount,
                     'type' => 'pending',
                 ]);
-                
-                WalletTransaction::create([
-                    'userId' => $user->id,
-                    'oldValue' => $user->wallet,
-                    'newValue' => $user->wallet - $amount,
-                    'type' => 'WITHDRAW',
-                ]);
             }
 
-            $user->changeWallet($amount * -1);
+            $user->changeWallet($amount * -1, 'withdraw');
             $user->save();
 
             return $withdraw ?? true;
@@ -120,14 +111,7 @@ class WithdrawService
             $user = $withdraw->user;
             $amount = $withdraw->amount;
 
-            WalletTransaction::create([
-                'userId' => $user->id,
-                'oldValue' => $user->wallet,
-                'newValue' => $user->wallet + $amount,
-                'type' => 'WITHDRAW REJECTED',
-            ]);
-
-            $user->changeWallet($amount);
+            $user->changeWallet($amount, 'withdraw rejected');
             $user->save();
 
             return true;

@@ -6,7 +6,7 @@ use App\Models\User;
 
 test('test play game dino and create game history', function () {
     $user = User::factory()->create();
-    $user->changeWallet(50);
+    $user->changeWallet(50, 'test');
     $user->save();
 
     Auth::login($user);
