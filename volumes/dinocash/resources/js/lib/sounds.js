@@ -1,6 +1,6 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext
 const audioContext = new AudioContext()
-const soundNames = ['game-over', 'jump', 'level-up']
+const soundNames = ['game-over', 'jump', 'level-up', 'trovao']
 const soundBuffers = {}
 let SOUNDS_LOADED = false
 

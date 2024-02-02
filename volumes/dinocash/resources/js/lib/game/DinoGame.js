@@ -13,9 +13,9 @@ import {
 } from "../utils.js";
 import GameRunner from "./GameRunner.js";
 import axios from "axios";
-import bgJogo from "../../../../storage/imgs/user/bg-jogo.jpg";
+import bgJogo from "../../../../storage/imgs/user/bg-jogo-v2.jpg";
 import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
-import bgNatalMobile from "../../../../storage/imgs/user/bg-natal-mobile.jpg";
+import bgNatalMobile from "../../../../storage/imgs/user/bg-jogo-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
 import coroa from "../../../../storage/imgs/user/coroa.png";
 import moon from "../../../../storage/imgs/user/moon.svg";
@@ -59,7 +59,7 @@ export default class DinoGame extends GameRunner {
             dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
-                ? 3
+                ? 7
                 : this.viciosity
                 ? 10
                 : randInteger(7, 9), // fpa
@@ -142,13 +142,13 @@ export default class DinoGame extends GameRunner {
         const windowWidth = window.innerWidth;
         const app = document.getElementById("app");
         app.style.backgroundImage = `url('${
-            windowWidth < 700 ? bgNatalMobile : bgNatal
+            windowWidth < 700 ? bgNatalMobile : bgJogo
         }')`;
         app.style.backgroundSize =
-            windowWidth < 700 ? "auto 100vh" : "auto auto";
-        app.style.backgroundPosition = "center";
+            windowWidth < 700 ? "cover" : "auto auto";
+        // app.style.backgroundPosition = "center";
         app.style.backgroundRepeat = "no-repeat";
-        app.style.backgroundPosition = "center";
+        app.style.backgroundPosition = windowWidth < 700 ? "center" : "bottom";
         app.style.setProperty("-webkit-touch-callout", "none");
         app.style.setProperty("-webkit-user-select", "none");
         app.style.setProperty("-khtml-user-select", "none");
@@ -596,10 +596,12 @@ export default class DinoGame extends GameRunner {
             this.canvasCtx.fillStyle = "#f7f7f7";
             this.canvasCtx.fillRect(0, 0, this.width, this.height);
         } else if (state.score.value === 500) {
+            playSound("trovao");
             this.animate({
                 content: this,
             });
         } else if (state.score.value === 1000) {
+            playSound("trovao");
             this.animate({
                 content: this,
             });
