@@ -29,6 +29,7 @@ class Setting extends Model
         'maxAutoPayWithdraw',
         'bonusPercent',
         'maxDepositBonusToUser',
+        'maxDepositBonusValue',
         'created_at',
         'updated_at',
     ];
