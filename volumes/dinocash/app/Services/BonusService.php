@@ -83,10 +83,9 @@ class BonusService
         }
     }
 
-    public function createFreeSpin(int $value): bool
+    public function addFreeSpin(User $user, int $value): bool
     {
         try {
-            $user = User::find(Auth::user()->id);
             $bonus = $this->getBonusCampaingActive();
             $settingsAmountFreeSpin = Setting::first()->amountFreeSpin;
             if ($bonus->type === 'bonus') {

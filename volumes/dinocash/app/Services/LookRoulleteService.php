@@ -22,13 +22,39 @@ class LookRoulleteService
         $this->bonusService = $bonusService;
     }
 
-    public function addBonusRoullet(User $user, float $value)
+    public function addBonusRoullet(User $user, float $value): bool
     {
         return $this->bonusService->createBonusLooked($user, $value);
     }
 
+    public function addFreespin(User $user, int $value): bool
+    {
+        return $this->bonusService->addFreeSpin($user, $value);
+    }
+
     public function optionRoulletReward(User $user, int $option): bool
     {
-        return true;
+        // 1 a 3 -> 100 reais
+        // 4 a 10 -> 5 rodadas 
+        // 11 a 20 -> 20 reais
+        // 21 a 30 -> 2 rodadas
+        // 31 a 100 -> 5 reais
+
+        if ($option === 1 && $this->addBonusRoullet($user, 100.00)) {
+            return true;
+        }
+        if ($option === 2) {
+            $this->addFreespin($user, 5);
+        }
+        if ($option === 3) {
+            $this->addBonusRoullet($user, 20.00);
+        }
+        if ($option === 4) {
+            $this->addFreespin($user, 2);
+        }
+        if ($option === 5) {
+            $this->addBonusRoullet($user, 5.00);
+        }
+        return false;
     }
 }
