@@ -53,7 +53,7 @@ class DepositController extends Controller
     {
         $userId = Auth::user()->id;
         $user = User::find($userId);
-        $hasBonus = $request->hasBonus;
+        $hasBonus = $request->hasBonus ?? false;
         $deposit = $depositService->createDeposit($user, $request->amount, $hasBonus);
         if ($deposit) {
             return response()->json([
