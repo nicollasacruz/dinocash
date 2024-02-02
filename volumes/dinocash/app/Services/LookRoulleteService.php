@@ -43,17 +43,17 @@ class LookRoulleteService
         if ($option === 1 && $this->addBonusRoullet($user, 100.00)) {
             return true;
         }
-        if ($option === 2) {
-            $this->addFreespin($user, 5);
+        elseif ($option === 2 && $this->addFreespin($user, 5)) {
+            return true;
         }
-        if ($option === 3) {
-            $this->addBonusRoullet($user, 20.00);
+        elseif ($option === 3 && $this->addBonusRoullet($user, 20.00)) {
+            return true;
         }
-        if ($option === 4) {
-            $this->addFreespin($user, 2);
+        elseif ($option === 4 && $this->addFreespin($user, 2)) {
+            return true;
         }
-        if ($option === 5) {
-            $this->addBonusRoullet($user, 5.00);
+        elseif ($option === 5 && $this->addBonusRoullet($user, 5.00)) {
+            return true;
         }
         return false;
     }
