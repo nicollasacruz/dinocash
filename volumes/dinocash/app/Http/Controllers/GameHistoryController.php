@@ -22,35 +22,34 @@ class GameHistoryController extends Controller
         try {
             $viciosidade = false;
             $settings = Setting::first();
-
+            
             $depositsAmountPaid = Deposit::where('type', 'paid')
-                ->sum('amount');
-
+            ->sum('amount');
+            
             $withdrawsAmountPaid = Withdraw::where('type', 'paid')
-                ->whereHas('user', function ($query) {
-                    $query->where('isAffiliate', false);
-                })
-                ->sum('amount');
-
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
+            ->sum('amount');
+            
             $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
-
+            
             $gain = $depositsAmountPaid ?? 1;
-
+            
             if (env('APP_GGR_DEPOSIT')) {
                 $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
             }
             $pay = $withdrawsAmountPaid + $walletsAmount;
             if (!$gain || !$pay) {
-                Log::info('Vazio ou 0');
+                // Log::channel('telegram')->info('Vazio ou 0');
                 $houseHealth = 100;
             } else {
                 $houseHealth = round(($pay * 100 / $gain), 1);
                 if ($houseHealth > 100 - $settings->payout) {
                     $viciosidade = true;
-                    Log::error('Viciosidade ativada.');
+                    Log::channel('telegram')->error('Viciosidade ativada.');
                 }
             }
-            // dd('teste');
             $user = User::find(Auth::user()->id);
             if ($user) {
                 $gameHistory = $user->gameHistories->where('type', 'pending');
@@ -82,7 +81,7 @@ class GameHistoryController extends Controller
 
                         event(new WalletChanged($message));
 
-                        Log::error('Partida já iniciada. - ' . $user->email);
+                        Log::channel('telegram')->error('Partida já iniciada. - ' . $user->email);
                     }
                 }
             }
