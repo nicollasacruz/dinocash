@@ -40,6 +40,7 @@ class GameHistoryController extends Controller
                 $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
             }
             $pay = $withdrawsAmountPaid + $walletsAmount;
+            dd($pay);
             if (!$gain || !$pay) {
                 Log::info('Vazio ou 0');
                 $houseHealth = 100;
@@ -50,7 +51,6 @@ class GameHistoryController extends Controller
                     Log::error('Viciosidade ativada.');
                 }
             }
-            dd('teste');
             $user = User::find(Auth::user()->id);
             if ($user) {
                 $gameHistory = $user->gameHistories->where('type', 'pending');
