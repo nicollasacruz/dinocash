@@ -16,7 +16,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
-                menu: "Upheavtt",
+                menu: "Inter",
             },
             colors: {
                 "verde-claro": "#d6f8b8",

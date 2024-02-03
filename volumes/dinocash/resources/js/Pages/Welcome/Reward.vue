@@ -3,20 +3,29 @@
         id="section2"
         class="section2 h-screen mx-auto p-6 lg:p-10 pb-5"
         :style="{
-            backgroundImage: `url('${background}')`,
+            backgroundImage: `url('${
+                windowWidth < 700 ? bgMobile : background
+            }')`,
             backgroundSize: 'cover',
             backgroundPosition: windowWidth < 700 ? 'bottom' : 'center',
             backgroundRepeat: 'no-repeat',
         }"
     >
         <div
-            class="text-4xl md:text-6xl text-verde font-menu text-center md:text-right lg:mr-40 "
+            class="text-4xl font-bold md:text-6xl text-verde font-menu text-center md:text-right lg:mr-40"
         >
             Recompensas
         </div>
-        <div class="flex flex-col items-center md:items-start md:flex-row lg:mr-40">
-            <div class="flex-1 w-full md:mr-5 flex justify-center md:justify-end">
-                <img :src="reward" class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-8" />
+        <div
+            class="flex flex-col items-center md:items-start md:flex-row lg:mr-40"
+        >
+            <div
+                class="flex-1 w-full md:mr-5 flex justify-center md:justify-end"
+            >
+                <img
+                    :src="reward"
+                    class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-8"
+                />
             </div>
             <div class="flex justify-center md:justify-end w-full md:w-auto">
                 <div
@@ -27,7 +36,7 @@
                         vários prêmios que você poderá adquirir somente jogando
                         ou depositando!
                     </div>
-                    <div class="text-verde font-menu text-lg my-3">
+                    <div class="text-verde font-menu text-lg my-3 font-bold">
                         <div>- Ícones de perfil lendários.</div>
                         <div>- Cashback de 5% em seus depósitos.</div>
                         <div>- Rodadas grátis toda semana.</div>
@@ -46,7 +55,9 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
-import background from "../../../../storage/imgs/home-page/bg.jpg";
+import background from "../../../../storage/imgs/home-page/bg5-desk.jpg";
+import bgMobile from "../../../../storage/imgs/home-page/bg5-mobile.jpg";
+
 import reward from "../../../../storage/imgs/home-page/reward.svg";
 
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =

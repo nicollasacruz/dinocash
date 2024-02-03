@@ -2,9 +2,7 @@
     <Head title="Depósitos" />
     <UserLayouyt>
         <div class="p-3 lg:p-6 lg:px-16">
-            <div
-                class="text-5xl mb-5 text-verde font-extrabold font-menu"
-            >
+            <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
                 Depositar
             </div>
             <div class="flex-col flex gap-y-4">
@@ -27,6 +25,20 @@
                         <b class="text-verde font-extrabold">{{
                             toBRL(maxDeposit)
                         }}</b>
+                    </div>
+                    <div>
+                        Bônus disponível:
+                        <b class="text-verde">{{ toBRL(0) }}</b>
+                    </div>
+                    <div class="flex mt-1">
+                        <input
+                            v-model="bonusSelected"
+                            type="checkbox"
+                            class="checkbox lg:ml mr-2"
+                        />
+                        <span class="text-verde font-bold text-lg">
+                            Usar Bonus
+                        </span>
                     </div>
                 </div>
 
@@ -86,8 +98,8 @@ const amount = ref(0);
 const loading = ref(false);
 const modal = ref(false);
 const qrCode = ref("");
+const bonusSelected = ref(false);
 // @ts-ignore
-
 async function startDeposit() {
     loading.value = true;
     try {

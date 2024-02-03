@@ -103,4 +103,5 @@ const drawer = ref(false);
     font-family: "FF-Mark", sans-serif;
     src: url("/resources/css/FF-Mark/MarkPro-Thin.otf") format("opentype");
 }
+
 </style>

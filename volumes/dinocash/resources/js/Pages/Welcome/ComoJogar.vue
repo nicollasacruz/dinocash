@@ -1,20 +1,22 @@
 <template>
     <section
         :style="{
-            backgroundImage: `url('${background}')`,
-            backgroundSize: windowWidth < 700 ? 'auto 100vh' : 'cover',
+            backgroundImage: `url('${
+                windowWidth < 700 ? backMobile : background
+            }')`,
+            backgroundSize: windowWidth < 700 ? 'cover' : 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
         }"
         class="h-screen pt-8 lg:p-8 lg:px-14 relative"
     >
         <div
-            class="text-4xl sm:text-5xl pl-3 md:text-6xl font-menu mb-3 md:mb-5 lg:mb-8 text-verde lg:text-right relative"
+            class="text-4xl sm:text-5xl pl-3 md:text-6xl font-menu font-bold mb-7 lg:mb-8 text-verde lg:text-right relative"
         >
             Como Jogar?
         </div>
         <div class="flex flex-col-reverse lg:flex-row">
-            <div class="flex-1  justify-center flex  w-full">
+            <div class="flex-1 justify-center flex w-full">
                 <img :src="dinoJogar" class="w-56 lg:w-96 absolute bottom-0" />
             </div>
             <div class="flex-1">
@@ -24,7 +26,7 @@
                     :key="i"
                 >
                     <div
-                        class="w-9 h-9 lg:w-11 lg:h-11 shrink-0 font-menu rounded text-center bg-verde pt-1 text-roxo text-3xl md:text-4xl flex items-center justify-center mr-5"
+                        class="w-9 h-9 lg:w-11 lg:h-11 shrink-0 font-menu font-bold rounded text-center bg-verde py-1 text-roxo text-3xl md:text-4xl flex items-center justify-center mr-5"
                     >
                         {{ i + 1 }}
                     </div>
@@ -40,7 +42,9 @@
 
 <script setup>
 import { ref } from "vue";
-import background from "../../../../storage/imgs/home-page/bg.jpg";
+import background from "../../../../storage/imgs/home-page/bg3-desk.jpg";
+import backMobile from "../../../../storage/imgs/home-page/bg3-mobile.jpg";
+
 import dinoJogar from "../../../../storage/imgs/home-page/dino-jogar.svg";
 console.log(dinoJogar);
 const instructions = [

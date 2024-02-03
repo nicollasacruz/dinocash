@@ -19,7 +19,7 @@
                 Seja bem-vindo(a)
             </div>
             <div
-                class="text-xl flex items-center lg:text-2xl text-verde"
+                class="text-xl flex items-center lg:text-2xl text-verde font-bold capitalize"
             >
                 <div>
                     {{ email?.split(" ")[0] }}
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="gap-y-2 px-1 lg:px-2 flex flex-col text-white">
+        <div class="gap-y-2 px-1 lg:px-2 flex flex-col text-white font-bold">
             <Link
                 v-for="link in routes"
                 class="drawer-button flex items-center pl-5"

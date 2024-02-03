@@ -6,7 +6,7 @@
             class="h-[20%] w-36 mx-auto z-10 mt-3 mb-4 px-2 md:mt-8"
         />
         <div class="text-center">
-            <div class="text-verde font-menu">
+            <div class="text-verde font-menu font-bold">
                 <a :href="route('terms')">Leia nossos termos de uso!</a>
             </div>
             <div class="text-white text-md md:text-lg">

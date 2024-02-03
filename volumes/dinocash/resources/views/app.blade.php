@@ -58,3 +58,12 @@
 <noscript><img height="1" width="1" style="display:none"
         src="https://www.facebook.com/tr?id=364787796132740&ev=PageView&noscript=1" /></noscript>
 <!-- End Meta Pixel Code -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+@font-face {
+    font-family: "Inter", sans-serif;
+    src: url("inter/Inter-Bold.ttf") format("opentype");
+
+}
+</style>

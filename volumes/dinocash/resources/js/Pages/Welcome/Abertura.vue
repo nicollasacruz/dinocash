@@ -18,7 +18,7 @@
         >
             {{ $page.props.errors.banned }}
         </div>
-        <div class="flex flex-col items-center md:flex-row">
+        <div class="flex flex-col items-center md:ml-10 md:flex-row">
             <div class="my-3 md:my-10 lg:w-[550px] px-3 flex-1">
                 <div class="flex sm:justify-center lg:justify-start">
                     <img
@@ -86,7 +86,7 @@
 import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import background from "../../../../storage/imgs/home-page/bg.jpg";
-import bgMobile from "../../../../storage/imgs/home-page/bg-mobile.jpg";
+import bgMobile from "../../../../storage/imgs/home-page/bg1-mobile.jpg";
 import DinoHome from "../../../../storage/imgs/home-page/dino-home.svg";
 
 import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";

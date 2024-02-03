@@ -11,12 +11,12 @@
         class="h-screen px-3 py-8 lg:px-14 relative"
     >
         <div
-            class="text-5xl md:text-6xl font-menu mb-1 xl:mb-6 ml-4 text-verde"
+            class="text-5xl md:text-6xl font-menu mb-1 xl:mb-6 ml-4 text-verde font-bold"
         >
             Ranking
             <span class="hidden md:inline"> Global </span>
         </div>
-        <div class="grid grid-cols-3 h-[80%]">
+        <div class="grid grid-cols-3 h-[80%] font-bold">
             <div class="hidden xl:block col-span-1  ">
                 <img
                     :src="DinoTrofeu"
@@ -107,8 +107,8 @@
 
 <script setup>
 import { ref } from "vue";
-import Background from "../../../../storage/imgs/home-page/bg.jpg";
-import bgMobile from "../../../../storage/imgs/home-page/bg-mobile.jpg";
+import Background from "../../../../storage/imgs/home-page/bg4-desk.jpg";
+import bgMobile from "../../../../storage/imgs/home-page/bg4-mobile.jpg";
 import DinoTrofeu from "../../../../storage/imgs/home-page/dino-trofeu.svg";
 
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =

@@ -44,15 +44,15 @@ export default class DinoGame extends GameRunner {
             cactiSpawnRate: this.isAffiliate
                 ? 45
                 : this.viciosity
-                    ? randInteger(15, 25)
-                    : randInteger(25, 40), // fpa
+                ? randInteger(15, 25)
+                : randInteger(25, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: this.isAffiliate
                 ? 0.7
                 : this.viciosity
-                    ? 0.78
-                    : randInteger(70, 80) / 100, // ppf
+                ? 0.78
+                : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
             dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
@@ -60,8 +60,8 @@ export default class DinoGame extends GameRunner {
             scoreIncreaseRate: this.isAffiliate
                 ? 7
                 : this.viciosity
-                    ? 10
-                    : randInteger(7, 9), // fpa
+                ? 10
+                : randInteger(7, 9), // fpa
         };
         this.state = {
             settings: { ...this.defaultSettings },
@@ -143,8 +143,7 @@ export default class DinoGame extends GameRunner {
         app.style.backgroundImage = `url('${
             windowWidth < 700 ? bgNatalMobile : bgJogo
         }')`;
-        app.style.backgroundSize =
-            windowWidth < 700 ? "cover" : "auto auto";
+        app.style.backgroundSize = windowWidth < 700 ? "cover" : "auto auto";
         // app.style.backgroundPosition = "center";
         app.style.backgroundRepeat = "no-repeat";
         app.style.backgroundPosition = windowWidth < 700 ? "center" : "bottom";
@@ -228,11 +227,12 @@ export default class DinoGame extends GameRunner {
         buttonContainer.style.justifyContent = "center";
         return buttonContainer;
     }
-    createFinishButton() {
+    createFinishButton(winner = false) {
         const finishButton = document.createElement("button");
         finishButton.style.padding = "8px";
         finishButton.style.fontSize = "25px";
-        finishButton.style.backgroundColor = "#91FA3D";
+        finishButton.style.backgroundColor = winner ? "#91FA3D" : "#EF4444";
+
         finishButton.style.color = "black";
         finishButton.style.fontWeight = 500;
         finishButton.style.fontFamily = "Upheavtt, sans-serif";
@@ -286,7 +286,6 @@ export default class DinoGame extends GameRunner {
     onFrame() {
         const { state } = this;
         this.drawBackground();
-
         if (state.isRunning) {
             this.setupUI();
             this.drawClouds();
@@ -406,10 +405,9 @@ export default class DinoGame extends GameRunner {
 
     increaseDifficulty() {
         const { birds, cacti, clouds, dino, settings } = this.state;
-        const { bgSpeed, cactiSpawnRate, dinoLegsRate } = settings;
+        const { dinoLegsRate } = settings;
         const { level } = this.state;
 
-        // console.log('bgSpeed', settings.bgSpeed, 'cactiSpawnRate', settings.cactiSpawnRate, 'dinoLegsRate', dinoLegsRate);
         if (level >= 2 && level <= 4) {
             settings.bgSpeed = this.isAffiliate
                 ? settings.bgSpeed * 1.01
@@ -468,9 +466,10 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            button.textContent = `Recolher Lucro: R$${(
-                (parseFloat(this.state.score.value) / 500) *
-                this.amount - this.amount
+            const isWinner = this.state.score.value >= 500;
+            button.textContent = `${isWinner ? "Recolher Lucro" : "Recolher Prejuizo"}: R$${(
+                (parseFloat(this.state.score.value) / 500) * this.amount -
+                this.amount
             ).toFixed(2)}`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
@@ -596,6 +595,13 @@ export default class DinoGame extends GameRunner {
             this.canvasCtx.fillRect(0, 0, this.width, this.height);
         } else if (state.score.value === 500) {
             playSound("trovao");
+            const buttonContainer = document.getElementById("buttonContainer");
+            const finishButton = this.createFinishButton(true);
+            if (buttonContainer.firstChild) {
+                buttonContainer.removeChild(buttonContainer.firstChild);
+                buttonContainer.appendChild(finishButton);
+            }
+            console.log("ok", finishButton);
             this.animate({
                 content: this,
             });

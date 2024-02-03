@@ -4,17 +4,17 @@
         class="section2 h-screen mx-auto p-6 lg:p-10 pb-5"
         :style="{
             backgroundImage: `url('${
-                windowWidth < 700 ? background : background
+                windowWidth < 700 ? bgMobile : background
             }')`,
             backgroundSize: 'cover',
-            backgroundPosition: windowWidth < 700 ? 'bottom' : 'center',
+            backgroundPosition: windowWidth < 700 ? 'center' : 'center',
             backgroundRepeat: 'no-repeat',
         }"
     >
-        <div class="text-5xl md:text-6xl text-verde font-menu text-start">Dino Cash</div>
+        <div class="text-5xl md:text-6xl text-verde font-menu text-start font-bold">Dino Cash</div>
         <div class="flex flex-col lg:flex-row">
             <div
-                class="text-sm md:text-lg max-h-[60%] text-justify mt-3 md:mt-5 flex-1 mb-2 lg:mr-5"
+                class="text-sm md:text-lg max-h-[60%] text-justify mt-5 flex-1 mb-2 lg:mr-5"
             >
                 Bem-vindo ao Dinocash, sua principal opção de entretenimento e
                 lucratividade em jogos online! Como uma provedora totalmente
@@ -35,12 +35,11 @@
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
-import bgMobile from "../../../../storage/imgs/home-page/bg-mobile.jpg";
+import bgMobile from "../../../../storage/imgs/home-page/bg2-mobile.jpg";
 import dinoPlataforma from "../../../../storage/imgs/home-page/dino-plataforma.svg";
 
-import background from "../../../../storage/imgs/home-page/bg.jpg";
+import background from "../../../../storage/imgs/home-page/bg2-desk.jpg";
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
     defineProps({
         canLogin: {

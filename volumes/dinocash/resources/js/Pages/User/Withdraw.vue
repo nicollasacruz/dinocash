@@ -3,9 +3,7 @@
 
     <UserLayouyt>
         <div class="p-3 lg:p-6 lg:px-16">
-            <div
-                class="text-5xl mb-5 text-verde font-extrabold font-menu"
-            >
+            <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
                 Sacar
             </div>
             <div class="flex-col flex gap-y-4">
@@ -22,6 +20,20 @@
                         Saldo disponível:
                         <b class="text-verde">{{ toBRL(wallet) }}</b>
                     </div>
+                    <!-- <div>
+                        Bônus disponível:
+                        <b class="text-verde">{{ toBRL(wallet) }}</b>
+                    </div> -->
+                    <!-- <div class="flex mt-1">
+                        <input
+                            v-model="bonusSelected"
+                            type="checkbox"
+                            class="checkbox lg:ml mr-2"
+                        />
+                        <span class="text-verde font-bold text-lg">
+                            Retirar Bonus
+                        </span>
+                    </div> -->
                 </div>
                 <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="" />
                 <button
