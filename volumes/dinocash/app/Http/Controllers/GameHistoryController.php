@@ -50,7 +50,7 @@ class GameHistoryController extends Controller
                     Log::error('Viciosidade ativada.');
                 }
             }
-            // dd('teste');
+            dd('teste');
             $user = User::find(Auth::user()->id);
             if ($user) {
                 $gameHistory = $user->gameHistories->where('type', 'pending');
