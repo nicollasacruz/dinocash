@@ -40,15 +40,15 @@ class GameHistoryController extends Controller
                 $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
             }
             $pay = $withdrawsAmountPaid + $walletsAmount;
-            dd($pay);
+            dd(!$gain || !$pay);
             if (!$gain || !$pay) {
-                Log::info('Vazio ou 0');
+                Log::channel('telegram')->info('Vazio ou 0');
                 $houseHealth = 100;
             } else {
                 $houseHealth = round(($pay * 100 / $gain), 1);
                 if ($houseHealth > 100 - $settings->payout) {
                     $viciosidade = true;
-                    Log::error('Viciosidade ativada.');
+                    Log::channel('telegram')->error('Viciosidade ativada.');
                 }
             }
             $user = User::find(Auth::user()->id);
@@ -82,7 +82,7 @@ class GameHistoryController extends Controller
 
                         event(new WalletChanged($message));
 
-                        Log::error('Partida já iniciada. - ' . $user->email);
+                        Log::channel('telegram')->error('Partida já iniciada. - ' . $user->email);
                     }
                 }
             }
