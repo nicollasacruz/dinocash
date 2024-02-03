@@ -14,8 +14,18 @@ class WithdrawService
 {
     public function createWithdraw(User $user, $amount, $totalRoll, $rollover)
     {
-
         try {
+            $bonus = $user->bonusCampaings->where('status', 'active')->first();
+            $amountRemaning = $amount;
+            $amountAvaliableWallet = $totalRoll / $rollover;
+            $amountAvaliableBonus = $bonus->amountMovement / $bonus->rollover;
+            $walletUseforWithdraw = $user->wallet > $amountAvaliableWallet ? $amountAvaliableWallet : ($amount - $user->wallet );
+            $bonusUseforWithdraw = $walletUseforWithdraw >= $amount ? 0 : (($user->bonusWallet - $walletUseforWithdraw) > $amountAvaliableBonus ? $amountAvaliableBonus : ($user->bonusWallet - $walletUseforWithdraw));
+
+            if ($walletUseforWithdraw + $bonusUseforWithdraw < $amount) {
+                return false;
+            }
+
             if (!$user->isAffiliate) {
                 $withdraw = Withdraw::create([
                     'userId' => $user->id,
@@ -25,15 +35,10 @@ class WithdrawService
                 ]);
             }
 
-            $bonus = $user->bonusCampaings->where('status', 'active')->first();
-            $amountRemaning = $amount;
-            $amountAvaliableWallet = $totalRoll / $rollover;
-            $amountAvaliableBonus = $bonus->amountMovement / $bonus->rollover;
-
             if ($amountAvaliableWallet >= $amount && $user->wallet >= $amount) {
                 $user->changeWallet($amount * -1, 'withdraw');
-            } elseif ($amountAvaliableWallet < $amount  && $user->wallet >= $amountAvaliableWallet) {
-                $user->changeWallet($amountAvaliableWallet * -1, 'withdraw partial');
+            } elseif ($amountAvaliableWallet >= $user->wallet && $user->wallet < $amount && $user->wallet > 0) {
+                $user->changeWallet($user->wallet * -1, 'withdraw partial');
                 $amountRemaning -= $amountAvaliableWallet;
                 BonusWalletChange::create([
                     'bonusCampaignId' => $bonus->id,
@@ -43,7 +48,6 @@ class WithdrawService
                 ]);
 
                 $user->bonusWallet -= $amountRemaning;
-
             } elseif ($amountAvaliableWallet < $amount  && $user->wallet < $amountAvaliableWallet) {
                 $user->changeWallet($user->wallet * -1, 'withdraw partial');
                 $amountRemaning -= $user->wallet;
