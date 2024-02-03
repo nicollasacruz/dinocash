@@ -33,10 +33,9 @@ class GameHistoryController extends Controller
             ->sum('amount');
             
             $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
-            dd('teste');
-
+            
             $gain = $depositsAmountPaid ?? 1;
-
+            
             if (env('APP_GGR_DEPOSIT')) {
                 $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
             }
@@ -51,6 +50,7 @@ class GameHistoryController extends Controller
                     Log::error('Viciosidade ativada.');
                 }
             }
+            dd('teste');
             $user = User::find(Auth::user()->id);
             if ($user) {
                 $gameHistory = $user->gameHistories->where('type', 'pending');
