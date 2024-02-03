@@ -22,7 +22,8 @@ class GameHistoryController extends Controller
         try {
             $viciosidade = false;
             $settings = Setting::first();
-
+            
+            dd('teste');
             $depositsAmountPaid = Deposit::where('type', 'paid')
                 ->sum('amount');
 
@@ -50,7 +51,6 @@ class GameHistoryController extends Controller
                     Log::error('Viciosidade ativada.');
                 }
             }
-            dd('teste');
             $user = User::find(Auth::user()->id);
             if ($user) {
                 $gameHistory = $user->gameHistories->where('type', 'pending');
