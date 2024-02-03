@@ -23,17 +23,17 @@ class GameHistoryController extends Controller
             $viciosidade = false;
             $settings = Setting::first();
             
-            dd('teste');
             $depositsAmountPaid = Deposit::where('type', 'paid')
-                ->sum('amount');
-
+            ->sum('amount');
+            
             $withdrawsAmountPaid = Withdraw::where('type', 'paid')
-                ->whereHas('user', function ($query) {
-                    $query->where('isAffiliate', false);
-                })
-                ->sum('amount');
-
+            ->whereHas('user', function ($query) {
+                $query->where('isAffiliate', false);
+            })
+            ->sum('amount');
+            
             $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
+            dd('teste');
 
             $gain = $depositsAmountPaid ?? 1;
 
