@@ -40,9 +40,9 @@ class GameHistoryController extends Controller
                 $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
             }
             $pay = $withdrawsAmountPaid + $walletsAmount;
-            dd(!$gain || !$pay);
             if (!$gain || !$pay) {
                 Log::channel('telegram')->info('Vazio ou 0');
+                dd(!$gain || !$pay);
                 $houseHealth = 100;
             } else {
                 $houseHealth = round(($pay * 100 / $gain), 1);
