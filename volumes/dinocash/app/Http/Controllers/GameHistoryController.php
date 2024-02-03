@@ -9,6 +9,7 @@ use App\Models\GameHistory;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Withdraw;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -128,8 +129,9 @@ class GameHistoryController extends Controller
                 "walletUser" => $user->wallet + $user->bonusWallet,
                 "maxAmmount" => $settings->maxAmountPlay
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::channel('telegram')->error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
+            Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
         }
     }
 
