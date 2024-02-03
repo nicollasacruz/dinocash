@@ -48,7 +48,7 @@ const isDocumentNumberValid = (document) => {
                 >
                     {{ status }}
                 </div>
-                <form @submit.prevent="submit" class="mx-auto lg:w-[40%]">
+                <form @submit.prevent="submit" class="mx-auto w-10/12 md:w-8/12 lg:w-1/5">
                     <div>
                         <TextInput
                             id="name"
@@ -170,7 +170,7 @@ const isDocumentNumberValid = (document) => {
                     </div>
 
                     <div
-                        class="flex flex-col items-center justify-center mt-5 mx-auto"
+                        class="flex flex-col items-center justify-center mt-4 mx-auto"
                     >
                         <PrimaryButton
                             class="!bg-verde flex justify-center items-center w-full py-4 text-xl capitalize rounded-xl user-button"

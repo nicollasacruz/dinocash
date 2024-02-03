@@ -57,20 +57,29 @@ const drawer = ref(false);
             >
                 <!-- Page content here -->
                 <UserHeader
+                    :logged="!!$page?.props?.auth?.user?.id"
                     @toggle="drawer = !drawer"
                     :wallet="wallet + $page.props.auth.user.bonusWallet"
                     :name="$page.props.auth.user.name"
                 />
-                <div class="flex gap-x-6 h-[93%] p-3 py-2 lg:px-10 lg:py-8">
-                    <UserDrawer
-                        :wallet="wallet"
-                        @close="drawer = false"
-                        class="hidden lg:block"
-                    />
+                <div class="grid grid-cols-1 xl:grid-cols-12 flex-1">
                     <div
-                        class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
+                        class="col-span-1 xl:col-span-10 xl:col-start-2 flex flex-col"
                     >
-                        <slot :wallet="wallet" />
+                        <div
+                            class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-8 user-height"
+                        >
+                            <UserDrawer
+                                :wallet="wallet"
+                                @close="drawer = false"
+                                class="hidden lg:block"
+                            />
+                            <div
+                                class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
+                            >
+                                <slot :wallet="wallet" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -82,6 +91,12 @@ const drawer = ref(false);
     height: calc(100vh - 110px);
     @media (min-width: 1024px) {
         height: calc(100vh - 200px);
+    }
+}
+.user-height {
+    height: calc(100vh - 110px);
+    @media (min-width: 1024px) {
+        height: calc(100vh - 100px);
     }
 }
 .font-lighter {

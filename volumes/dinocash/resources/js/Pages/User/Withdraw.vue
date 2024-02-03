@@ -4,7 +4,7 @@
     <UserLayouyt>
         <div class="p-3 lg:p-6 lg:px-16">
             <div
-                class="text-5xl mb-5 text-verde-escuro font-extrabold font-menu"
+                class="text-5xl mb-5 text-verde font-extrabold font-menu"
             >
                 Sacar
             </div>
@@ -20,7 +20,7 @@
                 <div class="text-lg lg:text-xl font-bold">
                     <div>
                         Saldo disponível:
-                        <b class="text-verde-escuro">{{ toBRL(wallet) }}</b>
+                        <b class="text-verde">{{ toBRL(wallet) }}</b>
                     </div>
                 </div>
                 <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="" />

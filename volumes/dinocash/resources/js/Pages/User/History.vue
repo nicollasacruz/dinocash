@@ -3,7 +3,7 @@
     <UserLayouyt>
         <div class="px-2 md:px-12 flex flex-col h-full">
             <div
-                class="font-menu text-5xl mb-4 font-extrabold px-4 mt-6 text-verde-escuro"
+                class="font-menu text-5xl mb-4 font-extrabold px-4 mt-6 text-verde"
             >
                 Histórico
             </div>

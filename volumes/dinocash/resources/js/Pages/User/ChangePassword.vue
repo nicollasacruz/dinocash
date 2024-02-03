@@ -2,7 +2,7 @@
     <Head title="Perfil" />
     <UserLayout>
         <div class="lg:p-6 lg:px-16 p-3">
-            <div class="text-5xl text-verde-escuro font-extrabold font-menu">
+            <div class="text-5xl text-verde font-extrabold font-menu">
                 Perfil
             </div>
             <UpdateProfileInformationForm

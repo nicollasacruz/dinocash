@@ -42,7 +42,7 @@ const submit = () => {
                     {{ status }}
                 </div>
 
-                <form @submit.prevent="submit" class="mx-auto lg:w-[40%]">
+                <form @submit.prevent="submit" class="mx-auto w-10/12 md:w-8/12 lg:w-1/5">
                     <div>
                         <!-- <InputLabel for="email" value="Email" /> -->
 

@@ -19,7 +19,7 @@
                 Seja bem-vindo(a)
             </div>
             <div
-                class="text-xl flex items-center lg:text-2xl text-verde-escuro"
+                class="text-xl flex items-center lg:text-2xl text-verde"
             >
                 <div>
                     {{ email?.split(" ")[0] }}
@@ -40,7 +40,7 @@
                 <img class="mr-2" :src="link.icon" />
                 <a>{{ link.label }}</a>
             </Link>
-            <template v-if="$page.props.auth.user.role === 'admin'">
+            <template v-if="$page.props.auth.user?.role === 'admin'">
                 <Link
                     class="drawer-button flex"
                     :href="route('admin.financeiro')"
@@ -74,12 +74,12 @@ const emit = defineEmits(["close"]);
 
 const page = usePage();
 
-const userId = computed(() => page.props.auth.user.id);
+const userId = computed(() => page.props.auth.user?.id);
 const userIdref = ref(userId);
 const loading = ref(false);
 
 const amount = ref(0);
-const wallet = ref(props.wallet + page.props.auth.user.bonusWallet);
+const wallet = ref(props.wallet + page.props.auth.user?.bonusWallet);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
     wallet.value = e.message.wallet;
@@ -128,7 +128,7 @@ const routes = [
     // },
 ];
 
-const email = page.props.auth.user.name;
+const email = page.props.auth.user?.name;
 
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {

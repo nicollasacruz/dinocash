@@ -4,12 +4,12 @@
     <UserLayouyt v-slot="{ wallet }">
         <div class="p-2 lg:px-16 h-full">
             <div
-                class="text-5xl font-extrabold text-verde-escuro font-menu my-4"
+                class="text-5xl font-extrabold text-verde font-menu my-4"
             >
                 Como jogar
             </div>
             <div class="text-sm sm:text-lg lg:text-[1rem] mb-1">
-                <div class="text-verde-escuro font-bold mb-3">
+                <div class="text-verde font-bold mb-3">
                     Para dispositívos móveis
                 </div>
                 <div>
@@ -18,7 +18,7 @@
                 <div>
                     - Para pular os cactos, clique com o dedo sobre a tela.
                 </div>
-                <div class="text-verde-escuro font-bold my-3">
+                <div class="text-verde font-bold my-3">
                     Para computadores:
                 </div>
                 <div>- Para iniciar o game aperte a barra de espaço.</div>

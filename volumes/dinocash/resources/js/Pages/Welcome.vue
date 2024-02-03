@@ -7,6 +7,9 @@ import Ranking from "./Welcome/Ranking.vue";
 import Reward from "./Welcome/Reward.vue";
 
 import Footer from "./Welcome/Footer.vue";
+import UserHeader from "@/Components/UserHeader.vue";
+import UserDrawer from "@/Components/UserDrawer.vue";
+
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
     defineProps({
         canLogin: {
@@ -33,15 +36,81 @@ const windowWidth = ref(window.innerWidth);
 window.addEventListener("resize", (valu) => {
     windowWidth.value = window.innerWidth;
 });
+const drawer = ref(false);
+
 </script>
 
 <template>
-    <Abertura />
-    <About />
-    <ComoJogar />
-    <Ranking :ranked-users="rankedUsers" />
-    <Reward />
-    <Footer />
+    <div class="h-screen font-menu flex">
+        <div class="drawer col-auto lg:w-96 z-10 absolute lg:hidden">
+            <input
+                v-model="drawer"
+                id="my-drawer"
+                type="checkbox"
+                class="drawer-toggle"
+            />
+
+            <div class="drawer-side lg:w-96">
+                <label
+                    for="my-drawer"
+                    aria-label="close sidebar"
+                    class="drawer-overlay"
+                ></label>
+                <ul
+                    class="menu py-4 lg:w-96 min-h-full bg-[#212121] text-white relative"
+                >
+                    <x-mark-icon
+                        class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
+                        @click="drawer = !drawer"
+                    />
+                    <UserDrawer :wallet="wallet" class="mt-3" />
+                </ul>
+            </div>
+        </div>
+        <div
+            class="drawer-content h-screen flex flex-col relative flex-1"
+            :style="{
+                'background-image': `url('${Background}')`,
+                'background-size': 'cover',
+                'background-position': 'center',
+            }"
+        >
+            <!-- Page content here -->
+            <UserHeader
+                @toggle="drawer = !drawer"
+                :logged="!!$page?.props?.auth?.user?.id"
+                :wallet="
+                    !!$page?.props?.auth?.user?.id
+                        ? $page.props.auth.user.wallet
+                        : 0
+                "
+                :name="
+                    !!$page?.props?.auth?.user?.id
+                        ? $page.props.auth.user.name
+                        : ''
+                "
+                class="py-2"
+            />
+            <div class="user-height">
+                <UserDrawer
+                    :wallet="wallet"
+                    @close="drawer = false"
+                    v-if="!!$page?.props?.auth?.user?.id"
+                    class="hidden"
+                />
+                <div
+                    class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
+                >
+                    <Abertura />
+                    <About />
+                    <ComoJogar />
+                    <Ranking :ranked-users="rankedUsers" />
+                    <Reward />
+                    <Footer />
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style>

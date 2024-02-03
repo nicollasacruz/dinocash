@@ -3,7 +3,7 @@
     <UserLayouyt>
         <div class="p-3 lg:p-6 lg:px-16">
             <div
-                class="text-5xl mb-5 text-verde-escuro font-extrabold font-menu"
+                class="text-5xl mb-5 text-verde font-extrabold font-menu"
             >
                 Depositar
             </div>
@@ -18,13 +18,13 @@
                 <div class="mt-4 text-lg font-bold">
                     <div>
                         Depósito mínimo:
-                        <b class="text-verde-escuro font-extrabold">
+                        <b class="text-verde font-extrabold">
                             {{ toBRL(minDeposit) }}
                         </b>
                     </div>
                     <div>
                         Depósito maximo:
-                        <b class="text-verde-escuro font-extrabold">{{
+                        <b class="text-verde font-extrabold">{{
                             toBRL(maxDeposit)
                         }}</b>
                     </div>
