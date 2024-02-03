@@ -736,7 +736,6 @@ export default class DinoGame extends GameRunner {
         const fontSize = 14;
         let shouldDraw = true;
         let drawValue = score.value;
-        let shouldDraw = true;
 
         if (isRunning && score.isBlinking) {
             score.blinkFrames++;
