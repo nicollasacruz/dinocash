@@ -18,42 +18,80 @@ class GameHistoryController extends Controller
 {
     public function play(Request $request)
     {
-        $viciosidade = false;
-        $settings = Setting::first();
+        try {
 
-        $depositsAmountPaid = Deposit::where('type', 'paid')
-            ->sum('amount');
 
-        $withdrawsAmountPaid = Withdraw::where('type', 'paid')
-            ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false);
-            })
-            ->sum('amount');
+            $viciosidade = false;
+            $settings = Setting::first();
 
-        $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
+            $depositsAmountPaid = Deposit::where('type', 'paid')
+                ->sum('amount');
 
-        $gain = $depositsAmountPaid ?? 1;
+            $withdrawsAmountPaid = Withdraw::where('type', 'paid')
+                ->whereHas('user', function ($query) {
+                    $query->where('isAffiliate', false);
+                })
+                ->sum('amount');
 
-        if (env('APP_GGR_DEPOSIT')) {
-            $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
-        }
-        $pay = $withdrawsAmountPaid + $walletsAmount;
-        if (!$gain || !$pay) {
-            Log::info('Vazio ou 0');
-            $houseHealth = 100;
-        } else {
-            $houseHealth = round(($pay * 100 / $gain), 1);
-            if ($houseHealth > 100 - $settings->payout) {
-                $viciosidade = true;
-                Log::error('Viciosidade ativada.');
+            $walletsAmount = User::where('role', 'user')->where('isAffiliate', false)->sum('wallet');
+
+            $gain = $depositsAmountPaid ?? 1;
+
+            if (env('APP_GGR_DEPOSIT')) {
+                $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
             }
-        }
+            $pay = $withdrawsAmountPaid + $walletsAmount;
+            if (!$gain || !$pay) {
+                Log::info('Vazio ou 0');
+                $houseHealth = 100;
+            } else {
+                $houseHealth = round(($pay * 100 / $gain), 1);
+                if ($houseHealth > 100 - $settings->payout) {
+                    $viciosidade = true;
+                    Log::error('Viciosidade ativada.');
+                }
+            }
 
-        $user = User::find(Auth::user()->id);
-        if ($user) {
-            $gameHistory = $user->gameHistories->where('type', 'pending');
+            $user = User::find(Auth::user()->id);
+            if ($user) {
+                $gameHistory = $user->gameHistories->where('type', 'pending');
+                if ($gameHistory) {
+                    foreach ($gameHistory as $gameHistoryItem) {
+                        if ($gameHistoryItem->amountType !== 'bonus') {
+                            $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                        } else {
+                            $bonus = $user->bonus->where('status', 'active')->first();
+                            BonusWalletChange::create([
+                                'bonusCampaignId' => $bonus->id,
+                                'amountOld' => $user->bonusWallet,
+                                'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                                'type' => 'game pending error',
+                            ]);
+                            $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
+                            $bonus->save();
+                            $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                        }
+                        $user->save();
+                        $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                            $affiliateHistory->delete();
+                        });
+                        $gameHistoryItem->delete();
+                        $message = [
+                            "id" => $user->id,
+                            "wallet" => $user->wallet
+                        ];
+
+                        event(new WalletChanged($message));
+
+                        Log::error('Partida já iniciada. - ' . $user->email);
+                    }
+                }
+            }
+
+            $gameHistory = $user->gameHistories->where('type', 'gaming');
             if ($gameHistory) {
                 foreach ($gameHistory as $gameHistoryItem) {
+
                     if ($gameHistoryItem->amountType !== 'bonus') {
                         $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     } else {
@@ -62,7 +100,7 @@ class GameHistoryController extends Controller
                             'bonusCampaignId' => $bonus->id,
                             'amountOld' => $user->bonusWallet,
                             'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
-                            'type' => 'game pending error',
+                            'type' => 'game gaming error',
                         ]);
                         $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
                         $bonus->save();
@@ -75,7 +113,7 @@ class GameHistoryController extends Controller
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
-                        "wallet" => $user->wallet
+                        "wallet" => $user->wallet + $user->bonusWallet
                     ];
 
                     event(new WalletChanged($message));
@@ -83,48 +121,16 @@ class GameHistoryController extends Controller
                     Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
+
+            return Inertia::render('User/Play', [
+                "isAffiliate" => $user->isAffiliate,
+                "viciosidade" => $viciosidade,
+                "walletUser" => $user->wallet + $user->bonusWallet,
+                "maxAmmount" => $settings->maxAmountPlay
+            ]);
+        } catch (\Exception $e) {
+            Log::channel('telegram')->error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
         }
-
-        $gameHistory = $user->gameHistories->where('type', 'gaming');
-        if ($gameHistory) {
-            foreach ($gameHistory as $gameHistoryItem) {
-
-                if ($gameHistoryItem->amountType !== 'bonus') {
-                    $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
-                } else {
-                    $bonus = $user->bonus->where('status', 'active')->first();
-                    BonusWalletChange::create([
-                        'bonusCampaignId' => $bonus->id,
-                        'amountOld' => $user->bonusWallet,
-                        'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
-                        'type' => 'game gaming error',
-                    ]);
-                    $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
-                    $bonus->save();
-                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
-                }
-                $user->save();
-                $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
-                    $affiliateHistory->delete();
-                });
-                $gameHistoryItem->delete();
-                $message = [
-                    "id" => $user->id,
-                    "wallet" => $user->wallet + $user->bonusWallet
-                ];
-
-                event(new WalletChanged($message));
-
-                Log::error('Partida já iniciada. - ' . $user->email);
-            }
-        }
-
-        return Inertia::render('User/Play', [
-            "isAffiliate" => $user->isAffiliate,
-            "viciosidade" => $viciosidade,
-            "walletUser" => $user->wallet + $user->bonusWallet,
-            "maxAmmount" => $settings->maxAmountPlay
-        ]);
     }
 
     public function store(Request $request)
