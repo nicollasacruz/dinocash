@@ -54,7 +54,7 @@ class GameHistoryController extends Controller
             $gameHistory = $user->gameHistories->where('type', 'pending');
             if ($gameHistory) {
                 foreach ($gameHistory as $gameHistoryItem) {
-                    if ($gameHistory->amountType !== 'bonus') {
+                    if ($gameHistoryItem->amountType !== 'bonus') {
                         $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     } else {
                         $bonus = $user->bonus->where('status', 'active')->first();
@@ -89,7 +89,7 @@ class GameHistoryController extends Controller
         if ($gameHistory) {
             foreach ($gameHistory as $gameHistoryItem) {
 
-                if ($gameHistory->amountType !== 'bonus') {
+                if ($gameHistoryItem->amountType !== 'bonus') {
                     $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                 } else {
                     $bonus = $user->bonus->where('status', 'active')->first();

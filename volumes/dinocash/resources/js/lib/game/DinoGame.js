@@ -14,7 +14,6 @@ import {
 import GameRunner from "./GameRunner.js";
 import axios from "axios";
 import bgJogo from "../../../../storage/imgs/user/bg-jogo-v2.jpg";
-import bgNatal from "../../../../storage/imgs/user/bg-natal.jpg";
 import bgNatalMobile from "../../../../storage/imgs/user/bg-jogo-mobile.jpg";
 import gorro from "../../../../storage/imgs/user/gorro.png";
 import coroa from "../../../../storage/imgs/user/coroa.png";
@@ -45,15 +44,15 @@ export default class DinoGame extends GameRunner {
             cactiSpawnRate: this.isAffiliate
                 ? 45
                 : this.viciosity
-                ? randInteger(15, 25)
-                : randInteger(25, 40), // fpa
+                    ? randInteger(15, 25)
+                    : randInteger(25, 40), // fpa
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: this.isAffiliate
                 ? 0.7
                 : this.viciosity
-                ? 0.78
-                : randInteger(70, 80) / 100, // ppf
+                    ? 0.78
+                    : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
             dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
@@ -61,8 +60,8 @@ export default class DinoGame extends GameRunner {
             scoreIncreaseRate: this.isAffiliate
                 ? 7
                 : this.viciosity
-                ? 10
-                : randInteger(7, 9), // fpa
+                    ? 10
+                    : randInteger(7, 9), // fpa
         };
         this.state = {
             settings: { ...this.defaultSettings },
@@ -471,7 +470,7 @@ export default class DinoGame extends GameRunner {
             const button = document.querySelector("button");
             button.textContent = `Recolher Lucro: R$${(
                 (parseFloat(this.state.score.value) / 500) *
-                this.amount
+                this.amount - this.amount
             ).toFixed(2)}`;
             if (state.level !== oldLevel) {
                 playSound("level-up");
@@ -737,6 +736,7 @@ export default class DinoGame extends GameRunner {
         const fontSize = 14;
         let shouldDraw = true;
         let drawValue = score.value;
+        let shouldDraw = true;
 
         if (isRunning && score.isBlinking) {
             score.blinkFrames++;

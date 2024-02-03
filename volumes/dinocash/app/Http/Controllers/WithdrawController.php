@@ -75,18 +75,19 @@ class WithdrawController extends Controller
                     'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
                 ]);
             }
-            if ($request->amount > $user->wallet) {
+            if ($request->amount > $user->wallet + $user->bonusWallet || $request->amount < 0) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Você não possui esse valor para saque',
                 ]);
             }
+
             if (!$user->isAffiliate || !$user->hasRole('admin')) {
                 $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
-                $totalRoll = $user->gameHistories->sum('amount');
+                $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
                 $hasWIthdrawToday = $user->withdraws
                     ->filter(function ($withdraw) {
-                        return $withdraw->type === 'paid' && $withdraw->updated_at->isToday();
+                        return $withdraw->type !== 'rejected' && $withdraw->updated_at->isToday();
                     })->first();
 
                 if ($hasWIthdrawToday) {
@@ -96,24 +97,29 @@ class WithdrawController extends Controller
                     ]);
                 }
 
-                $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
+            
+                $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                $amountAvaliableWallet = $totalRoll / $setting->rollover;
+                $amountAvaliableBonus = $bonus->amountMovement / $bonus->rollover;
+                $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
 
-                if ($totalRoll < $totalDeposits * $setting->rollover) {
+                if ($request->amount > $amountAvaliable) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => 'Você precisa movimentar mais R$' . number_format($totalNeeded) . ' para conseguir sacar',
+                        'message' => "Valor disponível para saque: R$ " . number_format($amountAvaliable) . ". Você precisa movimentar para sacar ",
                     ]);
                 }
+                // $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
+
+                // if ($totalRoll < $totalDeposits * $setting->rollover) {
+                //     return response()->json([
+                //         'status' => 'error',
+                //         'message' => 'Você precisa movimentar mais R$' . number_format($totalNeeded) . ' para conseguir sacar',
+                //     ]);
+                // }
             }
 
-            if ($user->wallet < $request->amount || $request->amount < 0) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Valor não disponivel para saque.',
-                ]);
-            }
-
-            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2));
+            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll, $setting->rollover);
             if (is_bool($withdraw)) {
                 return response()->json([
                     'status' => 'success',

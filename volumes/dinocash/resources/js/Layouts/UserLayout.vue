@@ -58,7 +58,7 @@ const drawer = ref(false);
                 <!-- Page content here -->
                 <UserHeader
                     @toggle="drawer = !drawer"
-                    :wallet="wallet"
+                    :wallet="wallet + $page.props.auth.user.bonusWallet"
                     :name="$page.props.auth.user.name"
                 />
                 <div class="flex gap-x-6 h-[93%] p-3 py-2 lg:px-10 lg:py-8">
