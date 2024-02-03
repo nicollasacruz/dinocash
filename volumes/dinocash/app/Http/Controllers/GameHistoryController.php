@@ -20,8 +20,6 @@ class GameHistoryController extends Controller
     public function play(Request $request)
     {
         try {
-
-
             $viciosidade = false;
             $settings = Setting::first();
 
@@ -52,7 +50,7 @@ class GameHistoryController extends Controller
                     Log::error('Viciosidade ativada.');
                 }
             }
-
+            dd('teste');
             $user = User::find(Auth::user()->id);
             if ($user) {
                 $gameHistory = $user->gameHistories->where('type', 'pending');
