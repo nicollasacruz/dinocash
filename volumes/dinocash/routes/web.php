@@ -189,7 +189,7 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 
     Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
-
+    Route::get('/roleta', [ProfileController::class, 'userRollete'])->name('user.roleta');
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
 

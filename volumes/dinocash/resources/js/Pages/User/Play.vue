@@ -2,7 +2,7 @@
     <Head title="Jogar" />
 
     <UserLayouyt v-slot="{ wallet }">
-        <div class="p-2 lg:px-16 h-full ">
+        <div class="p-2 lg:px-16 h-full">
             <div class="text-5xl font-extrabold text-verde font-menu my-4">
                 Como jogar
             </div>
@@ -94,6 +94,7 @@
 </template>
 
 <script setup lang="ts">
+import { Head, router } from "@inertiajs/vue3";
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import BaseModal from "../../Components/BaseModal.vue";
 import GameCluster from "../../Components/GameCluster.vue";
@@ -173,18 +174,24 @@ async function fetchUpdate() {
         const hash = await generateSHA256Hash(
             `${gameId.value}${userId.value}dinocash`
         );
-        const response = await axios.patch(route("user.play.update"), {
+        const { data } = await axios.patch(route("user.play.update"), {
             distance: score.value,
             gameId: gameId.value,
             type: type.value,
             token: hash,
         });
-
-        const result = response.data;
-        if (result.errors?.locked) {
+        if (data.errors?.locked) {
             toast.error("Você está em modo de economia de energia!");
+        } else if (data.lookRoullet) {
+            router.get(
+                route("user.roleta"),
+                {},
+                {
+                    preserveState: true,
+                }
+            );
         }
-        return result;
+        return data;
     } catch (error) {
         console.log("Erro na pesquisa:", error);
     }

@@ -29,6 +29,9 @@ class ProfileController extends Controller {
     /**
      * Update the user's profile information.
      */
+    public function userRollete(Request $request): Response {
+        return Inertia::render('User/Rollete');
+    }
     public function update(ProfileUpdateRequest $request): RedirectResponse {
         $request->user()->fill($request->validated());
 

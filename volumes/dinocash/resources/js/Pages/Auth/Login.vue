@@ -85,7 +85,7 @@ const submit = () => {
                         class="flex flex-col items-center justify-center mt-8 mx-auto"
                     >
                         <PrimaryButton
-                            class=" !bg-verde flex justify-center items-center w-full py-4 text-xl capitalize rounded-xl   user-button"
+                            class=" !bg-verde flex justify-center items-center w-full py-4 text-xl capitalize rounded-xl  user-button"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
