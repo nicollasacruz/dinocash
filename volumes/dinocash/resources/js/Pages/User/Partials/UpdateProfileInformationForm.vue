@@ -57,7 +57,7 @@ const form = useForm({
                 />
             </div>
 
-            <template v-if="!user.isAffiliate">
+            <template v-if="!!user.isAffiliate">
                 <div>
                     <div class="ml-3 text-sm">Saldo da Carteira</div>
 

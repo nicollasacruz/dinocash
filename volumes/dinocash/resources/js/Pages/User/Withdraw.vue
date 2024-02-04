@@ -20,6 +20,14 @@
                         Saldo disponível:
                         <b class="text-verde">{{ toBRL(wallet) }}</b>
                     </div>
+                    <div class="mt-1">
+                        Saque mínimo:
+                        <b class="text-verde">{{ toBRL(minWithdraw) }}</b>
+                    </div>
+                    <div>
+                        Saque máximo:
+                        <b class="text-verde">{{ toBRL(maxWithdraw) }}</b>
+                    </div>
                     <!-- <div>
                         Bônus disponível:
                         <b class="text-verde">{{ toBRL(wallet) }}</b>

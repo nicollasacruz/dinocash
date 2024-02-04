@@ -106,7 +106,7 @@ class WithdrawController extends Controller
                 if ($request->amount > $amountAvaliable) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => "Valor disponível para saque: R$ " . number_format($amountAvaliable) . ". Você precisa movimentar para sacar ",
+                        'message' => "Valor disponível para saque: R$" . number_format($amountAvaliable, 2, ',', '.') . ". Você precisa movimentar para sacar ",
                     ]);
                 }
                 // $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
