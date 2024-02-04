@@ -6,9 +6,9 @@ use App\Models\BonusWalletChange;
 use App\Models\Withdraw;
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Log;
 use Ramsey\Uuid\Uuid;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class WithdrawService
 {
@@ -19,13 +19,33 @@ class WithdrawService
             $amountRemaning = $amount;
             $amountAvaliableWallet = $totalRoll / $rollover;
             $amountAvaliableBonus = $bonus->amountMovement / $bonus->rollover;
-            $walletUseforWithdraw = $user->wallet > $amountAvaliableWallet ? $amountAvaliableWallet : ($amount - $user->wallet );
-            $bonusUseforWithdraw = $walletUseforWithdraw >= $amount ? 0 : (($user->bonusWallet - $walletUseforWithdraw) > $amountAvaliableBonus ? $amountAvaliableBonus : ($user->bonusWallet - $walletUseforWithdraw));
 
-            if ($walletUseforWithdraw + $bonusUseforWithdraw < $amount) {
-                return false;
+            if ($user->wallet >= $amountRemaning) {
+                if ($amountAvaliableWallet >= $amountRemaning) {
+                    $user->changeWallet($amountRemaning * -1, 'withdraw');
+                    $amountRemaning = 0;
+                } else {
+
+                    $user->changeWallet($amountAvaliableWallet * -1, 'withdraw partial');
+                    $amountRemaning -= $amountAvaliableWallet;
+                }
             }
+            if ($amountRemaning > 0) {
+                if ($user->bonusWallet >= $amountRemaning && $amountAvaliableBonus >= $amountRemaning) {
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => $user->bonusWallet - $amountRemaning,
+                        'type' => $amountRemaning === $amount ? 'withdraw' : 'withdraw partial',
+                    ]);
 
+                    $user->bonusWallet -= $amountRemaning;
+                } else {
+                    Log::channel('telegram')->error(('Erro salvar bonus'));
+                    return false;
+                }
+            }
+            $user->save();
             if (!$user->isAffiliate) {
                 $withdraw = Withdraw::create([
                     'userId' => $user->id,
@@ -33,37 +53,11 @@ class WithdrawService
                     'amount' => $amount,
                     'type' => 'pending',
                 ]);
+
+                return $withdraw;
             }
 
-            if ($amountAvaliableWallet >= $amount && $user->wallet >= $amount) {
-                $user->changeWallet($amount * -1, 'withdraw');
-            } elseif ($amountAvaliableWallet >= $user->wallet && $user->wallet < $amount && $user->wallet > 0) {
-                $user->changeWallet($user->wallet * -1, 'withdraw partial');
-                $amountRemaning -= $amountAvaliableWallet;
-                BonusWalletChange::create([
-                    'bonusCampaignId' => $bonus->id,
-                    'amountOld' => $user->bonusWallet,
-                    'amountNew' => $user->bonusWallet - $amountRemaning,
-                    'type' => 'withdraw partial',
-                ]);
-
-                $user->bonusWallet -= $amountRemaning;
-            } elseif ($amountAvaliableWallet < $amount  && $user->wallet < $amountAvaliableWallet) {
-                $user->changeWallet($user->wallet * -1, 'withdraw partial');
-                $amountRemaning -= $user->wallet;
-                BonusWalletChange::create([
-                    'bonusCampaignId' => $bonus->id,
-                    'amountOld' => $user->bonusWallet,
-                    'amountNew' => $user->bonusWallet - $amountRemaning,
-                    'type' => 'withdraw partial',
-                ]);
-
-                $user->bonusWallet -= $amountRemaning;
-            }
-
-            $user->save();
-
-            return $withdraw ?? true;
+            return true;
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage());
             return false;
