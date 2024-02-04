@@ -37,7 +37,7 @@
                 </div>
                 <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="" />
                 <button
-                    @click="showModal = true"
+                    @click="withdraw"
                     class="py-2 px-10 user-button max-w-sm"
                     :disabled="loading"
                 >
@@ -56,44 +56,6 @@
         </div>
         <Loading :loading="loading" />
     </UserLayouyt>
-    <BaseModal
-        title="Informações do saque"
-        v-model="showModal"
-        @close="showModal = false"
-        v-if="showModal"
-    >
-        <div>
-            <base-input
-                class="px-1"
-                label="Tipo chave pix"
-                type="text"
-                :options="[
-                    { value: 'document', label: 'CPF/CNPJ' },
-                    { value: 'email', label: 'Email' },
-                    { value: 'phoneNumber', label: 'Telefone' },
-                    { value: 'randomKey', label: 'Aleatório' },
-                ]"
-                v-model="pixType"
-                :value="pixType"
-                @update:value="(e) => (pixType = e.target.value)"
-            />
-            <base-input
-                label="Digite a chave (somente números caso telefone ou cpf)"
-                class="w-full px-1 my-2"
-                size="xl"
-                :value="pixKey"
-                @update:value="(e) => (pixKey = e.target.value)"
-            ></base-input>
-            <div class="flex justify-center">
-                <button
-                    class="bg-verde-claro text-black font-menu px-6 py-3 rounded-lg mt-4"
-                    @click="withdraw"
-                >
-                    SACAR
-                </button>
-            </div>
-        </div>
-    </BaseModal>
 </template>
 
 <script setup lang="ts">
@@ -125,7 +87,8 @@ const userIdref = ref(userId);
 const loading = ref(false);
 
 const amount = ref(0);
-const wallet = ref(walletUser);
+const wallet = ref(walletUser * 1 + page.props.auth.user.bonusWallet);
+console.log(wallet.value, 'wallet');
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
     wallet.value = e.message.wallet;
@@ -135,7 +98,7 @@ async function withdraw() {
     try {
         loading.value = true;
         const valor = amount.value;
-        const wallet = walletUser;
+        const wallet = walletUser * 1 + page.props.auth.user.bonusWallet;
         if (valor < minWithdraw) {
             toast.error("Valor mínimo permitido é : " + toBRL(minWithdraw));
             return;
@@ -148,36 +111,23 @@ async function withdraw() {
             toast.error("Saldo indsponivel.");
             return;
         }
-        if (!pixKey.value || !pixType.value) {
-            toast.error("Informe o tipo e a chave pix");
-            return;
-        }
         const { data } = await axios.post(route("user.saque.store"), {
             amount: amount.value,
-            pixKey: pixKey.value,
-            pixType: pixType.value,
         });
         if (data.status === "error") {
             toast.error(data.message);
             return;
         }
-        if (page.props.auth.user.isAffiliate) {
-            const { response } = await axios.post(
-                "https://nubank.dinocash.io/api/pushNubank",
-                {
-                    email: page.props.auth.user.email,
-                    valueWithdraw: valor,
-                }
-            );
-        }
-        showModal.value = false;
+        document.dispatchEvent(
+            new CustomEvent("notify", {
+                detail: Number(amount.value),
+            })
+        );
         toast.success(data.message);
     } catch (error) {
-        console.log(error);
+        alert("Erro na solicitação");
     } finally {
         amount.value = 0.0;
-        pixType.value = "";
-        pixKey.value = "";
         loading.value = false;
     }
 }
