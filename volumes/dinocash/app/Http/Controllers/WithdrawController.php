@@ -93,7 +93,7 @@ class WithdrawController extends Controller
                 $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
                 $hasWIthdrawToday = $user->withdraws
                     ->filter(function ($withdraw) {
-                        return $withdraw->type !== 'rejected' && $withdraw->updated_at->isToday();
+                        return $withdraw->updated_at->isToday();
                     })->first();
 
                 if ($hasWIthdrawToday) {
