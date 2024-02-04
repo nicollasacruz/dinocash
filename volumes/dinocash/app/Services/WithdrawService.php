@@ -18,7 +18,7 @@ class WithdrawService
             $bonus = $user->bonusCampaings->where('status', 'active')->first();
             $amountRemaning = $amount;
             $amountAvaliableWallet = $totalRoll / $rollover;
-            $amountAvaliableBonus = $bonus->amountMovement / $bonus->rollover;
+            $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $bonus->amountMovement / $bonus->rollover : 0;
 
             if ($user->wallet >= $amountRemaning) {
                 if ($amountAvaliableWallet >= $amountRemaning) {
