@@ -17,9 +17,9 @@ class LookRoulleteService
 {
     private BonusService $bonusService;
 
-    public function __construct(BonusService $bonusService)
+    public function __construct()
     {
-        $this->bonusService = $bonusService;
+        $this->bonusService = new BonusService();
     }
 
     public function addBonusRoullet(User $user, float $value): bool
@@ -39,7 +39,8 @@ class LookRoulleteService
         // 11 a 20 -> 20 reais
         // 21 a 30 -> 2 rodadas
         // 31 a 100 -> 5 reais
-
+        $user->haveRoullete = false;
+        $user->save();
         if ($option === 1 && $this->addBonusRoullet($user, 100.00)) {
             return true;
         }

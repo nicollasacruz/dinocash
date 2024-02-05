@@ -72,6 +72,7 @@ class User extends Authenticatable
         'revShare',
         'bannedAt',
         'bonusWallet',
+        'haveRoullete',
     ];
     
 

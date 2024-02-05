@@ -61,6 +61,9 @@ import pinoRoleta from "../../../../storage/imgs/user/pino-roleta.svg";
 import background from "../../../../storage/imgs/user/bg-roleta.jpg";
 import bgMobile from "../../../../storage/imgs/user/bg-roleta-mobile.jpg";
 import { ref } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
+import axios from 'axios';
+
 const position = ref(50);
 const loading = ref(false);
 const windowWidth = ref(window.innerWidth);
@@ -132,6 +135,8 @@ const girarRoleta = async () => {
         await sleep(speed / posicaoFinal);
     }
     loading.value = false;
+
+    postRecompensa(index);
 };
 
 function sleep(ms) {
@@ -140,6 +145,29 @@ function sleep(ms) {
 window.addEventListener("resize", (valu) => {
     windowWidth.value = window.innerWidth;
 });
+
+
+const postRecompensa = async (rewardOption) => {
+    try {
+        const page = usePage();
+        let user = page.props.auth.user.id;
+        console.log('úserID', user);
+
+        const response = await axios.post(route('user.recompensa.roleta'), {
+            user: user,
+            rewardOption: rewardOption,
+        });
+
+        console.log('Recompensa enviada com sucesso:', response.data);
+        if (response.data.status === 'success') {
+            sleep(2000);
+            router.get(route('user.play'));
+        } 
+    } catch (error) {
+        console.error('Erro ao enviar a recompensa:', error.message);
+    }
+};
+
 </script>
 <style>
 @font-face {

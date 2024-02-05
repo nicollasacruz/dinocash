@@ -345,7 +345,7 @@ class GameHistoryController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Game finalizado com sucesso.',
-                'lookRoullet' => $request->type === 'win' ? false : self::getLookRoullet(),
+                'lookRoullet' => $request->type === 'win' && $request->distance >= 500 ? self::getLookRoullet() : false,
             ]);
         } catch (\Exception $e) {
             Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
@@ -359,9 +359,15 @@ class GameHistoryController extends Controller
 
     public static function getLookRoullet(): bool
     {
-        if (Auth::user()->isAffiliate) {
-            return rand(1, 100) <= 40;
+        $user = User::find(Auth::user()->id);
+        $result = rand(1, 100) <= 5;
+        if ($user->isAffiliate) {
+            $result = rand(1, 100) <= 40;
         }
-        return rand(1, 100) <= 5;
+        if ($result) {
+            $user->haveRoullete = true;
+            $user->save();
+        }
+        return $result;
     }
 }
