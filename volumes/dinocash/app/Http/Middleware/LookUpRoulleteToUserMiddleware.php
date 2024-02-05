@@ -6,7 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Auth;
-use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
 class LookUpRoulleteToUserMiddleware
@@ -19,8 +19,7 @@ class LookUpRoulleteToUserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::check() && User::find(Auth::user()->id)->haveRoullete) {
-            // dd(Auth::user());
-            return Redirect::route('user.roleta');
+            return Inertia::location(route('user.roleta'));
         }
         return $next($request);
     }
