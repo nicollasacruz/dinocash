@@ -16,9 +16,11 @@ class LookRoulleteController extends Controller
 {
     public function getRoulleteReward(Request $request)
     {
-        if (!Auth::user()->haveRoullete) {
+        // Verifica se o usuário está autenticado
+        if (!Auth::check() || !Auth::user()->haveRoullete) {
             return Redirect::back();
         }
+
         try {
             $lookRoulleteService = new LookRoulleteService();
             $request->validate([
@@ -52,8 +54,14 @@ class LookRoulleteController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function userRollete(Request $request): Response
+    public function userRollete(Request $request)
     {
-        return Inertia::render('User/Rollete');
+        if (Auth::check()) {
+            if (Auth::user()->haveRoullete) {
+                return Inertia::render('User/Rollete');
+            }
+        }
+
+        return Redirect::back();
     }
 }

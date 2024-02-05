@@ -14,12 +14,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
 
 class GameHistoryController extends Controller
 {
     public function play(Request $request)
     {
         try {
+            if(Auth::check() && User::find(Auth::user()->id)->haveRoullete) {
+                // dd(Auth::user());
+                return Inertia::location(route('user.roleta'));
+            }
             $viciosidade = false;
             $settings = Setting::first();
 

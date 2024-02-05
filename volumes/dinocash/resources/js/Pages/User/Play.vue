@@ -169,14 +169,6 @@ async function fetchUpdate() {
         });
         if (data.errors?.locked) {
             toast.error("Você está em modo de economia de energia!");
-        } else if (data.lookRoullet) {
-            router.get(
-                route("user.roleta"),
-                {},
-                {
-                    preserveState: true,
-                }
-            );
         }
         return data;
     } catch (error) {
