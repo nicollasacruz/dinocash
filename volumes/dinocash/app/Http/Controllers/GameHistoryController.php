@@ -41,13 +41,13 @@ class GameHistoryController extends Controller
             }
             $pay = $withdrawsAmountPaid + $walletsAmount;
             if (!$gain || !$pay) {
-                // Log::channel('telegram')->info('Vazio ou 0');
+                // Log::info('Vazio ou 0');
                 $houseHealth = 100;
             } else {
                 $houseHealth = round(($pay * 100 / $gain), 1);
                 if ($houseHealth > 100 - $settings->payout) {
                     $viciosidade = true;
-                    Log::channel('telegram')->error('Viciosidade ativada.');
+                    Log::error('Viciosidade ativada.');
                 }
             }
             $user = User::find(Auth::user()->id);
@@ -81,7 +81,7 @@ class GameHistoryController extends Controller
 
                         event(new WalletChanged($message));
 
-                        Log::channel('telegram')->error('Partida já iniciada. - ' . $user->email);
+                        Log::error('Partida já iniciada. - ' . $user->email);
                     }
                 }
             }
@@ -129,7 +129,7 @@ class GameHistoryController extends Controller
                 "maxAmmount" => $settings->maxAmountPlay
             ]);
         } catch (Exception $e) {
-            Log::channel('telegram')->error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
+            Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
         }
     }

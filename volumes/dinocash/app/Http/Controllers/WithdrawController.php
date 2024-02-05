@@ -75,7 +75,7 @@ class WithdrawController extends Controller
                     'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
                 ]);
             }
-            if ($request->amount < $setting->maxWithdraw) {
+            if ($request->amount > $setting->maxWithdraw) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Saque máximo de R$ ' . number_format($setting->maxWithdraw, 2, ',', '.'),
@@ -105,13 +105,19 @@ class WithdrawController extends Controller
             
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
-                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $bonus->amountMovement / $bonus->rollover : 0;
+                if ($user->wallet * 1 == 0) {
+                    $amountAvaliableWallet = 0;
+                }
+                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+                if ($user->bonusWallet == 0) {
+                    $amountAvaliableBonus = 0;
+                }
                 $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
 
                 if ($request->amount > $amountAvaliable) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar ",
+                        'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
                     ]);
                 }
             }

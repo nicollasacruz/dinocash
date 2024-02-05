@@ -7,10 +7,10 @@ use App\Models\BonusWalletChange;
 use App\Models\Deposit;
 use App\Models\Setting;
 use Exception;
-use Log;
 use App\Models\User;
 use App\Notifications\PushDemoGGR;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class BonusService
@@ -52,7 +52,7 @@ class BonusService
 
             return true;
         } catch (Exception $e) {
-            Log::channel('telegram')->error('Erro de notificar - ' . $e->getMessage());
+            Log::error('Erro de notificar - ' . $e->getMessage());
             return false;
         }
     }
@@ -78,7 +78,7 @@ class BonusService
 
             return true;
         } catch (Exception $e) {
-            Log::channel('telegram')->error('Erro de createBonusLooked - ' . $e->getMessage());
+            Log::error('Erro de createBonusLooked - ' . $e->getMessage());
             return false;
         }
     }
@@ -99,7 +99,7 @@ class BonusService
 
             return true;
         } catch (Exception $e) {
-            Log::channel('telegram')->error('Erro de createFreeSpin - ' . $e->getMessage());
+            Log::error('Erro de createFreeSpin - ' . $e->getMessage());
             return false;
         }
     }

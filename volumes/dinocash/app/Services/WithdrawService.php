@@ -18,7 +18,7 @@ class WithdrawService
             $bonus = $user->bonusCampaings->where('status', 'active')->first();
             $amountRemaning = $amount;
             $amountAvaliableWallet = $totalRoll / $rollover;
-            $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $bonus->amountMovement / $bonus->rollover : 0;
+            $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
 
             if ($user->wallet >= $amountRemaning) {
                 if ($amountAvaliableWallet >= $amountRemaning) {
@@ -41,7 +41,7 @@ class WithdrawService
 
                     $user->bonusWallet -= $amountRemaning;
                 } else {
-                    Log::channel('telegram')->error(('Erro salvar bonus'));
+                    Log::error(('Erro salvar bonus'));
                     return false;
                 }
             }
