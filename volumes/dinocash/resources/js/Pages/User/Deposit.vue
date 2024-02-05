@@ -26,18 +26,14 @@
                             toBRL(maxDeposit)
                         }}</b>
                     </div>
-                    <div>
-                        Bônus disponível:
-                        <b class="text-verde">{{ toBRL(0) }}</b>
-                    </div>
-                    <div class="flex mt-1">
+                    <div class="flex mt-5">
                         <input
                             v-model="bonusSelected"
                             type="checkbox"
                             class="checkbox lg:ml mr-2"
                         />
-                        <span class="text-verde font-bold text-lg">
-                            Usar Bonus
+                        <span class="text-verde font-bold text-xl">
+                            Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus
                         </span>
                     </div>
                 </div>
@@ -99,7 +95,10 @@ const loading = ref(false);
 const modal = ref(false);
 const qrCode = ref("");
 const bonusSelected = ref(false);
-// @ts-ignore
+const page = usePage();
+const settings = page.props.settings;
+
+// @ts-ixgnore
 async function startDeposit() {
     loading.value = true;
     try {
@@ -127,7 +126,6 @@ async function startDeposit() {
         amount.value = 0;
     }
 }
-const page = usePage();
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
