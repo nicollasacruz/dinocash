@@ -32,13 +32,13 @@
                             type="checkbox"
                             class="checkbox lg:ml mr-2"
                         />
-                        <span class="text-verde font-bold text-xl">
+                        <span class="text-verde font-bold text-xl lg:text-2xl">
                             Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus
                         </span>
                     </div>
                 </div>
 
-                <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="" />
+                <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="pixLogo" />
                 <button
                     @click="startDeposit"
                     class="py-2 px-10 user-button max-w-sm"
