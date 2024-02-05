@@ -41,6 +41,7 @@
                     placeholder="Digite o valor da aposta"
                     v-model="amount"
                     @input="formatAmount"
+                    v-if="page.props.auth.user.freespin * 1 == 0 "
                 />
                 <button
                     class="user-button mt-4 md:mt-0"
@@ -131,6 +132,10 @@ function handleButtonClick() {
     location.reload();
 }
 
+if (page.props.auth.user.freespin > 0) {
+    amount.value = page.props.settings.amountFreeSpin;
+}
+
 async function fetchStore() {
     try {
         if (amount.value < 1) {
@@ -144,8 +149,12 @@ async function fetchStore() {
             );
             return;
         }
+        let amountValue = amount.value;
+        if (page.props.auth.user.freespin > 0) {
+            amountValue = page.props.settings.amountFreeSpin;
+        }
         const response = await axios.post(route("user.play.store"), {
-            amount: amount.value,
+            amount: amountValue,
         });
         const result = response.data.gameHistory.id;
         toast.success("Partida iniciada com sucesso");
