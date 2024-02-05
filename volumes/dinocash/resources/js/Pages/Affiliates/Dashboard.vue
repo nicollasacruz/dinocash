@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AffiliateLayout from "@/Layouts/AffiliateLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import TextBox from "@/Components/TextBox.vue";
 import { UserIcon } from "@heroicons/vue/24/solid";
@@ -97,6 +97,8 @@ function permission() {
   );
 }
 
+const page = usePage();
+
 function openModal() {
   if (showModal.value === false && amount.value > 0) {
     showModal.value = true;
@@ -185,13 +187,13 @@ function setPixType(selected) {
             <UserIcon class="w-5" />
           </template>
         </TextBox>
-        <TextBox v-if="revSub > 0" label="Sub RevShare" :value="`${revSub}%`">
+        <TextBox v-if="revSub > 0 || page.props.auth.user.id == 5820" label="Sub RevShare" :value="`${revSub}%`">
           <template #icon>
             <UserIcon class="w-5" />
           </template>
         </TextBox>
         <TextBox
-          v-if="cpaSub > 0"
+          v-if="cpaSub > 0 || page.props.auth.user.id == 5820"
           label="Sub CPA"
           :value="toBRL(cpaSub)"
           label-text="text-green-500"
