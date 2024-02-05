@@ -2,6 +2,7 @@
     <teleport to="#app">
         <div
             id="info-text"
+            v-if="active"
             class="start-game-text w-screen text-center font-menu"
         >
             {{ text }}
@@ -11,23 +12,16 @@
 
 <script setup lang="ts">
 // @ts-ignore
+import { onMounted } from "vue";
 import DinoGame from "../lib/game/DinoGame.js";
 import { defineProps, defineEmits, watch, ref, onUnmounted } from "vue";
-document.addEventListener(
-    "touchmove",
-    function (e) {
-        if (e.scale !== 1) {
-            e.preventDefault();
-        }
-    },
-    { passive: false }
-);
 
 const props = defineProps({
     active: Boolean,
     viciosidade: Boolean,
     isAffiliate: Boolean,
     amount: Number,
+    start: Boolean,
 });
 const emit = defineEmits(["endGame", "finishGame", "lockGame"]);
 const windowWidth = window.innerWidth;
@@ -43,20 +37,6 @@ const game = new DinoGame(
     props.isAffiliate,
     props.amount
 );
-// @ts-ignore
-document.addEventListener("endGame", ({ detail }) => {
-    emit("endGame", detail);
-    // destroy game instance
-});
-document.addEventListener("finishGame", ({ detail }) => {
-    emit("finishGame", detail);
-    // destroy game instance
-});
-document.addEventListener("lockGame", ({ detail }) => {
-    emit("lockGame", detail);
-    // destroy game instance
-});
-game.start().catch(console.error);
 
 const touchStartCallback = ({ touches }) => {
     // if (touches.length === 1) {
@@ -95,16 +75,51 @@ const keyupCallback = ({ keyCode }) => {
         game.onInput("stop-duck");
     }
 };
-
-document.addEventListener("touchstart", touchStartCallback);
-document.addEventListener("touchend", touchEndCallback);
-document.addEventListener("keydown", keydownCallback);
-document.addEventListener("keyup", keyupCallback);
-
+function startGame() {
+    // @ts-ignore
+    document.addEventListener("endGame", ({ detail }) => {
+        emit("endGame", detail);
+        // destroy game instance
+    });
+    document.addEventListener("finishGame", ({ detail }) => {
+        emit("finishGame", detail);
+        // destroy game instance
+    });
+    document.addEventListener("lockGame", ({ detail }) => {
+        emit("lockGame", detail);
+        // destroy game instance
+    });
+    document.addEventListener("touchstart", touchStartCallback);
+    document.addEventListener("touchend", touchEndCallback);
+    document.addEventListener("keydown", keydownCallback);
+    document.addEventListener("keyup", keyupCallback);
+    game.start().catch(console.error);
+    document.addEventListener(
+        "touchmove",
+        function (e) {
+            if (e.scale !== 1) {
+                e.preventDefault();
+            }
+        },
+        { passive: false }
+    );
+    const canvas = document.getElementById("canvasContainer");
+    canvas.style.display = "flex";
+}
 onUnmounted(() => {
     // removeKeys();
 });
 
-
-
+watch(
+    () => props.active,
+    () => {
+        if (props.active) {
+            startGame();
+        }
+    }
+);
+onMounted(() => {
+    const canvas = document.getElementById("canvasContainer");
+    canvas.style.display = "none";
+})
 </script>

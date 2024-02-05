@@ -36,9 +36,11 @@
                     </ul>
                 </div>
                 <div
+                    @mouseover="bonusActive.value = true"
+                    @mouseleave="bonusActive = false"
                     class="border border-verde text-xs sm:text-md text-verde p-1 sm:px-3 rounded flex justify-center items-center"
                 >
-                    {{ toBRL(wallet) }}
+                    {{ toBRL(money) }}
                 </div>
                 <Link class="" :href="route('logout')" method="post">
                     <img class="w-5 sm:w-7 mt-2" :src="leave" />
@@ -75,6 +77,7 @@ import { Bars3Icon, ChevronDownIcon } from "@heroicons/vue/24/solid";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
 import { computed } from "vue";
+import { ref } from "vue";
 const emit = defineEmits("toggle");
 const { wallet, name, logged } = defineProps(["wallet", "name", "logged"]);
 function toBRL(value) {
@@ -83,8 +86,14 @@ function toBRL(value) {
         currency: "BRL",
     });
 }
-console.log(logged);
+const page = usePage();
+const bonusActive = ref(false);
 
+const money = computed(() => {
+    if (bonusActive.value) {
+        return wallet + page.props.auth.user.bonusWallet;
+    } else return wallet;
+});
 const userName = computed(() => {
     if (logged) {
         if (name) return name.split(" ")[0];
