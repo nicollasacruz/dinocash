@@ -106,6 +106,7 @@ const getPosition = (value) => {
 const girarRoleta = async () => {
     loading.value = true;
     const randomStop = Math.floor(Math.random() * 100) + 1;
+    console.log(randomStop)
     const index = getPosition(randomStop);
     const posicaoMaxima = index * 20 - 2;
     const posicaoMinima = index * 20 - 20 + 2;
