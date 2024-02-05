@@ -1,6 +1,6 @@
 const AudioContext = window.AudioContext || window.webkitAudioContext
 const audioContext = new AudioContext()
-const soundNames = ['game-over', 'jump', 'level-up', 'trovao']
+const soundNames = ['game-over', 'jump', 'level-up', 'trovao', 'musica']
 const soundBuffers = {}
 let SOUNDS_LOADED = false
 
@@ -8,7 +8,8 @@ loadSounds().catch(console.error)
 export function playSound(name) {
   if (SOUNDS_LOADED) {
     audioContext.resume()
-    playBuffer(soundBuffers[name])
+    const sound = playBuffer(soundBuffers[name])
+    return sound
   }
 }
 
@@ -40,4 +41,5 @@ function playBuffer(buffer) {
   source.buffer = buffer
   source.connect(audioContext.destination)
   source.start()
+  return source
 }

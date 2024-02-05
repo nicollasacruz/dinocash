@@ -74,6 +74,7 @@ export default class DinoGame extends GameRunner {
             groundY: 0,
             isRunning: false,
             level: 0,
+            som: null,
             score: {
                 blinkFrames: 0,
                 blinks: 0,
@@ -252,6 +253,10 @@ export default class DinoGame extends GameRunner {
                 detail: this.state.score.value,
             });
             document.dispatchEvent(eventoModificacao);
+            const canvasContainer = document.getElementById("canvasContainer");
+            canvasContainer.style.display = "none";
+            this.state.som.stop();
+            this.state.isRunning = false;
             // this.endGame();
         });
         return finishButton;
@@ -374,6 +379,9 @@ export default class DinoGame extends GameRunner {
         this.start();
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "flex";
+        const som = playSound("musica");
+
+        this.state.som = som;
         setInterval(async () => {
             const isPowerSavingMode = await this.detectPowerSavingMode();
             console.log(isPowerSavingMode);
@@ -391,8 +399,11 @@ export default class DinoGame extends GameRunner {
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "none";
         document.dispatchEvent(eventoModificacao);
+        this.state.som.stop();
     }
-
+    stopGame() {
+        this.state.isRunning = false;
+    }
     lockGame() {
         this.state.isRunning = false;
         const eventoModificacao = new CustomEvent("lockGame", {
@@ -467,7 +478,9 @@ export default class DinoGame extends GameRunner {
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
             const isWinner = this.state.score.value >= 500;
-            button.textContent = `${isWinner ? "Recolher Lucro" : "Recolher Prejuizo"}: R$${(
+            button.textContent = `${
+                isWinner ? "Recolher Lucro" : "Recolher Prejuizo"
+            }: R$${(
                 (parseFloat(this.state.score.value) / 500) * this.amount -
                 this.amount
             ).toFixed(2)}`;

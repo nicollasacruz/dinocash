@@ -3,10 +3,10 @@
         <div class="flex flex-col items-center mb-3 lg:ml-5">
             <div class="relative">
                 <img
-                    class="mr-1 lg:mr-3 rounded mt-2"
-                    width="120"
-                    height="120"
-                    :src="fotoPerfil"
+                    class="mr-1 lg:mr-3 rounded mt-1"
+                    width="130"
+                    height="130"
+                    :src="userIicon"
                 />
                 <!-- <Link
                     :href="route('user.alterar_icone')"
@@ -37,7 +37,7 @@
                 :href="route(link.route)"
                 @click="emit('close')"
             >
-                <img class="mr-2" :src="link.icon" />
+                <img class="mr-2 w-6" :src="link.icon" />
                 <a>{{ link.label }}</a>
             </Link>
             <template v-if="$page.props.auth.user?.role === 'admin'">
@@ -61,6 +61,9 @@ import { Link, usePage } from "@inertiajs/vue3";
 import { defineEmits, defineProps, computed, ref, toRef } from "vue";
 import { PencilSquareIcon } from "@heroicons/vue/24/solid";
 import cart from "../../../storage/imgs/user/icons/cart.svg";
+import dino from "../../../storage/imgs/user/icons/dino.svg";
+import userIicon from "../../../storage/imgs/user/icons/user-icon.svg";
+
 import admin from "../../../storage/imgs/user/icons/admin.svg";
 import history from "../../../storage/imgs/user/icons/history.svg";
 import money from "../../../storage/imgs/user/icons/money.svg";
@@ -87,7 +90,7 @@ const routes = [
     {
         label: "Jogar",
         route: "user.play",
-        icon: person,
+        icon: dino,
     },
     {
         label: "Histórico",
@@ -99,21 +102,11 @@ const routes = [
         route: "user.movimentacao",
         icon: monitor,
     },
-    // {
-    //     label: "Loja",
-    //     route: "user.shop",
-    //     icon: cart,
-    // },
     {
         label: "Sacar",
         route: "user.saque",
         icon: money,
     },
-    // {
-    //     label: "Admin",
-    //     route: "user.alterar_icone",
-    //     icon: admin,
-    // },
 ];
 
 const email = page.props.auth.user?.name;

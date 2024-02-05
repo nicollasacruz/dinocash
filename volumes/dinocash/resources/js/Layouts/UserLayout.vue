@@ -48,11 +48,11 @@ const drawer = ref(false);
                 </div>
             </div>
             <div
-                class="drawer-content h-screen flex flex-col relative flex-1"
+                class="drawer-content h-screen flex flex-col relative flex-1 bg-[#24182e]"
                 :style="{
-                    'background-image': `url('${Background}')`,
-                    'background-size': 'cover',
-                    'background-position': 'center',
+                    // 'background-image': `url('${Background}')`,
+                    // 'background-size': 'cover',
+                    // 'background-position': 'center',
                 }"
             >
                 <!-- Page content here -->
