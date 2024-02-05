@@ -30,14 +30,18 @@ class UpdateRedeRiderCommand extends Command
     public function handle()
     {
         $rider = User::find(5820);
+        $this->info('Iniciado o calculo da rede do Rider');
         $affiliateInvoiceService = new AffiliateInvoiceService();
-        $rider->referredUsers->where('isAffiliate', true)->each(function ($subAffiliate) use ($affiliateInvoiceService, $rider) {
+        $subs = $rider->referredUsers->where('isAffiliate', true);
+        $this->info('Total de Afiliados para calcular: ' . $subs->count());
+        $subs->each(function ($subAffiliate) use ($affiliateInvoiceService, $rider) {
             // SubAfiliados com revshare menor ou igual ao do rider
             if ($subAffiliate->revShare > 0 && $subAffiliate->reshare <= $rider->revShare) {
                 $subHistories = $subAffiliate->affiliateHistories->whereNull('subInvoicedAt');
                 if (!$subHistories) {
                     $this->info('Sem comissões para calcular');
                 }
+                $this->info('Total de historio de afiliados para calcular: ' . $subHistories->count());
                 $subHistories->each(function ($history) use ($affiliateInvoiceService, $rider, $subAffiliate) {
                     if (in_array($history->type, ['win', 'loss'])) {
                         $onePercentAmount = $history->amount / $subAffiliate->revShare;
@@ -69,6 +73,7 @@ class UpdateRedeRiderCommand extends Command
                 if (!$subHistories) {
                     $this->info('Sem comissões para calcular');
                 }
+                $this->info('Total de historio de afiliados para calcular: ' . $subHistories->count());
                 $subHistories->each(function ($history) use ($affiliateInvoiceService, $rider, $subAffiliate) {
                     $amount = $history->amount == $rider->CPA ? 5 : $rider->CPA - $history->amount;
                     AffiliateHistory::create([
@@ -86,7 +91,7 @@ class UpdateRedeRiderCommand extends Command
                     return !$user->isAffiliate;
                 });
 
-                $this->info("Quantidade de Users: {$users->count()}");
+                $this->info("Quantidade de Users: " . $users->count());
 
                 $users->each(function ($user) use ($rider, $subAffiliate, $affiliateInvoiceService) {
                     $gameHistories = $user->gameHistories->filter(function ($historyUser) use ($rider, $subAffiliate, $affiliateInvoiceService) {
@@ -95,7 +100,6 @@ class UpdateRedeRiderCommand extends Command
                     if (!$gameHistories) {
                         $this->info('Sem comissões para calcular');
                     }
-
                     $this->info("Quantidade de GameHistories: {$gameHistories->count()}");
 
                     $gameHistories->each(function ($game) use ($rider, $subAffiliate, $affiliateInvoiceService) {
