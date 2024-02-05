@@ -75,6 +75,12 @@ class WithdrawController extends Controller
                     'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
                 ]);
             }
+            if ($request->amount < $setting->maxWithdraw) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Saque máximo de R$ ' . number_format($setting->maxWithdraw, 2, ',', '.'),
+                ]);
+            }
             if ($request->amount > $user->wallet + $user->bonusWallet || $request->amount < 0) {
                 return response()->json([
                     'status' => 'error',
@@ -87,7 +93,7 @@ class WithdrawController extends Controller
                 $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
                 $hasWIthdrawToday = $user->withdraws
                     ->filter(function ($withdraw) {
-                        return $withdraw->type !== 'rejected' && $withdraw->updated_at->isToday();
+                        return $withdraw->updated_at->isToday();
                     })->first();
 
                 if ($hasWIthdrawToday) {
@@ -96,27 +102,18 @@ class WithdrawController extends Controller
                         'message' => 'Só é possível fazer um saque por dia.',
                     ]);
                 }
-
             
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
-                $amountAvaliableWallet = $totalRoll / $setting->rollover;
-                $amountAvaliableBonus = $bonus->amountMovement / $bonus->rollover;
+                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
+                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $bonus->amountMovement / $bonus->rollover : 0;
                 $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
 
                 if ($request->amount > $amountAvaliable) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => "Valor disponível para saque: R$ " . number_format($amountAvaliable) . ". Você precisa movimentar para sacar ",
+                        'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar ",
                     ]);
                 }
-                // $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
-
-                // if ($totalRoll < $totalDeposits * $setting->rollover) {
-                //     return response()->json([
-                //         'status' => 'error',
-                //         'message' => 'Você precisa movimentar mais R$' . number_format($totalNeeded) . ' para conseguir sacar',
-                //     ]);
-                // }
             }
 
             $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll, $setting->rollover);
