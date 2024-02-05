@@ -11,11 +11,10 @@ import UserHeader from "@/Components/UserHeader.vue";
 const page = usePage();
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
-const userWallet = page.props.auth.user.wallet * 1;
-const wallet = ref(userWallet);
+const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.message.wallet;
+    totalWallet.value = e.message.wallet;
 });
 const drawer = ref(false);
 </script>
@@ -44,7 +43,7 @@ const drawer = ref(false);
                             class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
                             @click="drawer = !drawer"
                         />
-                        <UserDrawer :wallet="wallet" class="mt-3" />
+                        <UserDrawer :wallet="totalWallet" class="mt-3" />
                     </ul>
                 </div>
             </div>
@@ -60,7 +59,7 @@ const drawer = ref(false);
                 <UserHeader
                     :logged="!!$page?.props?.auth?.user?.id"
                     @toggle="drawer = !drawer"
-                    :wallet="wallet + $page.props.auth.user.bonusWallet"
+                    :wallet="totalWallet"
                     :name="$page.props.auth.user.name"
                 />
                 <div class="grid grid-cols-1 xl:grid-cols-12 flex-1">
@@ -71,14 +70,14 @@ const drawer = ref(false);
                             class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-8 user-height"
                         >
                             <UserDrawer
-                                :wallet="wallet"
+                                :wallet="totalWallet"
                                 @close="drawer = false"
                                 class="hidden lg:block"
                             />
                             <div
                                 class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
                             >
-                                <slot :wallet="wallet" />
+                                <slot :wallet="totalWallet" />
                             </div>
                         </div>
                     </div>

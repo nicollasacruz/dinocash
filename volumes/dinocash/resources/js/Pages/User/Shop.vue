@@ -55,10 +55,10 @@ const userIdref = ref(userId);
 const loading = ref(false);
 
 const amount = ref(0);
-const wallet = ref(walletUser);
+const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.message.wallet;
+    totalWallet.value = e.message.wallet;
 });
 
 async function withdraw() {

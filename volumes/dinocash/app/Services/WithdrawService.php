@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\WalletChanged;
 use App\Models\BonusWalletChange;
 use App\Models\Withdraw;
 use Exception;
@@ -45,7 +46,16 @@ class WithdrawService
                     return false;
                 }
             }
+            
             $user->save();
+
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet + $user->bonusWallet,
+            ];
+
+            event(new WalletChanged($message));
+            
             if (!$user->isAffiliate) {
                 $withdraw = Withdraw::create([
                     'userId' => $user->id,
@@ -53,7 +63,7 @@ class WithdrawService
                     'amount' => $amount,
                     'type' => 'pending',
                 ]);
-
+                
                 return $withdraw;
             }
 

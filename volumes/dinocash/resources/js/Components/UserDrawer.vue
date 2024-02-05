@@ -69,21 +69,9 @@ import person from "../../../storage/imgs/user/icons/person.svg";
 import deposit from "../../../storage/imgs/user/icons/deposit.svg";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
 
-const props = defineProps(["wallet"]);
 const emit = defineEmits(["close"]);
 
 const page = usePage();
-
-const userId = computed(() => page.props.auth.user?.id);
-const userIdref = ref(userId);
-const loading = ref(false);
-
-const amount = ref(0);
-const wallet = ref(props.wallet + page.props.auth.user?.bonusWallet);
-
-window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.message.wallet;
-});
 
 const routes = [
     {

@@ -18,7 +18,7 @@
                 <div class="text-lg lg:text-xl font-bold">
                     <div>
                         Saldo disponível:
-                        <b class="text-verde">{{ toBRL(wallet) }}</b>
+                        <b class="text-verde">{{ toBRL(totalWallet) }}</b>
                     </div>
                     <div class="mt-1">
                         Saque mínimo:
@@ -30,7 +30,7 @@
                     </div>
                     <!-- <div>
                         Bônus disponível:
-                        <b class="text-verde">{{ toBRL(wallet) }}</b>
+                        <b class="text-verde">{{ toBRL(totalWallet) }}</b>
                     </div> -->
                     <!-- <div class="flex mt-1">
                         <input
@@ -95,18 +95,16 @@ const userIdref = ref(userId);
 const loading = ref(false);
 
 const amount = ref(0);
-const wallet = ref(walletUser * 1 + page.props.auth.user.bonusWallet);
-console.log(wallet.value, 'wallet');
+const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.message.wallet;
+    totalWallet.value = e.message.wallet;
 });
 
 async function withdraw() {
     try {
         loading.value = true;
         const valor = amount.value;
-        const wallet = walletUser * 1 + page.props.auth.user.bonusWallet;
         if (valor < minWithdraw) {
             toast.error("Valor mínimo permitido é : " + toBRL(minWithdraw));
             return;
@@ -115,7 +113,7 @@ async function withdraw() {
             toast.error("Valor maximo permitido é : " + toBRL(maxWithdraw));
             return;
         }
-        if (valor > wallet) {
+        if (valor > totalWallet) {
             toast.error("Saldo indsponivel.");
             return;
         }

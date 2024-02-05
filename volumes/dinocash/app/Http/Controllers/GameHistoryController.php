@@ -76,7 +76,7 @@ class GameHistoryController extends Controller
                         $gameHistoryItem->delete();
                         $message = [
                             "id" => $user->id,
-                            "wallet" => $user->wallet
+                            "wallet" => $user->wallet + $user->bonusWallet
                         ];
 
                         event(new WalletChanged($message));
