@@ -12,7 +12,9 @@
         }"
     >
         <div class="max-w-xl lg:max-w-2xl w-full">
-            <div class="text-5xl font-bold text-verde text-center mb-3">
+            <div
+                class="text-5xl lg:text-6xl font-bold text-verde text-center mb-3"
+            >
                 Dino Bônus
             </div>
             <div class="text-center text-white text-sm md:text-base">
@@ -54,9 +56,17 @@
             </button>
         </div>
         <!-- Modal -->
-        <BaseModal v-model="showModal" v-if="showModal" class="modal z-50">
-            <div class="modal-content ">
-                <div class="text-3xl text-verde font-bold text-center mb-3">Recompensa Obtida</div>
+        <BaseModal
+            v-model="showModal"
+            v-if="showModal"
+            class="modal z-50 custom-modal"
+        >
+            <div class="modal-content h-full flex flex-col">
+                <div
+                    class="text-2xl font-bold -mt-5 text-verde text-center mb-6 whitespace-nowrap"
+                >
+                    Recompensa Obtida
+                </div>
                 <!-- Replicar a div onde o seletor parou -->
                 <div class="bg-[#17111F] w-20 mx-auto">
                     <div
@@ -64,18 +74,20 @@
                         v-if="selectedPremio"
                     >
                         <div
-                            class="text-lg sm:text-2xl lg:text-3xl text-verde font-bold"
+                            class="text-8xl sm:text-4xl lg:text-3xl  text-verde font-bold white whitespace-nowrap"
                         >
                             {{ selectedPremio.label }}
                         </div>
                         <div
-                            class="leading-none text-xs sm:text-sm md:text-base md:leading-tight text-white uppercase font-bold"
+                            class="leading-none text-base md:text-base md:leading-tight text-white uppercase font-bold"
                         >
                             {{ selectedPremio.complement }}
                         </div>
                     </div>
                 </div>
-                <button class="user-button mx-auto mt-5" @click="closeRoullete">Coletar</button>
+                <button class="user-button mx-auto mt-auto" @click="closeRoullete">
+                    Coletar
+                </button>
             </div>
         </BaseModal>
     </section>
@@ -207,9 +219,29 @@ const postRecompensa = async (rewardOption) => {
     }
 };
 </script>
-<style>
+<style lang="scss">
 @font-face {
     font-family: "Inter", sans-serif;
     src: url("inter/Inter-Bold.ttf") format("opentype");
+}
+.custom-modal {
+    .modal-box {
+        border: 4px solid #93fa38;
+        height: 70vh;
+        width: 90vw;
+        max-width: 400px;
+    }
+    svg {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        background: #93fa38;
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+    }
+    .modal-content {
+        height: 100%;
+    }
 }
 </style>
