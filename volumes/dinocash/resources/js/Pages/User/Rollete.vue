@@ -61,31 +61,49 @@
             v-if="showModal"
             class="modal z-50 custom-modal"
         >
+            <template #close>
+                <div class="absolute -top-8 -right-8 bg-verde rounded-full p-3">
+                    <!--    //     position: absolute;
+    //     top: -30px;
+    //     right: -30px;
+    //     background: #93fa38;
+    //     border-radius: 50%;
+    //     height: 40px;
+    //     width: 40px; -->
+                    <XMarkIcon class="w-5 h-5 fill-gray-500" />
+                </div>
+            </template>
             <div class="modal-content h-full flex flex-col">
                 <div
-                    class="text-2xl font-bold -mt-5 text-verde text-center mb-6 whitespace-nowrap"
+                    class="text-2xl font-bold -mt-4 text-verde text-center mb-3 whitespace-nowrap"
                 >
                     Recompensa Obtida
                 </div>
                 <!-- Replicar a div onde o seletor parou -->
-                <div class="bg-[#17111F] w-20 mx-auto">
+                <div class="w-20 mx-auto">
                     <div
-                        class="text-center flex w-20 h-20 flex-col items-center justify-center col-span-1 border-roxo border my-1 md:my-3 rounded-lg"
+                        class="text-center flex flex-col items-center justify-center col-span-1 rounded-lg"
                         v-if="selectedPremio"
                     >
                         <div
-                            class="text-8xl sm:text-4xl lg:text-3xl  text-verde font-bold white whitespace-nowrap"
+                            class="text-8xl sm:text-8xl lg:text-8xl text-verde font-bold white whitespace-nowrap"
                         >
                             {{ selectedPremio.label }}
                         </div>
                         <div
-                            class="leading-none text-base md:text-base md:leading-tight text-white uppercase font-bold"
+                            class="leading-none text-base md:text-base md:leading-tight text-white uppercase font-bold mt-2"
                         >
                             {{ selectedPremio.complement }}
                         </div>
                     </div>
                 </div>
-                <button class="user-button mx-auto mt-auto" @click="closeRoullete">
+                <div class="-mr-7 my-2">
+                    <img :src="dinoReward" class="w-60 mx-auto" alt="" />
+                </div>
+                <button
+                    class="user-button mx-auto mt-auto text-2xl !font-semibold"
+                    @click="closeRoullete"
+                >
                     Coletar
                 </button>
             </div>
@@ -97,11 +115,12 @@
 import pinoRoleta from "../../../../storage/imgs/user/pino-roleta.svg";
 import background from "../../../../storage/imgs/user/bg-roleta.jpg";
 import bgMobile from "../../../../storage/imgs/user/bg-roleta-mobile.jpg";
+import dinoReward from "../../../../storage/imgs/user/dino-reward.svg";
 import { ref } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import axios from "axios";
 import BaseModal from "@/Components/BaseModal.vue";
-
+import { XMarkIcon } from "@heroicons/vue/24/solid";
 const position = ref(50);
 const loading = ref(false);
 const showModal = ref(false);
@@ -230,16 +249,17 @@ const postRecompensa = async (rewardOption) => {
         height: 70vh;
         width: 90vw;
         max-width: 400px;
+        background: #17111f;
     }
-    svg {
-        position: absolute;
-        top: -30px;
-        right: -30px;
-        background: #93fa38;
-        border-radius: 50%;
-        height: 40px;
-        width: 40px;
-    }
+    // svg {
+    //     position: absolute;
+    //     top: -30px;
+    //     right: -30px;
+    //     background: #93fa38;
+    //     border-radius: 50%;
+    //     height: 40px;
+    //     width: 40px;
+    // }
     .modal-content {
         height: 100%;
     }
