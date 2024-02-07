@@ -38,7 +38,7 @@ class AffiliatePanelController extends Controller
 
         $profitSubRev = $user->affiliateHistories->where('type', 'revSub')->sum('amount');
 
-        $profitRev = $user->affiliateHistories->where('type', 'LIKE', ['win', 'loss']);
+        $profitRev = $user->affiliateHistories->whereIn('type', ['win', 'loss']);
         $profitTotal = $profitRev->sum('amount');
         $profitToday = $profitRev
             ->filter(function ($history) {
@@ -51,9 +51,10 @@ class AffiliatePanelController extends Controller
             })
             ->sum('amount');
 
+
         $countInvited = User::where('affiliateId', $user->id)->count();
         $paymentPending = $user->affiliateHistories->where('invoicedAt', null)->sum('amount');
-        
+
         return Inertia::render('Affiliates/Dashboard', [
             'profitToday' => $profitToday,
             'profitLast30Days' => $profitLast30Days,
