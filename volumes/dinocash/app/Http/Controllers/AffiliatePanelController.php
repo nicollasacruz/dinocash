@@ -51,7 +51,6 @@ class AffiliatePanelController extends Controller
             })
             ->sum('amount');
 
-
         $countInvited = User::where('affiliateId', $user->id)->count();
         $paymentPending = $user->affiliateHistories->where('invoicedAt', null)->sum('amount');
 
