@@ -19,10 +19,6 @@ const {
   profitLast30Days,
   profitTotal,
   profitSubRev,
-  lossToday,
-  lossLast30Days,
-  lossTotal,
-  revShareTotal,
   profitCPAToday,
   profitCPALast30Days,
   profitCPATotal,
@@ -39,12 +35,8 @@ const {
 } = defineProps([
   "profitToday",
   "profitLast30Days",
-  "lossLast30Days",
   "profitTotal",
   "profitSubRev",
-  "lossToday",
-  "lossTotal",
-  "revShareTotal",
   "profitCPAToday",
   "profitCPALast30Days",
   "profitCPATotal",
@@ -211,17 +203,17 @@ function setPixType(selected) {
       <CurrencyBox
         v-if="revShare > 0"
         label="RevShare do dia"
-        :value="profitToday - lossToday"
+        :value="profitToday"
       />
       <CurrencyBox
         v-if="revShare > 0"
         label="RevShare em 30 dias"
-        :value="profitLast30Days - lossLast30Days"
+        :value="profitLast30Days"
       />
       <CurrencyBox
         v-if="revShare > 0"
         label="RevShare Total"
-        :value="profitTotal - lossTotal"
+        :value="profitTotal"
       />
       <CurrencyBox
         v-if="revSub > 0"
