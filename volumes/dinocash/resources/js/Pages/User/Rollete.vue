@@ -77,7 +77,7 @@
                 <div
                     class="text-2xl font-bold -mt-4 text-verde text-center mb-3 whitespace-nowrap"
                 >
-                    Recompensa Obtida
+                    Você ganhou!
                 </div>
                 <!-- Replicar a div onde o seletor parou -->
                 <div class="w-20 mx-auto">

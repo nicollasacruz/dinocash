@@ -20,7 +20,7 @@
                     <div
                         tabindex="0"
                         role="button"
-                        class="bg-verde relative flex justify-center items-center rounded text-xs w-24 sm:text-md sm:w-32 h-10 text-roxo"
+                        class="bg-verde relative flex justify-center items-center rounded text-xs font-bold w-24 sm:text-md sm:w-32 h-10 text-roxo"
                     >
                         {{ userName }}
                         <ChevronDownIcon class="absolute right-1 top-3 w-4"
