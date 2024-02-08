@@ -19,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/';
 
-    // public const DEPOSIT = route('user.deposito');
+    public const DEPOSIT = 'user/deposito';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
