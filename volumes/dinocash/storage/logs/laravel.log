@@ -2365,3 +2365,35 @@
     },
     "socket": null
 }  
+[2024-02-08 15:09:39] local.INFO: Broadcasting [App\Events\WalletChanged] on channels [wallet234] with payload:
+{
+    "message": {
+        "id": 234,
+        "wallet": 19029.47
+    },
+    "socket": null
+}  
+[2024-02-08 15:09:39] local.INFO: Broadcasting [App\Events\WalletChanged] on channels [wallet234] with payload:
+{
+    "message": {
+        "id": 234,
+        "wallet": 19029.47
+    },
+    "socket": null
+}  
+[2024-02-08 15:09:45] local.INFO: Broadcasting [App\Events\WalletChanged] on channels [wallet234] with payload:
+{
+    "message": {
+        "id": 234,
+        "wallet": 19027.47
+    },
+    "socket": null
+}  
+[2024-02-08 15:09:45] local.INFO: Broadcasting [App\Events\WalletChanged] on channels [wallet234] with payload:
+{
+    "message": {
+        "id": 234,
+        "wallet": 19027.47
+    },
+    "socket": null
+}  
