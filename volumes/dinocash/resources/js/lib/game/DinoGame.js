@@ -19,7 +19,7 @@ import gorro from "../../../../storage/imgs/user/gorro.png";
 import coroa from "../../../../storage/imgs/user/coroa.png";
 import moon from "../../../../storage/imgs/user/moon.svg";
 import sol from "../../../../storage/imgs/user/sol.svg";
-
+import soundOff from "../../../../storage/imgs/user/soundoff.png";
 import logo from "../../../../storage/imgs/home-page/dino-logo.svg";
 
 export default class DinoGame extends GameRunner {
@@ -109,6 +109,7 @@ export default class DinoGame extends GameRunner {
         canvas.height = Math.floor(height * scale);
         canvas.style.border = "8px solid #91FA3D";
         canvas.style.borderRadius = "8px";
+        canvas.style.position = "relative";
         canvas.style.setProperty("-webkit-touch-callout", "none");
         canvas.style.setProperty("-webkit-user-select", "none");
         canvas.style.setProperty("-khtml-user-select", "none");
@@ -116,6 +117,7 @@ export default class DinoGame extends GameRunner {
         canvas.style.setProperty("-ms-user-select", "none");
         canvas.style.setProperty("user-select", "none");
         // canvas.style.boxShadow = "7px 9px 0px 0px rgba(0, 0, 0, 0.85)";
+
         return canvas;
     }
     createCanvasContainer() {
@@ -186,9 +188,15 @@ export default class DinoGame extends GameRunner {
         const app = this.createApp();
         const div = this.createText();
         canvasContainer.appendChild(image);
-        canvasContainer.appendChild(canvas);
+        const wrapper = document.createElement("div");
+        wrapper.id = 'canvas-wrapper'
+        wrapper.appendChild(canvas);
+        wrapper.style.position = 'relative';
+        canvasContainer.appendChild(wrapper);
         canvasContainer.appendChild(div);
         app.prepend(canvasContainer);
+        this.addSoundOff()
+
         return canvas;
     }
     async preloadGorro(content) {
@@ -377,6 +385,7 @@ export default class DinoGame extends GameRunner {
         });
         this.preload();
         this.start();
+        this.addSoundOff()
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "flex";
         const som = playSound("musica");
@@ -390,7 +399,24 @@ export default class DinoGame extends GameRunner {
             }
         }, 2000);
     }
-
+    addSoundOff(){
+        const offsoundImg = new Image
+        offsoundImg.src = soundOff
+        const div = document.createElement("div")
+        div.appendChild(offsoundImg)
+        div.style.position = "absolute";
+        // div.style.backgroundColor = "#FFF"
+        div.style.top = "20px";
+        div.style.right = "10px";
+        div.style.zIndex = '9999';
+        div.onclick = () => {
+            this.state.som.stop() 
+            this.state.som = null
+        }
+        const canvasContainer = document.getElementById("canvas-wrapper");
+        canvasContainer.style.position = "relative";
+        canvasContainer.appendChild(div);
+    }
     endGame() {
         this.state.isRunning = false;
         const eventoModificacao = new CustomEvent("endGame", {
