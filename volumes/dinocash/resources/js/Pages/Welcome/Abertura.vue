@@ -28,7 +28,8 @@
                     />
                 </div>
                 <div class="md:text-lg">
-                    Seja bem-vindo(a) ao <b class="text-verde">DinoCash!</b
+                    
+                    Seja bem-vindo(a) ao <b class="text-verde">DinoCash Oficial!</b
                     ><br />
                     O jogo que você não precisa <br class="hidden" />
                     contar com a sua <br class="hidden lg:block" />
