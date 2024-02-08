@@ -36,7 +36,9 @@
                     </ul>
                 </div>
                 <div
-                    @mouseover="bonusActive.value = true"
+                    @pointerdown="bonusActive = true"
+                    @pointerup="bonusActive = false"
+                    @mouseover="bonusActive = true"
                     @mouseleave="bonusActive = false"
                     class="border border-verde text-xs sm:text-md text-verde p-1 sm:px-3 rounded flex justify-center items-center"
                 >
