@@ -135,7 +135,6 @@ class FinanceController extends Controller
         }
         $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$pay) {
-            Log::info('Vazio ou 0');
             $houseHealth = 100;
         } else {
             $houseHealth = 100 - round(($pay * 100 / $gain), 1);

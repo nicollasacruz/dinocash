@@ -45,13 +45,12 @@ class GameHistoryController extends Controller
             }
             $pay = $withdrawsAmountPaid + $walletsAmount;
             if (!$gain || !$pay) {
-                // Log::info('Vazio ou 0');
                 $houseHealth = 100;
             } else {
                 $houseHealth = round(($pay * 100 / $gain), 1);
                 if ($houseHealth > 100 - $settings->payout) {
                     $viciosidade = true;
-                    // Log::error('Viciosidade ativada.');
+                    Log::error('Viciosidade ativada.');
                 }
             }
             $user = User::find(Auth::user()->id);
@@ -85,7 +84,7 @@ class GameHistoryController extends Controller
 
                         event(new WalletChanged($message));
 
-                        // Log::error('Partida já iniciada. - ' . $user->email);
+                        Log::error('Partida já iniciada. - ' . $user->email);
                     }
                 }
             }
@@ -122,7 +121,7 @@ class GameHistoryController extends Controller
 
                     event(new WalletChanged($message));
 
-                    // Log::error('Partida já iniciada. - ' . $user->email);
+                    Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
 
@@ -133,8 +132,7 @@ class GameHistoryController extends Controller
                 "maxAmmount" => $settings->maxAmountPlay
             ]);
         } catch (Exception $e) {
-            // Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
-            // Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
+            Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
         }
     }
 
@@ -222,7 +220,7 @@ class GameHistoryController extends Controller
                 // 'token' => $hashString,
             ]);
         } catch (\Exception $e) {
-            // Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
+            Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
@@ -241,7 +239,7 @@ class GameHistoryController extends Controller
 
             $hashString = hash('sha256', $request->gameId . Auth::user()->id . 'dinocash');
             if (!hash_equals($request->token, $hashString)) {
-                // Log::error('Token não confirmado.');
+                Log::error('Token não confirmado.');
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Token não confirmado.',
@@ -254,7 +252,7 @@ class GameHistoryController extends Controller
                 ->where('id', $request->gameId)->first();
 
             if (!$gameHistory) {
-                // Log::error('Partida não encontrada.');
+                Log::error('Partida não encontrada.');
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Partida não encontrada.',
@@ -262,7 +260,7 @@ class GameHistoryController extends Controller
             }
 
             if ($request->type === 'locked') {
-                // Log::error('Partida com bug / ' . $user->email);
+                Log::error('Partida com bug / ' . $user->email);
                 if ($gameHistory->amountType !== 'bonus') {
                     $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
                 } else {
@@ -296,7 +294,7 @@ class GameHistoryController extends Controller
 
 
             if (!$request->distance) {
-                // Log::error('Partida zerada erro');
+                Log::error('Partida zerada erro');
                 if ($gameHistory->amountType !== 'bonus') {
                     $user->wallet = (($user->wallet * 1) + ($gameHistory->amount * 1));
                 } else {
@@ -352,7 +350,7 @@ class GameHistoryController extends Controller
                 'lookRoullet' => $request->type === 'win' && $request->distance >= 500 ? self::getLookRoullet() : false,
             ]);
         } catch (\Exception $e) {
-            // Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
+            Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

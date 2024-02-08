@@ -122,8 +122,6 @@ class DepositService
             } catch (Exception $e) {
                 Log::error('Erro de notificar - ' . $e->getMessage());
             }
-
-            Log::info("Deposito aprovado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
             return true;
         } catch (Exception $e) {
             Log::error("Erro ao aprovar depósito: " . $e->getMessage());

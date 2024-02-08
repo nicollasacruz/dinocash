@@ -130,12 +130,7 @@ class WithdrawController extends Controller
                 ]);
             }
             if (!!$withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
-                Log::info('entrou no auto saque');
                 $response = $withdrawService->aprove($withdraw);
-                if (!$response['success']) {
-                    Log::info('Criado mas não foi pago');
-                    Log::info($response['message']);
-                }
             }
 
             return response()->json([
