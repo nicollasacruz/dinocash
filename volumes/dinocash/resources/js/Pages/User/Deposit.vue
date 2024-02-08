@@ -33,7 +33,7 @@
                             class="checkbox lg:ml mr-2"
                         />
                         <span class="text-verde font-bold text-xl lg:text-2xl">
-                            <!-- Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus + 20 rodadas grátis. -->
+                            Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus + 20 rodadas grátis.
                         </span>
                     </div>
                 </div>
