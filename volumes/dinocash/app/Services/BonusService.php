@@ -75,6 +75,8 @@ class BonusService
             $user->bonusWallet += $amountBonus;
             $user->save();
             $bonus->save();
+            
+            $this->addFreeSpin($user, 20);
 
             return true;
         } catch (Exception $e) {
