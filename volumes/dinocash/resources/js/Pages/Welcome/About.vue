@@ -1,31 +1,18 @@
 <template>
-    <section
-        id="section2"
-        class="section2 h-screen mx-auto p-6 lg:p-10 pb-5"
-        :style="{
-            backgroundImage: `url('${
-                windowWidth < 700 ? bgMobile : background
+    <section id="section2" class="section2 h-screen mx-auto p-6 lg:p-10 pb-5" :style="{
+        backgroundImage: `url('${windowWidth < 700 ? bgMobile : background
             }')`,
-            backgroundSize: 'cover',
-            backgroundPosition: windowWidth < 700 ? 'center' : 'center',
-            backgroundRepeat: 'no-repeat',
-        }"
-    >
+        backgroundSize: 'cover',
+        backgroundPosition: windowWidth < 700 ? 'center' : 'center',
+        backgroundRepeat: 'no-repeat',
+    }">
         <div class="text-5xl md:text-6xl text-verde font-menu text-start font-bold">Dino Cash</div>
         <div class="flex flex-col lg:flex-row">
-            <div
-                class="text-sm md:text-lg max-h-[60%] text-justify mt-5 flex-1 mb-2 lg:mr-5"
-            >
-                Bem-vindo ao Dinocash, sua principal opção de entretenimento e
-                lucratividade em jogos online! Como uma provedora totalmente
-                legalizada em Maita, oferecemos uma experibncia única e
-                inovadora no mercado. Explore um universo de diversão e
-                oportunidades de lucro como nunca antes, desafiando seus
-                reflexos em nossos emocionantes jogos. Junte-se a nós para uma
-                jornada envolvente, onde o entretenimento se encontra com a
-                chance de ganhar grandes recompensas. Venha fazer , parte dessa
-                experiência exctusiva no Dinocash, onde a diversão e 05 ganhos ,
-                estão ao seu alcance.
+            <div class="text-sm md:text-lg max-h-[60%] text-justify mt-5 flex-1 mb-2 lg:mr-5">
+                Bem-vindo ao DinoCash, agora você não precisa mais contar com a sorte, vai depender somente de você, conte
+                totalmente com a sua habilidades e reflexos para lucrar com o DinoCash, junte-se a nós para uma jornada
+                envolvente, onde você pode ter a oportunidade de ganhar nossas recompensas com o Dino Bônus, uma roleta
+                recheada de prêmios, e aumentar muito mais os seus ganhos!
             </div>
             <div class="lg:flex-1  h-52">
                 <img :src="dinoPlataforma" alt="">

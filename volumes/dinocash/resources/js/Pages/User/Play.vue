@@ -6,9 +6,9 @@
             <div class="text-5xl font-extrabold text-verde font-menu my-4">
                 Como jogar
             </div>
-            <div class="text-sm sm:text-lg lg:text-[1rem] mb-1">
+            <div class="text-sm sm:text-lg lg:text-[1.2rem] mb-1">
                 <div class="text-verde font-bold mb-3">
-                    Para dispositívos móveis
+                    Para celulares ou tablets
                 </div>
                 <div>
                     - Para iniciar o game aperte em qualquer lugar da tela.
@@ -16,15 +16,17 @@
                 <div>
                     - Para pular os cactos, clique com o dedo sobre a tela.
                 </div>
+
                 <div class="text-verde font-bold my-3">Para computadores:</div>
                 <div>- Para iniciar o game aperte a barra de espaço.</div>
                 <div>
                     - Para pular os cactos utilize a barra de espaço ou <br />
                     seta para cima em seu teclado
                 </div>
+                
                 <div class="mt-3">
                     O seu lucro será contabilizado após andar no mínimo <br />
-                    500 metros, a onde a tela ficará dourada. Você pode <br />
+                    500 metros, a onde a tela ficará a noite. Você pode <br />
                     encerrar a sua aposta a qualquer momento clicando <br />
                     no botão de saque que ficará no topo do jogo.
                 </div>

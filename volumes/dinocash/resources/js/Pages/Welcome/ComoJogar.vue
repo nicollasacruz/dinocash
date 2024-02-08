@@ -48,10 +48,11 @@ import backMobile from "../../../../storage/imgs/home-page/bg3-mobile.jpg";
 import dinoJogar from "../../../../storage/imgs/home-page/dino-jogar.svg";
 console.log(dinoJogar);
 const instructions = [
-    "Faça seu cadastro, ou então faça login se você já tem uma conta cadastrada no Dino Cash.",
-    "Faça um depósito de no mínimo R$30,00 e no máximo R$10.000,00 para iniciar a sua jornada.",
-    "Clique em jogar e escolha o valor da sua aposta para iniciar o jogo, o seu objetivo é pular todos os cactos e não deixar o Dino  bater em nenhum deles.",
-    "Após 500 metros percorrido, a tela ficará dourada, a partir dai o seu lucro será contabilizado e você pode sacar a qualquer momento Clicando no botão de parar.",
+    "Faça seu cadastro ou então logue-se no site você já tem uma conta cadastrada no Dino Cash.",
+    "Faça um depósito de no mínimo R$30,00 para iniciar a sua jornada.",
+    "Clique em jogar e escolha o valor da sua aposta para iniciar o jogo, o seu objetivo é pular todos os cactos e não deixar o Dino bater em nenhum deles.",
+    "Após 500 metros percorrido, a tela ficará de noite, a partir dai o seu lucro será multiplicado e você pode sacar a qualquer momento clicando no botão de retirar lucro.",
+    "Se você for um jogador habilidoso, você terá a chance de ganhar recompensas de ícones exclusivos após os 1.000 metros."
 ];
 const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
     defineProps({
