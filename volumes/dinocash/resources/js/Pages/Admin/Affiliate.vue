@@ -57,7 +57,7 @@ watchEffect(() => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: searchQuery.value, status: statusQuery.value },
+        { email: searchQuery.value, status: selectedTab.value === 2 ? statusQuery.value : 'all'},
         {
           preserveState: true,
         }
@@ -108,7 +108,7 @@ watchEffect(() => {
           Filtrar statuus
         </div>
         <select 
-        v-if="selectedTab === 1"
+        v-if="selectedTab === 2"
         v-model="statusQuery" class="admin-input">
           <option value="all">Todos</option>
           <option value="paid">Pago</option>
