@@ -8,6 +8,8 @@ import PaymentsTable from "@/Components/PaymentsTable.vue";
 import Paginator from "@/Components/Paginator.vue";
 import axios from "axios";
 import debounce from "lodash/debounce";
+import Checkbox from "@/Components/Checkbox.vue";
+import { watchEffect } from "vue";
 
 const selectedTab = ref(1);
 const columns = computed(() =>
@@ -46,15 +48,16 @@ const toBRL = (value) => {
 };
 const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
+const initialStatus = urlParams.get("status") || "todos";
 const searchQuery = ref(initialEmail);
+const statusQuery = ref(initialStatus);
 
-watch(
-  searchQuery,
-  debounce((value) => {
+watchEffect(() => {
+  debounce(() => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: value },
+        { email: searchQuery.value, status: statusQuery.value },
         {
           preserveState: true,
         }
@@ -62,8 +65,8 @@ watch(
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-  }, 700)
-);
+  }, 700)();
+});
 </script>
 
 <template>
@@ -99,6 +102,12 @@ watch(
           placeholder="Digite o email do afiliado..."
           v-model="searchQuery"
         />
+        <select v-model="statusQuery" class="admin-select">
+          <option value="all">Todos</option>
+          <option value="paid">Pago</option>
+          <option value="pending">Pendente</option>
+          <option value="rejected">Recusado</option>
+        </select>
       </div>
       <div class="flex gap-x-5">
         <TextBox
@@ -113,7 +122,7 @@ watch(
       :columns="columns"
       :rows="affiliates.data"
     />
-    <payments-table v-else :columns="columns" :rows="paymentsRow" />
+    <payments-table v-else :columns="columns" :rows="paymentsRow.data" />
     <Paginator
       :data="selectedTab === 1 ? affiliates : paymentsRow"
       class="mt-4"

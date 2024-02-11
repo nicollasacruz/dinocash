@@ -57,6 +57,19 @@ class AffiliateWithdrawController extends Controller
             $withdrawService = new WithdrawAffiliateService();
             $userId = Auth::user()->id;
             $user = User::find($userId);
+            if ($request->amount > $user->walletAffiliate) {
+                return response()->json([
+                    'success' => 'error',
+                    'message' => 'Não possui saldo disponivel suficiente.'
+                ]);
+            }
+            if ($request->amount < 50) {
+                return response()->json([
+                    'success' => 'error',
+                    'message' => 'Saque minimo é de R$50,00.'
+                ]);
+            }
+            
             $withdraw = $withdrawService->createWithdraw($user, $request->amount, $request->pixType, $request->pixKey);
             if ($withdraw) {
                 if ($withdraw->amount < 5000) {

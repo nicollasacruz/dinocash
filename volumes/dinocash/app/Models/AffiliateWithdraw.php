@@ -45,7 +45,6 @@ class AffiliateWithdraw extends Model
                 $query->where('isAffiliate', true)->where('email', 'LIKE', '%' . $email . '%');
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(20);
     }
-    
 }
