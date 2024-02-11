@@ -35,7 +35,7 @@ class AffiliateController extends Controller
                     $query->where('type', $status);
                 })
                 ->orderBy('created_at', 'desc')
-                ->paginate(20);
+                ->get();
 
             $affiliates = User::when($email, function ($query) use ($email) {
                 $query->where('email', 'LIKE', '%' . $email . '%');

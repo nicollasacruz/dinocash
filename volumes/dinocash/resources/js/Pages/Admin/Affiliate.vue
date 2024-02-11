@@ -122,7 +122,7 @@ watchEffect(() => {
       :columns="columns"
       :rows="affiliates.data"
     />
-    <payments-table v-else :columns="columns" :rows="paymentsRow.data" />
+    <payments-table v-else :columns="columns" :rows="paymentsRow" />
     <Paginator
       :data="selectedTab === 1 ? affiliates : paymentsRow"
       class="mt-4"
