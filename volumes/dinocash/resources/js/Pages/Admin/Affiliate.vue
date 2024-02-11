@@ -53,11 +53,11 @@ const searchQuery = ref(initialEmail);
 const statusQuery = ref(initialStatus);
 
 watchEffect(() => {
-  debounce(() => {
+  debounce((searchValue, statusValue) => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: searchQuery.value, status: statusQuery.value },
+        { email: searchValue, status: statusValue },
         {
           preserveState: true,
         }
@@ -65,8 +65,9 @@ watchEffect(() => {
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-  }, 700)();
-});
+  }, 700)(searchQuery.value, statusQuery.value);
+}, { flush: 'sync' });
+
 </script>
 
 <template>
