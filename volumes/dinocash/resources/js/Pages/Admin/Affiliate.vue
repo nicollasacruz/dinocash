@@ -57,7 +57,7 @@ watchEffect(() => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: searchQuery.value, status: selectedTab.value === 2 ? statusQuery.value : 'all'},
+        { email: searchQuery.value, status: statusQuery.value },
         {
           preserveState: true,
         }
