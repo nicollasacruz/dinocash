@@ -25,13 +25,13 @@ class AffiliateController extends Controller
     {
         try {
             $email = $request->query('email');
-            $status = $request->query('status');
+            $status = $request->query('status') != 'all' ?? false;
 
             $affiliateWithdrawsList = AffiliateWithdraw::with('user')
                 ->when($email, function ($query) use ($email) {
                     $query->where('user.email', 'LIKE', '%' . $email . '%');
                 })
-                ->when($status != 'all', function ($query) use ($status) {
+                ->when($status, function ($query) use ($status) {
                     $query->where('type', $status);
                 })
                 ->orderBy('created_at', 'desc')
