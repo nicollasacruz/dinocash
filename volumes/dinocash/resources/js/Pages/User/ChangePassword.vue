@@ -1,9 +1,12 @@
 <template>
     <Head title="Perfil" />
     <UserLayout>
-        <div class="lg:p-6 lg:px-16 p-3">
+        <div class="lg:p-4 lg:px-20 lg:pt-4 p-3">
             <div class="text-5xl text-verde font-extrabold font-menu">
                 Perfil
+            </div>
+            <div class="text-xs">
+                Mantenha as informações da sua conta sempre atualizadas
             </div>
             <UpdateProfileInformationForm
                 :must-verify-email="mustVerifyEmail"

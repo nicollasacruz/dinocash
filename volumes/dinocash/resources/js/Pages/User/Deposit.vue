@@ -1,11 +1,11 @@
 <template>
     <Head title="Depósitos" />
     <UserLayouyt>
-        <div class="p-3 lg:p-6 lg:px-16">
+        <div class="p-4 lg:p-6 lg:px-20">
             <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
                 Depositar
             </div>
-            <div class="flex-col flex gap-y-4">
+            <div class="flex-col flex gap-y-4 text-base">
                 <input
                     type="number"
                     class="max-w-xs user-input w-full"
@@ -13,7 +13,7 @@
                     v-model="amount"
                 />
 
-                <div class="mt-4 text-lg font-bold">
+                <div class="font-bold text-lg lg:text-base">
                     <div>
                         Depósito mínimo:
                         <b class="text-verde font-extrabold">
@@ -30,18 +30,18 @@
                         <input
                             v-model="bonusSelected"
                             type="checkbox"
-                            class="checkbox lg:ml mr-2"
+                            class="checkbox lg:ml mr-2 mt-2 lg:mt-0"
                         />
-                        <span class="text-verde font-bold text-xl lg:text-2xl">
+                        <span class="text-verde font-extrabold text-lg lg:text-base">
                             Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus + 20 rodadas grátis.
                         </span>
                     </div>
                 </div>
 
-                <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="pixLogo" />
+                <img :src="pixLogo" class="mb-2 w-32 max-w-sm" alt="pixLogo" />
                 <button
                     @click="startDeposit"
-                    class="py-2 px-10 user-button max-w-sm"
+                    class="user-button"
                     :disabled="loading"
                 >
                     <div v-if="loading">
@@ -49,7 +49,7 @@
                     </div>
                     <div v-else>Depositar</div>
                 </button>
-                <div class="mt-2 lg:mt-4 text-sm md:text-md">
+                <div class="mt-2 lg:mt-2 text-sm md:text-md">
                     Após clicar em depositar, scaneie o QR Code que aparecerá na
                     tela com a câmera de seu celular em seu aplicativo bancário.
                     Os depósitos levam até 1 minuto para serem creditados à sua

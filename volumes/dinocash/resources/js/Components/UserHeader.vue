@@ -1,7 +1,7 @@
 <template>
     <template v-if="logged">
         <div
-            class="bg-roxo flex justify-between items-center h-16 px-1 sm:px-2 lg:grid lg:grid-cols-12"
+            class="bg-[#150822] flex justify-between items-center h-24 py-6 px-1 sm:px-2 lg:grid lg:grid-cols-12"
         >
             <div
                 v-if="logged"
@@ -9,62 +9,54 @@
             >
                 <bars3-icon
                     @click="emit('toggle')"
-                    class="w-7 sm:w-8 sm:h-8 cursor-pointer fill-white lg:hidden"
+                    class="w-7 sm:w-8 sm:h-8 cursor-pointer fill-white lg:hidden ml-3"
                 />
                 <img class="h-5 sm:h-10 hidden lg:block" :src="DinoLogo" />
             </div>
             <div
                 class="flex sm:flex-1 justify-end gap-x-1 sm:gap-x-2 lg:col-end-11 xl:col-end-12 pr-8"
             >
-                <div class="dropdown">
-                    <div
-                        tabindex="0"
-                        role="button"
-                        class="bg-verde relative flex justify-center items-center rounded text-xs font-bold w-24 sm:text-md sm:w-32 h-10 text-roxo"
-                    >
+                <div
+                    class="bg-verde relative lg:flex justify-center items-center rounded font-bold sm:text-md hidden h-9 text-roxo"
+                >
+                    <div class="w-32 text-center">
                         {{ userName }}
-                        <ChevronDownIcon class="absolute right-1 top-3 w-4"
-                            >aa</ChevronDownIcon
-                        >
                     </div>
-                    <ul
-                        tabindex="0"
-                        class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                        <li><a>Bonus</a></li>
-                        <!-- <li><a>Item 2</a></li> -->
-                    </ul>
                 </div>
+
                 <div
                     @pointerdown="bonusActive = true"
                     @pointerup="bonusActive = false"
                     @mouseover="bonusActive = true"
                     @mouseleave="bonusActive = false"
-                    class="border border-verde text-xs sm:text-md text-verde p-1 sm:px-3 rounded flex justify-center items-center"
+                    class="text-sm font-bold text-verde p-1 sm:px-3 rounded flex justify-center items-center"
                 >
                     {{ toBRL(money) }}
                 </div>
+                <Link class="" :href="route('user.deposito')">
+                    <WalletIcon class="w-7 sm:w-7 mt-[6px] lg:mt-1 -ml-1 mr-5 lg:-ml-5 fill-white" />
+                </Link>
                 <Link class="" :href="route('logout')" method="post">
-                    <img class="w-5 sm:w-7 mt-2" :src="leave" />
+                    <img class="w-7 sm:w-7 mt-2" :src="leave" />
                 </Link>
             </div>
         </div>
     </template>
     <div
         v-else
-        class="bg-roxo flex justify-center items-center h-16 px-1 sm:px-2 py-2"
+        class="bg-roxo flex justify-center items-center h-20 py-6 px-1 sm:px-2 py-2"
     >
         <div class="flex gap-x-3">
             <Link :href="route('login')">
                 <div
-                    class="user-button lg:text-[1rem] lg:py-1 items-center flex"
+                    class="user-button lg:text-base lg:py-1 items-center flex"
                 >
                     Login
                 </div>
             </Link>
             <Link :href="route('register')">
                 <div
-                    class="user-button lg:text-[1rem] lg:py-1 items-center flex"
+                    class="user-button lg:text-base lg:py-1 items-center flex"
                 >
                     Registrar
                 </div>
@@ -75,7 +67,11 @@
 <script setup>
 import { Link, usePage } from "@inertiajs/vue3";
 
-import { Bars3Icon, ChevronDownIcon } from "@heroicons/vue/24/solid";
+import {
+    Bars3Icon,
+    ChevronDownIcon,
+    WalletIcon,
+} from "@heroicons/vue/24/solid";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
 import { computed } from "vue";

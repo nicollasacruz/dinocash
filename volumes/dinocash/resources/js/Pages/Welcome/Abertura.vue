@@ -1,7 +1,7 @@
 <template>
     <section
         id="section1"
-        class="section1 h-screen mx-auto items-center pt-4 px-4 md:p-2 flex flex-col relative"
+        class="section1 h-screen mx-auto items-center pt-1 lg:pt-4 px-4 md:p-2 flex flex-col relative"
         :style="{
             backgroundImage: `url('${
                 windowWidth < 700 ? bgMobile : background
@@ -19,7 +19,7 @@
             {{ $page.props.errors.banned }}
         </div>
         <div class="flex flex-col items-center md:ml-10 md:flex-row">
-            <div class="my-3 md:my-10 lg:w-[550px] px-3 flex-1">
+            <div class="my-2 md:my-10 lg:w-[550px] px-3 flex-1">
                 <div class="flex sm:justify-center lg:justify-start">
                     <img
                         :src="DinoLogo"
@@ -44,20 +44,20 @@
                     class="w-full mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
                 >
                     <Link
-                        class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
+                        class="mb-3 lp-button bg w-full lg:w-[220px] h-[65px]"
                         :href="route('login')"
                         >{{ __("auth.login") }}</Link
                     >
 
                     <Link
-                        class="mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
+                        class="mb-2 lp-button bg w-full lg:w-[220px] h-[65px]"
                         :href="route('register')"
                     >
                         {{ __("auth.register") }}
                     </Link>
                 </div>
                 <div
-                    class="w-full mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
+                    class="w-full mt-4 lg:mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
                     v-else
                 >
                     <Link
@@ -73,11 +73,11 @@
                         {{ __("homepage.play-now") }}
                     </Link>
                 </div>
-                <div class="mb-[10vh] md:text-lg text-start mt-3">
+                <div class="mb-[10vh] md:text-lg text-start text-sm mt-1 lg:mt-3">
                     {{ __("homepage.register-tip") }}
                 </div>
             </div>
-            <div class="absolute bottom-0 md:relative w-52 md:w-[500px]">
+            <div class="absolute bottom-0 md:relative w-44 shrink-image md:w-[500px]">
                 <img :src="DinoHome" alt="" class=" md:mt-16" />
             </div>
         </div>

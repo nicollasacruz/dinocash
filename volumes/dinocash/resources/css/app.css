@@ -37,7 +37,7 @@
         @apply !bg-[#17101F] !rounded-2xl !py-3 input-md !text-white;
     }
     .user-button {
-        @apply py-2 bg-verde text-black px-10 rounded-xl font-menu md:text-3xl !font-bold whitespace-nowrap flex justify-center;
+        @apply text-2xl py-5 lg:py-[10px] max-w-[250px] lg:max-w-xs bg-verde text-[#150822] cursor-pointer px-10 rounded-xl font-menu md:text-2xl !font-bold whitespace-nowrap flex justify-center;
     }
     .lp-button {
         @apply py-2 bg-verde text-[#441C5B] px-5 rounded-xl font-menu text-xl md:text-2xl flex justify-center items-center font-bold;

@@ -57,13 +57,13 @@ const drawer = ref(false);
                     class="drawer-overlay"
                 ></label>
                 <ul
-                    class="menu py-4 lg:w-96 min-h-full bg-[#212121] text-white relative"
+                    class="menu py-4 lg:w-96 min-h-full bg-[#17101F] text-white relative"
                 >
                     <x-mark-icon
                         class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
                         @click="drawer = !drawer"
                     />
-                    <UserDrawer :wallet="wallet" class="mt-3" />
+                    <UserDrawer :wallet="wallet" class="mt-3 !bg-[#17101F]" />
                 </ul>
             </div>
         </div>

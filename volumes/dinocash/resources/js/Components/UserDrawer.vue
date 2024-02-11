@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-xl p-2 lg:w-72 bg-[#1c1320]">
+    <div class="rounded-xl p-2 lg:w-72 bg-[#17101e]">
         <div class="flex flex-col items-center mb-3 lg:ml-5">
             <div class="relative">
                 <img

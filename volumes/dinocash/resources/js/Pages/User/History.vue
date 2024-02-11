@@ -8,7 +8,7 @@
                 Histórico
             </div>
             <div
-                class="grid grid-cols-4 text-[11px] lg:text-[1rem] px-5 font-thin"
+                class="grid grid-cols-4 text-[11px] lg:text-base px-5 font-thin"
             >
                 <div>Data</div>
                 <div class="text-center">Distancia</div>

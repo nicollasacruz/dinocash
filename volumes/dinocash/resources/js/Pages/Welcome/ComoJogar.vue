@@ -8,16 +8,16 @@
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
         }"
-        class="h-screen pt-8 lg:p-8 lg:px-14 relative"
+        class="h-screen pt-4 lg:p-8 lg:px-14 relative"
     >
         <div
-            class="text-4xl sm:text-5xl pl-3 md:text-6xl font-menu font-bold mb-7 lg:mb-8 text-verde lg:text-right relative"
+            class="text-4xl sm:text-5xl pl-3 md:text-6xl font-menu font-bold mb-5 lg:mb-8 text-verde lg:text-right relative"
         >
             Como Jogar?
         </div>
         <div class="flex flex-col-reverse lg:flex-row">
-            <div class="flex-1 justify-center flex w-full">
-                <img :src="dinoJogar" class="w-56 lg:w-96 absolute bottom-0" />
+            <div class="flex-1 justify-center flex w-full pt-5">
+                <img :src="dinoJogar" class="shrink-image w-44 lg:w-96 absolute bottom-0 " />
             </div>
             <div class="flex-1">
                 <div
@@ -31,7 +31,7 @@
                         {{ i + 1 }}
                     </div>
 
-                    <div class="text-sm sm:text-sm md:text-lg -mt-2">
+                    <div class="text-sm shrink-text sm:text-sm md:text-lg -mt-2">
                         {{ instruction }}
                     </div>
                 </div>
@@ -81,3 +81,15 @@ window.addEventListener("resize", (valu) => {
     windowWidth.value = window.innerWidth;
 });
 </script>
+<style>
+.shrink-image {
+    @media(max-width: 321px) {
+        width: 110px;
+    }
+}
+.shrink-text {
+    @media(max-width: 321px) {
+        font-size: .79em;
+    }
+}
+</style>

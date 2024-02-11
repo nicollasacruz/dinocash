@@ -2,7 +2,7 @@
     <Head title="Saques" />
 
     <UserLayouyt>
-        <div class="p-3 lg:p-6 lg:px-16">
+        <div class="p-4 lg:p-6 lg:px-20">
             <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
                 Sacar
             </div>
@@ -15,8 +15,8 @@
                     :min="minWithdraw"
                     :max="maxWithdraw"
                 />
-                <div class="text-lg lg:text-xl font-bold">
-                    <div>
+                <div class="text-lg lg:text-base font-extrabold">
+                    <div class="">
                         Saldo disponível:
                         <b class="text-verde">{{ toBRL(totalWallet) }}</b>
                     </div>
@@ -43,10 +43,10 @@
                         </span>
                     </div> -->
                 </div>
-                <img :src="pixLogo" class="mb-2 lg:mb-5 w-32 max-w-sm" alt="" />
+                <img :src="pixLogo" class="mb-2 w-32 max-w-sm" alt="" />
                 <button
                     @click="withdraw"
-                    class="py-2 px-10 user-button max-w-sm"
+                    class="user-button max-w-xs"
                     :disabled="loading"
                 >
                     <div v-if="loading">
@@ -55,7 +55,7 @@
                     <div v-else>Sacar</div>
                 </button>
 
-                <div class="mt-2 lg:mt-4 text-sm md:text-md">
+                <div class="mt-2 text-sm md:text-md">
                     Saques serão enviados em até 12 horas úteis após a
                     solicitação da retirada. <br />
                     Os saques serão enviados na chave pix do CPF cadastrado.

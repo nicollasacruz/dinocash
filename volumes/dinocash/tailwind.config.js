@@ -22,9 +22,9 @@ export default {
                 "verde-claro": "#d6f8b8",
                 "roxo-fundo": "#6c567b",
                 "roxo-escuro": "#3b2b45",
-                "verde": "#93FA38",
+                "verde": "#91fa3d",
                 "verde-escuro": "#00E68E",
-                "roxo-claro": "#D1C6E8",
+                "roxo-claro": "#dec6ec",
                 "roxo": "#392747",
             },
             dropShadow: {

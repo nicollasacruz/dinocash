@@ -36,16 +36,16 @@ const updatePassword = () => {
 <template>
     <section>
         <div>
-            <h2 class="text-3xl font-menu text-verde mt-5">Alterar Senha</h2>
+            <h2 class="text-xl font-bold font-menu text-verde mt-3">Alterar Senha</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
+            <div class="text-xs text-roxo-claro">
                 Certifique-se de que sua conta esteja usando uma senha longa e
                 aleatória para permanecer segura.
-            </p>
+            </div>
         </div>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6 w-full">
-            <div class="grid grid-cols-1 md:grid-cols-2  gap-x-8 gap-y-3 w-full">
+        <form @submit.prevent="updatePassword" class="mt-3 space-y-6 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-2  gap-x-6 gap-y-2 w-full">
                 <div>
                     <div class="ml-3 text-sm">Senha Atual</div>
 
@@ -86,7 +86,7 @@ const updatePassword = () => {
 
                 <div class="flex items-end gap-4">
                     <button
-                        class="user-button md:w-full"
+                        class="user-button w-full !max-w-full"
                         :disabled="form.processing"
                     >
                         Alterar senha

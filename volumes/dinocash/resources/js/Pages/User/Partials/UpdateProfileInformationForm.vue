@@ -28,11 +28,11 @@ const form = useForm({
 <template>
     <form
         @submit.prevent="form.patch(route('user.update'))"
-        class="mt-6 space-y-4 w-full"
+        class="mt-3 space-y-3 w-full"
     >
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 w-full">
             <div>
-                <div class="ml-3 text-sm">Nome</div>
+                <div class="ml-3 text-xs">Nome</div>
                 <input
                     id="name"
                     type="text"
@@ -45,7 +45,7 @@ const form = useForm({
             </div>
 
             <div>
-                <div class="ml-3 text-sm">Email</div>
+                <div class="ml-3 text-xs">Email</div>
                 <input
                     id="email"
                     type="text"
@@ -59,7 +59,7 @@ const form = useForm({
 
             <template v-if="!!user.isAffiliate">
                 <div>
-                    <div class="ml-3 text-sm">Saldo da Carteira</div>
+                    <div class="ml-3 text-xs">Saldo da Carteira</div>
 
                     <input
                         id="wallet"
@@ -71,8 +71,8 @@ const form = useForm({
                     />
                 </div>
                 <div>
-                    <div class="ml-3 text-sm">
-                        username para Link de Cadastro
+                    <div class="ml-3 text-xs">
+                        Link de Cadastro
                     </div>
 
                     <input
@@ -88,13 +88,13 @@ const form = useForm({
         </div>
 
         <div v-if="mustVerifyEmail && user.email_verified_at === null">
-            <p class="text-sm mt-2">
+            <p class="text-xs mt-2">
                 Seu endereço de e-mail não foi verificado.
                 <Link
                     :href="route('verification.send')"
                     method="post"
                     as="button"
-                    class="underline text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    class="underline text-xs rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Clique aqui para reenviar o e-mail de verificação.
                 </Link>
@@ -102,7 +102,7 @@ const form = useForm({
 
             <div
                 v-show="status === 'verification-link-sent'"
-                class="mt-2 font-medium text-sm text-green-600"
+                class="mt-2 font-medium text-xs text-green-600"
             >
                 Um novo link de verificação foi enviado para seu endereço de
                 e-mail.
@@ -120,7 +120,7 @@ const form = useForm({
                 leave-active-class="transition ease-in-out"
                 leave-to-class="opacity-0"
             >
-                <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">
+                <p v-if="form.recentlySuccessful" class="text-xs text-gray-600">
                     Salvou !
                 </p>
             </Transition>

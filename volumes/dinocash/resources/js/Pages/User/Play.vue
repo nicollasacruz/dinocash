@@ -2,11 +2,11 @@
     <Head title="Jogar" />
 
     <UserLayouyt v-slot="{ wallet }">
-        <div class="p-2 lg:px-16 h-full">
+        <div class="p-4 lg:px-20 h-full">
             <div class="text-5xl font-extrabold text-verde font-menu my-4">
                 Como jogar
             </div>
-            <div class="text-sm sm:text-lg lg:text-[1.2rem] mb-1">
+            <div class="text-lg sm:text-lg lg:text-[1rem] mb-1">
                 <div class="text-verde font-bold mb-3">
                     Para celulares ou tablets
                 </div>
@@ -24,7 +24,7 @@
                     seta para cima em seu teclado
                 </div>
                 
-                <div class="mt-3">
+                <div class="mt-3 text-sm">
                     O seu lucro será contabilizado após andar no mínimo <br />
                     500 metros, a onde a tela ficará a noite. Você pode <br />
                     encerrar a sua aposta a qualquer momento clicando <br />
@@ -46,7 +46,7 @@
                     v-if="page.props.auth.user.freespin * 1 == 0"
                 />
                 <button
-                    class="user-button mt-4 md:mt-0"
+                    class="user-button mt-4 md:mt-0 mx-auto"
                     @click="startGame"
                     :disabled="loading || !amount"
                 >

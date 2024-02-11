@@ -98,7 +98,7 @@
                 <img
                     :src="DinoTrofeu"
                     alt="dinoLogo"
-                    class="max-w-[210px]  mt-auto absolute bottom-0"
+                    class="shrink-image max-w-[210px]  mt-auto absolute bottom-0"
                 />
             </div>
         </div>

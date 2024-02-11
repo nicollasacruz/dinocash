@@ -30,20 +30,20 @@ const drawer = ref(false);
                     class="drawer-toggle"
                 />
 
-                <div class="drawer-side lg:w-96">
+                <div class="drawer-side lg:w-96 ">
                     <label
                         for="my-drawer"
                         aria-label="close sidebar"
                         class="drawer-overlay"
                     ></label>
                     <ul
-                        class="menu py-4 lg:w-96 min-h-full bg-[#212121] text-white relative"
+                        class="menu py-4 lg:w-96 min-h-full !bg-[#17101F] text-white relative"
                     >
                         <x-mark-icon
                             class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
                             @click="drawer = !drawer"
                         />
-                        <UserDrawer :wallet="totalWallet" class="mt-3" />
+                        <UserDrawer :wallet="totalWallet" class="mt-3 bg-[#17101F]" />
                     </ul>
                 </div>
             </div>
@@ -67,15 +67,15 @@ const drawer = ref(false);
                         class="col-span-1 xl:col-span-10 xl:col-start-2 flex flex-col"
                     >
                         <div
-                            class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-8 user-height"
+                            class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-6 user-height "
                         >
                             <UserDrawer
                                 :wallet="totalWallet"
                                 @close="drawer = false"
-                                class="hidden lg:block"
+                                class="hidden lg:block lg:border border-roxo"
                             />
                             <div
-                                class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
+                                class="bg-[#17101F] lg:border border-roxo text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
                             >
                                 <slot :wallet="totalWallet" />
                             </div>
@@ -94,9 +94,9 @@ const drawer = ref(false);
     }
 }
 .user-height {
-    height: calc(100vh - 110px);
+    height: calc(100vh - 120px);
     @media (min-width: 1024px) {
-        height: calc(100vh - 100px);
+        height: calc(100vh - 90px);
     }
 }
 .font-lighter {
