@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router } from "@inertiajs/vue3";
-import { ref, defineProps, computed, watch } from "vue";
+import { Head, Inertia } from "@inertiajs/inertia-vue3";
+import { ref, defineProps, computed, watch, onMounted } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
 import PaymentsTable from "@/Components/PaymentsTable.vue";
@@ -26,12 +26,10 @@ const columns = computed(() =>
         { label: "Status", key: "type" },
       ]
 );
-
-const props = defineProps(["affiliates", "affiliatesWithdrawsToday", "affiliatesWithdrawsList"]);
-const { affiliates, affiliatesWithdrawsToday, affiliatesWithdrawsList } = props;
-
-const paymentsRow = props.affiliatesWithdrawsList
-  ? props.affiliatesWithdrawsList.map((payment) => {
+const { affiliates, affiliatesWithdrawsToday, affiliatesWithdrawsList } =
+  defineProps(["affiliates", "affiliatesWithdrawsToday", "affiliatesWithdrawsList"]);
+const paymentsRow = affiliatesWithdrawsList
+  ? affiliatesWithdrawsList.map((payment) => {
       return {
         ...payment,
         name: payment.user.name,
@@ -56,12 +54,9 @@ const statusQuery = ref(initialStatus);
 watchEffect(() => {
   debounce((searchValue, statusValue) => {
     try {
-      router.get(
+      Inertia.get(
         route("admin.afiliados"),
-        { email: searchValue, status: statusValue },
-        {
-          preserveState: true,
-        }
+        { email: searchValue, status: statusValue }
       );
     } catch (error) {
       console.error("Erro na pesquisa:", error);
@@ -70,6 +65,7 @@ watchEffect(() => {
 }, { flush: 'sync' });
 
 </script>
+
 
 <template>
   <Head title="Admin Afiliados" />
@@ -121,7 +117,7 @@ watchEffect(() => {
       <div class="flex gap-x-5">
         <TextBox
           label="total de saques hoje"
-          :value="toBRL(props.affiliatesWithdrawsToday)"
+          :value="toBRL(affiliatesWithdrawsToday)"
           value-text="text-center text-red-500"
         />
       </div>
@@ -129,11 +125,11 @@ watchEffect(() => {
     <affiliates-table
       v-if="selectedTab === 1"
       :columns="columns"
-      :rows="props.affiliates.data"
+      :rows="affiliates.data"
     />
     <payments-table v-else :columns="columns" :rows="paymentsRow" />
     <Paginator
-      :data="selectedTab === 1 ? props.affiliates : paymentsRow"
+      :data="selectedTab === 1 ? affiliates : paymentsRow"
       class="mt-4"
     />
   </AuthenticatedLayout>
