@@ -6,9 +6,7 @@ import TextBox from "@/Components/TextBox.vue";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
 import PaymentsTable from "@/Components/PaymentsTable.vue";
 import Paginator from "@/Components/Paginator.vue";
-import axios from "axios";
 import debounce from "lodash/debounce";
-import Checkbox from "@/Components/Checkbox.vue";
 import { watchEffect } from "vue";
 
 const selectedTab = ref(1);
@@ -28,10 +26,12 @@ const columns = computed(() =>
         { label: "Status", key: "type" },
       ]
 );
-const { affiliates, affiliatesWithdrawsToday, affiliatesWithdrawsList } =
-  defineProps(["affiliates", "affiliatesWithdrawsToday", "affiliatesWithdrawsList"]);
-const paymentsRow = affiliatesWithdrawsList
-  ? affiliatesWithdrawsList.map((payment) => {
+
+const props = defineProps(["affiliates", "affiliatesWithdrawsToday", "affiliatesWithdrawsList"]);
+const { affiliates, affiliatesWithdrawsToday, affiliatesWithdrawsList } = props;
+
+const paymentsRow = props.affiliatesWithdrawsList
+  ? props.affiliatesWithdrawsList.map((payment) => {
       return {
         ...payment,
         name: payment.user.name,
@@ -46,6 +46,7 @@ const toBRL = (value) => {
     currency: "BRL",
   });
 };
+
 const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
 const initialStatus = urlParams.get("status") || "all";
@@ -120,7 +121,7 @@ watchEffect(() => {
       <div class="flex gap-x-5">
         <TextBox
           label="total de saques hoje"
-          :value="toBRL(affiliatesWithdrawsToday)"
+          :value="toBRL(props.affiliatesWithdrawsToday)"
           value-text="text-center text-red-500"
         />
       </div>
@@ -128,11 +129,11 @@ watchEffect(() => {
     <affiliates-table
       v-if="selectedTab === 1"
       :columns="columns"
-      :rows="affiliates.data"
+      :rows="props.affiliates.data"
     />
     <payments-table v-else :columns="columns" :rows="paymentsRow" />
     <Paginator
-      :data="selectedTab === 1 ? affiliates : paymentsRow"
+      :data="selectedTab === 1 ? props.affiliates : paymentsRow"
       class="mt-4"
     />
   </AuthenticatedLayout>
