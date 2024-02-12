@@ -9,12 +9,12 @@
             >
                 <bars3-icon
                     @click="emit('toggle')"
-                    class="w-7 sm:w-8 sm:h-8 cursor-pointer fill-white lg:hidden ml-3"
+                    class="w-6 min-w-[20px] sm:w-8 sm:h-8 cursor-pointer fill-white lg:hidden ml-1 lg:ml-3 mr-3"
                 />
-                <img class="h-5 sm:h-10 hidden lg:block" :src="DinoLogo" />
+                <img class="h-5 sm:h-10 lg:block" :src="DinoLogo" />
             </div>
             <div
-                class="flex sm:flex-1 justify-end gap-x-1 sm:gap-x-2 lg:col-end-11 xl:col-end-12 pr-8"
+                class="flex sm:flex-1 items-center justify-end gap-x-1 sm:gap-x-2 lg:col-end-11 xl:col-end-12 pr-3"
             >
                 <div
                     class="bg-verde relative lg:flex justify-center items-center rounded font-bold sm:text-md hidden h-9 text-roxo"
@@ -29,17 +29,22 @@
                     @pointerup="bonusActive = false"
                     @mouseover="bonusActive = true"
                     @mouseleave="bonusActive = false"
-                    class="text-sm font-bold text-verde p-1 sm:px-3 rounded flex justify-center items-center"
+                    class="text-sm sm:text-sm font-bold text-verde p-1 sm:px-3 rounded flex justify-center items-center"
                 >
                     {{ toBRL(money) }}
                 </div>
                 <Link class="" :href="route('user.deposito')">
                     <WalletIcon
-                        class="w-7 sm:w-7 mt-[6px] lg:mt-1 -ml-1 mr-5 lg:-ml-5 fill-white"
+                        class="w-5 sm:w-7 lg:mt-1 -ml-2 lg:-ml-5 fill-white"
                     />
                 </Link>
+                <Link class="font-bold mr-2 ml-1 lg:ml-0 lg:mr-0 text-xs lg:text-base" :href="route('user.deposito')">
+                    <div>
+                        DEPOSITAR
+                    </div>
+                </Link>
                 <Link class="" :href="route('logout')" method="post">
-                    <img class="w-7 sm:w-7 mt-2" :src="leave" />
+                    <img class="w-5 sm:w-7 mt-2" :src="leave" />
                 </Link>
             </div>
         </div>
@@ -51,14 +56,14 @@
         <div class="flex gap-x-3">
             <Link :href="route('login')">
                 <div
-                    class="user-button py-2 px-5 lg:text-base lg:py-1 items-center flex"
+                    class="user-button py-2 px-5 lg:px-10 lg:text-base lg:py-3 items-center flex"
                 >
                     Login
                 </div>
             </Link>
             <Link :href="route('register')">
                 <div
-                    class="user-button py-2 px-5 lg:text-base lg:py-1 items-center flex"
+                    class="user-button py-2 px-5 lg:px-10 lg:text-base lg:py-3 items-center flex"
                 >
                     Registrar
                 </div>
