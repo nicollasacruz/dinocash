@@ -62,7 +62,6 @@ watchEffect(() => {
       console.error("Erro na pesquisa:", error);
     }
   }, 700)(searchQuery.value, statusQuery.value);
-  router.reload();
 }, { flush: 'sync' });
 
 
