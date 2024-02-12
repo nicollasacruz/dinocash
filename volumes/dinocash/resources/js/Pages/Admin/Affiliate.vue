@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Inertia } from "@inertiajs/inertia-vue3";
 import { ref, defineProps, computed, watch, onMounted } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
@@ -8,6 +7,7 @@ import PaymentsTable from "@/Components/PaymentsTable.vue";
 import Paginator from "@/Components/Paginator.vue";
 import debounce from "lodash/debounce";
 import { watchEffect } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const selectedTab = ref(1);
 const columns = computed(() =>
@@ -54,7 +54,7 @@ const statusQuery = ref(initialStatus);
 watchEffect(() => {
   debounce((searchValue, statusValue) => {
     try {
-      Inertia.get(
+      router.get(
         route("admin.afiliados"),
         { email: searchValue, status: statusValue }
       );
@@ -62,7 +62,10 @@ watchEffect(() => {
       console.error("Erro na pesquisa:", error);
     }
   }, 700)(searchQuery.value, statusQuery.value);
+  router.reload();
 }, { flush: 'sync' });
+
+
 
 </script>
 
