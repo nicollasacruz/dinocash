@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { ref, defineProps, computed, watch, onMounted } from "vue";
+import { Head, router } from "@inertiajs/vue3";
+import { ref, defineProps, computed, watch } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import AffiliatesTable from "@/Components/AffiliatesTable.vue";
 import PaymentsTable from "@/Components/PaymentsTable.vue";
 import Paginator from "@/Components/Paginator.vue";
+import axios from "axios";
 import debounce from "lodash/debounce";
+import Checkbox from "@/Components/Checkbox.vue";
 import { watchEffect } from "vue";
-import { router } from "@inertiajs/vue3";
 
 const selectedTab = ref(1);
 const columns = computed(() =>
@@ -44,7 +46,6 @@ const toBRL = (value) => {
     currency: "BRL",
   });
 };
-
 const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
 const initialStatus = urlParams.get("status") || "all";
@@ -52,22 +53,21 @@ const searchQuery = ref(initialEmail);
 const statusQuery = ref(initialStatus);
 
 watchEffect(() => {
-  debounce((searchValue, statusValue) => {
+  debounce(() => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: searchValue, status: statusValue }
+        { email: searchQuery.value, status: statusQuery.value },
+        {
+          preserveState: true,
+        }
       );
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-  }, 700)(searchQuery.value, statusQuery.value);
-}, { flush: 'sync' });
-
-
-
+  }, 700)();
+});
 </script>
-
 
 <template>
   <Head title="Admin Afiliados" />
