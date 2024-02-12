@@ -34,7 +34,9 @@
                     {{ toBRL(money) }}
                 </div>
                 <Link class="" :href="route('user.deposito')">
-                    <WalletIcon class="w-7 sm:w-7 mt-[6px] lg:mt-1 -ml-1 mr-5 lg:-ml-5 fill-white" />
+                    <WalletIcon
+                        class="w-7 sm:w-7 mt-[6px] lg:mt-1 -ml-1 mr-5 lg:-ml-5 fill-white"
+                    />
                 </Link>
                 <Link class="" :href="route('logout')" method="post">
                     <img class="w-7 sm:w-7 mt-2" :src="leave" />
@@ -49,14 +51,14 @@
         <div class="flex gap-x-3">
             <Link :href="route('login')">
                 <div
-                    class="user-button lg:text-base lg:py-1 items-center flex"
+                    class="user-button py-2 px-5 lg:text-base lg:py-1 items-center flex"
                 >
                     Login
                 </div>
             </Link>
             <Link :href="route('register')">
                 <div
-                    class="user-button lg:text-base lg:py-1 items-center flex"
+                    class="user-button py-2 px-5 lg:text-base lg:py-1 items-center flex"
                 >
                     Registrar
                 </div>
