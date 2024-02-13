@@ -31,19 +31,19 @@
                 </Link>
 
                 <div
-                    @pointerdown="bonusActive = true"
-                    @pointerup="bonusActive = false"
-                    @mouseover="bonusActive = true"
-                    @mouseleave="bonusActive = false"
-                    class="text-sm sm:text-sm font-bold text-verde p-1 sm:px-3 rounded-full border-verde flex justify-center items-center"
+                    @pointerdown="bonusActive = false"
+                    @pointerup="bonusActive = true"
+                    @mouseover="bonusActive = false"
+                    @mouseleave="bonusActive = true"
+                    class="text-sm sm:text-sm font-bold text-verde p-1 sm:px-3 rounded-full border-2 border-verde flex justify-center items-center"
                 >
                 {{ toBRL(money) }}
                 <WalletIcon
-                    class="w-3 sm:w-4 lg:mt-1 -mr-2 lg:-mr-5 fill-white"
+                    class="w-4 sm:w-4 lg:mt-1 -mr-2 lg:-mr-5 fill-white"
                 />
                 </div>
                 <Link class="" :href="route('logout')" method="post">
-                    <img class="w-5 sm:w-7 mt-2" :src="leave" />
+                    <img class="w-5 sm:w-7 mt-2 mr-2" :src="leave" />
                 </Link>
             </div>
         </div>
