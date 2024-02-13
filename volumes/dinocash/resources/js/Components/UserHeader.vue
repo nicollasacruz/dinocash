@@ -24,6 +24,12 @@
                     </div>
                 </div>
 
+                <Link class="font-bold ml-2 mr-1 lg:mr-0 lg:ml-0 text-xs lg:text-base rounded-md border-verde" :href="route('user.deposito')">
+                    <div>
+                        DEPOSITAR
+                    </div>
+                </Link>
+
                 <div
                     @pointerdown="bonusActive = true"
                     @pointerup="bonusActive = false"
@@ -33,16 +39,9 @@
                 >
                 {{ toBRL(money) }}
                 <WalletIcon
-                    class="w-3 sm:w-4 lg:mt-1 -ml-2 lg:-ml-5 fill-white"
+                    class="w-3 sm:w-4 lg:mt-1 -mr-2 lg:-mr-5 fill-white"
                 />
                 </div>
-                <Link class="" :href="route('user.deposito')">
-                </Link>
-                <Link class="font-bold mr-2 ml-1 lg:ml-0 lg:mr-0 text-xs lg:text-base" :href="route('user.deposito')">
-                    <div>
-                        DEPOSITAR
-                    </div>
-                </Link>
                 <Link class="" :href="route('logout')" method="post">
                     <img class="w-5 sm:w-7 mt-2" :src="leave" />
                 </Link>
