@@ -32,6 +32,14 @@ use Inertia\Inertia;
 |
 */
 
+Route::fallback(function () {
+    return redirect()->route('homepage');
+});
+
+Route::get('/undefined', function () {
+    return redirect()->back();
+});
+
 Route::get('/', function () {
     $userIdLogado = Auth::id();
 
