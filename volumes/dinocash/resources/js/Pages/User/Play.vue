@@ -7,9 +7,6 @@
                 Como jogar
             </div>
             <div class="text-lg sm:text-lg lg:text-[1rem] mb-1">
-                <div class="text-verde font-bold mb-3 lg:hidden">
-                    Para celulares ou tablets
-                </div>
                 <div class="lg:hidden">
                     - Para iniciar o game aperte em qualquer lugar da tela.
                 </div>
@@ -17,13 +14,12 @@
                     - Para pular os cactos, clique com o dedo sobre a tela.
                 </div>
 
-                <div class="text-verde font-bold my-3 hidden lg:block">Para computadores:</div>
                 <div>- Para iniciar o game aperte a barra de espaço.</div>
                 <div class="hidden lg:block">
                     - Para pular os cactos utilize a barra de espaço ou <br />
                     seta para cima em seu teclado
                 </div>
-                
+
                 <div class="mt-3 text-sm hidden lg:block">
                     O seu lucro será contabilizado após andar no mínimo <br />
                     500 metros, a onde a tela ficará a noite. Você pode <br />
@@ -31,36 +27,18 @@
                     no botão de saque que ficará no topo do jogo.
                 </div>
             </div>
-            <!-- <div
-                class="text-center text-lg sm:text-xl font-bold mb-1 lg:hidden"
-            >
-                Saldo disponível: {{ toBRL(wallet) }}
-            </div> -->
             <div class="flex flex-col md:flex-row justify-start my-5">
-                <input
-                    type="text"
-                    class="max-w-lg mr-3 user-input"
-                    placeholder="Digite o valor da aposta"
-                    v-model="amount"
-                    @input="formatAmount"
-                    v-if="page.props.auth.user.freespin * 1 == 0"
-                />
-                <button
-                    class="user-button mt-4 md:mt-0 mx-auto"
-                    @click="startGame"
-                    :disabled="loading || !amount"
-                >
+                <input type="text" class="max-w-lg mr-3 user-input" placeholder="Digite o valor da aposta" v-model="amount"
+                    @input="formatAmount" v-if="page.props.auth.user.freespin * 1 == 0" />
+                <button class="user-button mt-4 md:mt-0 mx-auto" @click="startGame" :disabled="loading || !amount">
                     <div v-if="loading">
                         <span class="loading loading-spinner loading-sm"></span>
                     </div>
                     <div v-else>Jogar</div>
                 </button>
-                <span
-                    v-if="page.props.auth.user.freespin"
-                    class="ml-2 text-lg text-red-500 font-bold my-auto"
-                    >Você tem {{ page.props.auth.user.freespin }} rodadas
-                    grátis!</span
-                >
+                <span v-if="page.props.auth.user.freespin" class="ml-2 text-lg text-red-500 font-bold my-auto">Você tem {{
+                    page.props.auth.user.freespin }} rodadas
+                    grátis!</span>
             </div>
             <div class="text-sm">
                 Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}
@@ -69,33 +47,18 @@
                 Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}
             </div>
 
-            <GameCluster
-                :amount="userId"
-                :start="isRunning"
-                v-show="isRunning"
-                :viciosidade="viciosidade"
-                :isAffiliate="isAffiliate"
-                @end-game="handleEndGame"
-                @finish-game="handleFinishGame"
-                :active="isRunning"
-                :height="clientHeight"
-                :width="clientWidth"
-            />
+            <GameCluster :amount="userId" :start="isRunning" v-show="isRunning" :viciosidade="viciosidade"
+                :isAffiliate="isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
+                :height="clientHeight" :width="clientWidth" />
         </div>
-        <BaseModal
-            v-if="endGame || finishGame"
-            :score="score"
-            v-model="endGame"
-        >
+        <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
             <div v-if="endGame" class="text-center text-2xl">
                 Você andou {{ score }} metros!
             </div>
             <div class="flex justify-center">
-                <button
-                    v-if="endGame"
+                <button v-if="endGame"
                     class="mx-auto mt-5 py-2 px-10 bg-verde-escuro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
-                    @click="handleButtonClick()"
-                >
+                    @click="handleButtonClick()">
                     OK
                 </button>
             </div>
@@ -154,7 +117,7 @@ async function fetchStore() {
         if (amount.value > page.props.settings.maxAmountPlay) {
             toast.error(
                 "Valor não pode ser maior que " +
-                    toBRL(page.props.settings.maxAmountPlay)
+                toBRL(page.props.settings.maxAmountPlay)
             );
             return;
         }
