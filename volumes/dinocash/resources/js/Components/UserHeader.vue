@@ -27,7 +27,7 @@
                     @pointerup="bonusActive = true"
                     @mouseover="bonusActive = false"
                     @mouseleave="bonusActive = true"
-                    class="text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 rounded-full border-2 border-verde flex justify-center items-center">
+                    class="text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 lg:pr-6 rounded-full border-2 border-verde flex justify-center items-center">
                     
                     {{ toBRL(money) }}
 
