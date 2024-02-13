@@ -1,11 +1,11 @@
 <template>
     <Head title="Perfil" />
     <UserLayout>
-        <div class="lg:p-4 lg:px-20 lg:pt-4 p-3">
-            <div class="text-5xl text-verde font-extrabold font-menu">
+        <div class="lg:p-4 lg:px-20 lg:pt-4 p-4">
+            <div class="text-5xl mb-1 text-verde font-extrabold font-menu">
                 Perfil
             </div>
-            <div class="text-xs">
+            <div class="text-sm lg:text-xs">
                 Mantenha as informações da sua conta sempre atualizadas
             </div>
             <UpdateProfileInformationForm

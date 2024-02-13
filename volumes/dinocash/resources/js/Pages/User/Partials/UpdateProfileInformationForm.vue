@@ -28,9 +28,9 @@ const form = useForm({
 <template>
     <form
         @submit.prevent="form.patch(route('user.update'))"
-        class="mt-3 space-y-3 w-full"
+        class="mt-3 lg:mt-4 space-y-3 w-full"
     >
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 lg:gap-y-2 w-full">
             <div>
                 <div class="ml-3 text-xs">Nome</div>
                 <input
@@ -110,7 +110,7 @@ const form = useForm({
         </div>
 
         <div class="flex items-center gap-4">
-            <button class="user-button" :disabled="form.processing">
+            <button class="user-button lg:py-2 mt-3 lg:mt-1 text-2xl" :disabled="form.processing">
                 Salvar
             </button>
 

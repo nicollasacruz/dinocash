@@ -89,7 +89,6 @@ const drawer = ref(false);
                         ? $page.props.auth.user.name
                         : ''
                 "
-                class="py-2"
             />
             <div class="user-height">
                 <UserDrawer

@@ -87,7 +87,7 @@
                                         i < 3 ? 'text-verde' : '')
                                     "
                                 >
-                                    Premio
+                                    {{ getPrize(i) }}
                                 </div>
                             </template>
                         </div>
@@ -137,4 +137,19 @@ const windowWidth = ref(window.innerWidth);
 window.addEventListener("resize", (valu) => {
     windowWidth.value = window.innerWidth;
 });
+function toBRL(value) {
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+}
+function getPrize(i) {
+    switch (i) {
+        case 0: return toBRL(3000)
+        case 1: return toBRL(2000)
+        case 2: return toBRL(1000)
+        default: return '-'
+    }
+    
+}
 </script>
