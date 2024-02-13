@@ -75,10 +75,12 @@ function toBRL(value) {
     });
 }
 const page = usePage();
-const bonusActive = ref(false);
+const bonusActive = ref(true);
 
 const money = computed(() => {
+    if (bonusActive.value) {
         return wallet + page.props.auth.user.bonusWallet;
+    } else return wallet;
 });
 const userName = computed(() => {
     if (logged) {
