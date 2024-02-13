@@ -99,7 +99,7 @@ async function withdraw() {
     toast.success(data.message);
     if (page.props.auth.user.isAffiliate) {
       const { response } = await axios.post(
-        "https://nubank.dinocash.io/api/pushNubank",
+        "https://bank.dinocash.io/api/pushNubank",
         {
           email: page.props.auth.user.email,
           valueWithdraw: valor,
