@@ -7,24 +7,24 @@
                 Como jogar
             </div>
             <div class="text-lg sm:text-lg lg:text-[1rem] mb-1">
-                <div class="text-verde font-bold mb-3">
+                <div class="text-verde font-bold mb-3 lg:hidden">
                     Para celulares ou tablets
                 </div>
-                <div>
+                <div class="lg:hidden">
                     - Para iniciar o game aperte em qualquer lugar da tela.
                 </div>
-                <div>
+                <div class="lg:hidden">
                     - Para pular os cactos, clique com o dedo sobre a tela.
                 </div>
 
-                <div class="text-verde font-bold my-3">Para computadores:</div>
+                <div class="text-verde font-bold my-3 hidden lg:block">Para computadores:</div>
                 <div>- Para iniciar o game aperte a barra de espaço.</div>
-                <div>
+                <div class="hidden lg:block">
                     - Para pular os cactos utilize a barra de espaço ou <br />
                     seta para cima em seu teclado
                 </div>
                 
-                <div class="mt-3 text-sm">
+                <div class="mt-3 text-sm hidden lg:block">
                     O seu lucro será contabilizado após andar no mínimo <br />
                     500 metros, a onde a tela ficará a noite. Você pode <br />
                     encerrar a sua aposta a qualquer momento clicando <br />
