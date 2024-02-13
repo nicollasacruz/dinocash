@@ -29,14 +29,14 @@
                     @pointerup="bonusActive = false"
                     @mouseover="bonusActive = true"
                     @mouseleave="bonusActive = false"
-                    class="text-sm sm:text-sm font-bold text-verde p-1 sm:px-3 rounded flex justify-center items-center"
+                    class="text-sm sm:text-sm font-bold text-verde p-1 sm:px-3 rounded-full border-verde flex justify-center items-center"
                 >
-                    {{ toBRL(money) }}
+                {{ toBRL(money) }}
+                <WalletIcon
+                    class="w-3 sm:w-4 lg:mt-1 -ml-2 lg:-ml-5 fill-white"
+                />
                 </div>
                 <Link class="" :href="route('user.deposito')">
-                    <WalletIcon
-                        class="w-5 sm:w-7 lg:mt-1 -ml-2 lg:-ml-5 fill-white"
-                    />
                 </Link>
                 <Link class="font-bold mr-2 ml-1 lg:ml-0 lg:mr-0 text-xs lg:text-base" :href="route('user.deposito')">
                     <div>
