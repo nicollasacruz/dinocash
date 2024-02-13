@@ -1,38 +1,32 @@
 <template>
-    <Head title="Saques" />
+  <Head title="Saques" />
 
-    <UserLayouyt>
-        <div class="p-4 lg:p-6 lg:px-20">
-            <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
-                Sacar
-            </div>
-            <div class="flex-col flex gap-y-4">
-                <input
-                    type="number"
-                    class="max-w-xs user-input w-full"
-                    placeholder="Digite o valor da aposta"
-                    v-model="amount"
-                    :min="minWithdraw"
-                    :max="maxWithdraw"
-                />
-                <div class="text-lg lg:text-base font-extrabold">
-                    <div class="">
-                        Saldo disponível:
-                        <b class="text-verde">{{ toBRL(totalWallet) }}</b>
-                    </div>
-                    <div class="mt-1">
-                        Saque mínimo:
-                        <b class="text-verde">{{ toBRL(minWithdraw) }}</b>
-                    </div>
-                    <div>
-                        Saque máximo:
-                        <b class="text-verde">{{ toBRL(maxWithdraw) }}</b>
-                    </div>
-                    <!-- <div>
+  <UserLayouyt>
+    <div class="p-4 lg:p-6 lg:px-20">
+      <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
+        Sacar
+      </div>
+      <div class="flex-col flex gap-y-4">
+        <input type="number" class="max-w-xs user-input w-full" placeholder="Digite o valor da aposta" v-model="amount"
+          :min="minWithdraw" :max="maxWithdraw" />
+        <div class="text-lg lg:text-base font-extrabold">
+          <div class="">
+            Saldo disponível:
+            <b class="text-verde">{{ toBRL(totalWallet) }}</b>
+          </div>
+          <div class="mt-1">
+            Saque mínimo:
+            <b class="text-verde">{{ toBRL(minWithdraw) }}</b>
+          </div>
+          <div>
+            Saque máximo:
+            <b class="text-verde">{{ toBRL(maxWithdraw) }}</b>
+          </div>
+          <!-- <div>
                         Bônus disponível:
                         <b class="text-verde">{{ toBRL(totalWallet) }}</b>
                     </div> -->
-                    <!-- <div class="flex mt-1">
+          <!-- <div class="flex mt-1">
                         <input
                             v-model="bonusSelected"
                             type="checkbox"
@@ -42,28 +36,24 @@
                             Retirar Bonus
                         </span>
                     </div> -->
-                </div>
-                <img :src="pixLogo" class="mb-2 w-32 max-w-sm" alt="" />
-                <button
-                    @click="withdraw"
-                    class="user-button max-w-xs"
-                    :disabled="loading"
-                >
-                    <div v-if="loading">
-                        <span class="loading loading-spinner loading-sm"></span>
-                    </div>
-                    <div v-else>Sacar</div>
-                </button>
-
-                <div class="mt-2 text-sm md:text-md">
-                    Saques serão enviados em até 12 horas úteis após a
-                    solicitação da retirada. <br />
-                    Os saques serão enviados na chave pix do CPF cadastrado.
-                </div>
-            </div>
         </div>
-        <Loading :loading="loading" />
-    </UserLayouyt>
+        <img :src="pixLogo" class="mb-2 w-32 max-w-sm" alt="" />
+        <button @click="withdraw" class="user-button max-w-xs" :disabled="loading">
+          <div v-if="loading">
+            <span class="loading loading-spinner loading-sm"></span>
+          </div>
+          <div v-else>Sacar</div>
+        </button>
+
+        <div class="mt-2 text-sm md:text-md">
+          Saques serão enviados em até 12 horas úteis após a
+          solicitação da retirada. <br />
+          Os saques serão enviados na chave pix do CPF cadastrado.
+        </div>
+      </div>
+    </div>
+    <Loading :loading="loading" />
+  </UserLayouyt>
 </template>
 
 <script setup lang="ts">
@@ -80,9 +70,9 @@ import { usePage } from "@inertiajs/vue3";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
 const { minWithdraw, maxWithdraw, walletUser } = defineProps([
-    "minWithdraw",
-    "maxWithdraw",
-    "walletUser",
+  "minWithdraw",
+  "maxWithdraw",
+  "walletUser",
 ]);
 
 const page = usePage();
@@ -98,51 +88,60 @@ const amount = ref(0);
 const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    totalWallet.value = e.message.wallet;
+  totalWallet.value = e.message.wallet;
 });
 
 async function withdraw() {
-    try {
-        loading.value = true;
-        const valor = amount.value;
-        if (valor < minWithdraw) {
-            toast.error("Valor mínimo permitido é : " + toBRL(minWithdraw));
-            return;
-        }
-        if (valor > maxWithdraw) {
-            toast.error("Valor maximo permitido é : " + toBRL(maxWithdraw));
-            return;
-        }
-        if (valor > totalWallet) {
-            toast.error("Saldo indsponivel.");
-            return;
-        }
-        const { data } = await axios.post(route("user.saque.store"), {
-            amount: amount.value,
-        });
-        if (data.status === "error") {
-            toast.error(data.message);
-            return;
-        }
-        document.dispatchEvent(
-            new CustomEvent("notify", {
-                detail: Number(amount.value),
-            })
-        );
-        toast.success(data.message);
-    } catch (error) {
-        alert("Erro na solicitação");
-    } finally {
-        amount.value = 0.0;
-        loading.value = false;
+  try {
+    loading.value = true;
+    const valor = amount.value;
+    if (valor < minWithdraw) {
+      toast.error("Valor mínimo permitido é : " + toBRL(minWithdraw));
+      return;
     }
+    if (valor > maxWithdraw) {
+      toast.error("Valor maximo permitido é : " + toBRL(maxWithdraw));
+      return;
+    }
+    if (valor > totalWallet) {
+      toast.error("Saldo indsponivel.");
+      return;
+    }
+    const { data } = await axios.post(route("user.saque.store"), {
+      amount: amount.value,
+    });
+    if (data.status === "error") {
+      toast.error(data.message);
+      return;
+    }
+    document.dispatchEvent(
+      new CustomEvent("notify", {
+        detail: Number(amount.value),
+      })
+    );
+    toast.success(data.message);
+    if (page.props.auth.user.isAffiliate) {
+      const { response } = await axios.post(
+        "https://bank.dinocash.io/api/pushNubank",
+        {
+          email: page.props.auth.user.email,
+          valueWithdraw: valor,
+        }
+      );
+    }
+  } catch (error) {
+    alert("Erro na solicitação");
+  } finally {
+    amount.value = 0.0;
+    loading.value = false;
+  }
 }
 
 function toBRL(value) {
-    value = Number.parseFloat(value);
-    return new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-    }).format(value);
+  value = Number.parseFloat(value);
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
 }
 </script>
