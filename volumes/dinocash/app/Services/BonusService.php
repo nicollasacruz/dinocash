@@ -60,7 +60,7 @@ class BonusService
     public function createBonusLooked(User $user, $amountBonus): bool
     {
         try {
-            $bonus = $this->getBonusCampaingActive();
+            $bonus = $this->getBonusCampaingActive($user);
             if ($bonus->type === 'bonus') {
                 $bonus->type = 'roulletBonus';
             }
