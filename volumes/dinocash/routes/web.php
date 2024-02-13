@@ -41,14 +41,11 @@ Route::get('/', function () {
     $usuarioLogadoInserido = false;
 
     $rankings = GameHistory::select(['userId', 'distance'])
-        ->where('type', 'win')
-        ->whereHas('user', function ($query) {
-            $query->where('isAffiliate', false)
-                ->where('role', 'user');
-        })
-        ->orderBy('distance', 'desc')
-        ->limit(1000)
-        ->get();
+    ->where('type', 'win')
+    ->whereMonth('created_at', Carbon::now()->month)
+    ->orderBy('distance', 'desc')
+    ->limit(1000)
+    ->get();
 
     foreach ($rankings as $ranking) {
         if (count($rankedUsers) === 10) {
@@ -77,7 +74,7 @@ Route::get('/', function () {
         $position++;
     }
 
-    if (!$usuarioLogadoInserido && $userIdLogado && (!Auth::user()->hasRole('admin') || !Auth::user()->isAffiliate)) {
+    if (!$usuarioLogadoInserido && $userIdLogado) {
         $userLogado = User::find($userIdLogado);
         $emailLogado = $userLogado->name;
 
@@ -115,6 +112,7 @@ Route::get('/', function () {
         'wallet' => $wallet,
     ]);
 })->name('homepage');
+
 Route::get('termos-de-uso', function () {
     return Inertia::render('TermsUse');
 })->name('terms');
