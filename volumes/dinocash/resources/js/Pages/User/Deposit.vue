@@ -2,13 +2,13 @@
     <Head title="Depósitos" />
     <UserLayouyt>
         <div class="p-4 lg:p-6 lg:px-20">
-            <div class="text-5xl mb-5 text-verde font-extrabold font-menu">
+            <div class="text-5xl mb-7 text-verde font-extrabold font-menu">
                 Depositar
             </div>
             <div class="flex-col flex gap-y-4 text-base">
                 <input
                     type="number"
-                    class="max-w-xs user-input w-full"
+                    class="max-w-xs user-input w-full mb-2"
                     placeholder="Digite o valor da aposta"
                     v-model="amount"
                 />
@@ -26,7 +26,7 @@
                             toBRL(maxDeposit)
                         }}</b>
                     </div>
-                    <div class="flex mt-5">
+                    <div class="flex mt-2">
                         <input
                             v-model="bonusSelected"
                             type="checkbox"
@@ -38,10 +38,10 @@
                     </div>
                 </div>
 
-                <img :src="pixLogo" class="mb-2 w-32 max-w-sm" alt="pixLogo" />
+                <img :src="pixLogo" class="mb-2 w-44 lg:w-36 max-w-sm" alt="pixLogo" />
                 <button
                     @click="startDeposit"
-                    class="user-button"
+                    class="user-button mb-1 max-w-[280px] lg:max-w-xs"
                     :disabled="loading"
                 >
                     <div v-if="loading">
@@ -49,7 +49,7 @@
                     </div>
                     <div v-else>Depositar</div>
                 </button>
-                <div class="mt-2 lg:mt-2 text-sm md:text-md">
+                <div class="mt-1 text-base md font-semibold lg:font-normal lg:text-sm">
                     Após clicar em depositar, scaneie o QR Code que aparecerá na
                     tela com a câmera de seu celular em seu aplicativo bancário.
                     Os depósitos levam até 1 minuto para serem creditados à sua

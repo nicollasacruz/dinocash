@@ -43,10 +43,10 @@
                         </span>
                     </div> -->
                 </div>
-                <img :src="pixLogo" class="mb-2 w-32 max-w-sm" alt="" />
+                <img :src="pixLogo" class="mb-2 w-44 lg:w-36 max-w-sm" alt="" />
                 <button
                     @click="withdraw"
-                    class="user-button max-w-xs"
+                    class="user-button max-w-[280px] lg:max-w-xs"
                     :disabled="loading"
                 >
                     <div v-if="loading">
@@ -55,7 +55,7 @@
                     <div v-else>Sacar</div>
                 </button>
 
-                <div class="mt-2 text-sm md:text-md">
+                <div class="mt-1 text-base font-semibold lg:text-sm lg:font-normal">
                     Saques serão enviados em até 12 horas úteis após a
                     solicitação da retirada. <br />
                     Os saques serão enviados na chave pix do CPF cadastrado.

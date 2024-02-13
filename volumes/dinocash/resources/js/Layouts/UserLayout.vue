@@ -67,7 +67,7 @@ const drawer = ref(false);
                         class="col-span-1 xl:col-span-10 xl:col-start-2 flex flex-col"
                     >
                         <div
-                            class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-6 user-height "
+                            class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-5 user-height "
                         >
                             <UserDrawer
                                 :wallet="totalWallet"
@@ -94,7 +94,7 @@ const drawer = ref(false);
     }
 }
 .user-height {
-    height: calc(100vh - 120px);
+    height: calc(100vh - 70px);
     @media (min-width: 1024px) {
         height: calc(100vh - 90px);
     }

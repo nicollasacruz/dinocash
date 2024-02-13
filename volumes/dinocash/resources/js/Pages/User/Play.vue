@@ -46,7 +46,7 @@
                     v-if="page.props.auth.user.freespin * 1 == 0"
                 />
                 <button
-                    class="user-button mt-4 md:mt-0 mx-auto"
+                    class="user-button mt-4 md:mt-0 mx-auto lg:mx-0"
                     @click="startGame"
                     :disabled="loading || !amount"
                 >

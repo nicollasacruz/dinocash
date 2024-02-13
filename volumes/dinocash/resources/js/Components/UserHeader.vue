@@ -1,7 +1,7 @@
 <template>
     <template v-if="logged">
         <div
-            class="bg-[#150822] flex justify-between items-center h-16 py-2 lg:h-24 lg:py-6 px-1 sm:px-2 lg:grid lg:grid-cols-12"
+            class="bg-[#150822] flex justify-between items-center h-16 py-2 lg:h-20 lg:py-6 px-1 sm:px-2 lg:grid lg:grid-cols-12"
         >
             <div
                 v-if="logged"
@@ -11,7 +11,9 @@
                     @click="emit('toggle')"
                     class="w-6 min-w-[20px] sm:w-8 sm:h-8 cursor-pointer fill-white lg:hidden ml-1 lg:ml-3 mr-3"
                 />
-                <img class="h-5 sm:h-10 lg:block" :src="DinoLogo" />
+                <Link href="/" >
+                    <img class="h-5 logo sm:h-10 lg:block" :src="DinoLogo" />
+                </Link>
             </div>
             <div
                 class="flex sm:flex-1 items-center justify-end gap-x-1 sm:gap-x-2 lg:col-end-11 xl:col-end-12 pr-3"
@@ -38,13 +40,14 @@
                         class="w-5 sm:w-7 lg:mt-1 -ml-2 lg:-ml-5 fill-white"
                     />
                 </Link>
-                <Link class="font-bold mr-2 ml-1 lg:ml-0 lg:mr-0 text-xs lg:text-base" :href="route('user.deposito')">
-                    <div>
-                        DEPOSITAR
-                    </div>
+                <Link
+                    class="font-bold mr-2 ml-1 lg:ml-0 lg:mr-0 text-xs lg:text-base"
+                    :href="route('user.deposito')"
+                >
+                    <div>DEPOSITAR</div>
                 </Link>
                 <Link class="" :href="route('logout')" method="post">
-                    <img class="w-5 sm:w-7 mt-2" :src="leave" />
+                    <img class="w-5 sm:w-7" :src="leave" />
                 </Link>
             </div>
         </div>
@@ -106,3 +109,10 @@ const userName = computed(() => {
     } else return "";
 });
 </script>
+<style>
+.logo {
+    @media (min-width: 380px) {
+        height: 1.8rem;
+    }
+}
+</style>
