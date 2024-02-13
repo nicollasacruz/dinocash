@@ -78,9 +78,7 @@ const page = usePage();
 const bonusActive = ref(false);
 
 const money = computed(() => {
-    if (bonusActive.value) {
         return wallet + page.props.auth.user.bonusWallet;
-    } else return wallet;
 });
 const userName = computed(() => {
     if (logged) {
