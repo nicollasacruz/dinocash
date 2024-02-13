@@ -40,25 +40,7 @@
                     </span>
                 </div>
                 <div
-                    v-if="!!!$page?.props?.auth?.user?.id"
-                    class="w-full mt-2 lg:mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
-                >
-                    <Link
-                        class="mb-1 lg:mb-3 lp-button bg w-full lg:w-[220px] h-[65px]"
-                        :href="route('login')"
-                        >{{ __("auth.login") }}</Link
-                    >
-
-                    <Link
-                        class="mb-1 lg:mb-2 lp-button bg w-full lg:w-[220px] h-[65px]"
-                        :href="route('register')"
-                    >
-                        {{ __("auth.register") }}
-                    </Link>
-                </div>
-                <div
                     class="w-full mt-4 lg:mt-8 flex flex-col lg:flex-row items-center lg:justify-start gap-2 lg:gap-6"
-                    v-else
                 >
                     <Link
                         class="md:mb-4 lp-button bg w-full lg:w-[220px] h-[65px]"
