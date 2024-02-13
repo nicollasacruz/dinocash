@@ -3,7 +3,7 @@
 
     <UserLayouyt v-slot="{ wallet }">
         <div class="p-4 lg:px-20 h-full">
-            <div class="text-5xl font-extrabold text-verde font-menu my-4">
+            <div class="text-4xl font-extrabold text-verde font-menu my-4">
                 Como jogar
             </div>
             <div class="text-lg sm:text-lg lg:text-[1rem] mb-1">
@@ -57,7 +57,7 @@
             </div>
             <div class="flex justify-center">
                 <button v-if="endGame"
-                    class="mx-auto mt-5 py-2 px-10 bg-verde-escuro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+                    class="mx-auto mt-5 py-2 px-10 bg-verde rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
                     @click="handleButtonClick()">
                     OK
                 </button>
