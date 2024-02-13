@@ -1,7 +1,7 @@
 <template>
     <template v-if="logged">
         <div
-            class="bg-[#150822] flex justify-between items-center h-16 py-2 lg:h-20 lg:py-6 px-1 sm:px-2 lg:grid lg:grid-cols-12"
+            class="bg-[#150822] flex justify-between items-center min-h-[64px] py-2 lg:h-20 px-1 sm:px-2 lg:grid lg:grid-cols-12"
         >
             <div
                 v-if="logged"
