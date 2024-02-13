@@ -15,7 +15,7 @@
                     </div>
                 </div>
 
-                <Link class="font-bold ml-2 mr-1 lg:mr-0 lg:ml-0 text-xs lg:text-base rounded-md border-verde"
+                <Link class="font-bold ml-2 mr-1 lg:mr-0 lg:ml-0 text-xs lg:text-base text-red-700 rounded-md border border-red-700"
                     :href="route('user.deposito')">
                 <div>
                     DEPOSITAR
@@ -27,7 +27,7 @@
                     @pointerup="bonusActive = true"
                     @mouseover="bonusActive = false"
                     @mouseleave="bonusActive = true"
-                    class="text-sm sm:text-sm font-bold text-verde p-1 px-2 sm:px-3 rounded-full border-2 border-verde flex justify-center items-center">
+                    class="text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 rounded-full border-2 border-verde flex justify-center items-center">
                     
                     {{ toBRL(money) }}
 
