@@ -27,9 +27,9 @@
                     @pointerup="bonusActive = true"
                     @mouseover="bonusActive = false"
                     @mouseleave="bonusActive = true"
-                    class="select-none text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 lg:pr-6 rounded-full border-2 border-verde flex justify-center items-center">
+                    class="text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 lg:pr-6 rounded-full border-2 border-verde flex justify-center items-center">
                     
-                    {{ toBRL(money) }}
+                    <span class="select-none">{{ toBRL(money) }}</span>
 
                     <WalletIcon class="w-4 sm:w-4 lg:mt-1 -mr-2 lg:-mr-5 fill-white" />
                 </div>
