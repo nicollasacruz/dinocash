@@ -12,6 +12,7 @@ const page = usePage();
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
 const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
+const wallet = ref(page.props.auth.user.wallet * 1);
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
     totalWallet.value = e.message.wallet;
@@ -59,7 +60,7 @@ const drawer = ref(false);
                 <UserHeader
                     :logged="!!$page?.props?.auth?.user?.id"
                     @toggle="drawer = !drawer"
-                    :wallet="totalWallet"
+                    :wallet="wallet"
                     :name="$page.props.auth.user.name"
                 />
                 <div class="grid grid-cols-1 xl:grid-cols-12 flex-1">
