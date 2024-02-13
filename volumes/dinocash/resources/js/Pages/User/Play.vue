@@ -28,25 +28,9 @@
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-start my-5">
-<<<<<<< HEAD
-                <input
-                    type="text"
-                    class="max-w-lg mr-3 user-input"
-                    placeholder="Digite o valor da aposta"
-                    v-model="amount"
-                    @input="formatAmount"
-                    v-if="page.props.auth.user.freespin * 1 == 0"
-                />
-                <button
-                    class="user-button mt-4 md:mt-0 mx-auto lg:mx-0"
-                    @click="startGame"
-                    :disabled="loading || !amount"
-                >
-=======
                 <input type="text" class="max-w-lg mr-3 user-input" placeholder="Digite o valor da aposta" v-model="amount"
                     @input="formatAmount" v-if="page.props.auth.user.freespin * 1 == 0" />
                 <button class="user-button mt-4 md:mt-0 mx-auto" @click="startGame" :disabled="loading || !amount">
->>>>>>> 853bc56575e3e96e5920e3eaed73f506b7132160
                     <div v-if="loading">
                         <span class="loading loading-spinner loading-sm"></span>
                     </div>
