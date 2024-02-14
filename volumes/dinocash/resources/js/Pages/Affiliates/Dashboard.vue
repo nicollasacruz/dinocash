@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AffiliateLayout from "@/Layouts/AffiliateLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import CurrencyBox from "@/Components/CurrencyBox.vue";
 import TextBox from "@/Components/TextBox.vue";
 import { UserIcon } from "@heroicons/vue/24/solid";
@@ -72,9 +72,10 @@ interface ImportMetaEnv {
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
+const page = usePage();
 console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
-const link = "https://dinobet.vip/ref/" + affiliateLink;
+const link = page.props.domain + "/ref/" + affiliateLink;
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
