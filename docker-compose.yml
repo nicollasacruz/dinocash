@@ -28,6 +28,7 @@ services:
       - ./volumes/dinocash:/var/www/html:rw
     networks:
       - rede_dino_test
+      - database
 
 networks:
   rede_dino_test:

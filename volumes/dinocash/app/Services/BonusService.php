@@ -60,7 +60,7 @@ class BonusService
     public function createBonusLooked(User $user, $amountBonus): bool
     {
         try {
-            $bonus = $this->getBonusCampaingActive();
+            $bonus = $this->getBonusCampaingActive($user);
             if ($bonus->type === 'bonus') {
                 $bonus->type = 'roulletBonus';
             }
@@ -88,7 +88,7 @@ class BonusService
     public function addFreeSpin(User $user, int $value): bool
     {
         try {
-            $bonus = $this->getBonusCampaingActive();
+            $bonus = $this->getBonusCampaingActive($user);
             $settingsAmountFreeSpin = Setting::first()->amountFreeSpin;
             if ($bonus->type === 'bonus') {
                 $bonus->type = 'freespin';
@@ -101,14 +101,14 @@ class BonusService
 
             return true;
         } catch (Exception $e) {
-            Log::error('Erro de createFreeSpin - ' . $e->getMessage());
+            Log::error('Erro de createFreeSpin - ' . $e->getMessage() . '    -   ' . $e->getTraceAsString());
             return false;
         }
     }
 
-    public function getBonusCampaingActive(): BonusCampaign
+    public function getBonusCampaingActive(User $user): BonusCampaign
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find($user->id);
 
         $bonus = $user->bonusCampaings->where('status', 'active')->first();
 
