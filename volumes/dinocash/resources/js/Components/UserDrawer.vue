@@ -31,15 +31,16 @@
         </div>
 
         <div class="gap-y-2 px-1 lg:px-2 flex flex-col text-white font-bold">
-            <Link
-                v-for="link in routes"
-                class="drawer-button flex items-center pl-5"
-                :href="route(link.route)"
-                @click="emit('close')"
-            >
-                <img class="mr-2 w-6" :src="link.icon" />
-                <a>{{ link.label }}</a>
-            </Link>
+            <div v-for="(link, i) in routes" :key="i">
+                <Link
+                    class="drawer-button flex items-center pl-5"
+                    :href="route(link.route)"
+                    @click="emit('close')"
+                >
+                    <img class="mr-2 w-6" :src="link.icon" />
+                    <a>{{ link.label }}</a>
+                </Link>
+            </div>
             <template v-if="$page.props.auth.user?.role === 'admin'">
                 <Link
                     class="drawer-button flex"

@@ -1,7 +1,7 @@
 <template>
     <Head title="Jogar" />
 
-    <UserLayouyt v-slot="{ wallet }">
+    <UserLayout v-slot="{ wallet }">
         <div class="p-4 lg:px-20 h-full">
             <div class="text-4xl font-extrabold text-verde font-menu my-4">
                 Como jogar
@@ -47,7 +47,7 @@
                 Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}
             </div>
 
-            <GameCluster :amount="userId" :start="isRunning" v-show="isRunning" :viciosidade="viciosidade"
+            <GameCluster :amount="userId" :start="isRunning" v-if="isRunning" :viciosidade="viciosidade"
                 :isAffiliate="isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
                 :height="clientHeight" :width="clientWidth" />
         </div>
@@ -63,12 +63,12 @@
                 </button>
             </div>
         </BaseModal>
-    </UserLayouyt>
+    </UserLayout>
 </template>
 
 <script setup lang="ts">
 import { Head, router } from "@inertiajs/vue3";
-import UserLayouyt from "../..//Layouts/UserLayout.vue";
+import UserLayout from "../..//Layouts/UserLayout.vue";
 import BaseModal from "../../Components/BaseModal.vue";
 import GameCluster from "../../Components/GameCluster.vue";
 import { computed, ref, toRef } from "vue";

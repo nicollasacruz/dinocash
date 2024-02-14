@@ -75,7 +75,7 @@ const keyupCallback = ({ keyCode }) => {
         game.onInput("stop-duck");
     }
 };
-function startGame() {
+function setListeners() {
     // @ts-ignore
     document.addEventListener("endGame", ({ detail }) => {
         emit("endGame", detail);
@@ -93,7 +93,6 @@ function startGame() {
     document.addEventListener("touchend", touchEndCallback);
     document.addEventListener("keydown", keydownCallback);
     document.addEventListener("keyup", keyupCallback);
-    game.start().catch(console.error);
     document.addEventListener(
         "touchmove",
         function (e) {
@@ -103,23 +102,20 @@ function startGame() {
         },
         { passive: false }
     );
-    const canvas = document.getElementById("canvasContainer");
-    canvas.style.display = "flex";
 }
 onUnmounted(() => {
     // removeKeys();
 });
 
-watch(
-    () => props.active,
-    () => {
-        if (props.active) {
-            startGame();
-        }
-    }
-);
 onMounted(() => {
     const canvas = document.getElementById("canvasContainer");
     canvas.style.display = "none";
-})
+    setListeners();
+    document.addEventListener("loaded", () => {
+        console.log("loaded");
+        const canvas = document.getElementById("canvasContainer");
+        canvas.style.display = "flex";
+        game.start().catch(console.error);
+    });
+});
 </script>

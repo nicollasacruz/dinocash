@@ -98,6 +98,11 @@ export default class DinoGame extends GameRunner {
         ]);
         this.spriteImage = spriteImage;
         this.spriteImageData = getImageData(spriteImage);
+
+        const eventoModificacao = new CustomEvent("loaded");
+        document.dispatchEvent(eventoModificacao);
+        
+        // this.endGame();
     }
     createCanvas() {
         const { width, height } = this;
@@ -189,13 +194,13 @@ export default class DinoGame extends GameRunner {
         const div = this.createText();
         canvasContainer.appendChild(image);
         const wrapper = document.createElement("div");
-        wrapper.id = 'canvas-wrapper'
+        wrapper.id = "canvas-wrapper";
         wrapper.appendChild(canvas);
-        wrapper.style.position = 'relative';
+        wrapper.style.position = "relative";
         canvasContainer.appendChild(wrapper);
         canvasContainer.appendChild(div);
         app.prepend(canvasContainer);
-        this.addSoundOff()
+        this.addSoundOff();
 
         return canvas;
     }
@@ -385,7 +390,7 @@ export default class DinoGame extends GameRunner {
         });
         this.preload();
         this.start();
-        this.addSoundOff()
+        this.addSoundOff();
         const canvasContainer = document.getElementById("canvasContainer");
         canvasContainer.style.display = "flex";
         const som = playSound("musica");
@@ -399,20 +404,20 @@ export default class DinoGame extends GameRunner {
             }
         }, 2000);
     }
-    addSoundOff(){
-        const offsoundImg = new Image
-        offsoundImg.src = soundOff
-        const div = document.createElement("div")
-        div.appendChild(offsoundImg)
+    addSoundOff() {
+        const offsoundImg = new Image();
+        offsoundImg.src = soundOff;
+        const div = document.createElement("div");
+        div.appendChild(offsoundImg);
         div.style.position = "absolute";
         // div.style.backgroundColor = "#FFF"
         div.style.top = "20px";
         div.style.right = "10px";
-        div.style.zIndex = '9999';
+        div.style.zIndex = "9999";
         div.onclick = () => {
-            this.state.som.stop() 
-            this.state.som = null
-        }
+            this.state.som.stop();
+            this.state.som = null;
+        };
         const canvasContainer = document.getElementById("canvas-wrapper");
         canvasContainer.style.position = "relative";
         canvasContainer.appendChild(div);
