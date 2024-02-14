@@ -2,12 +2,15 @@
     <div class="rounded-xl p-2 lg:w-72 bg-[#17101e]">
         <div class="flex flex-col items-center mb-3 lg:ml-5">
             <div class="relative">
-                <img
-                    class="mr-1 lg:mr-3 rounded mt-1"
-                    width="130"
-                    height="130"
-                    :src="userIicon"
-                />
+                <div @click="checkAfiliate">
+                    <img
+                        class="mr-1 lg:mr-3 rounded mt-1"
+                        width="130"
+                        height="130"
+                        :src="userIicon"
+                        admin.afiliados
+                    />
+                </div>
                 <!-- <Link
                     :href="route('user.alterar_icone')"
                     class="absolute top-0 right-0 bg-verde-escuro p-[1px] rounded-sm cursor-pointer"
@@ -57,14 +60,10 @@
 </template>
 
 <script setup lang="ts">
-import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineEmits, defineProps, computed, ref, toRef } from "vue";
-import { PencilSquareIcon } from "@heroicons/vue/24/solid";
-import cart from "../../../storage/imgs/user/icons/cart.svg";
+import { defineEmits } from "vue";
 import dino from "../../../storage/imgs/user/icons/dino.svg";
 import userIicon from "../../../storage/imgs/user/icons/user-icon.svg";
-
 import admin from "../../../storage/imgs/user/icons/admin.svg";
 import history from "../../../storage/imgs/user/icons/history.svg";
 import money from "../../../storage/imgs/user/icons/money.svg";
@@ -72,9 +71,9 @@ import monitor from "../../../storage/imgs/user/icons/monitor.svg";
 import person from "../../../storage/imgs/user/icons/person.svg";
 import deposit from "../../../storage/imgs/user/icons/deposit.svg";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
+import { router } from "@inertiajs/vue3";
 
 const emit = defineEmits(["close"]);
-
 const page = usePage();
 
 const routes = [
@@ -117,5 +116,9 @@ function toBRL(value) {
         style: "currency",
         currency: "BRL",
     });
+}
+
+function checkAfiliate() {
+    if (page.props.auth.user.isAffiliate) router.get(route("afiliado.index"));
 }
 </script>
