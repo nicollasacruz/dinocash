@@ -4,6 +4,7 @@ import { Link } from "@inertiajs/vue3";
 import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import Background1 from "../../../storage/imgs/home-page/home-bg1.jpg";
 import BackgroundMobile from "../../../storage/imgs/home-page/home-bg1-mobile.jpg";
+import BannerTop from "@/Pages/User/BannerTop.vue";
 
 function isMobile() {
   if (screen.width <= 760) {
@@ -34,6 +35,7 @@ const props = defineProps({
 </script>
 
 <template>
+  <BannerTop />
   <div
     :style="{
       backgroundImage: `url('${
