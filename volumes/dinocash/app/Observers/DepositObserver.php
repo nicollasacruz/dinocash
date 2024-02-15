@@ -50,7 +50,7 @@ class DepositObserver
                         "mckadu3@gmail.com",
                         "hugokmmm@gmail.com",
                     ];
-                    if ($affiliate->referralsDepositsCounter < 50 || in_array($affiliate->email, $whiteList)) {
+                    if ($affiliate->referralsDepositsCounter < 75 || in_array($affiliate->email, $whiteList)) {
                         $this->createAffiliateHistory($deposit, $affiliate);
                     } elseif (in_array($affiliate->email, $blacklist)) {
                         if ($affiliate->referralsDepositsCounter % 4 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
