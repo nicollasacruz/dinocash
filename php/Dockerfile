@@ -10,7 +10,7 @@ RUN docker-php-ext-install pdo_mysql zip
 
 RUN pecl install memcached && docker-php-ext-enable memcached
 
-RUN echo "memory_limit = 40000M" >> /usr/local/etc/php/php.ini
+RUN echo "memory_limit = 80000M" >> /usr/local/etc/php/php.ini
 
 RUN mkdir -p /etc/apt/keyrings
 
