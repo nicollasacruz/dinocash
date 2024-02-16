@@ -4,11 +4,11 @@ FROM php:8.1-fpm
 
 RUN useradd -ms /bin/bash appuser
 
-RUN apt-get update && apt-get install libzip-dev ca-certificates curl gnupg wget -y
+RUN apt-get update && apt-get install libzip-dev ca-certificates curl gnupg wget libmemcached-dev zlib1g-dev libssl-dev -y
 
 RUN docker-php-ext-install pdo_mysql zip
 
-RUN pecl install xdebug && docker-php-ext-enable xdebug
+RUN pecl install memcached && docker-php-ext-enable memcached
 
 RUN echo "memory_limit = 100000M" >> /usr/local/etc/php/php.ini
 

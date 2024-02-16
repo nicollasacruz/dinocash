@@ -33,8 +33,6 @@ class AffiliateInvoiceService
             $invoice = AffiliateInvoice::where('status', 'open')->where('affiliateId', $affiliate->id)->first();
             if (!$invoice) {
                 $invoice = $this->createInvoice($affiliate);
-                Log::info("AffiliateInvoice criada com sucesso.");
-    
             }
     
             return $invoice;

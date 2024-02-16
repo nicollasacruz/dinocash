@@ -36,10 +36,10 @@ class UserObserver
     public function updated(User $user)
     {
         try {
-            if ($user->isDirty('wallet')) {
+            if ($user->isDirty('wallet') || $user->isDirty('bonusWallet')) {
                 $message = [
                     "id" => $user->id,
-                    "wallet" => $user->wallet
+                    "wallet" => $user->wallet + $user->bonusWallet,
                 ];
 
                 event(new WalletChanged($message));

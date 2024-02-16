@@ -1,108 +1,124 @@
 <template>
-  <div class="border-8 border-black bg-white rounded-xl py-2 lg:pb-6 p-2">
-    <div class="flex items-center mb-8 lg:ml-5">
-      <img
-        class="mr-1 lg:mr-3 rounded"
-        width="50"
-        height="50"
-        :src="fotoPerfil"
-      />
-      <div>
-        <div class="text-xs lg:text-sm text-gray-400">Seja bem-vindo(a)</div>
-        <div class="text-xl lg:text-2xl text-gray-700 -mt-2">{{ email }}</div>
-        <!-- <div class="tex-lg lg:text-xl text-gray-700">NÍVEL 100</div> -->
-        <Link
-          class="tex-lg lg:text-sm text-red-700"
-          :href="route('logout')"
-          method="post"
-        >
-          Encerrar sessão
-        </Link>
-      </div>
-    </div>
+    <div class="rounded-xl p-2 lg:w-72 bg-[#17101e]">
+        <div class="flex flex-col items-center mb-3 lg:ml-5">
+            <div class="relative">
+                <div @click="checkAfiliate">
+                    <img
+                        class="mr-1 lg:mr-3 rounded mt-1"
+                        width="130"
+                        height="130"
+                        :src="userIicon"
+                        admin.afiliados
+                    />
+                </div>
+                <!-- <Link
+                    :href="route('user.alterar_icone')"
+                    class="absolute top-0 right-0 bg-verde-escuro p-[1px] rounded-sm cursor-pointer"
+                >
+                    <PencilSquareIcon class="w-5 fill-black" />
+                </Link> -->
+            </div>
+            <div class="text-xs lg:text-xs text-gray-400 mt-2">
+                Seja bem-vindo(a)
+            </div>
+            <div
+                class="text-xl flex items-center lg:text-2xl text-verde font-bold capitalize"
+            >
+                <div>
+                    {{ email?.split(" ")[0] }}
+                </div>
+                <Link class="" :href="route('logout')" method="post">
+                    <img class="w-5 ml-3" :src="leave" />
+                </Link>
+            </div>
+        </div>
 
-    <div class="gap-y-2 px-1 lg:px-6 flex flex-col text-white">
-      <div v-if="!!$page.props.auth.user.isAffiliate" class="drawer-button">
-        <a href="/afiliados" class="text-yellow-400 text-xl">Saldo: {{ toBRL(wallet) }}</a>
-      </div>
-      <div v-else class="drawer-button">
-        <a class="text-yellow-400 text-xl">Saldo: {{ toBRL(wallet) }}</a>
-      </div>
-      <Link
-        v-for="link in routes"
-        class="drawer-button"
-        :href="route(link.route)"
-        @click="emit('close')"
-      >
-        <a>{{ link.label }}</a>
-      </Link>
-      <template v-if="$page.props.auth.user.role === 'admin'">
-        <Link
-          class="drawer-button"
-          :href="route('admin.financeiro')"
-          @click="emit('close')"
-        >
-          <a>Admin</a>
-        </Link>
-      </template>
+        <div class="gap-y-2 px-1 lg:px-2 flex flex-col text-white font-bold">
+            <div v-for="(link, i) in routes" :key="i">
+                <Link
+                    class="drawer-button flex items-center pl-5"
+                    :href="route(link.route)"
+                    @click="emit('close')"
+                >
+                    <img class="mr-2 w-6" :src="link.icon" />
+                    <a>{{ link.label }}</a>
+                </Link>
+            </div>
+            <template v-if="$page.props.auth.user?.role === 'admin'">
+                <Link
+                    class="drawer-button flex"
+                    :href="route('admin.financeiro')"
+                    @click="emit('close')"
+                >
+                    <img class="mr-2" :src="admin" />
+
+                    <a>Admin</a>
+                </Link>
+            </template>
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-import fotoPerfil from "../../../storage/imgs/admin/fotodinoperfilpadrao.svg";
 import { Link, usePage } from "@inertiajs/vue3";
-import { defineEmits, defineProps, computed, ref, toRef } from "vue";
+import { defineEmits } from "vue";
+import dino from "../../../storage/imgs/user/icons/dino.svg";
+import userIicon from "../../../storage/imgs/user/icons/user-icon.svg";
+import admin from "../../../storage/imgs/user/icons/admin.svg";
+import history from "../../../storage/imgs/user/icons/history.svg";
+import money from "../../../storage/imgs/user/icons/money.svg";
+import monitor from "../../../storage/imgs/user/icons/monitor.svg";
+import person from "../../../storage/imgs/user/icons/person.svg";
+import deposit from "../../../storage/imgs/user/icons/deposit.svg";
+import leave from "../../../storage/imgs/user/icons/leave.svg";
+import { router } from "@inertiajs/vue3";
 
-const props = defineProps(["wallet"]);
 const emit = defineEmits(["close"]);
-
 const page = usePage();
 
-const userId = computed(() => page.props.auth.user.id);
-const userIdref = ref(userId);
-const loading = ref(false);
-
-const amount = ref(0);
-const wallet = ref(props.wallet);
-
-window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-  wallet.value = e.message.wallet;
-});
-
 const routes = [
-  {
-    label: "Depositar",
-    route: "user.deposito",
-  },
-  {
-    label: "perfil",
-    route: "user.edit",
-  },
-  {
-    label: "Jogar",
-    route: "user.play",
-  },
-  {
-    label: "Histórico",
-    route: "user.historico",
-  },
-  {
-    label: "Movimentação",
-    route: "user.movimentacao",
-  },
-  {
-    label: "Sacar",
-    route: "user.saque",
-  },
+    {
+        label: "Depositar",
+        route: "user.deposito",
+        icon: deposit,
+    },
+    {
+        label: "Perfil",
+        route: "user.edit",
+        icon: person,
+    },
+    {
+        label: "Jogar",
+        route: "user.play",
+        icon: dino,
+    },
+    {
+        label: "Histórico",
+        route: "user.historico",
+        icon: history,
+    },
+    {
+        label: "Movimentações",
+        route: "user.movimentacao",
+        icon: monitor,
+    },
+    {
+        label: "Sacar",
+        route: "user.saque",
+        icon: money,
+    },
 ];
 
-const email = page.props.auth.user.name;
+const email = page.props.auth.user?.name;
 
 function toBRL(value) {
-  return Number(value).toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+    return Number(value).toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    });
+}
+
+function checkAfiliate() {
+    if (page.props.auth.user.isAffiliate) router.get(route("afiliado.index"));
 }
 </script>

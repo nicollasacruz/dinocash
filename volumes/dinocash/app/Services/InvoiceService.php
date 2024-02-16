@@ -21,8 +21,6 @@ class InvoiceService
         $invoice = Invoice::where('status', 'open')->first();
         if (!$invoice) {
             $invoice = $this->createInvoice();
-            Log::info("Invoice criada com sucesso.");
-
         }
         return $invoice;
     }

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\BonusCampaign;
+use App\Models\BonusWalletChange;
 use App\Models\Deposit;
-use App\Models\WalletTransaction;
+use App\Models\Setting;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Log;
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Notification;
 
 class DepositService
 {
-    public function createDeposit(User $user, $amount): ?Deposit
+    public function createDeposit(User $user, $amount, bool $hasBonus): ?Deposit
     {
         try {
             if (!$user->document) {
@@ -78,6 +80,7 @@ class DepositService
                     'externalId' => $response->json('idTransaction'),
                     'type' => 'pending',
                     'paymentCode' => $result,
+                    'hasBonus' => $hasBonus,
                 ]);
 
                 Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
@@ -95,20 +98,16 @@ class DepositService
     public function aproveDeposit(Deposit $deposit): bool
     {
         try {
+            $bonusService = new BonusService();
             $user = User::find($deposit->user->id);
             $amount = $deposit->amount;
 
-            WalletTransaction::create([
-                'userId' => $deposit->userId,
-                'oldValue' => $user->wallet,
-                'newValue' => $user->wallet + $amount,
-                'type' => 'DEPOSIT',
-            ]);
-
             $deposit->type = 'paid';
             $deposit->save();
-            $user->wallet += $amount;
-            $user->save();
+            // $user->changeWallet($amount);
+            // $user->save();
+
+            $bonusService->createBonusDeposit($deposit);
 
             try {
                 if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
@@ -123,11 +122,47 @@ class DepositService
             } catch (Exception $e) {
                 Log::error('Erro de notificar - ' . $e->getMessage());
             }
-
-            Log::info("Deposito aprovado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
             return true;
         } catch (Exception $e) {
             Log::error("Erro ao aprovar depósito: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function createBonusDeposit(Deposit $deposit): bool
+    {
+        try {
+            $settings = Setting::first();
+            $bonusPercent = $settings->bonusPercent;
+            $bonusRollover = $settings->rolloverBonus;
+            $amount = $deposit->amount;
+            $amountBonus = $amount * $bonusPercent / 100;
+            $user = $deposit->user;
+
+            $bonus = BonusCampaign::create([
+                'amount' => $amountBonus,
+                'amountMovement' => 0,
+                'bonusPercent' => $bonusPercent,
+                'rollover' =>  $bonusRollover,
+                'userId' => $user->id,
+                'type' => 'deposit',
+                'status' => 'active',
+                'expireAt' => now()->addDays(30),
+            ]);
+
+            BonusWalletChange::create([
+                'bonusCampaignId' => $bonus->id,
+                'amountOld' => $user->bonusWallet,
+                'amountNew' => $user->bonusWallet + $amountBonus,
+                'type' => 'credit',
+            ]);
+
+            $user->bonusWallet += $amountBonus;
+            $user->save();
+
+            return true;
+        } catch (Exception $e) {
+            Log::error('Erro de notificar - ' . $e->getMessage());
             return false;
         }
     }

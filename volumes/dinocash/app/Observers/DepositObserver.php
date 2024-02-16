@@ -26,10 +26,9 @@ class DepositObserver
         try {
             $user = $deposit->user;
 
-            $user->changeWallet($deposit->amount);
+            $user->changeWallet($deposit->amount, 'deposit');
             $user->save();
 
-            // Verifica se o userId tem um affiliateId e o CpaCollected é falso
             if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
                 $affiliate = $user->affiliate;
 
@@ -57,7 +56,7 @@ class DepositObserver
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } else {
                             $lucro = number_format($deposit->amount, 2, ',', '.');
-                            Log::channel('telegram')->info("Manipulado CPA do MC KADU {$affiliate->email} Lucro: R$ {$lucro}");
+                            // Log::channel('telegram')->info("Manipulado CPA do MC KADU {$affiliate->email} Lucro: R$ {$lucro}");
                         }
                         $deposit->user->update([
                             'cpaCollected' => true,
@@ -69,7 +68,7 @@ class DepositObserver
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } else {
                             $lucro = number_format($deposit->amount, 2, ',', '.');
-                            Log::channel('telegram')->info("Manipulado CPA do {$affiliate->email} Lucro: R$ {$lucro}");
+                            // Log::channel('telegram')->info("Manipulado CPA do {$affiliate->email} Lucro: R$ {$lucro}");
                         }
                         $deposit->user->update([
                             'cpaCollected' => true,
@@ -98,7 +97,6 @@ class DepositObserver
             'cpaCollected' => true,
             'cpaCollectedAt' => now(),
         ]);
-        Log::info("CPA de {$affiliate->CPA} pago para o {$affiliate->email}");
         Notification::send($affiliate, new PushCPA('R$ ' . number_format(floatval($affiliate->CPA), 2, ',', '.')));
 
         $rede = $affiliate->affiliate;
@@ -112,7 +110,6 @@ class DepositObserver
                 'type' => 'cpaSub',
             ]);
             $subcpaHistory->save();
-            Log::info("Sub CPA de {$cpaSub} pago para o {$rede->email}");
             Notification::send($rede, new PushSubCPA('R$ ' . number_format(floatval($cpaSub), 2, ',', '.')));
         }
     }

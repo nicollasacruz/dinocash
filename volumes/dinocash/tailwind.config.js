@@ -10,20 +10,22 @@ export default {
         "./resources/js/**/*.vue",
     ],
     daisyui: {
-        themes: [
-            'dark',
-        ]
+        themes: ["dark"],
     },
     theme: {
         extend: {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
-                menu: "Upheavtt",
+                menu: "Inter",
             },
             colors: {
                 "verde-claro": "#d6f8b8",
                 "roxo-fundo": "#6c567b",
                 "roxo-escuro": "#3b2b45",
+                "verde": "#91fa3d",
+                "verde-escuro": "#00E68E",
+                "roxo-claro": "#dec6ec",
+                "roxo": "#392747",
             },
             dropShadow: {
                 xl: "10px 10px 0px 0px rgba(0, 0, 0, 0.75)",
@@ -45,6 +47,7 @@ export default {
 
             xl: "1280px",
             // => @media (min-width: 1280px) { ... }
+            "2xl": "1600px"
         },
     },
 

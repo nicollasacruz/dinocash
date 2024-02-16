@@ -10,9 +10,6 @@ import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
-import BaseSelect from "@/Components/BaseSelect.vue";
-import { router } from "@inertiajs/vue3";
-import { Money3Component } from "v-money3";
 
 const {
   profitToday,

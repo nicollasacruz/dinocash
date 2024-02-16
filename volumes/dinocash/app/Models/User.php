@@ -24,31 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'contact',
-        'document',
-        'role',
         'wallet',
         'walletAffiliate',
-        'isAffiliate',
-        'isExpert',
-        'affiliateId',
-        'affiliatedAt',
-        'cpaCollected',
-        'cpaCollectedAt',
-        'invitation_link',
-        'referralsCounter',
-        'CPA',
-        'revShare',
-        'revSub',
-        'cpaSub',
-    ];
-
-    protected $visible = [
-        'id',
-        'name',
-        'email',
-        'wallet',
-        'walletAffiliate',
+        'freespin',
         'contact',
         'document',
         'role',
@@ -70,6 +48,40 @@ class User extends Authenticatable
         'cpaSub',
         'revShare',
         'bannedAt',
+        'bonusWallet',
+        'haveRoullete',
+    ];
+
+    protected $visible = [
+        'id',
+        'name',
+        'email',
+        'wallet',
+        'walletAffiliate',
+        'freespin',
+        'contact',
+        'document',
+        'role',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
+        'isAffiliate',
+        'isExpert',
+        'affiliateId',
+        'affiliatedAt',
+        'cpaCollected',
+        'cpaCollectedAt',
+        'invitation_link',
+        'referralsCounter',
+        'referralsDepositsCounter',
+        'CPA',
+        'revSub',
+        'revSubFake',
+        'cpaSub',
+        'revShare',
+        'bannedAt',
+        'bonusWallet',
+        'haveRoullete',
     ];
     
 
@@ -95,6 +107,7 @@ class User extends Authenticatable
         'isExpert' => 'boolean',
         'wallet' => 'float',
         'walletAffiliate' => 'float',
+        'bonusWallet' => 'float',
         'referrals' => 'array',
         'affiliatedAt' => 'datetime',
         'cpaCollected' => 'boolean',
@@ -105,6 +118,7 @@ class User extends Authenticatable
     {
         return $value === $this->role;
     }
+
     public function resetWalletAffiliate()
     {
         $this->walletAffiliate = 0;
@@ -126,8 +140,14 @@ class User extends Authenticatable
         $this->attributes['isAffiliate'] = true;
     }
 
-    public function changeWallet($value)
+    public function changeWallet($value, $type)
     {
+        WalletTransaction::create([
+            'userId' => $this->id,
+            'oldValue' => $this->wallet,
+            'newValue' => $this->wallet + $value,
+            'type' => $type,
+        ]);
         return $this->wallet = number_format($this->wallet + $value, 2, '.', '');
     }
 
@@ -207,6 +227,11 @@ class User extends Authenticatable
     public function affiliateHistories()
     {
         return $this->hasMany(AffiliateHistory::class, 'affiliateId');
+    }
+
+    public function bonusCampaings(): HasMany
+    {
+        return $this->hasMany(BonusCampaign::class, 'userId');
     }
 
     public function createDeposit($amount, $uuid, $paymentCode): Deposit

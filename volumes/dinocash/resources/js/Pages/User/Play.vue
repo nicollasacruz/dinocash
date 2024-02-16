@@ -1,99 +1,74 @@
 <template>
     <Head title="Jogar" />
 
-    <UserLayouyt v-slot="{ wallet }">
-        <!-- <video id="videoId" class="hidden" controls autoplay muted>
-      <source
-        src="http://techslides.com/demos/sample-videos/small.mp4"
-        type="video/mp4"
-      />
-    </video> -->
-        <div class="p-2 lg:px-4 h-full">
-            <div
-                class="w-full h-full flex-col justify-center flex gap-y-4 text-gray-800"
-            >
-                <div class="text-center text-xl mb-1">
-                    <p class="text-xl sm:text-2xl lg:text-4xl">Como Jogar:</p>
-                    <p class="text-sm sm:text-lg lg:text-xl">
-                        - Para iniciar o game aperte em qualquer lugar da tela!
-                    </p>
-                    <p class="text-sm sm:text-lg lg:text-xl">
-                        - Para pular aperte com um dedo na tela e para abaixar,
-                        pressione com dois dedos.
-                    </p>
-                    <p class="text-sm sm:text-lg lg:text-xl">
-                        Para computadores:
-                    </p>
-                    <p class="text-sm sm:text-lg lg:text-xl">
-                        - Para iniciar o game aperte a seta para cima ou a barra
-                        de espaço!
-                    </p>
-                    <p class="text-sm sm:text-lg lg:text-xl">
-                        - A setas para cima e para baixo direcionam o dino!
-                    </p>
+    <UserLayout v-slot="{ wallet }">
+        <div class="p-4 lg:px-20 h-full">
+            <div class="text-4xl font-extrabold text-verde font-menu my-4">
+                Como jogar
+            </div>
+            <div class="text-lg sm:text-lg lg:text-[1rem] mb-1">
+                <div class="lg:hidden">
+                    - Para iniciar o game aperte em qualquer lugar da tela.
                 </div>
-                <div
-                    class="text-center text-lg sm:text-xl font-bold mb-1 lg:hidden"
-                >
-                    Saldo disponível: {{ toBRL(wallet) }}
+                <div class="lg:hidden">
+                    - Para pular os cactos, clique com o dedo sobre a tela.
                 </div>
-                <input
-                    type="text"
-                    class="bg-white mx-auto max-w-xs border-8 rounded-xl border-gray-800 w-full"
-                    placeholder="Digite o valor da aposta"
-                    v-model="amount"
-                    @input="formatAmount"
-                />
-                <div class="text-center">Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}</div>
-                <div class="text-center">
-                    Aposta máxima: {{ toBRL(maxAmmount) }}
+
+                <div>- Para iniciar o game aperte a barra de espaço.</div>
+                <div class="hidden lg:block">
+                    - Para pular os cactos utilize a barra de espaço ou <br />
+                    seta para cima em seu teclado
                 </div>
-                <button
-                    class="mx-auto py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
-                    @click="startGame"
-                    :disabled="loading || !amount"
-                >
+
+                <div class="mt-3 text-sm hidden lg:block">
+                    O seu lucro será contabilizado após andar no mínimo <br />
+                    500 metros, a onde a tela ficará a noite. Você pode <br />
+                    encerrar a sua aposta a qualquer momento clicando <br />
+                    no botão de saque que ficará no topo do jogo.
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-start my-5">
+                <input type="text" class="max-w-lg mr-3 user-input" placeholder="Digite o valor da aposta" v-model="amount"
+                    @input="formatAmount" v-if="page.props.auth.user.freespin * 1 == 0" />
+                <button class="user-button mt-4 md:mt-0 mx-auto" @click="startGame" :disabled="loading || !amount">
                     <div v-if="loading">
                         <span class="loading loading-spinner loading-sm"></span>
                     </div>
                     <div v-else>Jogar</div>
                 </button>
+                <span v-if="page.props.auth.user.freespin" class="ml-2 text-lg text-red-500 font-bold my-auto">Você tem {{
+                    page.props.auth.user.freespin }} rodadas
+                    grátis!</span>
             </div>
-            <GameCluster
-                :amount="userId"
-                v-if="isRunning"
-                :viciosidade="viciosidade"
-                :isAffiliate="isAffiliate"
-                @end-game="handleEndGame"
-                @finish-game="handleFinishGame"
-                :active="isRunning"
-                :height="clientHeight"
-                :width="clientWidth"
-            />
+            <div class="text-sm">
+                Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}
+            </div>
+            <div class="text-sm pb-3">
+                Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}
+            </div>
+
+            <GameCluster :amount="userId" :start="isRunning" v-if="isRunning" :viciosidade="viciosidade"
+                :isAffiliate="isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
+                :height="clientHeight" :width="clientWidth" />
         </div>
-        <BaseModal
-            v-if="endGame || finishGame"
-            :score="score"
-            v-model="endGame"
-        >
+        <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
             <div v-if="endGame" class="text-center text-2xl">
                 Você andou {{ score }} metros!
             </div>
             <div class="flex justify-center">
-                <button
-                    v-if="endGame"
-                    class="mx-auto mt-5 py-2 px-10 bg-verde-claro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
-                    @click="handleButtonClick()"
-                >
+                <button v-if="endGame"
+                    class="mx-auto mt-5 py-2 px-10 bg-verde rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+                    @click="handleButtonClick()">
                     OK
                 </button>
             </div>
         </BaseModal>
-    </UserLayouyt>
+    </UserLayout>
 </template>
 
 <script setup lang="ts">
-import UserLayouyt from "../..//Layouts/UserLayout.vue";
+import { Head, router } from "@inertiajs/vue3";
+import UserLayout from "../..//Layouts/UserLayout.vue";
 import BaseModal from "../../Components/BaseModal.vue";
 import GameCluster from "../../Components/GameCluster.vue";
 import { computed, ref, toRef } from "vue";
@@ -125,7 +100,12 @@ const type = ref("loss");
 const loading = ref(false);
 function handleButtonClick() {
     endGame.value = false;
+    amount.value = 0;
     location.reload();
+}
+
+if (page.props.auth.user.freespin > 0) {
+    amount.value = page.props.settings.amountFreeSpin;
 }
 
 async function fetchStore() {
@@ -137,20 +117,23 @@ async function fetchStore() {
         if (amount.value > page.props.settings.maxAmountPlay) {
             toast.error(
                 "Valor não pode ser maior que " +
-                    toBRL(page.props.settings.maxAmountPlay)
+                toBRL(page.props.settings.maxAmountPlay)
             );
             return;
         }
+        let amountValue = amount.value;
+        if (page.props.auth.user.freespin > 0) {
+            amountValue = page.props.settings.amountFreeSpin;
+        }
         const response = await axios.post(route("user.play.store"), {
-            amount: amount.value,
+            amount: amountValue,
         });
         const result = response.data.gameHistory.id;
-
+        toast.success("Partida iniciada com sucesso");
         return result;
     } catch (error) {
-        console.error("Erro na pesquisa:", error);
-
-        throw error;
+        toast.error(error.response.data.message);
+        console.error("Erro na partida:", error.response.data.message);
     }
 }
 
@@ -172,19 +155,18 @@ async function fetchUpdate() {
         const hash = await generateSHA256Hash(
             `${gameId.value}${userId.value}dinocash`
         );
-        const response = await axios.patch(route("user.play.update"), {
+        const { data } = await axios.patch(route("user.play.update"), {
             distance: score.value,
             gameId: gameId.value,
             type: type.value,
             token: hash,
         });
-
-        const result = response.data;
-        return result;
+        if (data.errors?.locked) {
+            toast.error("Você está em modo de economia de energia!");
+        }
+        return data;
     } catch (error) {
-        console.error("Erro na pesquisa:", error);
-
-        throw error;
+        console.log("Erro na pesquisa:", error);
     }
 }
 
@@ -291,6 +273,16 @@ const handleFinishGame = (pontuation) => {
     endGame.value = true;
     score.value = pontuation;
     type.value = "win";
+    const div = document.getElementById("root") as HTMLDivElement;
+    div.style.display = "block";
+    fetchUpdate();
+};
+
+const handleLockGame = (pontuation) => {
+    isRunning.value = false;
+    endGame.value = true;
+    score.value = pontuation;
+    type.value = "locked";
     const div = document.getElementById("root") as HTMLDivElement;
     div.style.display = "block";
     fetchUpdate();

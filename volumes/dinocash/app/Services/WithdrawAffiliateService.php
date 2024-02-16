@@ -2,11 +2,7 @@
 
 namespace App\Services;
 
-use App\Jobs\ProcessAutoWithdraw;
-use App\Models\AffiliateHistory;
 use App\Models\AffiliateWithdraw;
-use App\Models\WalletTransaction;
-use App\Models\Withdraw;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Log;

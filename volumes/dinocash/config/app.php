@@ -171,6 +171,8 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\ReferralServiceProvider::class,
         App\Providers\DepositServiceProvider::class,
+        App\Providers\BonusServiceProvider::class,
+        App\Providers\LookRoulleteServiceProvider::class,
         App\Providers\WithdrawServiceProvider::class,
         App\Providers\WithdrawAffiliateServiceProvider::class,
         App\Providers\InvoiceServiceProvider::class,

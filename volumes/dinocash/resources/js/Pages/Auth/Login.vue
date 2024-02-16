@@ -42,14 +42,15 @@ const submit = () => {
                     {{ status }}
                 </div>
 
-                <form @submit.prevent="submit" class="mx-auto lg:w-[40%]">
+                <form @submit.prevent="submit" class="mx-auto w-10/12 md:w-8/12 lg:w-1/5">
                     <div>
                         <!-- <InputLabel for="email" value="Email" /> -->
 
                         <TextInput
                             id="email"
                             type="email"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full login-input border-none"
+                            placeholder="E-mail"
                             v-model="form.email"
                             required
                             autofocus
@@ -66,7 +67,7 @@ const submit = () => {
                         <TextInput
                             id="password"
                             type="password"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full login-input border-none"
                             v-model="form.password"
                             required
                             autocomplete="current-password"
@@ -79,35 +80,24 @@ const submit = () => {
                         />
                     </div>
 
-                    <div class="block mt-4">
-                        <label class="flex items-center">
-                            <Checkbox
-                                name="remember"
-                                v-model:checked="form.remember"
-                            />
-                            <span class="ms-2 text-xl text-white font-menu">
-                                {{ __("auth.remember") }}
-                            </span>
-                        </label>
-                    </div>
 
                     <div
                         class="flex flex-col items-center justify-center mt-8 mx-auto"
                     >
                         <PrimaryButton
-                            class="mb-4 flex justify-center items-center w-72 h-[80px] bg-verde-claro rounded-lg font-menu text-2xl text-black boxShadow border-black border-4"
+                            class=" !bg-verde flex justify-center items-center w-full py-4 text-xl capitalize rounded-xl  user-button"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
                             {{ __("auth.login") }}
                         </PrimaryButton>
-                        <Link
+                        <!-- <Link
                             v-if="canResetPassword"
                             :href="route('password.request')"
                             class="mx-auto font-menu underline text-xl md:text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             {{ __("auth.forgot_password") }}
-                        </Link>
+                        </Link> -->
                     </div>
                 </form>
             </div>

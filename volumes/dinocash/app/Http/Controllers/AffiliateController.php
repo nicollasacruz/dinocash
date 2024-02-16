@@ -25,8 +25,17 @@ class AffiliateController extends Controller
     {
         try {
             $email = $request->query('email');
+            $status = $request->query('status') != 'all' ?? false;
 
-            $affiliateWithdrawsList = AffiliateWithdraw::getAffiliateWithdrawLikeEmail($email);
+            $affiliateWithdrawsList = AffiliateWithdraw::with('user')
+                ->when($email, function ($query) use ($email) {
+                    $query->where('user.email', 'LIKE', '%' . $email . '%');
+                })
+                ->when($status, function ($query) use ($status) {
+                    $query->where('type', $status);
+                })
+                ->orderBy('created_at', 'desc')
+                ->get();
 
             $affiliates = User::when($email, function ($query) use ($email) {
                 $query->where('email', 'LIKE', '%' . $email . '%');
@@ -48,8 +57,8 @@ class AffiliateController extends Controller
                         });
                 }
             ])
-            ->whereDate('updated_at', Carbon::today())
-            ->sum('amount');
+                ->whereDate('updated_at', Carbon::today())
+                ->sum('amount');
 
             return Inertia::render('Admin/Affiliate', [
                 'affiliates' => $affiliates,

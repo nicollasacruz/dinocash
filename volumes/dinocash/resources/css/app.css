@@ -2,11 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: Upheavtt;
-    src: url("FF-Mark/MarkPro-Heavy.otf") format("opentype");
-}
+/* @font-face {
+    font-family: "Inter", sans-serif;
+    src: url("inter/Inter-Bold.ttf") format("opentype");
 
+} */
+
+/* .font-menu {
+    font-family: "Upheavtt";
+    src: url("FF-Mark/MarkPro-Heavy.otf") format("opentype");
+} */
 @layer components {
     .admin-input {
         @apply bg-[#212121] input-sm py-0 select-sm border-[1px] border-gray-500 rounded-md px-2 text-white;
@@ -18,11 +23,23 @@
         @apply btn btn-xs mx-auto w-full text-[0.6rem];
     }
     .drawer-button {
-        @apply text-lg bg-gray-700 px-4 rounded-md py-[6px];
+        @apply text-lg bg-[#0D0713] px-4 rounded-md py-[6px];
     }
     .start-game-text {
         position: absolute;
         top: 50%;
         font-size: 25px;
+    }
+    .user-input {
+        @apply bg-[#1C1328] border-2 border-roxo rounded-2xl py-4 lg:py-3;
+    }
+    .login-input {
+        @apply !bg-[#17101F] !rounded-2xl !py-3 input-md !text-white;
+    }
+    .user-button {
+        @apply text-3xl py-3 pb-4 lg:py-[12px] max-w-[250px] lg:max-w-xs bg-verde text-[#150822] cursor-pointer px-10 rounded-xl font-menu md:text-2xl !font-bold whitespace-nowrap flex justify-center;
+    }
+    .lp-button {
+        @apply py-2 bg-verde text-[#441C5B] px-5 rounded-xl font-menu text-xl md:text-2xl flex justify-center items-center font-bold;
     }
 }

@@ -8,6 +8,8 @@ import PaymentsTable from "@/Components/PaymentsTable.vue";
 import Paginator from "@/Components/Paginator.vue";
 import axios from "axios";
 import debounce from "lodash/debounce";
+import Checkbox from "@/Components/Checkbox.vue";
+import { watchEffect } from "vue";
 
 const selectedTab = ref(1);
 const columns = computed(() =>
@@ -46,15 +48,16 @@ const toBRL = (value) => {
 };
 const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
+const initialStatus = urlParams.get("status") || "all";
 const searchQuery = ref(initialEmail);
+const statusQuery = ref(initialStatus);
 
-watch(
-  searchQuery,
-  debounce((value) => {
+watchEffect(() => {
+  debounce(() => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: value },
+        { email: searchQuery.value, status: statusQuery.value },
         {
           preserveState: true,
         }
@@ -62,8 +65,8 @@ watch(
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-  }, 700)
-);
+  }, 700)();
+});
 </script>
 
 <template>
@@ -92,13 +95,26 @@ watch(
       <div class="">
         <div class="font-bold text-white uppercase mb-1">
           Pesquisar afiliado
-        </div>
+        </div> 
         <input
-          type="text"
-          class="admin-input"
-          placeholder="Digite o email do afiliado..."
-          v-model="searchQuery"
+        type="text"
+        class="admin-input"
+        placeholder="Digite o email do afiliado..."
+        v-model="searchQuery"
         />
+        <div 
+        v-if="selectedTab === 2"
+        class="font-bold text-white uppercase mb-1">
+          Filtrar statuus
+        </div>
+        <select 
+        v-if="selectedTab === 2"
+        v-model="statusQuery" class="admin-input">
+          <option value="all">Todos</option>
+          <option value="paid">Pago</option>
+          <option value="pending">Pendente</option>
+          <option value="rejected">Recusado</option>
+        </select>
       </div>
       <div class="flex gap-x-5">
         <TextBox

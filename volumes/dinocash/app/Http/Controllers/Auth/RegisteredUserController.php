@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\BonusService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -51,6 +52,9 @@ class RegisteredUserController extends Controller
             'CPA' => $settings->defaultCPA,
             'revShare' => $settings->defaultRevShare,
         ]);
+
+        $bonusService = new BonusService();
+        $bonusService->addFreeSpin($user, 2);
 
         event(new Registered($user));
 

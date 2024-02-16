@@ -2,8 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\BannedCheck;
-use App\Http\Middleware\RateLimitMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -26,7 +24,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\UpdateUserActivity::class,
         \App\Http\Middleware\LogUserIP::class,
     ];
-
+    
     /**
      * The application's route middleware groups.
      *
@@ -43,17 +41,16 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\InertiaGlobalPropsMiddleware::class,
-            BannedCheck::class,
-            // RateLimitMiddleware::class,
+            \App\Http\Middleware\BannedCheck::class,
         ],
-
+        
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
-
+    
     /**
      * The application's middleware aliases.
      *
@@ -76,5 +73,6 @@ class Kernel extends HttpKernel
         'session.check' => \App\Http\Middleware\UpdateUserActivity::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'isAffiliate' => \App\Http\Middleware\IsAffiliateMiddleware::class,
+        'haveRoullete' => \App\Http\Middleware\LookUpRoulleteToUserMiddleware::class,
     ];
 }

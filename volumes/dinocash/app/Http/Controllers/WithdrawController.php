@@ -75,18 +75,25 @@ class WithdrawController extends Controller
                     'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
                 ]);
             }
-            if ($request->amount > $user->wallet) {
+            if ($request->amount > $setting->maxWithdraw) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Saque máximo de R$ ' . number_format($setting->maxWithdraw, 2, ',', '.'),
+                ]);
+            }
+            if ($request->amount > $user->wallet + $user->bonusWallet || $request->amount < 0) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Você não possui esse valor para saque',
                 ]);
             }
+
             if (!$user->isAffiliate || !$user->hasRole('admin')) {
                 $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
-                $totalRoll = $user->gameHistories->sum('amount');
+                $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
                 $hasWIthdrawToday = $user->withdraws
                     ->filter(function ($withdraw) {
-                        return $withdraw->type === 'paid' && $withdraw->updated_at->isToday();
+                        return $withdraw->updated_at->isToday();
                     })->first();
 
                 if ($hasWIthdrawToday) {
@@ -95,25 +102,27 @@ class WithdrawController extends Controller
                         'message' => 'Só é possível fazer um saque por dia.',
                     ]);
                 }
+            
+                $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
+                if ($user->wallet * 1 == 0) {
+                    $amountAvaliableWallet = 0;
+                }
+                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+                if ($user->bonusWallet == 0) {
+                    $amountAvaliableBonus = 0;
+                }
+                $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
 
-                $totalNeeded = ($totalDeposits * $setting->rollover) - $totalRoll;
-
-                if ($totalRoll < $totalDeposits * $setting->rollover) {
+                if ($request->amount > $amountAvaliable) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => 'Você precisa movimentar mais R$' . number_format($totalNeeded) . ' para conseguir sacar',
+                        'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
                     ]);
                 }
             }
 
-            if ($user->wallet < $request->amount || $request->amount < 0) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Valor não disponivel para saque.',
-                ]);
-            }
-
-            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2));
+            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll, $setting->rollover);
             if (is_bool($withdraw)) {
                 return response()->json([
                     'status' => 'success',
@@ -121,12 +130,7 @@ class WithdrawController extends Controller
                 ]);
             }
             if (!!$withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
-                Log::info('entrou no auto saque');
                 $response = $withdrawService->aprove($withdraw);
-                if (!$response['success']) {
-                    Log::info('Criado mas não foi pago');
-                    Log::info($response['message']);
-                }
             }
 
             return response()->json([

@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { XMarkIcon, Bars3Icon } from "@heroicons/vue/24/solid";
-import Background from "../../../storage/imgs/home-page/home-bg2.jpg";
+import Background from "../../../storage/imgs/user/bg-login.jpg";
 import logoDino from "../../../storage/imgs/admin/logo dino branco painel.svg";
 import logoDinoRoxo from "../../../storage/imgs/user/dino-logo.svg";
 import UserDrawer from "@/Components/UserDrawer.vue";
 import { usePage } from "@inertiajs/vue3";
+import UserHeader from "@/Components/UserHeader.vue";
 
 const page = usePage();
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
-const userWallet = page.props.auth.user.wallet * 1;
-const wallet = ref(userWallet);
+const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
+const wallet = ref(page.props.auth.user.wallet * 1);
+
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    wallet.value = e.message.wallet;
+    totalWallet.value = e.message.wallet;
 });
-watch(
-    () => wallet.value,
-);
 const drawer = ref(false);
 </script>
 
@@ -32,51 +31,56 @@ const drawer = ref(false);
                     class="drawer-toggle"
                 />
 
-                <div class="drawer-side lg:w-96">
+                <div class="drawer-side lg:w-96 ">
                     <label
                         for="my-drawer"
                         aria-label="close sidebar"
                         class="drawer-overlay"
                     ></label>
                     <ul
-                        class="menu py-4 lg:w-96 min-h-full bg-[#212121] text-white relative"
+                        class="menu py-4 lg:w-96 min-h-full !bg-[#17101F] text-white relative"
                     >
                         <x-mark-icon
                             class="w-6 h-6 cursor-pointer absolute top-3 right-3 z-10 lg:hidden fill-white"
                             @click="drawer = !drawer"
                         />
-                        <UserDrawer :wallet="wallet" class="mt-3" />
+                        <UserDrawer :wallet="totalWallet" class="mt-3 bg-[#17101F]" />
                     </ul>
                 </div>
             </div>
             <div
-                class="drawer-content h-screen flex flex-col relative flex-1 px-4 py-2 lg:px-10 lg:py-8"
+                class="drawer-content h-screen flex flex-col relative flex-1 bg-[#24182e]"
                 :style="{
-                    'background-image': `url('${Background}')`,
-                    'background-size': 'cover',
-                    'background-position': 'center',
+                    // 'background-image': `url('${Background}')`,
+                    // 'background-size': 'cover',
+                    // 'background-position': 'center',
                 }"
             >
                 <!-- Page content here -->
-                <bars3-icon
-                    @click="drawer = !drawer"
-                    class="w-6 h-6 absolute right-3 top-3 cursor-pointer lg:hidden block z-10 fill-black"
+                <UserHeader
+                    :logged="!!$page?.props?.auth?.user?.id"
+                    @toggle="drawer = !drawer"
+                    :wallet="wallet"
+                    :name="$page.props.auth.user.name"
                 />
-                <img
-                    :src="logoDinoRoxo"
-                    class="mx-auto mb-5 w-36 lg:w-64"
-                    alt=""
-                />
-                <div class="flex gap-x-6 force-height">
-                    <UserDrawer
-                        :wallet="wallet"
-                        @close="drawer = false"
-                        class="hidden lg:block"
-                    />
+                <div class="grid grid-cols-1 xl:grid-cols-12 flex-1">
                     <div
-                        class="border-8 border-black bg-white rounded-xl flex-1 overflow-x-auto"
+                        class="col-span-1 xl:col-span-10 xl:col-start-2 flex flex-col"
                     >
-                        <slot :wallet="wallet"/>
+                        <div
+                            class="flex gap-x-6 p-3 py-2 lg:px-10 lg:py-5 user-height "
+                        >
+                            <UserDrawer
+                                :wallet="totalWallet"
+                                @close="drawer = false"
+                                class="hidden lg:block lg:border border-roxo"
+                            />
+                            <div
+                                class="bg-[#17101F] lg:border border-roxo text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
+                            >
+                                <slot :wallet="totalWallet" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,4 +94,15 @@ const drawer = ref(false);
         height: calc(100vh - 200px);
     }
 }
+.user-height {
+    height: calc(100vh - 70px);
+    @media (min-width: 1024px) {
+        height: calc(100vh - 90px);
+    }
+}
+.font-lighter {
+    font-family: "FF-Mark", sans-serif;
+    src: url("/resources/css/FF-Mark/MarkPro-Thin.otf") format("opentype");
+}
+
 </style>

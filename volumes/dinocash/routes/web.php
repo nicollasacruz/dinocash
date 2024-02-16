@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\GameHistoryController;
+use App\Http\Controllers\LookRoulleteController;
 use App\Http\Controllers\PushController;
 use App\Http\Controllers\UserController;
 use App\Models\GameHistory;
@@ -31,6 +32,14 @@ use Inertia\Inertia;
 |
 */
 
+Route::fallback(function () {
+    return redirect()->route('homepage');
+});
+
+Route::get('/undefined', function () {
+    return redirect()->back();
+});
+
 Route::get('/', function () {
     $userIdLogado = Auth::id();
 
@@ -40,14 +49,11 @@ Route::get('/', function () {
     $usuarioLogadoInserido = false;
 
     $rankings = GameHistory::select(['userId', 'distance'])
-        ->where('type', 'win')
-        ->whereHas('user', function ($query) {
-            $query->where('isAffiliate', false)
-                ->where('role', 'user');
-        })
-        ->orderBy('distance', 'desc')
-        ->limit(1000)
-        ->get();
+    ->where('type', 'win')
+    ->whereMonth('created_at', Carbon::now()->month)
+    ->orderBy('distance', 'desc')
+    ->limit(1000)
+    ->get();
 
     foreach ($rankings as $ranking) {
         if (count($rankedUsers) === 10) {
@@ -76,7 +82,7 @@ Route::get('/', function () {
         $position++;
     }
 
-    if (!$usuarioLogadoInserido && $userIdLogado && (!Auth::user()->hasRole('admin') || !Auth::user()->isAffiliate)) {
+    if (!$usuarioLogadoInserido && $userIdLogado) {
         $userLogado = User::find($userIdLogado);
         $emailLogado = $userLogado->name;
 
@@ -114,6 +120,7 @@ Route::get('/', function () {
         'wallet' => $wallet,
     ]);
 })->name('homepage');
+
 Route::get('termos-de-uso', function () {
     return Inertia::render('TermsUse');
 })->name('terms');
@@ -188,15 +195,22 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
 
     Route::get('/historico', [ProfileController::class, 'gameHistory'])->name('user.historico');
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
-
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
-
+    
+    Route::get('/roleta', [LookRoulleteController::class, 'userRollete'])->name('user.roleta');
+    Route::post('/recolher-recompensa', [LookRoulleteController::class, 'getRoulleteReward'])->name('user.recompensa.roleta');
+    
     Route::get('/deposito', [DepositController::class, 'index'])->name('user.deposito');
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
     Route::delete('/deposito', [DepositController::class, 'destroy'])->name('user.deposito.destroy');
-
+    Route::get('/alterar-icone', function () {
+        return Inertia::render('User/ChangeIcon');
+    })->name('user.alterar_icone');
+    Route::get('/shop', function () {
+        return Inertia::render('User/Shop');
+    })->name('user.shop');
     Route::get('/alterar-senha', function () {
         return Inertia::render('User/ChangePassword');
     })->name('user.alterar_senha');
