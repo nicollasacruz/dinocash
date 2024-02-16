@@ -1,9 +1,6 @@
 <script setup>
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
 
 defineProps({
     mustVerifyEmail: {
@@ -19,10 +16,26 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
-    wallet: user.wallet,
+    wallet: parseFloat(user.wallet).toFixed(2) ?? 0.00,
     isAffiliate: user.isAffiliate,
     invitation_link: user.invitation_link,
 });
+
+const moneyConfig = {
+    prefix: "R$ ",
+    suffix: "",
+    thousands: ".",
+    decimal: ",",
+    precision: 2,
+    disableNegative: true,
+    disabled: false,
+    min: null,
+    max: null,
+    allowBlank: false,
+    minimumNumberOfCharacters: 0,
+    shouldRound: true,
+    focusOnRight: false,
+};
 </script>
 
 <template>
@@ -44,8 +57,7 @@ const form = useForm({
                 <div>
                     <div class="ml-3 text-xs">Saldo da Carteira</div>
 
-                    <input id="wallet" type="number" step="0.01" class="mt-1 block w-full user-input" v-model="form.wallet"
-                        required autofocus pattern="\d+(\.\d{1,2})?" />
+                    <money3 class="mt-1 block w-full user-input" v-model.number="form.wallet" v-bind="moneyConfig" />
                 </div>
                 <div>
                     <div class="ml-3 text-xs">
