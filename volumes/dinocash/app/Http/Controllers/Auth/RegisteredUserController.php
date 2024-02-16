@@ -54,7 +54,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $bonusService = new BonusService();
-        $bonusService->addFreeSpin($user, 1);
+        $bonusService->addFreeSpin($user, 2);
 
         event(new Registered($user));
 
