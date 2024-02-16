@@ -1,6 +1,6 @@
 <script setup>
+import InputError from "@/Components/InputError.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { toast } from "vue3-toastify";
 
 defineProps({
     mustVerifyEmail: {
@@ -34,7 +34,7 @@ const moneyConfig = {
     allowBlank: false,
     minimumNumberOfCharacters: 0,
     shouldRound: true,
-    focusOnRight: false,
+    focusOnRight: true,
 };
 </script>
 

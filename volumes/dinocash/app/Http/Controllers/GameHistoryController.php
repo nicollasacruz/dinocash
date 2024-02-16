@@ -79,7 +79,8 @@ class GameHistoryController extends Controller
                         $gameHistoryItem->delete();
                         $message = [
                             "id" => $user->id,
-                            "wallet" => $user->wallet + $user->bonusWallet
+                            "wallet" => $user->wallet * 1,
+                            "bonus" => $user->bonusWallet * 1,
                         ];
 
                         event(new WalletChanged($message));
@@ -116,7 +117,8 @@ class GameHistoryController extends Controller
                     $gameHistoryItem->delete();
                     $message = [
                         "id" => $user->id,
-                        "wallet" => $user->wallet + $user->bonusWallet
+                        "wallet" => $user->wallet * 1,
+                        "bonus" => $user->bonusWallet * 1,
                     ];
 
                     event(new WalletChanged($message));
@@ -201,7 +203,8 @@ class GameHistoryController extends Controller
 
             $message = [
                 "id" => $user->id,
-                "wallet" => $user->wallet + $user->bonusWallet
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
             ];
 
             event(new WalletChanged($message));

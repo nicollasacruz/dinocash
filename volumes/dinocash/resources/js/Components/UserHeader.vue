@@ -40,7 +40,7 @@
                     @mouseleave="bonusActive = true"
                     class="text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 lg:pr-6 rounded-full border-2 border-verde flex justify-center items-center"
                 >
-                    <span class="select-none">{{ toBRL(money) }}</span>
+                    <span class="select-none">{{ toBRL(walletTotal) }}</span>
 
                     <WalletIcon class="w-4 sm:w-4 -mr-2 lg:-mr-5 fill-white" />
                 </div>
@@ -100,6 +100,14 @@ const money = computed(() => {
         return wallet + page.props.auth.user.bonusWallet;
     } else return wallet;
 });
+const walletTotal = ref(wallet)
+const bonusTotal = ref(page.props.auth.user.bonusWallet)
+
+window.Echo.channel("wallet" + page.props.auth.user.id).listen("WalletChanged", (e) => {
+    walletTotal.value = e.message.wallet;
+    bonusTotal.value = e.message.bonus;
+});
+
 const userName = computed(() => {
     if (logged) {
         if (name) return name.split(" ")[0];

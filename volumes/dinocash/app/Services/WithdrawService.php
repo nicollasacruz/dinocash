@@ -51,7 +51,8 @@ class WithdrawService
 
             $message = [
                 "id" => $user->id,
-                "wallet" => $user->wallet + $user->bonusWallet,
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
             ];
 
             event(new WalletChanged($message));

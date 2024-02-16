@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WalletChanged;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Deposit;
 use App\Models\GameHistory;
@@ -33,7 +34,16 @@ class ProfileController extends Controller {
             $request->user()->email_verified_at = null;
         }
 
+        $request->user()->bonusWallet = floatval($request->user()->bonusWallet);
         $request->user()->save();
+        $user = Auth::user();
+        $message = [
+            "id" => $user->id,
+            "wallet" => $user->wallet * 1,
+            "bonus" => $user->bonusWallet * 1,
+        ];
+
+        event(new WalletChanged($message));
 
         return Redirect::route('user.edit');
     }
