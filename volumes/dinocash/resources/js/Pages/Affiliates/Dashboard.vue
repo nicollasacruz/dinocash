@@ -10,19 +10,12 @@ import { ref } from "vue";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "@/Components/BaseModal.vue";
 import BaseInput from "@/Components/BaseInput.vue";
-import BaseSelect from "@/Components/BaseSelect.vue";
-import { router } from "@inertiajs/vue3";
-import { Money3Component } from "v-money3";
 
 const {
   profitToday,
   profitLast30Days,
   profitTotal,
   profitSubRev,
-  lossToday,
-  lossLast30Days,
-  lossTotal,
-  revShareTotal,
   profitCPAToday,
   profitCPALast30Days,
   profitCPATotal,
@@ -39,12 +32,8 @@ const {
 } = defineProps([
   "profitToday",
   "profitLast30Days",
-  "lossLast30Days",
   "profitTotal",
   "profitSubRev",
-  "lossToday",
-  "lossTotal",
-  "revShareTotal",
   "profitCPAToday",
   "profitCPALast30Days",
   "profitCPATotal",
@@ -72,10 +61,9 @@ interface ImportMetaEnv {
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
-const page = usePage();
 console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
-const link = page.props.domain + "/ref/" + affiliateLink;
+const link = "https://dinocash.io/ref/" + affiliateLink;
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {
@@ -97,6 +85,8 @@ function permission() {
     })
   );
 }
+
+const page = usePage();
 
 function openModal() {
   if (showModal.value === false && amount.value > 0) {
@@ -137,7 +127,7 @@ async function withdraw() {
     showModal.value = false;
     withdrawButtonVisible.value = true;
   } catch (error) {
-    toast.error("Não foi possível realizar o saque");
+    toast.error(error.response.data.message);
   }
 }
 
@@ -186,13 +176,13 @@ function setPixType(selected) {
             <UserIcon class="w-5" />
           </template>
         </TextBox>
-        <TextBox v-if="revSub > 0" label="Sub RevShare" :value="`${revSub}%`">
+        <TextBox v-if="revSub > 0 || page.props.auth.user.id == 5820" label="Sub RevShare" :value="`${revSub}%`">
           <template #icon>
             <UserIcon class="w-5" />
           </template>
         </TextBox>
         <TextBox
-          v-if="cpaSub > 0"
+          v-if="cpaSub > 0 || page.props.auth.user.id == 5820"
           label="Sub CPA"
           :value="toBRL(cpaSub)"
           label-text="text-green-500"
@@ -210,17 +200,17 @@ function setPixType(selected) {
       <CurrencyBox
         v-if="revShare > 0"
         label="RevShare do dia"
-        :value="profitToday - lossToday"
+        :value="profitToday"
       />
       <CurrencyBox
         v-if="revShare > 0"
         label="RevShare em 30 dias"
-        :value="profitLast30Days - lossLast30Days"
+        :value="profitLast30Days"
       />
       <CurrencyBox
         v-if="revShare > 0"
         label="RevShare Total"
-        :value="profitTotal - lossTotal"
+        :value="profitTotal"
       />
       <CurrencyBox
         v-if="revSub > 0"
