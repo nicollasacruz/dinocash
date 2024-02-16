@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->decimal('rolloverBonus');
+            $table->decimal('rolloverBonus')->default(30);
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            //
+            $table->dropColumn('rolloverBonus');
         });
     }
 };

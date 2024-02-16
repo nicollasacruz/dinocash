@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->decimal('maxDepositBonusValue', 8, 2);
+            $table->decimal('maxDepositBonusValue', 8, 2)->default(500);
         });
     }
 

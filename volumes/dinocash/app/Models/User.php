@@ -24,11 +24,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'wallet',
+        'walletAffiliate',
+        'freespin',
         'contact',
         'document',
         'role',
-        'wallet',
-        'walletAffiliate',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
         'isAffiliate',
         'isExpert',
         'affiliateId',
@@ -37,10 +41,15 @@ class User extends Authenticatable
         'cpaCollectedAt',
         'invitation_link',
         'referralsCounter',
+        'referralsDepositsCounter',
         'CPA',
-        'revShare',
         'revSub',
+        'revSubFake',
         'cpaSub',
+        'revShare',
+        'bannedAt',
+        'bonusWallet',
+        'haveRoullete',
     ];
 
     protected $visible = [
@@ -109,6 +118,7 @@ class User extends Authenticatable
     {
         return $value === $this->role;
     }
+
     public function resetWalletAffiliate()
     {
         $this->walletAffiliate = 0;

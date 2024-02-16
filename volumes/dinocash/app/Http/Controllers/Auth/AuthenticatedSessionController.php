@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,10 +39,19 @@ class AuthenticatedSessionController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('/')->withErrors(['banned' => 'Você foi banido.']);
+            return redirect('/')->withErrors(['banned' => 'Você foi banido, entre em contato com o suporte.']);
         }
 
         $request->session()->regenerate();
+        $user = User::find(auth()->user()->id);
+        if ($bonus = $user->bonusCampaings->where('status', 'active')->first()) {
+            if (now() >= $bonus->expireAt) {
+                $bonus->status = 'expired';
+                $user->bonusWallet = 0;
+                $user->save();
+                $bonus->save();
+            }
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

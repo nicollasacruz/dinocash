@@ -18,6 +18,7 @@ class InertiaGlobalPropsMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         Inertia::share('settings', Setting::first());
+        Inertia::share('domain', env('APP_URL'));
         return $next($request);
     }
 }
