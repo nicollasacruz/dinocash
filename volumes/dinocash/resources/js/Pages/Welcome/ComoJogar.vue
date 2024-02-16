@@ -11,7 +11,7 @@
         class="h-screen pt-4 lg:p-8 lg:px-14 relative"
     >
         <div
-            class="text-4xl sm:text-5xl pl-3 md:text-6xl font-menu font-bold mb-5 lg:mb-8 text-verde lg:text-right relative"
+            class="text-4xl sm:text-5xl 2xl:text-8xl pl-3 md:text-6xl font-menu font-bold mb-5 lg:mb-8 text-verde lg:text-right relative"
         >
             Como Jogar?
         </div>
@@ -26,12 +26,12 @@
                     :key="i"
                 >
                     <div
-                        class="w-9 h-9 lg:w-11 lg:h-11 shrink-0 font-menu font-bold rounded text-center bg-verde py-1 text-roxo text-3xl md:text-4xl flex items-center justify-center mr-5"
+                        class="w-9 h-9 2xl:w-20 2xl:h-20 lg:w-11 lg:h-11 shrink-0 font-menu font-bold rounded text-center bg-verde py-1 text-roxo text-3xl md:text-4xl flex items-center justify-center mr-5"
                     >
                         {{ i + 1 }}
                     </div>
 
-                    <div class="text-sm shrink-text sm:text-sm md:text-lg -mt-2">
+                    <div class="text-sm shrink-text sm:text-sm md:text-lg 2xl:text-2xl -mt-2">
                         {{ instruction }}
                     </div>
                 </div>

@@ -27,10 +27,9 @@
                         class="w-full sm:w-80 lg:w-10/12 -ml-2"
                     />
                 </div>
-                <div class="md:text-lg">
-                    
-                    Seja bem-vindo(a) ao <b class="text-verde">DinoCash Oficial!</b
-                    ><br />
+                <div class="md:text-lg 2xl:text-2xl">
+                    Seja bem-vindo(a) ao
+                    <b class="text-verde">DinoCash Oficial!</b><br />
                     O jogo que você não precisa <br class="hidden" />
                     contar com a sua <br class="hidden lg:block" />
                     sorte,
@@ -55,12 +54,16 @@
                         {{ __("homepage.play-now") }}
                     </Link>
                 </div>
-                <div class="mb-[10vh] md:text-lg text-start text-sm mt-1 lg:mt-3">
+                <div
+                    class="mb-[10vh] md:text-lg text-start text-sm mt-1 lg:mt-3 2xl:text-2xl"
+                >
                     {{ __("homepage.register-tip") }}
                 </div>
             </div>
-            <div class="absolute bottom-0 md:relative w-44 shrink-image md:w-[500px]">
-                <img :src="DinoHome" alt="" class=" md:mt-16" />
+            <div
+                class="absolute bottom-0 md:relative w-44 shrink-image md:w-[500px]"
+            >
+                <img :src="DinoHome" alt="" class="md:mt-16" />
             </div>
         </div>
     </section>

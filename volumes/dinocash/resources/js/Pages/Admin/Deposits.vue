@@ -5,6 +5,7 @@ import BaseTable from "@/Components/BaseTable.vue";
 import { ref, defineProps } from "vue";
 import TextBox from "@/Components/TextBox.vue";
 import dayjs from "dayjs";
+import Paginator from "@/Components/Paginator.vue";
 
 const columns = [
     { label: "Email", key: "email" },
@@ -18,7 +19,7 @@ const { deposits, totalToday, totalAmount } = defineProps([
     "totalToday",
     "totalAmount",
 ]);
-const depositsRow = deposits.map((deposit) => {
+const depositsRow = deposits.data.map((deposit) => {
     return {
         ...deposit,
         document: deposit.user.document,
@@ -32,12 +33,12 @@ const toBRL = (value) => {
     });
 };
 const getStatus = (status) => {
-  switch (status) {
-    case "paid":
-      return "FINALIZADO";
-    default:
-      return "PENDENTE";
-  }
+    switch (status) {
+        case "paid":
+            return "FINALIZADO";
+        default:
+            return "PENDENTE";
+    }
 };
 </script>
 
@@ -76,7 +77,7 @@ const getStatus = (status) => {
             hide-actions
             :columns="columns"
             :rows="depositsRow"
-            class="table-xs mt-6 h-3/4"
+            class="table-xs mt-6 h-4/6"
         >
             <template #updated_at="{ value }">
                 <td class="py-0">
@@ -109,8 +110,7 @@ const getStatus = (status) => {
                 </td>
             </template>
         </BaseTable>
+        <Paginator :data="deposits" class="mt-4" />
     </AuthenticatedLayout>
-    <div class="lg:mt-10 hidden border-verde">
-
-    </div>
+    <div class="lg:mt-10 hidden border-verde"></div>
 </template>

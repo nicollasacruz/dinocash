@@ -12,7 +12,7 @@
         }"
     >
         <div
-            class="text-4xl font-bold md:text-6xl text-verde font-menu text-center md:text-right lg:mr-40"
+            class="text-4xl 2xl:text-8xl font-bold md:text-6xl text-verde font-menu text-center md:text-right lg:mr-40"
         >
             Recompensas
         </div>
@@ -24,21 +24,23 @@
             >
                 <img
                     :src="reward"
-                    class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-8"
+                    class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-8 2xl:max-w-3xl"
                 />
             </div>
             <div
                 class="flex justify-center md:justify-end w-full -mt-5 lg:-mt-0 md:w-auto text-base leading-none sm:leading-normal"
             >
                 <div
-                    class="md:text-lg max-h-[60%] text-right mb-2 w-96 md:max-w-md md:mt-5"
+                    class="md:text-lg max-h-[60%] text-right mb-2 w-96 md:max-w-md md:mt-5 2xl:text-2xl"
                 >
                     <div>
                         Jogue DinoCash e ganhe recompensas exclusivas, são
                         vários prêmios que você poderá adquirir somente jogando
                         ou depositando!
                     </div>
-                    <div class="text-verde font-menu text-base sm:text-lg my-2 lg:my-3 font-bold">
+                    <div
+                        class="text-verde font-menu text-base sm:text-lg my-2 lg:my-3 font-bold  2xl:text-2xl"
+                    >
                         <div>- Ícones de perfil lendários.</div>
                         <div>- Cashback de 5% em seus depósitos.</div>
                         <div>- Rodadas grátis toda semana.</div>

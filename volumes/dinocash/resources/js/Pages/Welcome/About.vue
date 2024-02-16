@@ -6,15 +6,15 @@
         backgroundPosition: windowWidth < 700 ? 'center' : 'center',
         backgroundRepeat: 'no-repeat',
     }">
-        <div class="text-5xl md:text-6xl text-verde font-menu text-start font-bold">Dino Cash</div>
+        <div class="text-5xl md:text-6xl text-verde font-menu text-start font-bold 2xl:text-8xl">Dino Cash</div>
         <div class="flex flex-col lg:flex-row">
-            <div class="text-sm md:text-lg max-h-[60%] text-justify mt-5 flex-1 mb-2 lg:mr-5">
+            <div class="text-sm md:text-lg xl:text-2xl 2xl:text-3xl max-h-[60%] text-justify mt-5 flex-1 mb-2 lg:mr-5">
                 Bem-vindo ao DinoCash, agora você não precisa mais contar com a sorte, vai depender somente de você, conte
                 totalmente com a sua habilidades e reflexos para lucrar com o DinoCash, junte-se a nós para uma jornada
                 envolvente, onde você pode ter a oportunidade de ganhar nossas recompensas com o Dino Bônus, uma roleta
                 recheada de prêmios, e aumentar muito mais os seus ganhos!
             </div>
-            <div class="lg:flex-1  h-52">
+            <div class="lg:flex-1 ">
                 <img :src="dinoPlataforma" alt="">
             </div>
         </div>
