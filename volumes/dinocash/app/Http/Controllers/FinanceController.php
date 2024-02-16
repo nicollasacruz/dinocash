@@ -24,12 +24,15 @@ class FinanceController extends Controller
         $dateEnd = DateTime::createFromFormat('Y-m-d', $request->dateEnd);
         if ($dateStart) {
             $dateStart->setTime(0, 0, 0);
+        } else {
+            $dateStart = now()->subDays(30);
         }
 
         if ($dateEnd) {
             $dateEnd->setTime(23, 59, 59);
+        } else {
+            $dateEnd = now();
         }
-
 
         $depositsAmountPaid = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
@@ -45,52 +48,26 @@ class FinanceController extends Controller
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
-            ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', false)
-                    ->where('role', 'user');
-            })
             ->sum('amount');
-        $withdrawsAmountPending = Withdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-            })
-                ->where('type', 'pending')
-                ->whereHas('user', function ($query) {
-                    $query->where('isAffiliate', false)
-                        ->where('role', 'user');
-                })
-                ->sum('amount');
+
+        $withdrawsAmountPending = Withdraw::where('type', 'pending')->sum('amount');
+
         $withdrawsAmountAffiliatePaid = AffiliateWithdraw::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
             $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
         })
             ->where('type', 'paid')
-            ->whereHas('user', function ($query) {
-                $query->where('isAffiliate', true)
-                    ->where('role', 'user');
-            })
             ->sum('amount');
 
         $walletsAmount = User::where('role', 'user')
             ->where('isAffiliate', false)
-            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-            })->sum('wallet');
+            ->sum('wallet');
 
 
         $walletsAfilliateAmount = User::where('role', 'user')
             ->where('isAffiliate', true)
-            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-            })->sum('walletAffiliate');
+            ->sum('walletAffiliate');
 
-        $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)
-            ->when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
-                $query->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$dateStart, $dateEnd]);
-            })->with([
-                    'affiliate' => function ($query) {
-                        $query
-                            ->where('role', 'user');
-                    }
-                ])->sum('amount');
+        $walletsAfilliatePending = AffiliateHistory::where('invoicedAt', null)->sum('amount');
 
 
         $topWithdraws = Withdraw::where('type', 'paid')
@@ -140,14 +117,12 @@ class FinanceController extends Controller
             $houseHealth = 100 - round(($pay * 100 / $gain), 1);
         }
 
-        $activeSessions = DB::table('sessions')
-            ->where('last_activity', '>=', now()->subMinutes(5))
-            ->count();
+        $activeSessions = 0;
         $totalUsers = User::all()->count();
+        $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
         $totalUsersWithDeposits = User::whereHas('deposits', function ($query) {
             $query->where('type', 'paid');
         })->count();        
-        $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
         $totalUsersTodayWithDeposit = User::whereDate('created_at', Carbon::today())->whereHas('deposits', function ($query) {
             $query->where('type', 'paid');
         })->count();
@@ -181,7 +156,6 @@ class FinanceController extends Controller
         ->orderBy('data', 'asc')
         ->get();
     
-
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
