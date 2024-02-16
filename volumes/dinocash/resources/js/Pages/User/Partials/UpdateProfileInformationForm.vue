@@ -16,7 +16,7 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
-    wallet: parseFloat(user.wallet).toFixed(2) ?? 0.00,
+    wallet: parseFloat(user.wallet).toFixed(2),
     isAffiliate: user.isAffiliate,
     invitation_link: user.invitation_link,
 });
