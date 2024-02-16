@@ -96,8 +96,8 @@ function openModal() {
 }
 
 async function withdraw() {
-  if (amount.value <= 0) {
-    toast.error("Saque não pode ser menor ou igual a zero");
+  if (amount.value <= 50) {
+    toast.error("Saque não pode ser menor que R$50,00");
     return;
   }
   if (!pixKey.value || !pixType.value) {
@@ -105,7 +105,7 @@ async function withdraw() {
     return;
   }
   if (amount.value > carteira) {
-    toast.error("Saque não pode ser maior que o disponível");
+    toast.error("Saque não pode ser maior que o valor disponível");
     return;
   }
 
