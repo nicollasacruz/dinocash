@@ -113,11 +113,6 @@ window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("Wal
 });
 }
 
-const userName = computed(() => {
-    if (logged) {
-        return page.props.auth.user.name;
-    } else return "";
-});
 </script>
 <style>
 .logo {
