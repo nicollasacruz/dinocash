@@ -99,16 +99,17 @@ const bonusActive = ref(true);
 
 const money = computed(() => {
     if (bonusActive.value) {
-        return page.props.auth.user ? wallet : 0 + page.props.auth.user ? page.props.auth.user.bonusWallet : 0;
+        return logged ? wallet : 0 + logged ? page.props.auth.user.bonusWallet : 0;
     } else return wallet;
 });
-const walletTotal = ref(wallet)
-const bonusTotal = ref(page.props.auth.user ? page.props.auth.user.bonusWallet : 0)
+const walletTotal = ref(logged ? wallet : 0);
+const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet : 0);
 
-window.Echo.channel("wallet" + page.props.auth.user.id ?? 0).listen("WalletChanged", (e) => {
+window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("WalletChanged", (e) => {
     walletTotal.value = e.message.wallet;
     bonusTotal.value = e.message.bonus;
 });
+
 const userName = computed(() => {
     if (logged) {
         if (name) return name.split(" ")[0];
