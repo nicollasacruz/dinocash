@@ -98,11 +98,11 @@ const bonusActive = ref(true);
 
 const money = computed(() => {
     if (bonusActive.value) {
-        return wallet ?? 0 + page.props.auth.user.bonusWallet ?? 0;
+        return wallet + page.props.auth.user.bonusWallet;
     } else return wallet;
 });
 const walletTotal = ref(wallet)
-const bonusTotal = ref(page.props.auth.user.bonusWallet ?? 0)
+const bonusTotal = ref(page.props.auth.user.bonusWallet)
 
 window.Echo.channel("wallet" + page.props.auth.user.id).listen("WalletChanged", (e) => {
     walletTotal.value = e.message.wallet;
