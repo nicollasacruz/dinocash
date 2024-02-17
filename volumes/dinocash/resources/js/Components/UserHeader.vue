@@ -93,21 +93,22 @@ function toBRL(value) {
     });
 }
 const page = usePage();
+if (page.props.auth.user) {
 const bonusActive = ref(true);
 
 const money = computed(() => {
     if (bonusActive.value) {
-        return wallet + page.props.auth.user.bonusWallet;
+        return wallet ?? 0 + page.props.auth.user.bonusWallet ?? 0;
     } else return wallet;
 });
 const walletTotal = ref(wallet)
-const bonusTotal = ref(page.props.auth.user.bonusWallet)
+const bonusTotal = ref(page.props.auth.user.bonusWallet ?? 0)
 
 window.Echo.channel("wallet" + page.props.auth.user.id).listen("WalletChanged", (e) => {
     walletTotal.value = e.message.wallet;
     bonusTotal.value = e.message.bonus;
 });
-
+}
 const userName = computed(() => {
     if (logged) {
         if (name) return name.split(" ")[0];
