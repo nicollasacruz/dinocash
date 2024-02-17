@@ -87,7 +87,7 @@ import { computed } from "vue";
 import { ref } from "vue";
 
 const emit = defineEmits("toggle");
-const { wallet, logged } = defineProps(["wallet", "logged"]);
+const { logged } = defineProps(["logged"]);
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
@@ -97,22 +97,22 @@ function toBRL(value) {
 const page = usePage();
 const bonusActive = ref(true);
 
-const walletTotal = ref(logged ? page.props.auth.user.wallet * 1 : 0);
-const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet * 1 : 0);
+const walletTotal = ref(logged ? page.props.auth.user.wallet : 0);
+const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet : 0);
 
 const money = computed(() => {
     if (bonusActive.value) {
-        return walletTotal + bonusTotal;
-    } else return walletTotal;
+        return walletTotal.value + bonusTotal.value;
+    } else return walletTotal.value;
 });
 
-
-if (logged) {
-window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("WalletChanged", (e) => {
-    walletTotal.value = e.message.wallet;
-    bonusTotal.value = e.message.bonus;
-});
-}
+console.log(bonusTotal, 'MONEYYyyyy');
+// if (logged) {
+// window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("WalletChanged", (e) => {
+//     walletTotal.value = e.message.wallet;
+//     bonusTotal.value = e.message.bonus;
+// });
+// }
 
 </script>
 <style>

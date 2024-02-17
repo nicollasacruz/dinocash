@@ -64,27 +64,6 @@ import bgMobile from "../../../../storage/imgs/home-page/bg5-mobile.jpg";
 
 import reward from "../../../../storage/imgs/home-page/reward.svg";
 
-const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
-    defineProps({
-        canLogin: {
-            type: Boolean,
-        },
-        canRegister: {
-            type: Boolean,
-        },
-        laravelVersion: {
-            type: String,
-            required: true,
-        },
-        phpVersion: {
-            type: String,
-            required: true,
-        },
-        rankedUsers: {
-            type: Array,
-            required: true,
-        },
-    });
 const windowWidth = ref(window.innerWidth);
 
 window.addEventListener("resize", (valu) => {

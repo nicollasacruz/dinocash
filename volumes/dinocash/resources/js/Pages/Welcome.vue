@@ -10,22 +10,8 @@ import Footer from "./Welcome/Footer.vue";
 import UserHeader from "@/Components/UserHeader.vue";
 import UserDrawer from "@/Components/UserDrawer.vue";
 
-const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
+const { rankedUsers } =
     defineProps({
-        canLogin: {
-            type: Boolean,
-        },
-        canRegister: {
-            type: Boolean,
-        },
-        laravelVersion: {
-            type: String,
-            required: true,
-        },
-        phpVersion: {
-            type: String,
-            required: true,
-        },
         rankedUsers: {
             type: Array,
             required: true,

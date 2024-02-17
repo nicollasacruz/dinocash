@@ -111,22 +111,8 @@ import Background from "../../../../storage/imgs/home-page/bg4-desk.jpg";
 import bgMobile from "../../../../storage/imgs/home-page/bg4-mobile.jpg";
 import DinoTrofeu from "../../../../storage/imgs/home-page/dino-trofeu.svg";
 
-const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
+const { rankedUsers } =
     defineProps({
-        canLogin: {
-            type: Boolean,
-        },
-        canRegister: {
-            type: Boolean,
-        },
-        laravelVersion: {
-            type: String,
-            required: true,
-        },
-        phpVersion: {
-            type: String,
-            required: true,
-        },
         rankedUsers: {
             type: Array,
             required: true,

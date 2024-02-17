@@ -54,27 +54,6 @@ const instructions = [
     "Após 500 metros percorrido, a tela ficará de noite, a partir dai o seu lucro será multiplicado e você pode sacar a qualquer momento clicando no botão de retirar lucro.",
     "Se você for um jogador habilidoso, você terá a chance de ganhar recompensas de ícones exclusivos após os 1.000 metros."
 ];
-const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
-    defineProps({
-        canLogin: {
-            type: Boolean,
-        },
-        canRegister: {
-            type: Boolean,
-        },
-        laravelVersion: {
-            type: String,
-            required: true,
-        },
-        phpVersion: {
-            type: String,
-            required: true,
-        },
-        rankedUsers: {
-            type: Array,
-            required: true,
-        },
-    });
 const windowWidth = ref(window.innerWidth);
 
 window.addEventListener("resize", (valu) => {

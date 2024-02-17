@@ -27,27 +27,6 @@ import bgMobile from "../../../../storage/imgs/home-page/bg2-mobile.jpg";
 import dinoPlataforma from "../../../../storage/imgs/home-page/dino-plataforma.svg";
 
 import background from "../../../../storage/imgs/home-page/bg2-desk.jpg";
-const { canLogin, canRegister, laravelVersion, phpVersion, rankedUsers } =
-    defineProps({
-        canLogin: {
-            type: Boolean,
-        },
-        canRegister: {
-            type: Boolean,
-        },
-        laravelVersion: {
-            type: String,
-            required: true,
-        },
-        phpVersion: {
-            type: String,
-            required: true,
-        },
-        rankedUsers: {
-            type: Array,
-            required: true,
-        },
-    });
 const windowWidth = ref(window.innerWidth);
 
 window.addEventListener("resize", (valu) => {
