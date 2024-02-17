@@ -72,6 +72,7 @@
         </div>
     </div>
 </template>
+
 <script setup>
 import { Link, usePage } from "@inertiajs/vue3";
 
@@ -84,6 +85,7 @@ import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
 import { computed } from "vue";
 import { ref } from "vue";
+
 const emit = defineEmits("toggle");
 const { wallet, name, logged } = defineProps(["wallet", "name", "logged"]);
 function toBRL(value) {
@@ -93,22 +95,20 @@ function toBRL(value) {
     });
 }
 const page = usePage();
-if (page.props.auth.user) {
 const bonusActive = ref(true);
 
 const money = computed(() => {
     if (bonusActive.value) {
-        return wallet + page.props.auth.user.bonusWallet;
+        return page.props.auth.user ? wallet : 0 + page.props.auth.user ? page.props.auth.user.bonusWallet : 0;
     } else return wallet;
 });
 const walletTotal = ref(wallet)
-const bonusTotal = ref(page.props.auth.user.bonusWallet)
+const bonusTotal = ref(page.props.auth.user ? page.props.auth.user.bonusWallet : 0)
 
-window.Echo.channel("wallet" + page.props.auth.user.id).listen("WalletChanged", (e) => {
+window.Echo.channel("wallet" + page.props.auth.user.id ?? 0).listen("WalletChanged", (e) => {
     walletTotal.value = e.message.wallet;
     bonusTotal.value = e.message.bonus;
 });
-}
 const userName = computed(() => {
     if (logged) {
         if (name) return name.split(" ")[0];
