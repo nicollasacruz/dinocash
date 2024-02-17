@@ -91,13 +91,13 @@ const submit = () => {
                         >
                             {{ __("auth.login") }}
                         </PrimaryButton>
-                        <!-- <Link
+                        <Link
                             v-if="canResetPassword"
                             :href="route('password.request')"
                             class="mx-auto font-menu underline text-xl md:text-2xl text-white hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             {{ __("auth.forgot_password") }}
-                        </Link> -->
+                        </Link>
                     </div>
                 </form>
             </div>
