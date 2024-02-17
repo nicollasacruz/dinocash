@@ -105,10 +105,12 @@ const money = computed(() => {
 const walletTotal = ref(logged ? wallet : 0);
 const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet : 0);
 
+if (logged) {
 window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("WalletChanged", (e) => {
     walletTotal.value = e.message.wallet;
     bonusTotal.value = e.message.bonus;
 });
+}
 
 const userName = computed(() => {
     if (logged) {
