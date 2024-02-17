@@ -40,7 +40,7 @@
                     @mouseleave="bonusActive = true"
                     class="text-xs sm:text-sm font-bold text-verde p-1 px-3 sm:px-3 lg:pr-6 rounded-full border-2 border-verde flex justify-center items-center"
                 >
-                    <span class="select-none">{{ toBRL(walletTotal) }}</span>
+                    <span class="select-none">{{ toBRL(money) }}</span>
 
                     <WalletIcon class="w-4 sm:w-4 -mr-2 lg:-mr-5 fill-white" />
                 </div>
@@ -97,13 +97,14 @@ function toBRL(value) {
 const page = usePage();
 const bonusActive = ref(true);
 
+const walletTotal = ref(logged ? wallet * 1 : 0);
+const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet * 1 : 0);
 const money = computed(() => {
     if (bonusActive.value) {
-        return logged ? wallet : 0 + logged ? page.props.auth.user.bonusWallet : 0;
-    } else return wallet;
+        return walletTotal + bonusTotal;
+    } else return walletTotal;
 });
-const walletTotal = ref(logged ? wallet : 0);
-const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet : 0);
+
 
 if (logged) {
 window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("WalletChanged", (e) => {
