@@ -106,13 +106,12 @@ const money = computed(() => {
     } else return walletTotal.value;
 });
 
-console.log(bonusTotal, 'MONEYYyyyy');
-// if (logged) {
-// window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("WalletChanged", (e) => {
-//     walletTotal.value = e.message.wallet;
-//     bonusTotal.value = e.message.bonus;
-// });
-// }
+console.log(bonusTotal.value, 'MONEYYyyyy');
+
+window.Echo.channel("wallet" + logged ? `${page.props.auth.user.id}` : '0').listen("WalletChanged", (e) => {
+    walletTotal.value = e.message.wallet;
+    bonusTotal.value = e.message.bonus;
+});
 
 </script>
 <style>
