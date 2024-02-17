@@ -99,6 +99,7 @@ const bonusActive = ref(true);
 
 const walletTotal = ref(logged ? wallet * 1 : 0);
 const bonusTotal = ref(logged ? page.props.auth.user.bonusWallet * 1 : 0);
+
 const money = computed(() => {
     if (bonusActive.value) {
         return walletTotal + bonusTotal;
