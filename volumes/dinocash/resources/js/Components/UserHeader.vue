@@ -22,7 +22,7 @@
                     class="bg-verde relative lg:flex justify-center items-center rounded font-bold sm:text-md hidden h-9 text-roxo"
                 >
                     <div class="w-32 text-center">
-                        {{ userName }}
+                        {{ logged ? page.props.auth.user.name : '' }}
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@ import { computed } from "vue";
 import { ref } from "vue";
 
 const emit = defineEmits("toggle");
-const { wallet, name, logged } = defineProps(["wallet", "name", "logged"]);
+const { wallet, logged } = defineProps(["wallet", "logged"]);
 function toBRL(value) {
     return Number(value).toLocaleString("pt-br", {
         style: "currency",
@@ -115,8 +115,7 @@ window.Echo.channel("wallet" + logged ? page.props.auth.user.id : 0).listen("Wal
 
 const userName = computed(() => {
     if (logged) {
-        if (name) return name.split(" ")[0];
-        else return "";
+        return page.props.auth.user.name;
     } else return "";
 });
 </script>
