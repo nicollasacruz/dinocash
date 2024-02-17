@@ -48,7 +48,7 @@ const props = defineProps({
         :class="homepage ? '' : 'overflow-hidden'"
     >
         <UserHeader
-            :logged="!!$page?.props?.auth?.user?.id"
+            :logged="!!$page.props.auth.user?.id"
             @toggle="drawer = !drawer"
             class="mb-3"
         />
