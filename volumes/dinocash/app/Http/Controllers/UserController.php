@@ -13,9 +13,17 @@ class UserController extends Controller
 {
     public function indexAdmin(Request $request)
     {
+        $status = $request->query('status');
         $users = User::when($request->email, function ($query, $email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
+            ->when($status !== 'all', function ($query) use ($status) {
+                if ($status === 'banned') {
+                    $query->whereNotNull('bannedAt');
+                } else {
+                    $query->whereNull('bannedAt');
+                }
+            })
             ->where('isAffiliate', false)
             ->orderByRaw('CAST(wallet AS DECIMAL(10,2)) DESC')
             ->paginate(20);
@@ -24,6 +32,7 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
 
 
     /**

@@ -107,14 +107,15 @@ class FinanceController extends Controller
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
 
         $gain = $depositsAmountPaid ?? 1;
+        $gainValue = $gain > 0 ? $gain : 1;
         if (env('APP_GGR_DEPOSIT')) {
-            $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
+            $gainValue = $gainValue * ((100 - env('APP_GGR_VALUE') / 100));
         }
         $pay = $withdrawsAmountPaid + $walletsAmount;
         if (!$pay) {
             $houseHealth = 100;
         } else {
-            $houseHealth = 100 - round(($pay * 100 / $gain), 1);
+            $houseHealth = 100 - round(($pay * 100 / $gainValue), 1);
         }
 
         $activeSessions = 0;

@@ -23,6 +23,8 @@ class WithdrawController extends Controller
     public function indexAdmin(Request $request)
     {
         $email = $request->email;
+        $status = $request->query('status') ?? 'all';
+        // dd($status);
         $withdraws = Withdraw::with('user')
             ->when($email, function ($query) use ($email) {
                 $query->whereHas('user', function ($userQuery) use ($email) {
@@ -32,6 +34,9 @@ class WithdrawController extends Controller
                 if (!$email) {
                     $query->whereNot('type', 'rejected');
                 }
+            })
+            ->when($status !== 'all', function ($query) use ($status) {
+                $query->where('type', $status);
             })
             ->orderBy('type', 'desc')
             ->orderBy('created_at', 'desc')
@@ -102,7 +107,7 @@ class WithdrawController extends Controller
                         'message' => 'Só é possível fazer um saque por dia.',
                     ]);
                 }
-            
+
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
                 if ($user->wallet * 1 == 0) {
