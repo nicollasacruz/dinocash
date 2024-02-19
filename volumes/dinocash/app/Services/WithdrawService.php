@@ -64,9 +64,9 @@ class WithdrawService
                 $amountAvaliableWallet = 0;
             }
             $amountAvaliableBonus = 0;
+            $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
             if (!$onlyWallet) {
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
-                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
                 $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
             }
             if ($user->bonusWallet == 0) {
