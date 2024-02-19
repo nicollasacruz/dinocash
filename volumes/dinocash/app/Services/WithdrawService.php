@@ -110,7 +110,7 @@ class WithdrawService
                         'amountNew' => $user->bonusWallet - $amountRemaning,
                         'type' => $amountRemaning === $amount ? 'withdraw' : 'withdraw partial',
                     ]);
-                    
+
                     $user->bonusWallet -= $amountRemaning;
                 } else {
                     Log::error('Sem valor restante para sacar do bonus');
@@ -139,11 +139,14 @@ class WithdrawService
                     $autoPay = $this->aprove($withdraw);
                 };
             }
+            
             Log::alert($user);
 
-            $response = [];
+            return [
+                'success' => 'success',
+                'message' => 'Saque realizado com successo.',
+            ];
 
-            return $response;
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage());
             return false;
