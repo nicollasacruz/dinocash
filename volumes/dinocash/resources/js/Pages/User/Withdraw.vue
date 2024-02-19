@@ -102,7 +102,7 @@ const totalWallet = ref(
 );
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    totalWallet.value = e.message.wallet;
+    totalWallet.value = e.message.wallet + e.message.bonus ;
 });
 
 async function withdraw() {
