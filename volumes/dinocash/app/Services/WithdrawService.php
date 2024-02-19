@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Http;
 use Ramsey\Uuid\Uuid;
 use App\Models\User;
+use App\Models\WalletTransaction;
 use Illuminate\Support\Facades\Log;
 
 class WithdrawService
@@ -25,13 +26,25 @@ class WithdrawService
             }
             if ($user->wallet >= $amountRemaning) {
                 if ($amountAvaliableWallet >= $amountRemaning) {
-                    $user->changeWallet($amountRemaning * -1, 'withdraw');
+                    WalletTransaction::create([
+                        'userId' => $user->id,
+                        'oldValue' => $user->wallet,
+                        'newValue' => $user->wallet + $amountRemaning * -1,
+                        'type' => 'withdraw',
+                    ]);
+                    $user->wallet = number_format($user->wallet + $amountRemaning * -1, 2, '.', '');
                     $amountRemaning = 0;
                 } else {
-
-                    $user->changeWallet($amountAvaliableWallet * -1, 'withdraw partial');
+                    WalletTransaction::create([
+                        'userId' => $user->id,
+                        'oldValue' => $user->wallet,
+                        'newValue' => $user->wallet + $amountAvaliableWallet * -1,
+                        'type' => 'withdraw partial',
+                    ]);
+                    $user->wallet = number_format($user->wallet + $amountAvaliableWallet * -1, 2, '.', '');
                     $amountRemaning -= $amountAvaliableWallet;
                 }
+                $user->save();
             }
             if ($amountRemaning > 0) {
                 if ($user->bonusWallet >= $amountRemaning && $amountAvaliableBonus >= $amountRemaning) {
