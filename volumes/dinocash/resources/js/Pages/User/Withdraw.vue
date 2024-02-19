@@ -7,14 +7,8 @@
                 Sacar
             </div>
             <div class="flex-col flex gap-y-4">
-                <input
-                    type="number"
-                    class="max-w-xs user-input w-full"
-                    placeholder="Digite o valor da aposta"
-                    v-model="amount"
-                    :min="minWithdraw"
-                    :max="maxWithdraw"
-                />
+                <money3 class="max-w-xs user-input w-full" v-model.number="amount" :min="minWithdraw" :max="maxWithdraw"
+                    v-bind="moneyConfig" />
                 <div class="text-lg lg:text-base font-extrabold">
                     <div class="">
                         Saldo disponível:
@@ -44,20 +38,14 @@
                     </div> -->
                 </div>
                 <img :src="pixLogo" class="mb-2 w-44 lg:w-36 max-w-sm" alt="" />
-                <button
-                    @click="withdraw"
-                    class="user-button max-w-[280px] lg:max-w-xs"
-                    :disabled="loading"
-                >
+                <button @click="withdraw" class="user-button max-w-[280px] lg:max-w-xs" :disabled="loading">
                     <div v-if="loading">
                         <span class="loading loading-spinner loading-sm"></span>
                     </div>
                     <div v-else>Sacar</div>
                 </button>
 
-                <div
-                    class="mt-1 text-base font-semibold lg:text-sm lg:font-normal"
-                >
+                <div class="mt-1 text-base font-semibold lg:text-sm lg:font-normal">
                     Saques serão enviados em até 12 horas úteis após a
                     solicitação da retirada. <br />
                     Os saques serão enviados na chave pix do CPF cadastrado.
@@ -92,6 +80,22 @@ const showModal = ref(false);
 const pixKey = ref("");
 const pixType = ref("");
 
+const moneyConfig = {
+    prefix: "R$ ",
+    suffix: "",
+    thousands: ".",
+    decimal: ",",
+    precision: 2,
+    disableNegative: true,
+    disabled: false,
+    min: null,
+    max: null,
+    allowBlank: false,
+    minimumNumberOfCharacters: 0,
+    shouldRound: true,
+    focusOnRight: false,
+};
+
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
 const loading = ref(false);
@@ -102,7 +106,7 @@ const totalWallet = ref(
 );
 
 window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    totalWallet.value = e.message.wallet + e.message.bonus ;
+    totalWallet.value = e.message.wallet + e.message.bonus;
 });
 
 async function withdraw() {
