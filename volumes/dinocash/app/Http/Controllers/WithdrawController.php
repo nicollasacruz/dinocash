@@ -143,7 +143,7 @@ class WithdrawController extends Controller
             //     ]);
             // }
 
-            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll, $setting->rollover);
+            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll ?? 0, $setting->rollover);
             if (is_bool($withdraw)) {
                 return response()->json([
                     'status' => 'success',
