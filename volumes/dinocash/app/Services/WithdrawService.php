@@ -45,6 +45,7 @@ class WithdrawService
                     $amountRemaning -= $amountAvaliableWallet;
                 }
                 $user->save();
+                
             }
             if ($amountRemaning > 0) {
                 if ($user->bonusWallet >= $amountRemaning && $amountAvaliableBonus >= $amountRemaning) {
@@ -57,7 +58,7 @@ class WithdrawService
 
                     $user->bonusWallet -= $amountRemaning;
                 } else {
-                    Log::error(('Sem valor restante para sacar do bonus'));
+                    Log::error('Sem valor restante para sacar do bonus');
                     return false;
                 }
             }
@@ -82,6 +83,7 @@ class WithdrawService
 
                 return $withdraw;
             }
+            Log::alert($user);
 
             return true;
         } catch (Exception $e) {
