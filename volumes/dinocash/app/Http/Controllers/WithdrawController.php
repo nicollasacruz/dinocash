@@ -89,42 +89,40 @@ class WithdrawController extends Controller
                 ]);
             }
 
-            if (!$user->isAffiliate || !$user->hasRole('admin')) {
-                $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
-                $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
-                $hasWIthdrawToday = $user->withdraws
-                    ->filter(function ($withdraw) {
-                        return $withdraw->updated_at->isToday();
-                    })->first();
+            $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
+            $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
+            $hasWIthdrawToday = $user->withdraws
+                ->filter(function ($withdraw) {
+                    return $withdraw->updated_at->isToday();
+                })->first();
 
-                if ($hasWIthdrawToday) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Só é possível fazer um saque por dia.',
-                    ]);
-                }
-            
-                $bonus = $user->bonusCampaings->where('status', 'active')->first();
-                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
-                if ($user->wallet * 1 == 0) {
-                    $amountAvaliableWallet = 0;
-                }
+            if ($hasWIthdrawToday) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Só é possível fazer um saque por dia.',
+                ]);
+            }
+
+            $bonus = $user->bonusCampaings->where('status', 'active')->first();
+            $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
+            if ($user->wallet * 1 == 0) {
+                $amountAvaliableWallet = 0;
+            }
+            $amountAvaliableBonus = 0;
+            if ($bonus) {
+                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+            }
+            if ($user->bonusWallet == 0) {
                 $amountAvaliableBonus = 0;
-                if ($bonus) {
-                    $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
-                }
-                if ($user->bonusWallet == 0) {
-                    $amountAvaliableBonus = 0;
-                }
-                $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
+            }
+            $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
 
-                if ($request->amount > $amountAvaliable) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
-                    ]);
-                }
-            } 
+            if ($request->amount > $amountAvaliable) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
+                ]);
+            }
             // else {
             //     $user->changeWallet($request->amount * -1, 'withdraw');
             //     $user->save();
@@ -134,9 +132,9 @@ class WithdrawController extends Controller
             //         "wallet" => $user->wallet * 1,
             //         "bonus" => $user->bonusWallet * 1,
             //     ];
-    
+
             //     event(new WalletChanged($message));
-                
+
             //     return response()->json([
             //         'status' => 'success',
             //         'message' => 'Saque realizado com sucesso.',
