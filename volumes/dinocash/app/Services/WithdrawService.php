@@ -63,17 +63,20 @@ class WithdrawService
             $amountAvaliableWallet = 0;
             $amountAvaliableBonus = 0;
 
-            $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
-
+            
             if ($onlyBonus || (!$onlyWallet && !$onlyBonus)) {
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
-                $amountAvaliable =  $amountAvaliableBonus;
+                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $user->wallet : 0;
+                $amountAvaliable =  $amountAvaliableBonus + $amountAvaliableWallet;
                 if ($onlyBonus) {
-                    $amountAvaliable =  $amountAvaliableBonus + $amountAvaliableWallet;
+                    $amountAvaliable =  $amountAvaliableBonus;
+                    Log::alert('Entrou no somente bonus');
                 }
             } elseif ($onlyWallet) {
-                $amountAvaliable =  $amountAvaliableWallet;
+                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $user->wallet : 0;
+                $amountAvaliable = $amountAvaliableWallet;
+                Log::alert('Entrou no somente Saldo');
             }
             
             Log::alert("AMOUNT: $amount  ------ amountAvaliableBonus: $amountAvaliableBonus -------   amountAvaliableWallet: $amountAvaliableWallet");
