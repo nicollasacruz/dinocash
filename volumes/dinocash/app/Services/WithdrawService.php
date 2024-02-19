@@ -42,7 +42,7 @@ class WithdrawService
 
                     $user->bonusWallet -= $amountRemaning;
                 } else {
-                    Log::error(('Erro salvar bonus'));
+                    Log::error(('Sem valor restante para sacar do bonus'));
                     return false;
                 }
             }

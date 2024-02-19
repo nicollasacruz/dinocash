@@ -109,7 +109,10 @@ class WithdrawController extends Controller
                 if ($user->wallet * 1 == 0) {
                     $amountAvaliableWallet = 0;
                 }
-                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+                $amountAvaliableBonus = 0;
+                if ($bonus) {
+                    $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+                }
                 if ($user->bonusWallet == 0) {
                     $amountAvaliableBonus = 0;
                 }
@@ -121,23 +124,24 @@ class WithdrawController extends Controller
                         'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
                     ]);
                 }
-            } else {
-                $user->changeWallet($request->amount * -1, 'withdraw');
-                $user->save();
+            } 
+            // else {
+            //     $user->changeWallet($request->amount * -1, 'withdraw');
+            //     $user->save();
 
-                $message = [
-                    "id" => $user->id,
-                    "wallet" => $user->wallet * 1,
-                    "bonus" => $user->bonusWallet * 1,
-                ];
+            //     $message = [
+            //         "id" => $user->id,
+            //         "wallet" => $user->wallet * 1,
+            //         "bonus" => $user->bonusWallet * 1,
+            //     ];
     
-                event(new WalletChanged($message));
+            //     event(new WalletChanged($message));
                 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Saque realizado com sucesso.',
-                ]);
-            }
+            //     return response()->json([
+            //         'status' => 'success',
+            //         'message' => 'Saque realizado com sucesso.',
+            //     ]);
+            // }
 
             $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll, $setting->rollover);
             if (is_bool($withdraw)) {
