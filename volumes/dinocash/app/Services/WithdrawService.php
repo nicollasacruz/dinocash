@@ -19,8 +19,10 @@ class WithdrawService
             $bonus = $user->bonusCampaings->where('status', 'active')->first();
             $amountRemaning = $amount;
             $amountAvaliableWallet = $totalRoll / $rollover;
-            $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
-
+            $amountAvaliableBonus = 0;
+            if ($bonus) {
+                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+            }
             if ($user->wallet >= $amountRemaning) {
                 if ($amountAvaliableWallet >= $amountRemaning) {
                     $user->changeWallet($amountRemaning * -1, 'withdraw');
@@ -46,7 +48,7 @@ class WithdrawService
                     return false;
                 }
             }
-            
+
             $user->save();
 
             $message = [
@@ -56,7 +58,7 @@ class WithdrawService
             ];
 
             event(new WalletChanged($message));
-            
+
             if (!$user->isAffiliate) {
                 $withdraw = Withdraw::create([
                     'userId' => $user->id,
@@ -64,7 +66,7 @@ class WithdrawService
                     'amount' => $amount,
                     'type' => 'pending',
                 ]);
-                
+
                 return $withdraw;
             }
 
