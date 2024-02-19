@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WalletChanged;
 use App\Models\AffiliateWithdraw;
 use App\Models\Deposit;
 use App\Models\Setting;
@@ -120,6 +121,22 @@ class WithdrawController extends Controller
                         'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
                     ]);
                 }
+            } else {
+                $user->changeWallet($request->amount * -1, 'withdraw');
+                $user->save();
+
+                $message = [
+                    "id" => $user->id,
+                    "wallet" => $user->wallet * 1,
+                    "bonus" => $user->bonusWallet * 1,
+                ];
+    
+                event(new WalletChanged($message));
+                
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Saque realizado com sucesso.',
+                ]);
             }
 
             $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll, $setting->rollover);
