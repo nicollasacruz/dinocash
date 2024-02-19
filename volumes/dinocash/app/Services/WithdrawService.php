@@ -65,13 +65,18 @@ class WithdrawService
 
             $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
 
-            if (!$onlyWallet) {
+            if ($onlyBonus || (!$onlyWallet && !$onlyBonus)) {
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
+                $amountAvaliable =  $amountAvaliableBonus;
+                if ($onlyBonus) {
+                    $amountAvaliable =  $amountAvaliableBonus + $amountAvaliableWallet;
+                }
+            } elseif ($onlyWallet) {
+                $amountAvaliable =  $amountAvaliableWallet;
             }
-
-            $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
-            Log::alert("AMOUNT: $amount  ------ amountAvaliableBonus: $amountAvaliableBonus -------   amountAvaliableWallet: $$amountAvaliableWallet");
+            
+            Log::alert("AMOUNT: $amount  ------ amountAvaliableBonus: $amountAvaliableBonus -------   amountAvaliableWallet: $amountAvaliableWallet");
 
             if ($amount > $amountAvaliable) {
                 return [
