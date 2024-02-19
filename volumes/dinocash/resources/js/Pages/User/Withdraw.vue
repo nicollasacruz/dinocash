@@ -124,7 +124,7 @@ async function withdraw() {
         const { data } = await axios.post(route("user.saque.store"), {
             amount: amount.value,
         });
-        if (data.status === "error") {
+        if (data.success === "error") {
             toast.error(data.message);
             return;
         }

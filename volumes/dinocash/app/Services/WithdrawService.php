@@ -81,7 +81,7 @@ class WithdrawService
             if ($amount > $amountAvaliable) {
                 return [
                     'success' => 'error',
-                    'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
+                    'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar.",
                 ];
             }
             $amountRemaning = $amount;
