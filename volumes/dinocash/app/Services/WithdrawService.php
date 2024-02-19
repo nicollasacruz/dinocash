@@ -46,7 +46,8 @@ class WithdrawService
                 $onlyBonus = true;
             }
 
-            $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
+            $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount') ?? 1;
+
             $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
             $hasWIthdrawToday = $user->withdraws
                 ->filter(function ($withdraw) {
