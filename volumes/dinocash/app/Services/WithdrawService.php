@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\WalletChanged;
 use App\Models\BonusWalletChange;
+use App\Models\Setting;
 use App\Models\Withdraw;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -14,16 +15,72 @@ use Illuminate\Support\Facades\Log;
 
 class WithdrawService
 {
-    public function createWithdraw(User $user, $amount, $totalRoll, $rollover)
+    public function createWithdraw(User $user, $amount)
     {
         try {
-            $bonus = $user->bonusCampaings->where('status', 'active')->first();
-            $amountRemaning = $amount;
-            $amountAvaliableWallet = $totalRoll / $rollover;
+            $onlyWallet = false;
+            $onlyBonus = false;
+            $setting = Setting::first();
+            if ($amount < $setting->minWithdraw) {
+                return [
+                    'success' => 'error',
+                    'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
+                ];
+            }
+            if ($amount > $setting->maxWithdraw) {
+                return [
+                    'success' => 'error',
+                    'message' => 'Saque máximo de R$ ' . number_format($setting->maxWithdraw, 2, ',', '.'),
+                ];
+            }
+            if ($amount > $user->wallet + $user->bonusWallet || $amount < 0) {
+                return [
+                    'success' => 'error',
+                    'message' => 'Você não possui esse valor para saque',
+                ];
+            }
+
+            if ($amount <= $user->wallet) {
+                $onlyWallet = true;
+            } elseif ($user->wallet == 0) {
+                $onlyBonus = true;
+            }
+
+            $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
+            $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
+            $hasWIthdrawToday = $user->withdraws
+                ->filter(function ($withdraw) {
+                    return $withdraw->updated_at->isToday();
+                })->first();
+
+            if ($hasWIthdrawToday) {
+                return response()->json([
+                    'success' => 'error',
+                    'message' => 'Só é possível fazer um saque por dia.',
+                ]);
+            }
+
+            if ($user->wallet * 1 == 0) {
+                $amountAvaliableWallet = 0;
+            }
             $amountAvaliableBonus = 0;
-            if ($bonus) {
+            if (!$onlyWallet) {
+                $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
                 $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
             }
+            if ($user->bonusWallet == 0) {
+                $amountAvaliableBonus = 0;
+            }
+            $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
+
+            if ($amount > $amountAvaliable) {
+                return [
+                    'success' => 'error',
+                    'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
+                ];
+            }
+            $amountRemaning = $amount;
             if ($user->wallet >= $amountRemaning) {
                 if ($amountAvaliableWallet >= $amountRemaning) {
                     WalletTransaction::create([
@@ -44,8 +101,6 @@ class WithdrawService
                     $user->wallet = number_format($user->wallet + $amountAvaliableWallet * -1, 2, '.', '');
                     $amountRemaning -= $amountAvaliableWallet;
                 }
-                $user->save();
-                
             }
             if ($amountRemaning > 0) {
                 if ($user->bonusWallet >= $amountRemaning && $amountAvaliableBonus >= $amountRemaning) {
@@ -55,11 +110,10 @@ class WithdrawService
                         'amountNew' => $user->bonusWallet - $amountRemaning,
                         'type' => $amountRemaning === $amount ? 'withdraw' : 'withdraw partial',
                     ]);
-
+                    
                     $user->bonusWallet -= $amountRemaning;
                 } else {
                     Log::error('Sem valor restante para sacar do bonus');
-                    return false;
                 }
             }
 
@@ -81,11 +135,15 @@ class WithdrawService
                     'type' => 'pending',
                 ]);
 
-                return $withdraw;
+                if ($setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
+                    $autoPay = $this->aprove($withdraw);
+                };
             }
             Log::alert($user);
 
-            return true;
+            $response = [];
+
+            return $response;
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage());
             return false;

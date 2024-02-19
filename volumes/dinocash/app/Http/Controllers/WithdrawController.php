@@ -69,97 +69,17 @@ class WithdrawController extends Controller
         try {
             $userId = Auth::user()->id;
             $user = User::find($userId);
-            $setting = Setting::first();
-            if ($request->amount < $setting->minWithdraw) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Saque mínimo de R$ ' . number_format($setting->minWithdraw, 2, ',', '.'),
-                ]);
-            }
-            if ($request->amount > $setting->maxWithdraw) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Saque máximo de R$ ' . number_format($setting->maxWithdraw, 2, ',', '.'),
-                ]);
-            }
-            if ($request->amount > $user->wallet + $user->bonusWallet || $request->amount < 0) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Você não possui esse valor para saque',
-                ]);
-            }
 
-            $totalDeposits = $user->deposits->where('type', 'paid')->sum('amount');
-            $totalRoll = $user->gameHistories->where('type', '!=', 'locked')->where('amountType', 'real')->sum('amount');
-            $hasWIthdrawToday = $user->withdraws
-                ->filter(function ($withdraw) {
-                    return $withdraw->updated_at->isToday();
-                })->first();
-
-            if ($hasWIthdrawToday) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Só é possível fazer um saque por dia.',
-                ]);
-            }
-
-            $bonus = $user->bonusCampaings->where('status', 'active')->first();
-            $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
-            if ($user->wallet * 1 == 0) {
-                $amountAvaliableWallet = 0;
-            }
-            $amountAvaliableBonus = 0;
-            if ($bonus) {
-                $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
-            }
-            if ($user->bonusWallet == 0) {
-                $amountAvaliableBonus = 0;
-            }
-            $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
-
-            if ($request->amount > $amountAvaliable) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar  " . $amountAvaliableBonus,
-                ]);
-            }
-            // else {
-            //     $user->changeWallet($request->amount * -1, 'withdraw');
-            //     $user->save();
-
-            //     $message = [
-            //         "id" => $user->id,
-            //         "wallet" => $user->wallet * 1,
-            //         "bonus" => $user->bonusWallet * 1,
-            //     ];
-
-            //     event(new WalletChanged($message));
-
-            //     return response()->json([
-            //         'status' => 'success',
-            //         'message' => 'Saque realizado com sucesso.',
-            //     ]);
-            // }
-
-            $withdraw = $withdrawService->createWithdraw($user, round($request->amount, 2), $totalRoll ?? 0, $setting->rollover);
-            if (is_bool($withdraw)) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Saque realizado com sucesso.',
-                ]);
-            }
-            if (!!$withdraw && $setting->autoPayWithdraw && (float) $withdraw->amount <= $setting->maxAutoPayWithdraw) {
-                $response = $withdrawService->aprove($withdraw);
-            }
+            $response = $withdrawService->createWithdraw($user, round($request->amount, 2));
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Saque realizado com sucesso.',
+                'success' => $response['success'],
+                'message' => $response['message'],
             ]);
         } catch (Exception $e) {
-            Log::error('ERROR CRIAR WITHDRAW   - ' . (Auth::user())->id . '  -  ' . $e->getMessage() . '  -  ' . $e->getTraceAsString());
+            Log::error('ERROR CRIAR WITHDRAW CONTROLLER  - ' . (Auth::user())->id . '  -  ' . $e->getMessage() . '  -  ' . $e->getTraceAsString());
             return response()->json([
-                'status' => 'error',
+                'success' => 'error',
                 'message' => 'Erro ao realizar o saque.',
             ]);
         }
