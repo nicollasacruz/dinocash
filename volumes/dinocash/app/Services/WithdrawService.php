@@ -60,19 +60,18 @@ class WithdrawService
                 ]);
             }
 
-            if ($user->wallet * 1 == 0) {
-                $amountAvaliableWallet = 0;
-            }
+            $amountAvaliableWallet = 0;
             $amountAvaliableBonus = 0;
+
             $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $totalRoll / $setting->rollover : 0;
+
             if (!$onlyWallet) {
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
             }
-            if ($user->bonusWallet == 0) {
-                $amountAvaliableBonus = 0;
-            }
+
             $amountAvaliable = $amountAvaliableBonus + $amountAvaliableWallet;
+            Log::alert("AMOUNT: $amount  ------ amountAvaliableBonus: $amountAvaliableBonus -------   amountAvaliableWallet: $$amountAvaliableWallet");
 
             if ($amount > $amountAvaliable) {
                 return [
@@ -139,7 +138,7 @@ class WithdrawService
                     $autoPay = $this->aprove($withdraw);
                 };
             }
-            
+
             Log::alert($user);
 
             return [
