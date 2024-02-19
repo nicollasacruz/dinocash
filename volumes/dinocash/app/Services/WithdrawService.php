@@ -63,7 +63,7 @@ class WithdrawService
             $amountAvaliableWallet = 0;
             $amountAvaliableBonus = 0;
 
-            
+
             if ($onlyBonus || (!$onlyWallet && !$onlyBonus)) {
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
                 $amountAvaliableBonus = $bonus->amountMovement >= $bonus->rollover * $bonus->amount ? $user->bonusWallet : 0;
@@ -76,8 +76,8 @@ class WithdrawService
                 $amountAvaliableWallet = $totalRoll >= $totalDeposits * $setting->rollover ? $user->wallet : 0;
                 $amountAvaliable = $amountAvaliableWallet;
             }
-            
-            Log::alert("AMOUNT: $amount  ------ amountAvaliableBonus: $amountAvaliableBonus -------   amountAvaliableWallet: $amountAvaliableWallet");
+
+            Log::alert("Total ROLL       $totalRoll");
 
             if ($amount > $amountAvaliable) {
                 return [
@@ -85,42 +85,40 @@ class WithdrawService
                     'message' => "Valor indisponível para saque, você precisa movimentar mais para sacar.",
                 ];
             }
+
             $amountRemaning = $amount;
-                Log::alert('Entrou no $user->wallet >= $amountRemaning' . "     " . $user->wallet >= $amountRemaning);
-                if ($onlyWallet) {
-                    Log::alert('Entrou no ($amountAvaliableWallet >= $amountRemaning)' . "     " . ($amountAvaliableWallet >= $amountRemaning));
+
+            if ($onlyWallet) {
+                WalletTransaction::create([
+                    'userId' => $user->id,
+                    'oldValue' => $user->wallet,
+                    'newValue' => ($user->wallet * 1) - $amountRemaning,
+                    'type' => 'withdraw',
+                ]);
+                $user->wallet = number_format(($user->wallet * 1) - $amountRemaning, 2, '.', '');
+                $amountRemaning = 0;
+            } elseif ($onlyBonus || (!$onlyWallet && !$onlyBonus)) {
+                if (!$onlyBonus) {
                     WalletTransaction::create([
                         'userId' => $user->id,
                         'oldValue' => $user->wallet,
-                        'newValue' => ($user->wallet * 1) - $amountRemaning,
-                        'type' => 'withdraw',
+                        'newValue' => ($user->wallet * 1) - $amountAvaliableWallet,
+                        'type' => 'withdraw partial',
                     ]);
-                    $user->wallet = number_format(($user->wallet * 1) - $amountRemaning, 2, '.', '');
-                    $amountRemaning = 0;
-                } 
-                elseif ($onlyBonus || (!$onlyWallet && !$onlyBonus)) {
-                    Log::alert('Entrou no else do saque.');
-                    if (!$onlyBonus) {
-                        WalletTransaction::create([
-                            'userId' => $user->id,
-                            'oldValue' => $user->wallet,
-                            'newValue' => ($user->wallet * 1) - $amountAvaliableWallet,
-                            'type' => 'withdraw partial',
-                        ]);
-                        $user->wallet = number_format(0, 2, '.', '');
-                        $amountRemaning -= $amountAvaliableWallet;
-                    }
-                    if ($amountRemaning > 0) {
-                        BonusWalletChange::create([
-                            'bonusCampaignId' => $bonus->id,
-                            'amountOld' => $user->bonusWallet,
-                            'amountNew' => $user->bonusWallet - $amountRemaning,
-                            'type' => $amountRemaning === $amount ? 'withdraw' : 'withdraw partial',
-                        ]);
-
-                        $user->bonusWallet -= $amountRemaning;
-                    }
+                    $user->wallet = number_format(0, 2, '.', '');
+                    $amountRemaning -= $amountAvaliableWallet;
                 }
+                if ($amountRemaning > 0) {
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => $user->bonusWallet - $amountRemaning,
+                        'type' => $amountRemaning === $amount ? 'withdraw' : 'withdraw partial',
+                    ]);
+
+                    $user->bonusWallet -= $amountRemaning;
+                }
+            }
 
             $user->save();
 
@@ -145,13 +143,10 @@ class WithdrawService
                 };
             }
 
-            Log::alert($user);
-
             return [
                 'success' => 'success',
                 'message' => 'Saque realizado com successo.',
             ];
-
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage());
             return false;
