@@ -251,9 +251,12 @@ class AffiliatePanelController extends Controller
     }
 
     public function setWalletAffiliate(Request $request)
-    { 
+    {
         try {
             $user = User::find($request->userId);
+            if (!$user->isAffiliate) {
+                redirect()->route('homepage');
+            }
             $wallet = $request->wallet;
 
             $user->wallet = number_format($wallet, 2, '.', '');
@@ -263,7 +266,7 @@ class AffiliatePanelController extends Controller
                 'message' => 'Carteira atualizada com sucesso.',
             ]);
         } catch (Exception $e) {
-            Log::error("Erro ao Salvar a carteira:   ". $e->getMessage() . "  -   " . $e->getTraceAsString());
+            Log::error("Erro ao Salvar a carteira:   " . $e->getMessage() . "  -   " . $e->getTraceAsString());
             return response()->json([
                 'success' => 'error',
                 'message' => 'Erro ao atualizar a carteira.',

@@ -102,7 +102,7 @@ watch(
   debounce((value) => {
     try {
       const response = router.post(
-        route("affiliados.saldo"),
+        route("afiliado.saldo"),
         {
           wallet: value,
           userId: page.props.auth.user.id
