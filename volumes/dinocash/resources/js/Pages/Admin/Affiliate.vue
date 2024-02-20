@@ -30,15 +30,7 @@ const columns = computed(() =>
 );
 const { affiliates, affiliatesWithdrawsToday, affiliatesWithdrawsList } =
   defineProps(["affiliates", "affiliatesWithdrawsToday", "affiliatesWithdrawsList"]);
-const paymentsRow = affiliatesWithdrawsList
-  ? affiliatesWithdrawsList.map((payment) => {
-      return {
-        ...payment,
-        name: payment.user.name,
-        email: payment.user.email,
-      };
-    })
-  : [];
+const paymentsRow = affiliatesWithdrawsList;
 
 const toBRL = (value) => {
   return Number(value).toLocaleString("pt-br", {

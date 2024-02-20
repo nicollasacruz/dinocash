@@ -50,8 +50,6 @@ class AffiliateController extends Controller
                 ->toArray()
                 ;
 
-            dd($affiliateWithdrawsList);
-
             $affiliates = User::when($email, function ($query) use ($email) {
                 $query->where('email', 'LIKE', '%' . $email . '%');
             })
