@@ -27,7 +27,7 @@ class AffiliateWithdraw extends Model
     ];
 
     // Relacionamento com o usuário que solicitou a retirada
-    public function user()
+    public function affiliate()
     {
         return $this->belongsTo(User::class, 'userId', 'id');
     }
@@ -35,16 +35,6 @@ class AffiliateWithdraw extends Model
     // Relacionamento com o gerente ou usuário que aprovou ou reprovou a retirada
     public function manager()
     {
-        return $this->belongsTo(User::class, 'managerUserId');
-    }
-    
-    public static function getAffiliateWithdrawLikeEmail($email): Collection
-    {
-        return static::with('user')
-            ->whereHas('user', function ($query) use ($email) {
-                $query->where('isAffiliate', true)->where('email', 'LIKE', '%' . $email . '%');
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        return $this->belongsTo(User::class, 'managerUserId', 'id');
     }
 }
