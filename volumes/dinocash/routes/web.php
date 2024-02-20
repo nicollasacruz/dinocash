@@ -239,7 +239,7 @@ Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->gro
     Route::get('/historico', [AffiliatePanelController::class, 'historyAffiliate'])->name('afiliado.historico');
     Route::get('/historico-sub', [AffiliatePanelController::class, 'subHistoryAffiliate'])->name('afiliado.historico-sub');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.faturas');
-    Route::post('/carteira', [AffiliatePanelController::class, 'setWalletAffiliatet'])->name('afiliado.saldo');
+    Route::post('/carteira', [AffiliatePanelController::class, 'setWalletAffiliate'])->name('afiliado.saldo');
 });
 Route::post('/', [ProfileController::class, 'edit'])->name('logout');
 
