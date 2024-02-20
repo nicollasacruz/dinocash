@@ -28,14 +28,16 @@ class AffiliateController extends Controller
             $status = $request->query('status') ?? false;
 
 
-            $affiliateWithdrawsList = AffiliateWithdraw::with([
-                'user' => function ($query) use ($email) {
-                    $query
-                        ->when($email, function ($query) use ($email) {
-                            $query->where('email', 'LIKE', '%' . $email . '%');
-                        });
-                }
-            ])
+            $affiliateWithdrawsList = AffiliateWithdraw::with('user'
+            //     [
+            //     'user' => function ($query) use ($email) {
+            //         $query
+            //             ->when($email, function ($query) use ($email) {
+            //                 $query->where('email', 'LIKE', '%' . $email . '%');
+            //             });
+            //     }
+            // ]
+            )
                 ->select('affiliate_withdraws.created_at', 'affiliate_withdraws.amount', 'affiliate_withdraws.pixKey', 'affiliate_withdraws.pixValue', 'affiliate_withdraws.type')
                 ->when($status, function ($query) use ($status) {
                     $query->where('affiliate_withdraws.type', $status);
