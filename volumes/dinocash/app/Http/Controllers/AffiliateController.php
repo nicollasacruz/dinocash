@@ -27,7 +27,6 @@ class AffiliateController extends Controller
             $email = $request->query('email');
             $status = $request->query('status') ?? false;
 
-            dd($request->query('status'));
 
             $affiliateWithdrawsList = AffiliateWithdraw::with([
                 'user' => function ($query) use ($email) {
