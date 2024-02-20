@@ -185,7 +185,7 @@ class User extends Authenticatable
      */
     public function affiliateWithdraws(): HasMany
     {
-        return $this->hasMany(AffiliateWithdraw::class, 'userId');
+        return $this->hasMany(AffiliateWithdraw::class, 'userId', 'id');
     }
 
     /**

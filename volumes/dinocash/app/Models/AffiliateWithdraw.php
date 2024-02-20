@@ -29,7 +29,7 @@ class AffiliateWithdraw extends Model
     // Relacionamento com o usuário que solicitou a retirada
     public function user()
     {
-        return $this->belongsTo(User::class, 'userId');
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 
     // Relacionamento com o gerente ou usuário que aprovou ou reprovou a retirada
