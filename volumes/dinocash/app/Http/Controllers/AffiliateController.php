@@ -25,7 +25,7 @@ class AffiliateController extends Controller
     {
         try {
             $email = $request->query('email');
-            $status = $request->query('status') != 'all' ?? false;
+            $status = $request->query('status') ?? false;
 
             dd($request->query('status'));
 
