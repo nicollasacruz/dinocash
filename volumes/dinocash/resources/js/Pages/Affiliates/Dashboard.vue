@@ -101,14 +101,11 @@ watch(
   walletUser,
   debounce((value) => {
     try {
-      const response = router.post(
+      const response = axios.post(
         route("afiliado.saldo"),
         {
           wallet: value,
           userId: page.props.auth.user.id
-        },
-        {
-          preserveState: true,
         }
       );
       // toast.success(response);
