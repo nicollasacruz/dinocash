@@ -39,7 +39,8 @@ class AffiliateController extends Controller
             })
             ->orderBy('affiliate_withdraws.created_at', 'desc')
             ->get()
-            ->toArray();
+            // ->toArray()
+            ;
         
         
 
