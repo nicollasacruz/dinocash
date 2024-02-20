@@ -32,7 +32,9 @@ class AffiliateController extends Controller
             }])
             ->select('affiliate_withdraws.created_at', 'affiliate_withdraws.amount', 'affiliate_withdraws.pixKey', 'affiliate_withdraws.pixValue', 'affiliate_withdraws.type')
             ->when($email, function ($query) use ($email) {
-                $query->hasUser()->where('email', 'LIKE', '%' . $email . '%');
+                $query->whereHas('user', function ($query) use ($email) {
+                    $query->where('email', 'LIKE', '%' . $email . '%');
+                });
             })
             ->when($status, function ($query) use ($status) {
                 $query->where('affiliate_withdraws.type', $status);
@@ -40,6 +42,7 @@ class AffiliateController extends Controller
             ->orderBy('affiliate_withdraws.created_at', 'desc')
             ->get()
             ->toArray();
+        
         
 
             dd($affiliateWithdrawsList);
