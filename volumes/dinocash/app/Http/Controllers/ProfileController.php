@@ -34,16 +34,8 @@ class ProfileController extends Controller {
             $request->user()->email_verified_at = null;
         }
 
-        $request->user()->bonusWallet = floatval($request->user()->bonusWallet);
+        $request->user()->invitation_link = floatval($request->user()->invitation_link);
         $request->user()->save();
-        $user = Auth::user();
-        $message = [
-            "id" => $user->id,
-            "wallet" => $user->wallet * 1,
-            "bonus" => $user->bonusWallet * 1,
-        ];
-
-        event(new WalletChanged($message));
 
         return Redirect::route('user.edit');
     }
