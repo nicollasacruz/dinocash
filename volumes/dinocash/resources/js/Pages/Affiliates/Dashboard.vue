@@ -101,15 +101,16 @@ watch(
   walletUser,
   debounce((value) => {
     try {
-      const response = axios.post(
+      axios.post(
         route("afiliado.saldo"),
         {
           wallet: value,
           userId: page.props.auth.user.id
         }
-      );
-      toast.success(response.data.message);
-      // console.log(response);
+      ).then((response) => {
+        console.log(response);
+        toast.success(response.data.message);
+      });
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
