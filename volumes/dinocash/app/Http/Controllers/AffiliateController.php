@@ -15,6 +15,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Response;
 use Redirect;
@@ -28,24 +29,26 @@ class AffiliateController extends Controller
             $status = $request->query('status') ?? false;
 
 
-            $affiliateWithdrawsList = AffiliateWithdraw::with('afiliado'
-            //     [
-            //     'user' => function ($query) use ($email) {
-            //         $query
-            //             ->when($email, function ($query) use ($email) {
-            //                 $query->where('email', 'LIKE', '%' . $email . '%');
-            //             });
-            //     }
-            // ]
-            )
-                ->select('affiliate_withdraws.created_at', 'affiliate_withdraws.amount', 'affiliate_withdraws.pixKey', 'affiliate_withdraws.pixValue', 'affiliate_withdraws.type')
+            $affiliateWithdrawsList = DB::table('affiliate_withdraws')
+                ->select(
+                    'affiliate_withdraws.created_at',
+                    'affiliate_withdraws.amount',
+                    'affiliate_withdraws.pixKey',
+                    'affiliate_withdraws.pixValue',
+                    'affiliate_withdraws.type',
+                    'users.email'
+                )
+                ->leftJoin('users', 'affiliate_withdraws.userId', '=', 'users.id')
+                ->when($email, function ($query) use ($email) {
+                    $query->where('users.email', 'LIKE', '%' . $email . '%');
+                })
                 ->when($status, function ($query) use ($status) {
                     $query->where('affiliate_withdraws.type', $status);
                 })
                 ->orderBy('affiliate_withdraws.created_at', 'desc')
                 ->get()
-                // ->toArray()
-            ;
+                ->toArray()
+                ;
 
             dd($affiliateWithdrawsList);
 
