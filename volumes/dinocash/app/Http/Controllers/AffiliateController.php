@@ -27,15 +27,22 @@ class AffiliateController extends Controller
             $email = $request->query('email');
             $status = $request->query('status') != 'all' ?? false;
 
-            $affiliateWithdrawsList = AffiliateWithdraw::with('user')
-                ->when($email, function ($query) use ($email) {
-                    $query->where('user.email', 'LIKE', '%' . $email . '%');
-                })
-                ->when($status, function ($query) use ($status) {
-                    $query->where('type', $status);
-                })
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $affiliateWithdrawsList = AffiliateWithdraw::with(['user' => function ($query) {
+                $query->select('id', 'email');
+            }])
+            ->select('user_email', 'created_at', 'amount', 'pixKey', 'pixValue', 'type')
+            ->when($email, function ($query) use ($email) {
+                $query->whereHas('user', function ($query) use ($email) {
+                    $query->where('email', 'LIKE', '%' . $email . '%');
+                });
+            })
+            ->when($status, function ($query) use ($status) {
+                $query->where('type', $status);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+            dd($affiliateWithdrawsList);
 
             $affiliates = User::when($email, function ($query) use ($email) {
                 $query->where('email', 'LIKE', '%' . $email . '%');
