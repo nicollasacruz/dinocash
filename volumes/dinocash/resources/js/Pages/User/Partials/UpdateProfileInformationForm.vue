@@ -40,7 +40,7 @@ const form = useForm({
 
             <template v-if="!!user.isAffiliate">
                 <div>
-                    <div class="ml-3 text-xs">Saldo da Carteira  está no painel de afiliado</div>
+                    <div class="ml-3 text-xl">Saldo da Carteira  está no painel de afiliado</div>
                 </div>
                 <div>
                     <div class="ml-3 text-xs">
