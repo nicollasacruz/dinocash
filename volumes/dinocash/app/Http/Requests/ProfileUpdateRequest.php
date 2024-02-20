@@ -24,4 +24,17 @@ class ProfileUpdateRequest extends FormRequest
             'invitation_link' => ['string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'email.unique' => 'email já está sendo utilizado por outra pessoa.',
+            'invitation_link.unique' => 'Link já está sendo utilizado por outra pessoa.',
+        ];
+    }
 }
