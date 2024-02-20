@@ -45,12 +45,12 @@ const initialStatus = urlParams.get("status") || "all";
 const searchQuery = ref(initialEmail);
 const statusQuery = ref(initialStatus);
 
-watchEffect(() => {
+watch([searchQuery, statusQuery], ([newSearchQuery, newStatusQuery], [oldSearchQuery, oldStatusQuery]) => {
   debounce(() => {
     try {
       router.get(
         route("admin.afiliados"),
-        { email: searchQuery.value, status: statusQuery.value },
+        { email: newSearchQuery, status: newStatusQuery },
         {
           preserveState: true,
         }
