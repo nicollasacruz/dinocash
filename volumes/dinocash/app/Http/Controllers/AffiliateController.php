@@ -27,6 +27,8 @@ class AffiliateController extends Controller
             $email = $request->query('email');
             $status = $request->query('status') != 'all' ?? false;
 
+            dd($status);
+
             $affiliateWithdrawsList = AffiliateWithdraw::with([
                 'user' => function ($query) use ($email) {
                     $query
@@ -35,16 +37,14 @@ class AffiliateController extends Controller
                         });
                 }
             ])
-            ->select('affiliate_withdraws.created_at', 'affiliate_withdraws.amount', 'affiliate_withdraws.pixKey', 'affiliate_withdraws.pixValue', 'affiliate_withdraws.type')
-            ->when($status, function ($query) use ($status) {
-                $query->where('affiliate_withdraws.type', $status);
-            })
-            ->orderBy('affiliate_withdraws.created_at', 'desc')
-            ->get()
-            // ->toArray()
+                ->select('affiliate_withdraws.created_at', 'affiliate_withdraws.amount', 'affiliate_withdraws.pixKey', 'affiliate_withdraws.pixValue', 'affiliate_withdraws.type')
+                ->when($status, function ($query) use ($status) {
+                    $query->where('affiliate_withdraws.type', $status);
+                })
+                ->orderBy('affiliate_withdraws.created_at', 'desc')
+                ->get()
+                // ->toArray()
             ;
-        
-        
 
             dd($affiliateWithdrawsList);
 
