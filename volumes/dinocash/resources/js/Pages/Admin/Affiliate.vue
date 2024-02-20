@@ -122,9 +122,15 @@ watch([searchQuery, statusQuery], ([newSearchQuery, newStatusQuery], [oldSearchQ
       :columns="columns"
       :rows="affiliates.data"
     />
-    <payments-table v-else :columns="columns" :rows="paymentsRow" />
+    <payments-table v-else :columns="columns" :rows="affiliatesWithdrawsList.data" />
     <Paginator
-      :data="selectedTab === 1 ? affiliates : paymentsRow"
+      v-if="selectedTab === 1"
+      :data="affiliatesWithdrawsList"
+      class="mt-4"
+    />
+    <Paginator
+      v-else
+      :data="affiliates"
       class="mt-4"
     />
   </AuthenticatedLayout>

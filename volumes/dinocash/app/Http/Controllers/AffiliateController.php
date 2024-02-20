@@ -46,15 +46,14 @@ class AffiliateController extends Controller
                     $query->where('affiliate_withdraws.type', $status);
                 })
                 ->orderBy('affiliate_withdraws.updated_at', 'desc')
-                ->get()
-                ->toArray()
+                ->paginate(15)
                 ;
 
             $affiliates = User::when($email, function ($query) use ($email) {
                 $query->where('email', 'LIKE', '%' . $email . '%');
             })
                 ->where('isAffiliate', true)
-                ->paginate(10);
+                ->paginate(15);
 
             $affiliates->each(function ($affiliate) {
                 $affiliate->referralsDepositsCounter = $affiliate->referralsDepositsCounter;
