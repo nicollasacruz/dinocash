@@ -241,7 +241,7 @@ function setPixType(selected) {
           Permitir notificações
         </button>
         <span class="text-2xl text-white !text-left capitalize">Saldo da Carteira</span>
-        <money3 class="col-span-2 admin-input mt-5" v-model.number="page.props.auth.user.wallet" v-bind="moneyConfig" />
+        <money3 class="col-span-2 admin-input mt-5" v-model.number="walletUser" v-bind="moneyConfig" />
       </div>
     </div>
     <BaseModal title="Informações do saque" v-model="showModal" @close="showModal = false" v-if="showModal">
