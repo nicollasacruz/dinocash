@@ -85,8 +85,8 @@ watch([searchQuery, statusQuery], ([newSearchQuery, newStatusQuery], [oldSearchQ
       </a>
     </div>
     <div class="flex justify-between my-4">
-      <div class="">
-        <div class="font-bold text-white uppercase mb-1">
+      <div class="flex flex-row">
+        <div class=" font-bold text-white uppercase mb-1">
           Pesquisar afiliado
         </div> 
         <input
