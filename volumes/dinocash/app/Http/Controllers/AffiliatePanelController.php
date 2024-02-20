@@ -12,6 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\Log;
+
+use function Pest\Laravel\call;
 
 class AffiliatePanelController extends Controller
 {
@@ -244,5 +248,26 @@ class AffiliatePanelController extends Controller
         return Inertia::render('Affiliates/Invoices', [
             'affiliatesInvoices' => $affiliatesInvoices ?? [],
         ]);
+    }
+
+    public function setWalletAffiliate(Request $request)
+    { 
+        try {
+            $user = User::find($request->userId);
+            $wallet = $request->wallet;
+
+            $user->wallet = number_format($wallet, 2, '.', '');
+            $user->save();
+            return response()->json([
+                'success' => 'success',
+                'message' => 'Carteira atualizada com sucesso.',
+            ]);
+        } catch (Exception $e) {
+            Log::error("Erro ao Salvar a carteira:   ". $e->getMessage() . "  -   " . $e->getTraceAsString());
+            return response()->json([
+                'success' => 'error',
+                'message' => 'Erro ao atualizar a carteira.',
+            ]);
+        }
     }
 }
