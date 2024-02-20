@@ -28,7 +28,7 @@ class AffiliateController extends Controller
             $status = $request->query('status') != 'all' ?? false;
 
             $affiliateWithdrawsList = AffiliateWithdraw::with(['user' => function ($query) {
-                $query->select('email');
+                $query->select('id', 'email');
             }])
             ->select('created_at', 'amount', 'pixKey', 'pixValue', 'type')
             ->when($email, function ($query) use ($email) {
