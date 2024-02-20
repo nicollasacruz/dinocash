@@ -21,21 +21,6 @@ const form = useForm({
     invitation_link: user.invitation_link,
 });
 
-const moneyConfig = {
-    prefix: "R$ ",
-    suffix: "",
-    thousands: ".",
-    decimal: ",",
-    precision: 2,
-    disableNegative: true,
-    disabled: false,
-    min: null,
-    max: null,
-    allowBlank: false,
-    minimumNumberOfCharacters: 0,
-    shouldRound: true,
-    focusOnRight: true,
-};
 </script>
 
 <template>
@@ -55,9 +40,7 @@ const moneyConfig = {
 
             <template v-if="!!user.isAffiliate">
                 <div>
-                    <div class="ml-3 text-xs">Saldo da Carteira</div>
-
-                    <money3 class="mt-1 block w-full user-input" v-model.number="form.wallet" v-bind="moneyConfig" />
+                    <div class="ml-3 text-xs">Saldo da Carteira  está no painel de afiliado</div>
                 </div>
                 <div>
                     <div class="ml-3 text-xs">
