@@ -26,12 +26,12 @@ class AffiliateController extends Controller
     {
         try {
             $email = $request->query('email');
-            $status = $request->query('status') ?? false;
+            $status = $request->query('status') != 'all' ? $request->query('status') : false;
 
 
             $affiliateWithdrawsList = DB::table('affiliate_withdraws')
                 ->select(
-                    'affiliate_withdraws.created_at',
+                    'affiliate_withdraws.updated_at',
                     'affiliate_withdraws.amount',
                     'affiliate_withdraws.pixKey',
                     'affiliate_withdraws.pixValue',
@@ -45,7 +45,7 @@ class AffiliateController extends Controller
                 ->when($status, function ($query) use ($status) {
                     $query->where('affiliate_withdraws.type', $status);
                 })
-                ->orderBy('affiliate_withdraws.created_at', 'desc')
+                ->orderBy('affiliate_withdraws.updated_at', 'desc')
                 ->get()
                 ->toArray()
                 ;

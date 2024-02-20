@@ -21,10 +21,11 @@ const columns = computed(() =>
         // { label: "Saldo Pendente", key: "paymentPending" },
       ]
     : [
-        { label: "Nome", key: "name" },
         { label: "Email", key: "email" },
         { label: "Valor", key: "amount" },
         { label: "Data", key: "updated_at" },
+        { label: "Tipo de Chave", key: "pixKey" },
+        { label: "Chave", key: "pixValue" },
         { label: "Status", key: "type" },
       ]
 );
