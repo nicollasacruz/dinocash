@@ -34,7 +34,7 @@ class ProfileController extends Controller {
             $request->user()->email_verified_at = null;
         }
 
-        $request->user()->invitation_link = floatval($request->user()->invitation_link);
+        $request->user()->invitation_link = $request->user()->invitation_link;
         $request->user()->save();
 
         return Redirect::route('user.edit');
