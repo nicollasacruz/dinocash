@@ -147,8 +147,8 @@ class DepositController extends Controller
 
             Log::alert('Entrou no callback ezzebank antes ' . $reqTimestamp . '    -     ' . $reqSignature);
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
-                Log::alert( $request->json());
-                
+                Log::alert( $request->requestBody);
+
                 // $requestData = $request->only(['idTransaction', 'typeTransaction', 'statusTransaction']);
 
                 // $idTransaction = $requestData['idTransaction'];
