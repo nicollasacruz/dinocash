@@ -33,7 +33,7 @@
       </template>
       <template #bannedAt="{ value }">
         <td class="py-0">
-          {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
+          {{ value ? dayjs(value).format("DD/MM/YYYY HH:mm:ss") : ""}}
         </td>
       </template>
     </BaseTable>
