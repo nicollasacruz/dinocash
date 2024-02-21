@@ -94,7 +94,9 @@ class DepositController extends Controller
 
     public function webhook(Request $request, DepositService $depositService)
     {
+        Log::alert('Entrou no callback');
         if (env('PAYMENT_SERVICE') == 'SUITPAY') {
+            Log::alert('Entrou no callback SUITPAY');
             $validatedData = $request->validate([
                 'idTransaction' => 'required|string',
                 'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
@@ -125,6 +127,7 @@ class DepositController extends Controller
             }
             return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
         } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
+            Log::alert('Entrou no callback ezzebank');
             return response()->json([
                 'test' => true
             ], 200);
