@@ -16,7 +16,7 @@ class UserController extends Controller
         $users = User::when($request->email, function ($query, $email) {
             $query->where('email', 'LIKE', '%' . $email . '%');
         })
-            ->select('email', 'wallet', 'bannedAt', 'created_at')
+            ->select('id', 'email', 'isAffiliate','wallet', 'bannedAt', 'created_at')
             ->where('isAffiliate', false)
             ->orderByRaw('CAST(wallet AS DECIMAL(10,2)) DESC')
             ->paginate(20);

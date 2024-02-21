@@ -5,157 +5,62 @@
   </div>
   <form @submit.prevent="submit">
     <div class="grid grid-cols-2 items-center gap-x-4 gap-y-2 text-white">
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['email']"
-        v-bind="email"
-        label="Email"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['isAffiliate']"
-        v-bind="isAffiliate"
-        label="Afiliado"
-        class="p-0"
-        :options="[
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['email']" v-bind="email"
+        label="Email" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['isAffiliate']" v-bind="isAffiliate"
+        label="Afiliado" class="p-0" :options="[
           { value: false, label: 'Não' },
           { value: true, label: 'Sim' },
-        ]"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['isExpert']"
-        v-bind="isExpert"
-        label="Tem Rede"
-        class="p-0"
-        :options="[
+        ]" />
+      <base-input v-if="typeForm == 'affiliate'" label-style="font-bold text-xs" classes="!h-[40px]"
+        :error="errors['isExpert']" v-bind="isExpert" label="Tem Rede" class="p-0" :options="[
           { value: false, label: 'Não' },
           { value: true, label: 'Sim' },
-        ]"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['wallet']"
-        v-bind="wallet"
-        label="Saldo"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['revShare']"
-        v-bind="revShare"
-        label="RevShare %"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['CPA']"
-        v-bind="CPA"
-        label="CPA"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['revSub']"
-        v-bind="revSub"
-        label="Sub RevShare %"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['cpaSub']"
-        v-bind="cpaSub"
-        label="Sub CPA"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['referralsCounter']"
-        v-bind="referralsCounter"
-        label="Cadastros no link"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['referralsDepositsCounter']"
-        v-bind="referralsDepositsCounter"
-        label="Cadastros depositantes"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['walletAffiliate']"
-        v-bind="walletAffiliate"
-        label="Valor de comissão"
-        v-if="typeForm == 'affiliate'"
-      />
-      <base-input
-        label-style="font-bold text-xs"
-        classes="!h-[40px]"
-        :error="errors['invitation_link']"
-        v-bind="invitation_link"
-        label="Link de afiliados"
-        v-if="typeForm == 'affiliate'"
-        class=""
-      />
+        ]" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['wallet']" v-bind="wallet"
+        label="Saldo" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['revShare']" v-bind="revShare"
+        label="RevShare %" v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['CPA']" v-bind="CPA" label="CPA"
+        v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['revSub']" v-bind="revSub"
+        label="Sub RevShare %" v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['cpaSub']" v-bind="cpaSub"
+        label="Sub CPA" v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['referralsCounter']"
+        v-bind="referralsCounter" label="Cadastros no link" v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['referralsDepositsCounter']"
+        v-bind="referralsDepositsCounter" label="Cadastros depositantes" v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['walletAffiliate']"
+        v-bind="walletAffiliate" label="Valor de comissão" v-if="typeForm == 'affiliate'" />
+      <base-input label-style="font-bold text-xs" classes="!h-[40px]" :error="errors['invitation_link']"
+        v-bind="invitation_link" label="Link de afiliados" v-if="typeForm == 'affiliate'" class="" />
     </div>
     <div class="grid grid-cols-2 gap-x-4 mt-4">
       <div class="flex flex-col col-span-1 uppercase gap-y-2">
-        <div
-          @click="getHistories(user.id)"
-          class="modal-button bg-white text-black"
-        >
+        <div @click="getHistories(user.id)" class="modal-button bg-white text-black">
           Visualizar histórico de jogadas
         </div>
-        <div
-          @click="getCommissions(user.id)"
-          class="modal-button bg-white text-black"
-          v-if="typeForm == 'affiliate'"
-        >
+        <div @click="getCommissions(user.id)" class="modal-button bg-white text-black" v-if="typeForm == 'affiliate'">
           Visualizar histórico de comissões
         </div>
-        <div
-          @click="getMovements(user.id)"
-          class="modal-button bg-white text-black"
-        >
+        <div @click="getMovements(user.id)" class="modal-button bg-white text-black">
           Visualizar movimentações
         </div>
       </div>
       <div class="flex flex-col uppercase gap-y-2">
-        <div
-          @click="banTemporary(user.id)"
-          class="modal-button bg-red-600 text-white"
-        >
+        <div @click="banTemporary(user.id)" class="modal-button bg-red-600 text-white">
           banir usuário por 30 dias
         </div>
-        <div
-          @click="banPermanent(user.id)"
-          class="modal-button bg-red-600 text-white"
-        >
+        <div @click="banPermanent(user.id)" class="modal-button bg-red-600 text-white">
           banir usuário permanentemente
         </div>
-        <div
-          @click="deleteUser(user.id)"
-          class="modal-button bg-red-600 text-white"
-        >
+        <div @click="deleteUser(user.id)" class="modal-button bg-red-600 text-white">
           excluir usuário
         </div>
       </div>
     </div>
-    <button
-      @click="submit"
-      class="btn btn-success text-white w-full mt-4 mb-2 btn-sm"
-    >
+    <button @click="submit" class="btn btn-success text-white w-full mt-4 mb-2 btn-sm">
       Salvar
     </button>
   </form>
@@ -243,18 +148,18 @@ const emit = defineEmits(["submit", "delete-user"]);
 const affiliateValidations =
   typeForm === "affiliate"
     ? {
-        revShare: yup.string().required("O campo Rev Share é obrigatório"),
-        CPA: yup.string().required("O campo CPA é obrigatório"),
-        referralsCounter: yup
-          .string()
-          .required("O campo Cadastros no link é obrigatório"),
-        walletAffiliate: yup
-          .string()
-          .required("O campo Valor de comissão é obrigatório"),
-        invitation_link: yup
-          .string()
-          .required("O campo Link de afiliados é obrigatório"),
-      }
+      revShare: yup.string().required("O campo Rev Share é obrigatório"),
+      CPA: yup.string().required("O campo CPA é obrigatório"),
+      referralsCounter: yup
+        .string()
+        .required("O campo Cadastros no link é obrigatório"),
+      walletAffiliate: yup
+        .string()
+        .required("O campo Valor de comissão é obrigatório"),
+      invitation_link: yup
+        .string()
+        .required("O campo Link de afiliados é obrigatório"),
+    }
     : {};
 const validationSchema = yup.object().shape({
   email: yup
@@ -266,19 +171,19 @@ const validationSchema = yup.object().shape({
 });
 const initialValues = user
   ? {
-      email: user.email,
-      isAffiliate: user.isAffiliate,
-      isExpert: user.isExpert,
-      wallet: user.wallet,
-      revSub: user.revSub,
-      cpaSub: user.cpaSub,
-      revShare: user.revShare,
-      CPA: user.CPA,
-      referralsCounter: user.referralsCounter,
-      referralsDepositsCounter: user.referralsDepositsCounter,
-      walletAffiliate: user.walletAffiliate,
-      invitation_link: user.invitation_link,
-    }
+    email: user.email,
+    isAffiliate: user.isAffiliate,
+    isExpert: user.isExpert,
+    wallet: user.wallet,
+    revSub: user.revSub,
+    cpaSub: user.cpaSub,
+    revShare: user.revShare,
+    CPA: user.CPA,
+    referralsCounter: user.referralsCounter,
+    referralsDepositsCounter: user.referralsDepositsCounter,
+    walletAffiliate: user.walletAffiliate,
+    invitation_link: user.invitation_link,
+  }
   : {};
 const { handleSubmit, defineInputBinds, errors } = useForm({
   validationSchema,
