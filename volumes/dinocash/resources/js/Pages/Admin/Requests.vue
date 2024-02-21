@@ -22,15 +22,16 @@ const columns = [
 
 const urlParams = new URLSearchParams(window.location.search);
 const initialEmail = urlParams.get("email") || "";
+const initialStatus = urlParams.get("status") || "all";
 const searchQuery = ref(initialEmail);
+const statusQuery = ref(initialStatus);
 
-watch(
-  searchQuery,
-  debounce((value) => {
+watch([searchQuery, statusQuery], ([newSearchQuery, newStatusQuery], [oldSearchQuery, oldStatusQuery]) => {
+  debounce(() => {
     try {
       router.get(
-        route("admin.saque"),
-        { email: value },
+        route("admin.afiliados"),
+        { email: newSearchQuery, status: newStatusQuery },
         {
           preserveState: true,
         }
@@ -38,8 +39,8 @@ watch(
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-  }, 700)
-);
+  }, 700)();
+});
 
 const showModal = ref(false);
 const getStatus = (status) => {
@@ -94,13 +95,6 @@ const { withdraws, totalToday, totalAmount } = defineProps([
   "totalAmount",
   "totalToday",
 ]);
-const rows = withdraws.data.map((withdraw) => {
-  return {
-    ...withdraw,
-    email: withdraw.user?.email,
-    pix: withdraw.user?.document,
-  };
-});
 </script>
 
 <template>
@@ -109,33 +103,31 @@ const rows = withdraws.data.map((withdraw) => {
   <AuthenticatedLayout>
     <div class="text-4xl text-white font-bold mb-5">Saques</div>
     <div class="flex justify-between my-4">
-      <div class="">
-        <div class="font-bold text-white uppercase mb-1">Pesquisar saque</div>
-        <input
-          type="text"
-          class="admin-input"
-          placeholder="Digite o email do usuário..."
-          v-model="searchQuery"
-        />
+      <div class="flex flex-row">
+        <div>
+          <div class=" font-bold text-white uppercase mb-1">
+            Pesquisar Saque
+          </div>
+          <input type="text" class="admin-input" placeholder="Digite o email do afiliado..." v-model="searchQuery" />
+        </div>
+        <div>
+          <div class="font-bold text-white uppercase mb-1">
+            Filtrar statuus
+          </div>
+          <select v-model="statusQuery" class="admin-input">
+            <option value="all">Todos</option>
+            <option value="paid">Pago</option>
+            <option value="pending">Pendente</option>
+            <option value="rejected">Recusado</option>
+          </select>
+        </div>
       </div>
-      <!-- <div class="flex gap-x-5">
-        <TextBox
-          label="CAIXA DA CASA"
-          :value="toBRL(totalAmount)"
-          value-text="text-center text-green-500"
-        />
-        <TextBox
-          label="total de saques hoje"
-          :value="toBRL(totalToday)"
-          value-text="text-center text-red-500"
-        />
-      </div> -->
     </div>
     <BaseTable
       hideActions
       class="table-xs mt-6 h-3/4"
       :columns="columns"
-      :rows="rows"
+      :rows="withdraws.data"
     >
       <template #actions="{ value }">
         <td>

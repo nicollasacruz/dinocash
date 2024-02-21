@@ -13,6 +13,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -24,19 +25,26 @@ class WithdrawController extends Controller
     public function indexAdmin(Request $request)
     {
         $email = $request->email;
-        $withdraws = Withdraw::with('user')
+        $status = $request->query('status') != 'all' ? $request->query('status') : false;
+
+        $withdraws = DB::table('withdraws')
+            ->select(
+                'withdraws.updated_at',
+                'withdraws.amount',
+                'withdraws.pixKey',
+                'withdraws.pixValue',
+                'withdraws.type',
+                'users.email'
+            )
+            ->leftJoin('users', 'withdraws.userId', '=', 'users.id')
             ->when($email, function ($query) use ($email) {
-                $query->whereHas('user', function ($userQuery) use ($email) {
-                    $userQuery->where('email', 'LIKE', '%' . $email . '%')->where('isAffiliate', false);
-                });
-            }, function ($query) use ($email) {
-                if (!$email) {
-                    $query->whereNot('type', 'rejected');
-                }
+                $query->where('users.email', 'LIKE', '%' . $email . '%');
             })
-            ->orderBy('type', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(30);
+            ->when($status, function ($query) use ($status) {
+                $query->where('withdraws.type', $status);
+            })
+            ->orderBy('withdraws.updated_at', 'desc')
+            ->paginate(20);
 
         $totalToday = Withdraw::whereDate('created_at', Carbon::today())->where('type', 'paid')->sum('amount');
 
