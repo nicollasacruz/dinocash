@@ -96,6 +96,7 @@ class DepositService
                 $response = Http::withHeaders([
                     'Authorization' => 'Basic ' . env('EZZEBANK_AUTH')
                 ])
+                    ->asForm()
                     ->post(env('EZZEBANK_URL') . 'oauth/token', [
                         'grant_type' => 'client_credentials',
                     ]);
