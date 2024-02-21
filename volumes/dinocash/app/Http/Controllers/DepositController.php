@@ -149,7 +149,7 @@ class DepositController extends Controller
                 $reqSignature = $matches[1];
             }
             
-            Log::alert('Entrou no callback ezzebank antes ' . hash_equals($reqSignature, $signed_payload));
+            Log::alert('Entrou no callback ezzebank antes ' . $reqSignature . '    -     ' . $signed_payload);
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
                 Log::alert('Entrou dentro do callback ezzebank');
                 // Extrair dados da requisição
