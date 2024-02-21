@@ -134,9 +134,12 @@ class DepositController extends Controller
             
             $secretKey = env('EZZEBANK_SIGNATURE_KEY');
             
-            $ts = $request->header('Verify-Signature');
+            $header = mb_split(',' ,$request->header('Verify-Signature'));
+            $ts = mb_split('=', $header[0]);
             
-            $signed_payload = hash_hmac('sha256', $ts . '.' . $requestPayload, $secretKey);
+            Log::alert($header);
+            
+            $signed_payload = hash_hmac('sha256', $ts[1] . '.' . $requestPayload, $secretKey);
             
             $reqTimestamp = null;
             $reqSignature = null;
@@ -150,7 +153,6 @@ class DepositController extends Controller
             }
             
             Log::alert('Entrou no callback ezzebank antes ' . $reqTimestamp . '    -     ' . $reqSignature);
-            Log::alert($request->header('Verify-Signature'));
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
                 Log::alert('Entrou dentro do callback ezzebank');
                 // Extrair dados da requisição
