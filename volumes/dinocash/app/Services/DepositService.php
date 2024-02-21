@@ -94,7 +94,7 @@ class DepositService
             } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
 
                 $response = Http::withHeaders([
-                    'Authorization' => 'Basic ' . env('EZZEBANK_AUTH')
+                    'Authorization' => 'Basic ' . base64_encode(env('EZZEBANK_CI') . ':' . env('EZZEBANK_CS'))
                 ])
                     ->asForm()
                     ->post(env('EZZEBANK_URL') . 'oauth/token', [
