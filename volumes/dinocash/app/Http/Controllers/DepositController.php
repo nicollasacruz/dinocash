@@ -147,32 +147,33 @@ class DepositController extends Controller
 
             Log::alert('Entrou no callback ezzebank antes ' . $reqTimestamp . '    -     ' . $reqSignature);
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
-                Log::alert('Entrou dentro do callback ezzebank');
-                // Extrair dados da requisição
-                $requestData = $request->only(['idTransaction', 'typeTransaction', 'statusTransaction']);
+                Log::alert( $request->json());
+                
+                // $requestData = $request->only(['idTransaction', 'typeTransaction', 'statusTransaction']);
 
-                $idTransaction = $requestData['idTransaction'];
-                $typeTransaction = $requestData['typeTransaction'];
-                $statusTransaction = $requestData['statusTransaction'];
+                // $idTransaction = $requestData['idTransaction'];
+                // $typeTransaction = $requestData['typeTransaction'];
+                // $statusTransaction = $requestData['statusTransaction'];
 
-                if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
-                    $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
-                    if ($deposit) {
-                        $user = User::find($deposit->user->id);
-                        if ($depositService->aproveDeposit($deposit)) {
-                            event(new PixReceived($user));
-                            try {
-                                foreach (User::where('role', 'admin')->get() as $admin) {
-                                    Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
-                                }
-                            } catch (Exception $e) {
-                                Log::error('Erro de notificar - ' . $e->getMessage());
-                            }
-                            return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
-                        }
-                    }
-                    return response()->json(['status' => 'error', 'message' => 'Depósito não encontrado'], 500);
-                }
+                // if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
+                //     $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
+                //     if ($deposit) {
+                //         $user = User::find($deposit->user->id);
+                //         if ($depositService->aproveDeposit($deposit)) {
+                //             event(new PixReceived($user));
+                //             try {
+                //                 foreach (User::where('role', 'admin')->get() as $admin) {
+                //                     Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
+                //                 }
+                //             } catch (Exception $e) {
+                //                 Log::error('Erro de notificar - ' . $e->getMessage());
+                //             }
+                //             return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
+                //         }
+                //     }
+                //     return response()->json(['status' => 'error', 'message' => 'Depósito não encontrado'], 500);
+                // }
+                return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
                 return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
             }
         }
