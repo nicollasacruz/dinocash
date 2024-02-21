@@ -94,36 +94,40 @@ class DepositController extends Controller
 
     public function webhook(Request $request, DepositService $depositService)
     {
-        $validatedData = $request->validate([
-            'idTransaction' => 'required|string',
-            'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
-            'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
-        ]);
+        if (env('PAYMENT_SERVICE') == 'SUITPAY') {
+            $validatedData = $request->validate([
+                'idTransaction' => 'required|string',
+                'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
+                'statusTransaction' => 'required|in:PAID_OUT,CANCELED,UNPAID,CHARGEBACK,WAITING_FOR_APPROVAL,PAYMENT_ACCEPT',
+            ]);
 
-        $idTransaction = $request->idTransaction;
-        $typeTransaction = $validatedData['typeTransaction'];
-        $statusTransaction = $validatedData['statusTransaction'];
+            $idTransaction = $request->idTransaction;
+            $typeTransaction = $validatedData['typeTransaction'];
+            $statusTransaction = $validatedData['statusTransaction'];
 
-        if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
-            $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
-            if ($deposit) {
-                $user = User::find($deposit->user->id);
-                if ($depositService->aproveDeposit($deposit)) {
-                    event(new PixReceived($user));
-                    try {
-                        foreach (User::where('role', 'admin')->get() as $admin) {
-                            Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
+            if ($typeTransaction === 'PIX' && $statusTransaction === 'PAID_OUT') {
+                $deposit = Deposit::where('externalId', $idTransaction)->where('type', 'pending')->first();
+                if ($deposit) {
+                    $user = User::find($deposit->user->id);
+                    if ($depositService->aproveDeposit($deposit)) {
+                        event(new PixReceived($user));
+                        try {
+                            foreach (User::where('role', 'admin')->get() as $admin) {
+                                Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
+                            }
+                        } catch (Exception $e) {
+                            Log::error('Erro de notificar - ' . $e->getMessage());
                         }
-                    } catch (Exception $e) {
-                        Log::error('Erro de notificar - ' . $e->getMessage());
+                        return response()->json(['status' => 'success', 'message' => 'Deposito aprovado']);
                     }
-                    return response()->json(['status' => 'success', 'message' => 'Deposito aprovado']);
                 }
+                return response()->json(['status' => 'error', 'message' => 'Deposito não encontrado'], 500);
             }
-            return response()->json(['status' => 'error', 'message' => 'Deposito não encontrado'], 500);
-
+            return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
+        } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
+            return response()->json([
+                'test' => true
+            ], 200);
         }
-        return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
-
     }
 }
