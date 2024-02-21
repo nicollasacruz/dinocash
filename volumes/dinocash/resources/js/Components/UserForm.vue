@@ -138,6 +138,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import { router } from "@inertiajs/vue3";
 
 const { user, typeForm } = defineProps(["user", "typeForm"]);
 const showData = ref(false);
@@ -272,6 +273,9 @@ function deleteUser(userId) {
     })
     .then((response) => {
       toast.success(response.data.message);
+      router.get(
+        route("admin.usuarios")
+      );
     })
     .catch((error) => {
       console.log("erro interno", error);
@@ -287,6 +291,9 @@ function banTemporary(userId) {
     })
     .then((response) => {
       toast.success(response.data.message);
+      router.get(
+        route("admin.usuarios")
+      );
     })
     .catch((error) => {
       console.log("erro interno", error);
@@ -302,6 +309,9 @@ function banPermanent(userId) {
     })
     .then((response) => {
       toast.success(response.data.message);
+      router.get(
+        route("admin.usuarios")
+      );
     })
     .catch((error) => {
       console.log("erro interno", error);
