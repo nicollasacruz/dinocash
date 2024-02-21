@@ -8,7 +8,7 @@ use App\Models\Deposit;
 use App\Models\Setting;
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 use App\Models\User;
 use App\Notifications\PushDemoGGR;
@@ -24,30 +24,7 @@ class DepositService
             }
 
             $uuid = Uuid::uuid4()->toString();
-            $body = [
-                'requestNumber' => $uuid,
-                'dueDate' => now()->addHours(2),
-                'amount' => $amount,
-                'callbackUrl' => env('APP_URL') . '/callback',
-                'client' => [
-                    'name' => $user->name,
-                    'document' => $user->document,
-                    'phoneNumber' => $user->contact,
-                    'email' => $user->email,
-                ]
-            ];
-            if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
-                $body['split'] = [
-                    'username' => 'limbotecnologia',
-                    'percentageSplit' => env('APP_GGR_VALUE'),
-                ];
-            }
-            $response = Http::withHeaders([
-                'ci' => env('SUITPAY_CI'),
-                'cs' => env('SUITPAY_CS'),
-            ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
-
-            if ($response->json('response') && $response->json('response') === 'INVALID_DOCUMENT') {
+            if (env('PAYMENT_SERVICE') == 'SUITPAY') {
                 $body = [
                     'requestNumber' => $uuid,
                     'dueDate' => now()->addHours(2),
@@ -55,7 +32,7 @@ class DepositService
                     'callbackUrl' => env('APP_URL') . '/callback',
                     'client' => [
                         'name' => $user->name,
-                        'document' => '09884555605',
+                        'document' => $user->document,
                         'phoneNumber' => $user->contact,
                         'email' => $user->email,
                     ]
@@ -70,25 +47,120 @@ class DepositService
                     'ci' => env('SUITPAY_CI'),
                     'cs' => env('SUITPAY_CS'),
                 ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
-            }
-            $result = $response->json('paymentCode');
-            if ($result) {
-                $deposit = Deposit::create([
-                    'userId' => $user->id,
-                    'amount' => $amount,
-                    'transactionId' => $uuid,
-                    'externalId' => $response->json('idTransaction'),
-                    'type' => 'pending',
-                    'paymentCode' => $result,
-                    'hasBonus' => $hasBonus,
-                ]);
 
-                Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
-                return $deposit;
+                if ($response->json('response') && $response->json('response') === 'INVALID_DOCUMENT') {
+                    $body = [
+                        'requestNumber' => $uuid,
+                        'dueDate' => now()->addHours(2),
+                        'amount' => $amount,
+                        'callbackUrl' => env('APP_URL') . '/callback',
+                        'client' => [
+                            'name' => $user->name,
+                            'document' => '09884555605',
+                            'phoneNumber' => $user->contact,
+                            'email' => $user->email,
+                        ]
+                    ];
+                    if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
+                        $body['split'] = [
+                            'username' => 'limbotecnologia',
+                            'percentageSplit' => env('APP_GGR_VALUE'),
+                        ];
+                    }
+                    $response = Http::withHeaders([
+                        'ci' => env('SUITPAY_CI'),
+                        'cs' => env('SUITPAY_CS'),
+                    ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
+                }
+                $result = $response->json('paymentCode');
+                if ($result) {
+                    $deposit = Deposit::create([
+                        'userId' => $user->id,
+                        'amount' => $amount,
+                        'transactionId' => $uuid,
+                        'externalId' => $response->json('idTransaction'),
+                        'type' => 'pending',
+                        'paymentCode' => $result,
+                        'hasBonus' => $hasBonus,
+                    ]);
+
+                    Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
+                    return $deposit;
+                }
+                Log::error('Erro ao Solicitar o deposito do CPF ' . $user->document);
+                Log::error($response->json());
+
+                return null;
+
+            } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Basic ' . env('EZZEBANK_AUTH')
+                ])
+                    ->post(env('EZZEBANK_URL') . 'oauth/token', [
+                        'grant_type' => 'client_credentials',
+                    ]);
+
+                if ($response->successful()) {
+                    $accessToken = $response->json('access_token');
+                } else {
+                    $errorMessage = $response->body();
+
+                    Log::error($errorMessage . '  -   Erro no Login Ezzebank');
+                }
+
+                if ($accessToken) {
+                    $document = $user->document;
+
+                    $response = Http::withToken($accessToken)
+                        ->get(env('EZZEBANK_URL') . 'services/cpf?docNumber=4' . $document);
+
+                    if ($response->successful()) {
+                        $responseData = $response->json('Status');
+                        $status = $responseData['Message'];
+                    } else {
+                        $errorMessage = $response->body();
+    
+                        Log::error($errorMessage . '  -   Erro no check CPF Ezzebank');
+                    }
+
+                    if ($status == 'CPF DOES NOT EXIST IN RECEITA FEDERAL DATABASE') {
+                        $document = '09884555605';
+                    }
+
+                    $response = Http::withToken($accessToken)
+                        ->post(env('EZZEBANK_URL') . 'pix/qrcode', [
+                            'amount' => $amount,
+                            'payerQuestion' => 'Pagamento referente produto/serviço',
+                            'external_id' => $uuid,
+                            'payer' => [
+                                'name' => $user->name,
+                                'document' => $document,
+                            ],
+                        ]);
+
+                    if ($response->successful()) {
+                        $qrCode = $response->json('emvqrcps');
+
+                        $deposit = Deposit::create([
+                            'userId' => $user->id,
+                            'amount' => $amount,
+                            'transactionId' => $response->json('transactionId'),
+                            'externalId' => $response->json('external_id'),
+                            'type' => 'pending',
+                            'paymentCode' => $qrCode,
+                            'hasBonus' => $hasBonus,
+                        ]);
+    
+                        Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
+                        return $deposit;
+                    } else {
+                        $errorMessage = $response->body();
+    
+                        Log::error($errorMessage . '  -   Erro no Gerar QrCode Ezzebank');
+                    }
+                }
             }
-            Log::error('Erro ao Solicitar o deposito do CPF ' . $user->document);
-            Log::error($response->json());
-            return null;
         } catch (Exception $e) {
             Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
             return null;
