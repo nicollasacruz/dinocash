@@ -91,13 +91,12 @@ class DepositService
                 Log::error($response->json());
 
                 return null;
-
             } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
 
                 $response = Http::withHeaders([
                     'Authorization' => 'Basic ' . env('EZZEBANK_AUTH')
                 ])
-                    ->post(env('EZZEBANK_URL') . 'oauth/token?grant_type=client_credentials', [
+                    ->post(env('EZZEBANK_URL') . 'oauth/token', [
                         'grant_type' => 'client_credentials',
                     ]);
 
@@ -120,7 +119,7 @@ class DepositService
                         $status = $responseData['Message'];
                     } else {
                         $errorMessage = $response->body();
-    
+
                         Log::error($errorMessage . '  -   Erro no check CPF Ezzebank');
                     }
 
@@ -151,12 +150,12 @@ class DepositService
                             'paymentCode' => $qrCode,
                             'hasBonus' => $hasBonus,
                         ]);
-    
+
                         Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
                         return $deposit;
                     } else {
                         $errorMessage = $response->body();
-    
+
                         Log::error($errorMessage . '  -   Erro no Gerar QrCode Ezzebank');
                     }
                 }
