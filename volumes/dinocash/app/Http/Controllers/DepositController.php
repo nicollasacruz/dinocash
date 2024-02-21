@@ -131,27 +131,20 @@ class DepositController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
         } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
             $requestPayload = $request->getContent();
-            
+
             $secretKey = env('EZZEBANK_SIGNATURE_KEY');
-            
-            $header = mb_split(',' ,$request->header('Verify-Signature'));
+
+            $header = mb_split(',', $request->header('Verify-Signature'));
             $ts = mb_split('=', $header[0]);
-            
+            $ts = $ts[1];
+            $reqSignature = mb_split('=', $header[1]);
+            $reqSignature = $reqSignature[1];
             Log::alert($header);
-            
-            $signed_payload = hash_hmac('sha256', $ts[1] . '.' . $requestPayload, $secretKey);
-            
-            $reqTimestamp = null;
-            $reqSignature = null;
-            
-            if (preg_match('/t=(.*?),/', $ts, $matches)) {
-                $reqTimestamp = $matches[1];
-            }
-            
-            if (preg_match('/vsign=(.*?)$/', $ts, $matches)) {
-                $reqSignature = $matches[1];
-            }
-            
+
+            $signed_payload = hash_hmac('sha256', $ts . '.' . $requestPayload, $secretKey);
+
+            $reqTimestamp = $ts;
+
             Log::alert('Entrou no callback ezzebank antes ' . $reqTimestamp . '    -     ' . $reqSignature);
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
                 Log::alert('Entrou dentro do callback ezzebank');
