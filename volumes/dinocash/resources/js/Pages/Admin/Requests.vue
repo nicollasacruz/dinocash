@@ -30,7 +30,7 @@ watch([searchQuery, statusQuery], ([newSearchQuery, newStatusQuery], [oldSearchQ
   debounce(() => {
     try {
       router.get(
-        route("admin.afiliados"),
+        route("admin.saque"),
         { email: newSearchQuery, status: newStatusQuery },
         {
           preserveState: true,
