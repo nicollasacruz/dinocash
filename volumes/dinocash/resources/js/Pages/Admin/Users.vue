@@ -5,18 +5,9 @@
     <div class="text-4xl text-white font-bold">Usuários</div>
     <div class="my-4">
       <div class="font-bold text-white uppercase mb-1">Pesquisar usuário</div>
-      <input
-        type="text"
-        class="admin-input"
-        placeholder="Digite o email do usuário... "
-        v-model="searchQuery"
-      />
+      <input type="text" class="admin-input" placeholder="Digite o email do usuário... " v-model="searchQuery" />
     </div>
-    <BaseTable
-      class="table-xs h-3/4"
-      :columns="columns"
-      :rows="props.users.data"
-    >
+    <BaseTable class="table-xs h-3/4" :columns="columns" :rows="props.users.data">
       <template #created_at="{ value }">
         <td class="py-0">
           {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
@@ -24,10 +15,8 @@
       </template>
       <template #actions="{ value }">
         <td>
-          <div
-            @click="selectUser(value)"
-            class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer"
-          >
+          <div @click="selectUser(value)"
+            class="badge badge-success no-wrap text-white whitespace-nowrap text-xs cursor-pointer">
             GERENCIAR
           </div>
         </td>
@@ -50,7 +39,7 @@
       </template>
     </BaseTable>
 
-    <Paginator :data="props.users" class="mt-4"/>
+    <Paginator :data="props.users" class="mt-4" />
 
     <BaseModal v-if="showModal" v-model="showModal">
       <UserForm @submit="submit" :user="selectedUser" typeForm="user" />
@@ -101,6 +90,9 @@ function submit(values) {
     .catch((error) => {
       console.log(error);
     });
+  router.get(
+    route("admin.usuarios")
+  );
 }
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -123,6 +115,4 @@ watch(
     }
   }, 700)
 );
-
-console.log(props.users, "users");
 </script>

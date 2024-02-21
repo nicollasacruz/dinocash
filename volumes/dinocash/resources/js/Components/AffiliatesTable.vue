@@ -78,5 +78,8 @@ function submit(values) {
         .catch((error) => {
             // console.log('erro interno');
         });
+        router.get(
+    route("admin.afiliados")
+  );
 }
 </script>
