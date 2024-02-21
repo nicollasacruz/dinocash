@@ -7,7 +7,7 @@
       <div class="font-bold text-white uppercase mb-1">Pesquisar usuário</div>
       <input type="text" class="admin-input" placeholder="Digite o email do usuário... " v-model="searchQuery" />
     </div>
-    <BaseTable class="table-xs h-3/4" :columns="columns" :rows="props.users.data">
+    <BaseTable class="table-xs h-3/4" :columns="columns" :rows="users.data">
       <template #created_at="{ value }">
         <td class="py-0">
           {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
@@ -31,15 +31,14 @@
           }}
         </td>
       </template>
-      <template #isAffiliate="{ value }">
-        <td>
-          <div v-if="value">SIM</div>
-          <div v-else>NÃO</div>
+      <template #bannedAt="{ value }">
+        <td class="py-0">
+          {{ dayjs(value).format("DD/MM/YYYY HH:mm:ss") }}
         </td>
       </template>
     </BaseTable>
 
-    <Paginator :data="props.users" class="mt-4" />
+    <Paginator :data="users" class="mt-4" />
 
     <BaseModal v-if="showModal" v-model="showModal">
       <UserForm @submit="submit" :user="selectedUser" typeForm="user" />
@@ -62,19 +61,15 @@ import debounce from "lodash/debounce";
 
 const columns = [
   { label: "Data", key: "created_at" },
-  // { label: "Nome", key: "name" },
   { label: "Email", key: "email" },
   { label: "Saldo", key: "wallet" },
-  // { label: "Afiliado", key: "isAffiliate" },
+  { label: "Banido", key: "bannedAt" },
 ];
 
 const showModal = ref(false);
 const selectedUser = ref(null);
-const page = usePage();
 
-const props = defineProps({
-  users: Object,
-});
+const { users } = defineProps(["users"]);
 
 function selectUser(user) {
   showModal.value = true;
