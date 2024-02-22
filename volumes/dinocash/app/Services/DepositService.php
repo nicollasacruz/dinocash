@@ -116,7 +116,7 @@ class DepositService
                     $document = preg_replace("/[^0-9]/", "", $document);
 
                     $response = Http::withToken($accessToken)
-                        ->get(env('EZZEBANK_URL') . 'services/cpf?docNumber=4' . $document);
+                        ->get(env('EZZEBANK_URL') . 'services/cpf?docNumber=' . $document);
 
                     if ($response->successful()) {
                         $responseData = $response->json('Status');
