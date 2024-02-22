@@ -49,7 +49,8 @@ class WithdrawAffiliateService
 
     public function autoWithdraw(AffiliateWithdraw $withdraw)
     {
-        Log::info("Pago para {$withdraw->user->email} com o pix tipo: {$withdraw->pixKey} e chave: {$withdraw->pixValue}");
+        // $withdraw = AffiliateWithdraw::find($withdraw->id);
+        // Log::info("Pago para {$withdraw->user->email} com o pix tipo: {$withdraw->pixKey} e chave: {$withdraw->pixValue}");
         $response = Http::withHeaders([
             'ci' => env('SUITPAY_CI'),
             'cs' => env('SUITPAY_CS'),
