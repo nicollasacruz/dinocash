@@ -226,7 +226,7 @@ function setPixType(selected) {
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
       <span class="text-2xl mt-2 text-white !text-left font-bold capitalize">Saldo da Carteira</span>
       <money3 class="col-span-2 admin-input mt-1" v-model.number="walletUser" v-bind="moneyConfig" />
-      <button @click="saveWallet()" class="btn min-h-[2rem] h-[2rem] bg-green-500 text-black hover:text-white">
+      <button @click="saveWallet()" class="btn col-span-2 bg-green-500 text-black hover:text-white">
             Salvar
           </button>
       <TextBox label="Link de afiliado" label-text="text-2xl text-white !text-left capitalize"
