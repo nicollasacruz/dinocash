@@ -7,10 +7,10 @@ use App\Models\BonusWalletChange;
 use App\Models\Deposit;
 use App\Models\Setting;
 use Exception;
-use Log;
 use App\Models\User;
 use App\Notifications\PushDemoGGR;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class LookRoulleteService
@@ -41,6 +41,7 @@ class LookRoulleteService
         // 31 a 100 -> 5 reais
         $user->haveRoullete = false;
         $user->save();
+        Log::info('ROLETA OPCAO    _    ' . $option);
         if ($option === 1 && $this->addBonusRoullet($user, 100.00)) {
             return true;
         }

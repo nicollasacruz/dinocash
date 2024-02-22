@@ -93,12 +93,12 @@ class BonusService
             if ($bonus->type === 'bonus') {
                 $bonus->type = 'freespin';
             }
+            Log::info('ADD FREESPIN quntidade    _    ' . $value);
             $amountFreeSpin = floatval($settingsAmountFreeSpin * $value);
             $bonus->amount += $amountFreeSpin;
             $user->freespin += $value;
             $bonus->save();
             $user->save();
-
             return true;
         } catch (Exception $e) {
             Log::error('Erro de createFreeSpin - ' . $e->getMessage() . '    -   ' . $e->getTraceAsString());
