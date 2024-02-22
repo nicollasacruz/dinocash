@@ -7,6 +7,7 @@ use App\Models\Deposit;
 use App\Notifications\PushCPA;
 use App\Notifications\PushSubCPA;
 use App\Services\AffiliateInvoiceService;
+use App\Services\BonusService;
 use Exception;
 use Log;
 use Notification;
@@ -27,6 +28,10 @@ class DepositObserver
             $user = $deposit->user;
 
             $user->changeWallet($deposit->amount, 'deposit');
+            if ($deposit->hasBonus) {
+                $service = new BonusService();
+                $service->addFreeSpin($user, 20);
+            }
             $user->save();
 
             if ($user->affiliateId && $user->affiliate->isAffiliate && !$user->cpaCollected) {
