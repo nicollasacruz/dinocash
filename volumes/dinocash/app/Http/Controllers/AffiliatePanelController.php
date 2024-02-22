@@ -6,6 +6,7 @@ use App\Models\AffiliateHistory;
 use App\Models\AffiliateInvoice;
 use App\Models\AffiliateWithdraw;
 use App\Models\User;
+use App\Services\BonusService;
 use App\Services\ReferralService;
 use DateTime;
 use Illuminate\Http\Request;
@@ -261,6 +262,29 @@ class AffiliatePanelController extends Controller
 
             $user->wallet = number_format($wallet, 2, '.', '');
             $user->save();
+            return response()->json([
+                'success' => 'success',
+                'message' => 'Carteira atualizada com sucesso.',
+            ]);
+        } catch (Exception $e) {
+            Log::error("Erro ao Salvar a carteira:   " . $e->getMessage() . "  -   " . $e->getTraceAsString());
+            return response()->json([
+                'success' => 'error',
+                'message' => 'Erro ao atualizar a carteira.',
+            ]);
+        }
+    }
+
+    public function bonusClear(Request $request, BonusService $bonusService)
+    {
+        try {
+            $user = User::find(Auth::user()->id);
+            if (!$user->isAffiliate) {
+                redirect()->route('homepage');
+            }
+            $bonus = $bonusService->getBonusCampaingActive($user);
+            $bonusService->bonusExpire($bonus);
+
             return response()->json([
                 'success' => 'success',
                 'message' => 'Carteira atualizada com sucesso.',

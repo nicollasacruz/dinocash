@@ -75,7 +75,7 @@ class BonusService
             $user->bonusWallet += $amountBonus;
             $user->save();
             $bonus->save();
-        
+
             return true;
         } catch (Exception $e) {
             Log::error('Erro de createBonusLooked - ' . $e->getMessage());
@@ -125,5 +125,14 @@ class BonusService
         }
 
         return $bonus;
+    }
+
+    public function bonusExpire($bonus)
+    {
+        $bonus->status = 'expired';
+        $user = $bonus->user;
+        $user->bonusWallet = 0;
+        $user->save();
+        $bonus->save();
     }
 }

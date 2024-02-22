@@ -153,6 +153,14 @@ async function withdraw() {
     toast.error(error.response.data.message);
   }
 }
+async function clearBonus() {
+  try {
+    await axios.post(route("afiliado.bonus.clear"));
+    toast.success("Bônus apagado com sucesso");
+  } catch (error) {
+    toast.error(error.response.data.message);
+  }
+}
 
 const moneyConfig = {
   prefix: "R$ ",
@@ -238,6 +246,9 @@ function setPixType(selected) {
         </button>
         <button @click="permission" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
           Permitir notificações
+        </button>
+        <button @click="clearBonus" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
+          Limpar bônus
         </button>
         <span class="text-2xl text-white !text-left capitalize">Saldo da Carteira</span>
         <money3 class="col-span-2 admin-input mt-5" v-model.number="walletUser" v-bind="moneyConfig" />
