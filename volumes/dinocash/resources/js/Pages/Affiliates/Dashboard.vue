@@ -229,7 +229,7 @@ function setPixType(selected) {
       <TextBox v-if="CPA > 0" label="Convidados CPA" :value="countCPA" />
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
-      <span class="text-2xl mt-2 text-white !text-left capitalize">Saldo da Carteira</span>
+      <span class="text-2xl mt-2 text-white !text-left font-bold capitalize">Saldo da Carteira</span>
       <money3 class="col-span-2 admin-input mt-1" v-model.number="walletUser" v-bind="moneyConfig" />
       <TextBox label="Link de afiliado" label-text="text-2xl text-white !text-left capitalize"
         value-text="!text-left flex items-center text-xs lg:text-xl" class="lg:col-span-2" :value="link">
