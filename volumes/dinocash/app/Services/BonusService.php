@@ -131,6 +131,7 @@ class BonusService
     {
         $bonus->status = 'expired';
         $user = $bonus->user;
+        $user->freespin = 0;
         $user->bonusWallet = 0;
         $user->save();
         $bonus->save();
