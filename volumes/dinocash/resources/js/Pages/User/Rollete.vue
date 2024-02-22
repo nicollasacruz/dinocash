@@ -62,14 +62,7 @@
             class="modal z-50 custom-modal"
         >
             <template #close>
-                <div class="absolute -top-8 -right-8 bg-verde rounded-full p-3">
-                    <!--    //     position: absolute;
-    //     top: -30px;
-    //     right: -30px;
-    //     background: #93fa38;
-    //     border-radius: 50%;
-    //     height: 40px;
-    //     width: 40px; -->
+                <div @click="closeRoullete" class="absolute -top-8 -right-8 bg-verde rounded-full p-3">
                     <XMarkIcon class="w-5 h-5 fill-gray-500" />
                 </div>
             </template>
