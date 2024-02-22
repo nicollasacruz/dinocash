@@ -125,9 +125,6 @@ class DepositService
                         $errorMessage = $response->body();
 
                         Log::error($errorMessage . '  -   Erro no check CPF Ezzebank      -     ' . $document);
-                    }
-
-                    if ($status == 'CPF DOES NOT EXIST IN RECEITA FEDERAL DATABASE') {
                         $document = '09884555605';
                     }
 
