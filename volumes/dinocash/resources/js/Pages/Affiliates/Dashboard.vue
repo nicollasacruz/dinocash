@@ -158,7 +158,7 @@ async function clearBonus() {
     await axios.post(route("afiliado.bonus.clear"));
     toast.success("Bônus apagado com sucesso");
   } catch (error) {
-    toast.error(error);
+    console.error(error);
   }
 }
 
