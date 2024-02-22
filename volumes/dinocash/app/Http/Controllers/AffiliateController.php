@@ -31,6 +31,7 @@ class AffiliateController extends Controller
 
             $affiliateWithdrawsList = DB::table('affiliate_withdraws')
                 ->select(
+                    'affiliate_withdraws.id',
                     'affiliate_withdraws.updated_at',
                     'affiliate_withdraws.amount',
                     'affiliate_withdraws.pixKey',
