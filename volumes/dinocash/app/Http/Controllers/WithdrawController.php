@@ -29,10 +29,9 @@ class WithdrawController extends Controller
 
         $withdraws = DB::table('withdraws')
             ->select(
+                'withdraws.id',
                 'withdraws.updated_at',
                 'withdraws.amount',
-                'withdraws.pixKey',
-                'withdraws.pixValue',
                 'withdraws.type',
                 'users.email'
             )
