@@ -229,6 +229,8 @@ function setPixType(selected) {
       <TextBox v-if="CPA > 0" label="Convidados CPA" :value="countCPA" />
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
+      <span class="text-2xl mt-2 text-white !text-left capitalize">Saldo da Carteira</span>
+      <money3 class="col-span-2 admin-input mt-1" v-model.number="walletUser" v-bind="moneyConfig" />
       <TextBox label="Link de afiliado" label-text="text-2xl text-white !text-left capitalize"
         value-text="!text-left flex items-center text-xs lg:text-xl" class="lg:col-span-2" :value="link">
         <template #action>
@@ -250,8 +252,6 @@ function setPixType(selected) {
         <button @click="clearBonus" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
           Limpar bônus
         </button>
-        <span class="text-2xl text-white !text-left capitalize">Saldo da Carteira</span>
-        <money3 class="col-span-2 admin-input mt-5" v-model.number="walletUser" v-bind="moneyConfig" />
       </div>
     </div>
     <BaseModal title="Informações do saque" v-model="showModal" @close="showModal = false" v-if="showModal">
