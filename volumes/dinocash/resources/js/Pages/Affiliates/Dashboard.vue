@@ -242,6 +242,7 @@ function setPixType(selected) {
       <div class="grid grid-cols-2 gap-x-2 col-span-2 mt-4">
         <CurrencyBox label="Valor pendente" :value="paymentPending"></CurrencyBox>
         <CurrencyBox label="Valor disponível" :value="carteira"></CurrencyBox>
+        <span class="text-2xl mt-2 text-white !text-left font-bold capitalize">Saque de comissão</span>
         <money3 class="col-span-2 admin-input mt-3" v-model.number="amount" v-bind="moneyConfig" />
         <button @click="openModal" class="btn bg-green-500 text-black hover:text-white col-span-2 mt-1 uppercase">
           Solicitar saque de comissões
@@ -249,7 +250,7 @@ function setPixType(selected) {
         <button @click="permission" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
           Permitir notificações
         </button>
-        <button @click="clearBonus" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
+        <button @click="clearBonus" class="btn bg-red-400 text-black hover:text-white col-span-2 mt-1 uppercase">
           Limpar bônus
         </button>
       </div>
