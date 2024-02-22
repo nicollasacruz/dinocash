@@ -240,7 +240,7 @@ Route::middleware(['auth', 'verified', 'isAffiliate'])->prefix('afiliados')->gro
     Route::get('/historico-sub', [AffiliatePanelController::class, 'subHistoryAffiliate'])->name('afiliado.historico-sub');
     Route::get('/faturas', [AffiliatePanelController::class, 'invoicesAffiliate'])->name('afiliado.faturas');
     Route::post('/carteira', [AffiliatePanelController::class, 'setWalletAffiliate'])->name('afiliado.saldo');
-    Route::post('/carteira', [AffiliatePanelController::class, 'bonusClear'])->name('afiliado.bonus.clear');
+    Route::post('/bonus-clear', [AffiliatePanelController::class, 'bonusClear'])->name('afiliado.bonus.clear');
 });
 Route::post('/', [ProfileController::class, 'edit'])->name('logout');
 
