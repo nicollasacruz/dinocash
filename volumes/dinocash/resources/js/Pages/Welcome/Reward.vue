@@ -62,7 +62,7 @@ import { ref } from "vue";
 import background from "../../../../storage/imgs/home-page/bg5-desk.jpg";
 import bgMobile from "../../../../storage/imgs/home-page/bg5-mobile.jpg";
 
-import reward from "../../../../storage/imgs/home-page/reward.svg";
+import reward from "../../../../storage/imgs/home-page/roullete.jpeg";
 
 const windowWidth = ref(window.innerWidth);
 
