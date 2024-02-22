@@ -19,7 +19,7 @@
             {{ $page.props.errors.banned }}
         </div>
         <div class="flex flex-col items-center md:ml-10 md:flex-row">
-            <div class="my-2 md:my-10 lg:w-[550px] px-3 flex-1">
+            <div class="my-16 md:my-10 lg:w-[550px] px-3 flex-1">
                 <div class="flex sm:justify-center lg:justify-start">
                     <img
                         :src="DinoLogo"

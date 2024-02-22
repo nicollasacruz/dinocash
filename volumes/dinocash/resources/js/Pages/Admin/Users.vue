@@ -31,6 +31,16 @@
           }}
         </td>
       </template>
+      <template #bonusWallet="{ value }">
+        <td>
+          {{
+            value.toLocaleString("pt-br", {
+              style: "currency",
+              currency: "BRL",
+            })
+          }}
+        </td>
+      </template>
       <template #bannedAt="{ value }">
         <td class="py-0">
           {{ value ? dayjs(value).format("DD/MM/YYYY HH:mm:ss") : ""}}
@@ -63,6 +73,8 @@ const columns = [
   { label: "Data", key: "created_at" },
   { label: "Email", key: "email" },
   { label: "Saldo", key: "wallet" },
+  { label: "Bonus", key: "bonusWallet" },
+  { label: "FreeSpin", key: "freespin" },
   { label: "Banido", key: "bannedAt" },
 ];
 
