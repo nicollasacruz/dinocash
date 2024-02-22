@@ -119,16 +119,16 @@ watch(
 );
 
 async function withdraw() {
-  if (amount.value <= 50) {
+  if (amount.value > carteira.value) {
+    toast.error("Saque não pode ser maior que o valor disponível");
+    return;
+  }
+  if (amount.value < 50) {
     toast.error("Saque não pode ser menor que R$50,00");
     return;
   }
   if (!pixKey.value || !pixType.value) {
     toast.error("Informe o tipo e a chave pix");
-    return;
-  }
-  if (amount.value > carteira) {
-    toast.error("Saque não pode ser maior que o valor disponível");
     return;
   }
 
