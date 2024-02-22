@@ -107,6 +107,7 @@ class DepositService
                     $errorMessage = $response->body();
 
                     Log::error($errorMessage . '  -   Erro no Login Ezzebank');
+                    return null;
                 }
 
                 if ($accessToken) {
