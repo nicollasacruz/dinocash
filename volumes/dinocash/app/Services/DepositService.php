@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Notification;
 
 class DepositService
 {
-    public function createDeposit(User $user, $amount, bool $hasBonus): ?Deposit
+    public function createDeposit(User $user, $amount, bool $hasBonus)
     {
         try {
             if (!$user->document) {
@@ -158,6 +158,7 @@ class DepositService
                         $errorMessage = $response->body();
 
                         Log::error($errorMessage . '  -   Erro no Gerar QrCode Ezzebank');
+
                     }
                 }
             }
