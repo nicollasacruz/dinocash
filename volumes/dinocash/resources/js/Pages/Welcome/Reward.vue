@@ -24,7 +24,7 @@
             >
                 <img
                     :src="reward"
-                    class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-8 2xl:max-w-3xl"
+                    class="max-w-sm md:max-w-xl md:float-right w-full md:-mt-10 2xl:max-w-3xl"
                 />
             </div>
             <div
