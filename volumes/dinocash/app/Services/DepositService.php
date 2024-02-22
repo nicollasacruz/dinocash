@@ -112,6 +112,8 @@ class DepositService
 
                 if ($accessToken) {
                     $document = $user->document;
+                    // Remove todos os caracteres não numéricos
+                    $document = preg_replace("/[^0-9]/", "", $document);
 
                     $response = Http::withToken($accessToken)
                         ->get(env('EZZEBANK_URL') . 'services/cpf?docNumber=4' . $document);
