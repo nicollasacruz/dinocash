@@ -97,27 +97,6 @@ function openModal() {
   }
 }
 
-watch(
-  walletUser,
-  debounce((value) => {
-    try {
-      axios.post(
-        route("afiliado.saldo"),
-        {
-          wallet: value,
-          userId: page.props.auth.user.id
-        }
-      ).then((response) => {
-        console.log(response);
-        toast.success(response.data.message);
-      });
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-  }, 700)
-);
-
 async function withdraw() {
   if (amount.value > carteira.value) {
     toast.error("Saque não pode ser maior que o valor disponível");
@@ -161,7 +140,23 @@ async function clearBonus() {
     console.error(error);
   }
 }
-
+async function saveWallet() {
+  try {
+      axios.post(
+        route("afiliado.saldo"),
+        {
+          wallet: walletUser.value,
+          userId: page.props.auth.user.id
+        }
+      ).then((response) => {
+        console.log(response);
+        toast.success(response.data.message);
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+}
 const moneyConfig = {
   prefix: "R$ ",
   suffix: "",
@@ -231,6 +226,9 @@ function setPixType(selected) {
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-3 mt-10">
       <span class="text-2xl mt-2 text-white !text-left font-bold capitalize">Saldo da Carteira</span>
       <money3 class="col-span-2 admin-input mt-1" v-model.number="walletUser" v-bind="moneyConfig" />
+      <button @click="saveWallet()" class="btn min-h-[2rem] h-[2rem] bg-green-500 text-black hover:text-white">
+            Salvar
+          </button>
       <TextBox label="Link de afiliado" label-text="text-2xl text-white !text-left capitalize"
         value-text="!text-left flex items-center text-xs lg:text-xl" class="lg:col-span-2" :value="link">
         <template #action>
