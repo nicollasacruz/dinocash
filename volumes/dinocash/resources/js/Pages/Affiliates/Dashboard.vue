@@ -241,7 +241,7 @@ function setPixType(selected) {
         <CurrencyBox label="Valor pendente" :value="paymentPending"></CurrencyBox>
         <CurrencyBox label="Valor disponível" :value="carteira"></CurrencyBox>
         <money3 class="col-span-2 admin-input mt-3" v-model.number="amount" v-bind="moneyConfig" />
-        <button @click="openModal" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
+        <button @click="openModal" class="btn bg-green-500 text-black hover:text-white col-span-2 mt-1 uppercase">
           Solicitar saque de comissões
         </button>
         <button @click="permission" class="btn bg-yellow-500 text-black hover:text-white col-span-2 mt-1 uppercase">
