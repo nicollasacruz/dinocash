@@ -98,7 +98,13 @@ class AffiliateWithdrawController extends Controller
         try {
             $withdrawService = new WithdrawAffiliateService();
 
-            $withdraw = AffiliateWithdraw::find($request->withdraw);
+            $withdraw = AffiliateWithdraw::find($request->withdrawId);
+            if (!$withdraw) {
+                return response()->json([
+                    'success' => 'error',
+                    'message' => 'Saque não encontrado.'
+                ]);
+            }
             $response = $withdrawService->aprove($withdraw);
             if ($response['success']) {
                 return response()->json([

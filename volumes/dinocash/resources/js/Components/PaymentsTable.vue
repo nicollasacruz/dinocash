@@ -79,7 +79,7 @@ async function pay(id: number) {
   try {
     isButtonDisabled.value = true;
     const response = await axios.post(route("admin.saque.afiliados.aprovar"), {
-      withdraw: id,
+      withdrawId: id,
     });
     toast.success(response.data.message);
   } catch (err) {
