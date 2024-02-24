@@ -78,8 +78,10 @@ class WithdrawService
                 $amountAvaliable = $amountAvaliableWallet;
             }
 
-            Log::alert("Total ROLL       $totalRoll");
-
+            if (!$user->isAffiliate) {
+                Log::info("Total ROLL       $totalRoll     -    $user->email");
+            }
+            
             if ($amount > $amountAvaliable) {
                 return [
                     'success' => 'error',
