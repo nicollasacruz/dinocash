@@ -91,7 +91,7 @@ class BonusService
             if ($bonus->type === 'bonus') {
                 $bonus->type = 'freespin';
             }
-            Log::info('ADD FREESPIN quntidade    _    ' . $value);
+            Log::info('ADD FREESPIN ' . "Email: $user->email   " . 'quntidade    _    ' . $value);
             $amountFreeSpin = floatval($settingsAmountFreeSpin * $value);
             $bonus->amount += $amountFreeSpin;
             $user->freespin += $value;
