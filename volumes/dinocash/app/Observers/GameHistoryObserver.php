@@ -57,7 +57,7 @@ class GameHistoryObserver
                     'userId' => $gameHistory->userId,
                     'type' => $amount > 0 ? 'win' : 'loss',
                 ]);
-                // Log::info("AffiliateHistory REV com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
+                Log::info("AffiliateHistory REV com amount de: {$amount} - {$affiliate->revShare}% e comissão de R$ {$newAmount}");
 
                 Notification::send($affiliate, new PushRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
 
@@ -77,7 +77,7 @@ class GameHistoryObserver
                         ]);
                         $revsub->save();
                         // Log::info("Create SubRevShare COM REV criado com sucesso.");
-                        // Log::info("AffiliateHistory SUB REV com amount de: {$amount} - {$revSub}% e comissão de R$ {$newAmount}");
+                        Log::info("AffiliateHistory SUB REV com amount de: {$amount} - {$revSub}% e comissão de R$ {$newAmount}");
                     }
 
                     Notification::send($rede, new PushSubRevShare('R$ ' . number_format(floatval($newAmount), 2, ',', '.')));
