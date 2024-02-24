@@ -24,14 +24,10 @@ class FinanceController extends Controller
         $dateEnd = DateTime::createFromFormat('Y-m-d', $request->dateEnd);
         if ($dateStart) {
             $dateStart->setTime(0, 0, 0);
-        } else {
-            $dateStart = now()->subDays(30);
         }
 
         if ($dateEnd) {
             $dateEnd->setTime(23, 59, 59);
-        } else {
-            $dateEnd = now();
         }
 
         $depositsAmountPaid = Deposit::when($dateStart && $dateEnd, function ($query) use ($dateStart, $dateEnd) {
