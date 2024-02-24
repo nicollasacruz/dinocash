@@ -61,13 +61,15 @@ class GameHistoryController extends Controller
                         if ($gameHistoryItem->amountType !== 'bonus') {
                             $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                         } else {
-                            $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                            $bonus = $user->bonusCampaings->first();
+                            
                             BonusWalletChange::create([
                                 'bonusCampaignId' => $bonus->id,
                                 'amountOld' => $user->bonusWallet,
                                 'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
                                 'type' => 'game pending error',
                             ]);
+                            
                             $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
                             $bonus->save();
                             $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
