@@ -20,7 +20,7 @@ class GameHistoryController extends Controller
     public function play(Request $request)
     {
         try {
-            if(Auth::check() && User::find(Auth::user()->id)->haveRoullete) {
+            if (Auth::check() && User::find(Auth::user()->id)->haveRoullete) {
                 // dd(Auth::user());
                 return Inertia::location(route('user.roleta'));
             }
@@ -58,20 +58,24 @@ class GameHistoryController extends Controller
                 $gameHistory = $user->gameHistories->where('type', 'pending');
                 if ($gameHistory) {
                     foreach ($gameHistory as $gameHistoryItem) {
+                        $amount = $gameHistoryItem->amount * 1;
+                        if ($amount < 0) {
+                            $amount = $amount * -1;
+                        }
                         if ($gameHistoryItem->amountType !== 'bonus') {
-                            $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+                            $user->wallet = (($user->wallet * 1) + $amount);
                         } else {
                             $bonus = $user->bonusCampaings->first();
-                            
+                            $bonus->amountMovement -= $amount;
+                            $bonus->save();
+
                             BonusWalletChange::create([
                                 'bonusCampaignId' => $bonus->id,
                                 'amountOld' => $user->bonusWallet,
                                 'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
                                 'type' => 'game pending error',
                             ]);
-                            
-                            $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
-                            $bonus->save();
+
                             $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
                         }
                         $user->save();
@@ -95,18 +99,24 @@ class GameHistoryController extends Controller
             $gameHistory = $user->gameHistories->where('type', 'gaming');
             if ($gameHistory) {
                 foreach ($gameHistory as $gameHistoryItem) {
+                    $amount = ($gameHistoryItem->amount * 1);
+                    if ($amount < 0) {
+                        $amount = $amount * -1;
+                    }
                     if ($gameHistoryItem->amountType !== 'bonus') {
                         $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
                     } else {
                         $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                        $bonus->amountMovement -= $amount;
+                        $bonus->save();
+
                         BonusWalletChange::create([
                             'bonusCampaignId' => $bonus->id,
                             'amountOld' => $user->bonusWallet,
                             'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
                             'type' => 'game gaming error',
                         ]);
-                        $bonus->amountMovement -= ($gameHistoryItem->amount * 1);
-                        $bonus->save();
+
                         $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
                     }
                     if ($gameHistoryItem->freespin) {
@@ -197,7 +207,11 @@ class GameHistoryController extends Controller
                     'amountNew' => $user->bonusWallet - $request->amount,
                     'type' => 'game start',
                 ]);
-                $bonus->amountMovement += $request->amount;
+                $amount = ($request->amount * 1);
+                if ($amount < 0) {
+                    $amount = $amount * -1;
+                }
+                $bonus->amountMovement += $amount;
                 $bonus->save();
                 $user->bonusWallet -= $request->amount;
             }
@@ -276,7 +290,11 @@ class GameHistoryController extends Controller
                         'amountNew' => $user->bonusWallet + $gameHistory->amount,
                         'type' => 'game refunded',
                     ]);
-                    $bonus->amountMovement -= ($gameHistory->amount * 1);
+                    $amount = $gameHistory->amount * 1;
+                    if ($amount < 0) {
+                        $amount = $amount * -1;
+                    }
+                    $bonus->amountMovement -= $amount;
                     $bonus->save();
                     $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistory->amount * 1));
                 }
@@ -310,7 +328,11 @@ class GameHistoryController extends Controller
                         'amountNew' => $user->bonusWallet + $gameHistory->amount,
                         'type' => 'game zero error',
                     ]);
-                    $bonus->amountMovement -= ($gameHistory->amount * 1);
+                    $amount = $gameHistory->amount * 1;
+                    if ($amount < 0) {
+                        $amount = $amount * -1;
+                    }
+                    $bonus->amountMovement -= $amount;
                     $bonus->save();
                     $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistory->amount * 1));
                 }
