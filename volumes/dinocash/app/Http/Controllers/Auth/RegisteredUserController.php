@@ -53,8 +53,8 @@ class RegisteredUserController extends Controller
             'revShare' => $settings->defaultRevShare,
         ]);
 
-        $bonusService = new BonusService();
-        $bonusService->addFreeSpin($user, 2);
+        // $bonusService = new BonusService();
+        // $bonusService->addFreeSpin($user, 2);
 
         event(new Registered($user));
 
