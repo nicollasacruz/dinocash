@@ -57,12 +57,13 @@ class BonusService
         }
     }
 
-    public function createBonusLooked(User $user, $amountBonus): bool
+    public function createBonusLuckRoullete(User $user, $amountBonus): bool
     {
         try {
             $bonus = $this->getBonusCampaingActive($user);
             if ($bonus->type === 'bonus') {
                 $bonus->type = 'roulletBonus';
+                $bonus->amount += $amountBonus;
             }
 
             BonusWalletChange::create([
@@ -78,7 +79,7 @@ class BonusService
 
             return true;
         } catch (Exception $e) {
-            Log::error('Erro de createBonusLooked - ' . $e->getMessage());
+            Log::error('Erro de createBonusLuckRoullete - ' . $e->getMessage());
             return false;
         }
     }

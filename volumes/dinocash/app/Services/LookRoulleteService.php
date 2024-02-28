@@ -24,7 +24,7 @@ class LookRoulleteService
 
     public function addBonusRoullet(User $user, float $value): bool
     {
-        return $this->bonusService->createBonusLooked($user, $value);
+        return $this->bonusService->createBonusLuckRoullete($user, $value);
     }
 
     public function addFreespin(User $user, int $value): bool
