@@ -46,7 +46,7 @@ import background from "../../../../storage/imgs/home-page/bg3-desk.jpg";
 import backMobile from "../../../../storage/imgs/home-page/bg3-mobile.jpg";
 
 import dinoJogar from "../../../../storage/imgs/home-page/dino-jogar.svg";
-console.log(dinoJogar);
+// console.log(dinoJogar);
 const instructions = [
     "Faça seu cadastro ou então logue-se no site você já tem uma conta cadastrada no Dino Cash.",
     "Faça um depósito de no mínimo R$30,00 para iniciar a sua jornada.",

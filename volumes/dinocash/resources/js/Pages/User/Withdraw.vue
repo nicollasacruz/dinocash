@@ -148,7 +148,7 @@ async function withdraw() {
             );
         }
     } catch (error) {
-        console.log("Erro na solicitação");
+        // console.log("Erro na solicitação");
     } finally {
         amount.value = 0.0;
         loading.value = false;

@@ -398,7 +398,7 @@ export default class DinoGame extends GameRunner {
         this.state.som = som;
         setInterval(async () => {
             const isPowerSavingMode = await this.detectPowerSavingMode();
-            console.log(isPowerSavingMode);
+            // console.log(isPowerSavingMode);
             if (isPowerSavingMode) {
                 this.lockGame();
             }
@@ -541,7 +541,7 @@ export default class DinoGame extends GameRunner {
                         (performance.now() - startTime) / numFrames;
                     let ratio = actualInterval / interval; // 1.3x or more in Low Power Mode, 1.1x otherwise
                     // alert(actualInterval+' '+interval);
-                    console.log(actualInterval, interval, ratio);
+                    // console.log(actualInterval, interval, ratio);
                     resolve(ratio > 1.3);
                 }, interval);
             });
@@ -645,7 +645,7 @@ export default class DinoGame extends GameRunner {
                 buttonContainer.removeChild(buttonContainer.firstChild);
                 buttonContainer.appendChild(finishButton);
             }
-            console.log("ok", finishButton);
+            // console.log("ok", finishButton);
             this.animate({
                 content: this,
             });
@@ -808,7 +808,7 @@ export default class DinoGame extends GameRunner {
         }
         if (shouldDraw) {
             if (this.steps === 90) {
-                console.log("ok black");
+                // console.log("ok black");
 
                 canvasCtx.fillStyle = "#222222";
             } else if (this.steps >= 180) canvasCtx.fillStyle = "#f4f4f4";

@@ -112,7 +112,6 @@ onMounted(() => {
     canvas.style.display = "none";
     setListeners();
     document.addEventListener("loaded", () => {
-        console.log("loaded");
         const canvas = document.getElementById("canvasContainer");
         canvas.style.display = "flex";
         game.start().catch(console.error);

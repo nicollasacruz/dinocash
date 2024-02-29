@@ -10,7 +10,6 @@ const source = ref("");
 
 async function getImage() {
     const image = await import(`/storage/imgs/user/icons/${src}`);
-    console.log(image);
     source.value = image;
 }
 onMounted(async () => {

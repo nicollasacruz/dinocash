@@ -55,7 +55,6 @@ import dayjs from "dayjs";
 function selectUser(user) {
     showModal.value = true;
     selectedUser.value = user;
-    console.log('user do affiliate table', user)
 }
 const data = ref(null);
 

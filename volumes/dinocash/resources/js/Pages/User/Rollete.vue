@@ -162,7 +162,7 @@ const getPosition = (value) => {
 const girarRoleta = async () => {
     loading.value = true;
     const randomStop = Math.floor(Math.random() * 100) + 1;
-    console.log(randomStop);
+    // console.log(randomStop);
     const index = getPosition(randomStop);
     selectedIndex.value = index;
     const posicaoMaxima = index * 20 - 2;
@@ -209,7 +209,7 @@ const postRecompensa = async (rewardOption) => {
     try {
         const page = usePage();
         let user = page.props.auth.user.id;
-        console.log("úserID", user);
+        // console.log("úserID", user);
 
         const response = await axios.post(route("user.recompensa.roleta"), {
             user: user,
@@ -219,10 +219,10 @@ const postRecompensa = async (rewardOption) => {
         console.log("Recompensa enviada com sucesso:", response.data);
         if (response.data.status === "success") {
             showModal.value = true;
-            console.log(premios);
-            console.log(selectedIndex.value);
+            // console.log(premios);
+            // console.log(selectedIndex.value);
             selectedPremio.value = premios[selectedIndex.value - 1];
-            console.log(selectedPremio.value, "premio");
+            // console.log(selectedPremio.value, "premio");
         }
     } catch (error) {
         console.error("Erro ao enviar a recompensa:", error.message);

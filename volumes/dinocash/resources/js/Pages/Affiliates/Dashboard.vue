@@ -62,7 +62,7 @@ interface ImportMetaEnv {
 axios.defaults.headers.common["X-CSRF-TOKEN"] = document.querySelector(
   'meta[name="csrf-token"]'
 ).content;
-console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
+// console.log("tokio", document.querySelector('meta[name="csrf-token"]').content);
 
 const link = "https://dinocash.io/ref/" + affiliateLink;
 
@@ -149,11 +149,11 @@ async function saveWallet() {
           userId: page.props.auth.user.id
         }
       ).then((response) => {
-        console.log(response);
+        // console.log(response);
         toast.success(response.data.message);
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response.data.message);
     }
 }

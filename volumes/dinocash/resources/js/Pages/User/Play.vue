@@ -166,14 +166,14 @@ async function fetchUpdate() {
         }
         return data;
     } catch (error) {
-        console.log("Erro na pesquisa:", error);
+        // console.log("Erro na pesquisa:", error);
     }
 }
 
 async function startGame() {
     loading.value = true;
     const lowPowerMode = await detectPowerSavingMode();
-    console.log(lowPowerMode);
+    // console.log(lowPowerMode);
     if (lowPowerMode) {
         toast.error("Você está em modo de economia de energia!");
         return;
@@ -216,7 +216,7 @@ function detectPowerSavingMode() {
                     (performance.now() - startTime) / numFrames;
                 let ratio = actualInterval / interval; // 1.3x or more in Low Power Mode, 1.1x otherwise
                 // alert(actualInterval+' '+interval);
-                console.log(actualInterval, interval, ratio);
+                // console.log(actualInterval, interval, ratio);
                 resolve(ratio > 1.3);
             }, interval);
         });
@@ -304,7 +304,7 @@ function formatAmount() {
     if (decimalCount > 1) {
         cleanedValue = cleanedValue.slice(0, cleanedValue.lastIndexOf("."));
     }
-    console.log(cleanedValue, "value");
+    // console.log(cleanedValue, "value");
 
     // Atualizar o valor
     amount.value = cleanedValue;
