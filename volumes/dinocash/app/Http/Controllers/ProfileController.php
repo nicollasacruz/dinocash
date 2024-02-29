@@ -33,6 +33,7 @@ class ProfileController extends Controller {
         if($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+        unset($request->user()->referralsDepositsCounter);
 
         $request->user()->invitation_link = $request->user()->invitation_link;
         $request->user()->save();
