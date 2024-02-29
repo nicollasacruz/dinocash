@@ -119,7 +119,7 @@ class FinanceController extends Controller
             ->whereNotNull('user_id')
             ->where('sessions.last_activity', '>', Carbon::now()->subMinutes(5)->getTimestamp())
             ->leftJoin('users', config('session.table') . '.user_id', '=', 'users.id')
-            ->get();;
+            ->count();
         $totalUsers = User::all()->count();
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
         $totalUsersWithDeposits = User::whereHas('deposits', function ($query) {
