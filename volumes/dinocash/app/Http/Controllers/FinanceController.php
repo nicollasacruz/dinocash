@@ -113,12 +113,18 @@ class FinanceController extends Controller
             $houseHealth = 100 - round(($pay * 100 / $gain), 1);
         }
 
-        $activeSessions = 0;
+        $activeSessions = DB::table(config('session.table'))
+            ->distinct()
+            ->select(['users.id', 'users.name', 'users.email'])
+            ->whereNotNull('user_id')
+            ->where('sessions.last_activity', '>', Carbon::now()->subMinutes(5)->getTimestamp())
+            ->leftJoin('users', config('session.table') . '.user_id', '=', 'users.id')
+            ->get();;
         $totalUsers = User::all()->count();
         $totalUsersToday = User::whereDate('created_at', Carbon::today())->count();
         $totalUsersWithDeposits = User::whereHas('deposits', function ($query) {
             $query->where('type', 'paid');
-        })->count();        
+        })->count();
         $totalUsersTodayWithDeposit = User::whereDate('created_at', Carbon::today())->whereHas('deposits', function ($query) {
             $query->where('type', 'paid');
         })->count();
@@ -141,17 +147,17 @@ class FinanceController extends Controller
             FROM affiliate_histories
             GROUP BY DATE(created_at)
         ) AS result'))
-        ->where('data', '>=', now()->subDays(15)->toDateString())
-        ->groupBy('data')
-        ->selectRaw('
+            ->where('data', '>=', now()->subDays(15)->toDateString())
+            ->groupBy('data')
+            ->selectRaw('
             data,
             FORMAT(SUM(COALESCE(depositos, 0)), 2) AS depositos,
             FORMAT(SUM(COALESCE(pagamento_afiliado, 0)), 2) AS pagamento_afiliado,
             FORMAT(SUM(COALESCE(depositos, 0)) - SUM(COALESCE(pagamento_afiliado, 0)), 2) AS lucro
         ')
-        ->orderBy('data', 'asc')
-        ->get();
-    
+            ->orderBy('data', 'asc')
+            ->get();
+
         return Inertia::render("Admin/Finances", [
             'activeSessions' => $activeSessions,
             'totalUsers' => $totalUsers,
@@ -192,6 +198,6 @@ class FinanceController extends Controller
             'status' => 'success',
             'message' => 'Viciosidade ajustada com sucesso',
             // 'token' => $hashString,
-        ]); 
+        ]);
     }
 }
