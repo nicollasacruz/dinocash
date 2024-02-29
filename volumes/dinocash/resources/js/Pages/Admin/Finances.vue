@@ -27,9 +27,6 @@ const {
   totalPaid,
   topWithdraws,
   topDeposits,
-  topProfitableAffiliates,
-  topLossAffiliates,
-  topAffiliatesCPA,
   payout,
   houseHealth,
   chart,
@@ -51,9 +48,6 @@ const {
   "totalPaid",
   "topWithdraws",
   "topDeposits",
-  "topProfitableAffiliates",
-  "topLossAffiliates",
-  "topAffiliatesCPA",
   "payout",
   "houseHealth",
   "chart",
@@ -325,64 +319,6 @@ const styleOptions = ref({
       </div>
     </div>
     <div class="mt-4 grid grid-cols-1 gap-x-5">
-      <div class="">
-        <div class="text-2xl text-white font-bold mb-3">
-          Lucros e Prejuízos - Afiliados
-        </div>
-        <div class="grid md:grid-cols-2 gap-x-2">
-          <div class="box p-2">
-            <div
-              class="text-green-500 text-center font-bold text-xs uppercase mb-2"
-            >
-              Afiliados que mais trouxeram lucros
-            </div>
-            <div class="">
-              <div
-                class="text-xs pt-1"
-                v-for="{ email, totalGain } in topProfitableAffiliates"
-              >
-                <div class="text-white">
-                  {{ email }} - {{ toBRL(totalGain) }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="box p-2">
-            <div
-              class="text-red-500 text-center font-bold text-xs uppercase mb-2"
-            >
-              Afiliados que mais trouxeram prejuízos
-            </div>
-            <div class="">
-              <div
-                class="text-xs pt-1"
-                v-for="{ email, totalPayed } in topLossAffiliates"
-              >
-                <div class="text-white">
-                  {{ email }} - {{ toBRL(totalPayed * -1) }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="box p-2 mt-2">
-          <div
-            class="text-green-500 text-center font-bold text-xs uppercase mb-2"
-          >
-            Afiliados que mais trouxeram cadastros pagantes
-          </div>
-          <div class="grid-cols-2">
-            <div
-              class="text-xs pt-1"
-              v-for="{ email, totalCount } in topAffiliatesCPA"
-            >
-              <div class="text-white">
-                {{ email }} - {{ totalCount }} convidados
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <CanvasJSChart class="mt-2" :options="options" :styles="styleOptions" />
 

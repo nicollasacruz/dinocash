@@ -98,10 +98,6 @@ class FinanceController extends Controller
 
         $lucroTotal = $depositsAmountPaid * 0.965 - $withdrawsAmountPaid * 0.98 - $withdrawsAmountAffiliatePaid * 0.98 - $walletsAmount - $walletsAfilliateAmount - $walletsAfilliatePending;
 
-        $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
-        $topLossAffiliates = $referralService->getTopReferralsByLoss();
-        $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
-
         $gain = $depositsAmountPaid ?? 1;
         if (env('APP_GGR_DEPOSIT')) {
             $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
@@ -175,9 +171,6 @@ class FinanceController extends Controller
             'lucroTotal' => $lucroTotal,
             'topWithdraws' => $topWithdraws,
             'topDeposits' => $topDeposits,
-            'topProfitableAffiliates' => $topProfitableAffiliates,
-            'topAffiliatesCPA' => $topAffiliatesCPA,
-            'topLossAffiliates' => $topLossAffiliates,
             'payout' => Setting::first('payout'),
             'houseHealth' => $houseHealth * 1,
             'chart' => $chart,

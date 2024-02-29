@@ -33,7 +33,7 @@ function toBRL(value) {
 
   <AuthenticatedLayout>
     <div class="flex-col lg:flex-row justify-between max-w-screen">
-      <div class="text-4xl my-2 text-white font-bold">Financeiro</div>
+      <div class="text-4xl my-2 text-white font-bold">Financeiro Afiliados</div>
     </div>
     <div class="mt-4 grid grid-cols-1 gap-x-5">
       <div class="">
