@@ -11,11 +11,11 @@
             backgroundRepeat: 'no-repeat',
         }"
     >
-        <div
+        <!-- <div
             class="text-4xl 2xl:text-8xl font-bold md:text-6xl text-verde font-menu text-center md:text-right lg:mr-40"
         >
             Recompensas
-        </div>
+        </div> -->
         <div
             class="flex flex-col items-center md:items-start md:flex-row lg:mr-40"
         >
