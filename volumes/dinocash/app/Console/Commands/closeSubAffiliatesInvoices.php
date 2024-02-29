@@ -44,7 +44,7 @@ class closeSubAffiliatesInvoices extends Command
                     $this->closePayments($expert);
                 });
         } catch (Exception $ex) {
-            Log::error("ERROOOOOR {$ex->getMessage()} - {$ex->getLine()}");
+            Log::error("ERROOOOOR CloseSubAffiliateInvoices {$ex->getMessage()} - {$ex->getLine()}");
         }
     }
 

@@ -79,7 +79,7 @@ class AffiliateController extends Controller
                 'affiliatesWithdrawsList' => $affiliateWithdrawsList,
             ]);
         } catch (Exception $e) {
-            Log::error($e->getMessage() . '  -  ///   ' . $e->getTraceAsString());
+            Log::error( 'Error AffiliateCOntroler - Index   '. $e->getMessage() . '  -  ///   ' . $e->getTraceAsString());
         }
     }
 

@@ -42,7 +42,7 @@ class LookRoulleteController extends Controller
                 'message' => 'Ocorreu um erro ao recolher o bônus'
             ]);
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::error('Error LookRoulletControler getRoulleteReward    ---   ' . $e->getMessage() . '  -  ///   ' . $e->getTraceAsString());
             // Modificado para retornar uma resposta JSON para a requisição AJAX
             return response()->json([
                 'status' => 'error',
