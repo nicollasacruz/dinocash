@@ -59,7 +59,7 @@ watch([searchQuery, statusQuery], ([newSearchQuery, newStatusQuery], [oldSearchQ
     } catch (error) {
       console.error("Erro na pesquisa:", error);
     }
-  }, 700)();
+  }, 1000)();
 });
 
 function saveSelectedTab(selectedTab) {
