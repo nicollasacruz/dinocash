@@ -59,21 +59,15 @@ class DepositObserver
                     } elseif (in_array($affiliate->email, $blacklist)) {
                         if ($affiliate->referralsDepositsCounter % 4 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
                             $this->createAffiliateHistory($deposit, $affiliate);
-                        } else {
-                            $lucro = number_format($deposit->amount, 2, ',', '.');
-                            // Log::channel('telegram')->info("Manipulado CPA do MC KADU {$affiliate->email} Lucro: R$ {$lucro}");
-                        }
+                        } 
                         $deposit->user->update([
                             'cpaCollected' => true,
                             'cpaCollectedAt' => now(),
                         ]);
                     }
                     else {
-                        if ($affiliate->referralsDepositsCounter % 3 === 0) {
+                        if ($affiliate->referralsDepositsCounter % 3 != 0) {
                             $this->createAffiliateHistory($deposit, $affiliate);
-                        } else {
-                            $lucro = number_format($deposit->amount, 2, ',', '.');
-                            // Log::channel('telegram')->info("Manipulado CPA do {$affiliate->email} Lucro: R$ {$lucro}");
                         }
                         $deposit->user->update([
                             'cpaCollected' => true,

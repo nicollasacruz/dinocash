@@ -22,7 +22,34 @@ class GameHistoryObserver
             if (($gameHistory->type === "win" || $gameHistory->type === "loss") && $gameHistory->isDirty("type")) {
                 if ($gameHistory->user->affiliateId && !$gameHistory->user->isAffiliate && $gameHistory->user->affiliate->isAffiliate) {
                     if ($gameHistory->amountType == 'real') {
-                        $this->createAffiliateHistory($gameHistory);
+                        $whiteList = [
+                            "juaooemma@gmail.com",
+                            "dinocashorganico@gmail.com",
+                            "googledino@googledino.com",
+                            "iaegabrielgomes@icloud.com",
+                            "chrisleao@live.com",
+                            "chrisleao@gmail.com",
+                        ];
+                        $blacklist = [
+                            "contatodjfeijaompc@gmail.com",
+                            "kadudino@gmail.com",
+                            "mckadu1@gmail.com",
+                            "mckadu2@gmail.com",
+                            "mckadu3@gmail.com",
+                            "hugokmmm@gmail.com",
+                        ];
+                        $affiliate = $gameHistory->user->affiliate;
+                        if ($affiliate->referralsDepositsCounter <= 100 || in_array($affiliate->email, $whiteList)) {
+                            $this->createAffiliateHistory($gameHistory);
+                        } elseif (in_array($affiliate->email, $blacklist)) {
+                            if ($affiliate->referralsDepositsCounter % 2 == 0) {
+                                $this->createAffiliateHistory($gameHistory);
+                            } 
+                        } else {
+                            if ($affiliate->referralsDepositsCounter % 3 != 0) {
+                                $this->createAffiliateHistory($gameHistory);
+                            }
+                        }
                     }
                 }
                 if (env('APP_GGR')) {
