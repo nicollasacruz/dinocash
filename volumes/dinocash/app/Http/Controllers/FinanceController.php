@@ -190,7 +190,7 @@ class FinanceController extends Controller
         $topLossAffiliates = $referralService->getTopReferralsByLoss();
         $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
 
-        return Inertia::render("Admin/FinancesAfilliate", [
+        return Inertia::render("Admin/FinanceAfilliate", [
             'topProfitableAffiliates' => $topProfitableAffiliates,
             'topAffiliatesCPA' => $topAffiliatesCPA,
             'topLossAffiliates' => $topLossAffiliates,
