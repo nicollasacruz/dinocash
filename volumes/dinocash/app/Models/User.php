@@ -41,7 +41,7 @@ class User extends Authenticatable
         'cpaCollectedAt',
         'invitation_link',
         'referralsCounter',
-        'referralsDepositsCounter',
+        // 'referralsDepositsCounter',
         'CPA',
         'revSub',
         'revSubFake',
