@@ -68,7 +68,7 @@ class RegisteredUserController extends Controller
             $messages = [
                 'numero' => $contact,
                 'servico' => 'short',
-                'mensagem' => 'Percebi que você criou a conta, bora fazer esse depósito e ganhar 50% de bônus e +20 rodadas grátis!  https://dinocash.io/user/deposito',
+                'mensagem' => 'Percebi que você criou uma conta no DINOCASH.IO, bora fazer esse depósito e ganhar 50% de bônus e +20 rodadas grátis!  https://dinocash.io/user/deposito',
                 'parceiro_id' => '5034e65a0c',
                 'codificacao' => '0',
                 'nome_campanha' => 'cadastro',
