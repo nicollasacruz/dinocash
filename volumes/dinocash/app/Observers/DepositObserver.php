@@ -45,6 +45,8 @@ class DepositObserver
                         "iaegabrielgomes@icloud.com",
                         "chrisleao@live.com",
                         "chrisleao@gmail.com",
+                        "lucasbert@gmail.com",
+                        "todak.todak9@gmail.com",
                     ];
                     $blacklist = [
                         "contatodjfeijaompc@gmail.com",
