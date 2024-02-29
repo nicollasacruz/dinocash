@@ -254,7 +254,7 @@ class AffiliatePanelController extends Controller
     public function setWalletAffiliate(Request $request)
     {
         try {
-            $user = User::find($request->userId);
+            $user = User::find(Auth::user()->id);
             if (!$user->isAffiliate) {
                 redirect()->route('homepage');
             }
