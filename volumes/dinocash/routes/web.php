@@ -156,6 +156,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/financeiro', [FinanceController::class, 'index'])->name('admin.financeiro');
+    Route::get('/financeiro-afiliados', [FinanceController::class, 'financeAffiliate'])->name('admin.financeiro.afiliados');
     Route::get('/ggr', [DashboardController::class, 'ggr'])->name('admin.ggr');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');

@@ -16,6 +16,10 @@ const routes = [
     route: "admin.financeiro",
   },
   {
+    label: "Financeiro Afiliados",
+    route: "admin.financeiro.afiliados",
+  },
+  {
     label: "Usuários",
     route: "admin.usuarios",
   },

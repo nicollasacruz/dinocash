@@ -184,6 +184,19 @@ class FinanceController extends Controller
         ]);
     }
 
+    public function financeAffiliate(Request $request, ReferralService $referralService)
+    {
+        $topProfitableAffiliates = $referralService->getTopReferralsByProfit();
+        $topLossAffiliates = $referralService->getTopReferralsByLoss();
+        $topAffiliatesCPA = $referralService->getTopReferralsByCPA();
+
+        return Inertia::render("Admin/FinancesAfilliate", [
+            'topProfitableAffiliates' => $topProfitableAffiliates,
+            'topAffiliatesCPA' => $topAffiliatesCPA,
+            'topLossAffiliates' => $topLossAffiliates,
+        ]);
+    }
+
     public function updatePayout(Request $request)
     {
         $request->validate([
