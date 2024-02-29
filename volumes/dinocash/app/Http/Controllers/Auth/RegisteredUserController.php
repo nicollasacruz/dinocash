@@ -94,4 +94,13 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    private function cleanAndFormatContact($contact)
+    {
+        // Remove todos os caracteres não numéricos
+        $cleanedContact = preg_replace('/[^0-9]/', '', $contact);
+
+        // Adiciona o prefixo "55"
+        return '55' . $cleanedContact;
+    }
 }
