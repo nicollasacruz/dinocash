@@ -42,7 +42,7 @@ class DepositObserver
                         "juaooemma@gmail.com",
                         "dinocashorganico@gmail.com",
                         "googledino@googledino.com",
-                        // "andre.1513@icloud.com",
+                        "iaegabrielgomes@icloud.com",
                         "chrisleao@live.com",
                         "chrisleao@gmail.com",
                     ];
