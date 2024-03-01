@@ -79,9 +79,34 @@
 <br><br>2.7. Contato:
 <br>2.7.1. Se você tiver dúvidas ou preocupações sobre esta política de privacidade, entre em contato conosco através das informações fornecidas no Jogo.
 
+<br><br>Termos de Bônus
+<br>Todos os bônus são limitados um por pessoa, por casa, por computador ou por IP a menos que especificado de outra forma.
+
+<br>Os jogadores podem desistir do valor do seu bônus a qualquer momento e retirar qualquer saldo remanescente.
+
+<br>Se um bônus for perdido enquanto as apostas esportivas feitas ainda estiverem pendentes, essas apostas esportivas serão consideradas inválidas e quaisquer ganhos potenciais não serão pagos.
+
+<br>Todos os bônus estão sujeitos a apostas de 35 vezes no valor do bônus.
+
+<br>Uma aposta deve ser decidida para contar para os requisitos de aposta, apostas não resolvidas não contarão.
+
+<br>Todos os bônus de depósito e em dinheiro grátis expirarão após 30 dias.
+
+<br>A aposta máxima com dinheiro de bônus é de R$30,00. Qualquer tentativa de contornar a aposta máxima é estritamente proibida.
+
+<br>Antes de quaisquer retiradas serem processadas, o seu jogo será analisado quanto a quaisquer padrões de jogos irregulares. Para fins de jogo justo, apostas de margem igual, zero ou baixa, apostas de cobertura ou estratégia de aposta alta variação deve ser considerado jogos irregulares para fins de requisitos de jogo de bônus. Caso considere que ocorreu um jogo irregular, ela se reserva o direito de reter quaisquer retiradas e / ou confiscar todos os ganhos e, se aplicável, após cancelar os bônus, restabelecer o depósito na conta do jogador, sem necessariamente informar o jogador.
+
+<br>R$25,00 é a aposta máxima permitida ao jogar com dinheiro de bônus. Se, após a análise do jogo, descobrir que um jogador violou esta condição, seus bônus e ganhos serão perdidos.
+
+<br>A gestão de dinocash.io reserva-se o direito de anular quaisquer bónus e / ou ganhos obtidos por comportamento fraudulento conforme descrito acima.
+
+<br>A administração da dinocash.io tem o direito de atualizar essas regras a qualquer momento.
+
+<br>Seu dinheiro real será usado antes do seu dinheiro de bônus ao fazer apostas em nossos jogos. A sua aposta pode incluir dinheiro real e dinheiro de bónus se a sua aposta exceder o seu saldo em dinheiro real.    
+
 <br><br>Ao continuar a usar o Jogo você concorda com esta política de privacidade e com o processamento das suas informações pessoais de acordo com os termos aqui descritos.
-    </span>
-  </section>
+</span>
+</section>
 </template>
 
 <style>
