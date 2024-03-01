@@ -94,7 +94,7 @@ class DepositController extends Controller
 
     public function webhook(Request $request, DepositService $depositService)
     {
-        Log::alert('Entrou no callback');
+        Log::alert('Entrou no callback de Deposito');
         if (env('PAYMENT_SERVICE') == 'SUITPAY') {
             Log::alert('Entrou no callback SUITPAY');
             $validatedData = $request->validate([
@@ -141,13 +141,11 @@ class DepositController extends Controller
             $ts = $ts[1];
             $reqSignature = mb_split('=', $header[1]);
             $reqSignature = $reqSignature[1];
-            Log::alert($header);
 
             $signed_payload = hash_hmac('sha256', $ts . '.' . $requestPayload, $secretKey);
 
             $reqTimestamp = $ts;
 
-            Log::alert('Entrou no callback ezzebank antes ' . $reqTimestamp . '    -     ' . $reqSignature);
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
                 Log::alert( $request->requestBody);
                 $requestBody = $request->requestBody;
