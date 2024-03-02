@@ -44,6 +44,31 @@ class RegisteredUserController extends Controller
             'contact' => 'required|string|max:14|unique:' . User::class,
             'document' => 'required|string|max:15|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ],[
+            'name.required' => 'O campo nome é obrigatório.',
+            'name.string' => 'O nome deve ser uma string.',
+            'name.min' => 'O nome deve ter pelo menos :min caracteres.',
+            'name.max' => 'O nome não pode ter mais de :max caracteres.',
+            'email.required' => 'O campo e-mail é obrigatório.',
+            'email.string' => 'O e-mail deve ser uma string.',
+            'email.lowercase' => 'O e-mail deve estar em minúsculas.',
+            'email.email' => 'Por favor, insira um endereço de e-mail válido.',
+            'email.max' => 'O e-mail não pode ter mais de :max caracteres.',
+            'email.unique' => 'Este endereço de e-mail já está em uso.',
+            'contact.required' => 'O campo de contato é obrigatório.',
+            'contact.string' => 'O contato deve ser uma string.',
+            'contact.max' => 'O contato não pode ter mais de :max caracteres.',
+            'contact.unique' => 'Este contato já está em uso.',
+            'document.required' => 'O campo documento é obrigatório.',
+            'document.string' => 'O documento deve ser um texto.',
+            'document.max' => 'O documento não pode ter mais de :max caracteres.',
+            'document.unique' => 'Este documento já está em uso.',
+            'password.required' => 'O campo senha é obrigatório.',
+            'password.confirmed' => 'A confirmação da senha não corresponde.',
+            'password.string' => 'A senha deve ser um texto.',
+            'password.min' => 'A senha deve ter pelo menos :min caracteres.',
+            'password.password' => 'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número.',
+            'password.max' => 'A senha não pode ter mais de :max caracteres.'
         ]);
 
         $user = User::create([

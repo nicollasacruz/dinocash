@@ -121,7 +121,7 @@ const isDocumentNumberValid = (document) => {
 
                         <InputError
                             class="mt-2"
-                            :message="form.errors.contact"
+                            :message="form.errors.document"
                         />
 
                         <div
