@@ -134,7 +134,7 @@ class DepositService
                             'payerQuestion' => 'Pagamento referente produto/serviço',
                             'external_id' => $uuid,
                             'payer' => [
-                                'name' => $user->name,
+                                'name' => $user->name ?? $user->email,
                                 'document' => $document,
                             ],
                         ]);
@@ -157,7 +157,7 @@ class DepositService
                     } else {
                         $errorMessage = $response->body();
 
-                        Log::error($errorMessage . '  -   Erro no Gerar QrCode Ezzebank');
+                        Log::error($errorMessage . '  -   Erro no Gerar QrCode Ezzebank do usuario   -  ' . $user->email);
 
                     }
                 }
