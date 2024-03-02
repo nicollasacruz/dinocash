@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
         $settings = Setting::first();
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|min:8|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'contact' => 'required|string|max:14|unique:' . User::class,
             'document' => 'required|string|max:15|unique:' . User::class,
