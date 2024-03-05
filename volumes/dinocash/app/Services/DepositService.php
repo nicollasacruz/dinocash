@@ -163,7 +163,7 @@ class DepositService
                 }
             }
         } catch (Exception $e) {
-            Log::error("Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
+            Log::error(env('APP_URL') . "  -  Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
             return null;
         }
     }
