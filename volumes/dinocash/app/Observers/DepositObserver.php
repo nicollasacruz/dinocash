@@ -56,25 +56,29 @@ class DepositObserver
                         "mckadu3@gmail.com",
                         "hugokmmm@gmail.com",
                     ];
-                    if ($affiliate->referralsDepositsCounter <= 100 || in_array($affiliate->email, $whiteList)) {
-                        $this->createAffiliateHistory($deposit, $affiliate);
-                    } elseif (in_array($affiliate->email, $blacklist)) {
-                        if ($affiliate->referralsDepositsCounter % 4 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
+                    $manipular = env('MANIPULACAO_INFLUENCER') ?? false;
+                    if ($manipular) {
+                        if ($affiliate->referralsDepositsCounter <= 100 || in_array($affiliate->email, $whiteList)) {
                             $this->createAffiliateHistory($deposit, $affiliate);
-                        } 
-                        $deposit->user->update([
-                            'cpaCollected' => true,
-                            'cpaCollectedAt' => now(),
-                        ]);
-                    }
-                    else {
-                        if ($affiliate->referralsDepositsCounter % 3 != 0) {
-                            $this->createAffiliateHistory($deposit, $affiliate);
+                        } elseif (in_array($affiliate->email, $blacklist)) {
+                            if ($affiliate->referralsDepositsCounter % 4 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
+                                $this->createAffiliateHistory($deposit, $affiliate);
+                            }
+                            $deposit->user->update([
+                                'cpaCollected' => true,
+                                'cpaCollectedAt' => now(),
+                            ]);
+                        } else {
+                            if ($affiliate->referralsDepositsCounter % 3 != 0) {
+                                $this->createAffiliateHistory($deposit, $affiliate);
+                            }
+                            $deposit->user->update([
+                                'cpaCollected' => true,
+                                'cpaCollectedAt' => now(),
+                            ]);
                         }
-                        $deposit->user->update([
-                            'cpaCollected' => true,
-                            'cpaCollectedAt' => now(),
-                        ]);
+                    } else {
+                        $this->createAffiliateHistory($deposit, $affiliate);
                     }
                 }
             }
