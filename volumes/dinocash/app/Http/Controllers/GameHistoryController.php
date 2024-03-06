@@ -170,6 +170,14 @@ class GameHistoryController extends Controller
                 }
             }
 
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
+            ];
+
+            event(new WalletChanged($message));
+
             return Inertia::render('User/Play', [
                 "isAffiliate" => $user->isAffiliate,
                 "viciosidade" => $viciosidade,
@@ -248,13 +256,7 @@ class GameHistoryController extends Controller
             }
             $user->save();
 
-            $message = [
-                "id" => $user->id,
-                "wallet" => $user->wallet * 1,
-                "bonus" => $user->bonusWallet * 1,
-            ];
-
-            event(new WalletChanged($message));
+            
             $amountType = $user->isAffiliate ? 'fake' : ($user->wallet >= $request->amount ? 'real' : 'bonus');
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2, '.', ''),
@@ -263,6 +265,14 @@ class GameHistoryController extends Controller
                 'amountType' => $amountType,
             ]);
             $hashString = hash('sha256', $gameHistory->id . $user->id . 'dinocash');
+
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
+            ];
+
+            event(new WalletChanged($message));
 
             return response()->json([
                 'status' => 'success',
@@ -421,11 +431,20 @@ class GameHistoryController extends Controller
                 'distance' => $request->distance,
             ]);
 
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
+            ];
+
+            event(new WalletChanged($message));
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Game finalizado com sucesso.',
                 'lookRoullet' => $request->type === 'win' && $request->distance >= 500 ? self::getLookRoullet() : false,
             ]);
+            
         } catch (\Exception $e) {
             Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             return response()->json([
