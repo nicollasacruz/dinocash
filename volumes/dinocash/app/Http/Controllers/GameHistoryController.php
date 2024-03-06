@@ -55,62 +55,59 @@ class GameHistoryController extends Controller
                 }
             }
             $user = User::find(Auth::user()->id);
-            if ($user) {
-                $gameHistory = $user->gameHistories->where('type', 'pending');
-                if ($gameHistory) {
-                    foreach ($gameHistory as $gameHistoryItem) {
-                        $amount = $gameHistoryItem->amount * 1;
-                        if ($amount < 0) {
-                            $amount = $amount * -1;
-                        }
-                        if ($gameHistoryItem->amountType !== 'bonus') {
-                            
-                            WalletTransaction::create([
-                                'userId' => $user->id,
-                                'oldValue' => ($user->wallet * 1),
-                                'newValue' => ($user->wallet * 1) + $amount,
-                                'type' => 'game pending error wallet',
+            $gameHistory = $user->gameHistories->where('type', 'pending');
+            if ($gameHistory) {
+                foreach ($gameHistory as $gameHistoryItem) {
+                    $amount = $gameHistoryItem->amount * 1;
+                    if ($amount < 0) {
+                        $amount = $amount * -1;
+                    }
+                    if ($gameHistoryItem->amountType !== 'bonus') {
+
+                        WalletTransaction::create([
+                            'userId' => $user->id,
+                            'oldValue' => ($user->wallet * 1),
+                            'newValue' => ($user->wallet * 1) + $amount,
+                            'type' => 'game pending error wallet',
+                        ]);
+
+                        $user->wallet = (($user->wallet * 1) + $amount);
+                    } else {
+
+                        $bonus = $user->bonusCampaings->first();
+                        if ($bonus && !$gameHistoryItem->freespin) {
+                            $bonus->amountMovement -= $amount;
+                            $bonus->save();
+
+                            BonusWalletChange::create([
+                                'bonusCampaignId' => $bonus->id,
+                                'amountOld' => $user->bonusWallet,
+                                'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                                'type' => 'game pending error bonus',
                             ]);
 
-                            $user->wallet = (($user->wallet * 1) + $amount);
-
-                        } else {
-
-                            $bonus = $user->bonusCampaings->first();
-                            if ($bonus && !$gameHistoryItem->freespin) {
-                                $bonus->amountMovement -= $amount;
-                                $bonus->save();
-
-                                BonusWalletChange::create([
-                                    'bonusCampaignId' => $bonus->id,
-                                    'amountOld' => $user->bonusWallet,
-                                    'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
-                                    'type' => 'game pending error bonus',
-                                ]);
-
-                                $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
-                            }
-                            if ($gameHistoryItem->freespin) {
-                                $user->freespin += 1;
-                            }
+                            $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
                         }
-                        $user->save();
-                        $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
-                            $affiliateHistory->delete();
-                        });
-                        $gameHistoryItem->type = 'deleted';
-                        $gameHistoryItem->finalAmount = 0;
-                        $gameHistoryItem->save();
-                        $message = [
-                            "id" => $user->id,
-                            "wallet" => $user->wallet * 1,
-                            "bonus" => $user->bonusWallet * 1,
-                        ];
-
-                        event(new WalletChanged($message));
-
-                        Log::error('Partida já iniciada. - ' . $user->email);
+                        if ($gameHistoryItem->freespin) {
+                            $user->freespin += 1;
+                        }
                     }
+                    $user->save();
+                    $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                        $affiliateHistory->delete();
+                    });
+                    $gameHistoryItem->type = 'deleted';
+                    $gameHistoryItem->finalAmount = 0;
+                    $gameHistoryItem->save();
+                    $message = [
+                        "id" => $user->id,
+                        "wallet" => $user->wallet * 1,
+                        "bonus" => $user->bonusWallet * 1,
+                    ];
+
+                    event(new WalletChanged($message));
+
+                    Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
 
@@ -256,7 +253,7 @@ class GameHistoryController extends Controller
             }
             $user->save();
 
-            
+
             $amountType = $user->isAffiliate ? 'fake' : ($user->wallet >= $request->amount ? 'real' : 'bonus');
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2, '.', ''),
@@ -444,7 +441,6 @@ class GameHistoryController extends Controller
                 'message' => 'Game finalizado com sucesso.',
                 'lookRoullet' => $request->type === 'win' && $request->distance >= 500 ? self::getLookRoullet() : false,
             ]);
-            
         } catch (\Exception $e) {
             Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             return response()->json([

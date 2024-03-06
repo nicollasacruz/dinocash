@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\WalletChanged;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\AffiliatePanelController;
 use App\Http\Controllers\AffiliateWithdrawController;
@@ -13,10 +14,14 @@ use App\Http\Controllers\GameHistoryController;
 use App\Http\Controllers\LookRoulleteController;
 use App\Http\Controllers\PushController;
 use App\Http\Controllers\UserController;
+use App\Models\BonusWalletChange;
 use App\Models\GameHistory;
 use App\Models\User;
+use App\Models\WalletTransaction;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -41,6 +46,127 @@ Route::get('/undefined', function () {
 });
 
 Route::get('/', function () {
+    $user = User::find(Auth::user()->id);
+    $gameHistory = $user->gameHistories->where('type', 'pending');
+    if ($gameHistory) {
+        foreach ($gameHistory as $gameHistoryItem) {
+            $amount = $gameHistoryItem->amount * 1;
+            if ($amount < 0) {
+                $amount = $amount * -1;
+            }
+            if ($gameHistoryItem->amountType !== 'bonus') {
+
+                WalletTransaction::create([
+                    'userId' => $user->id,
+                    'oldValue' => ($user->wallet * 1),
+                    'newValue' => ($user->wallet * 1) + $amount,
+                    'type' => 'game pending error wallet',
+                ]);
+
+                $user->wallet = (($user->wallet * 1) + $amount);
+            } else {
+
+                $bonus = $user->bonusCampaings->first();
+                if ($bonus && !$gameHistoryItem->freespin) {
+                    $bonus->amountMovement -= $amount;
+                    $bonus->save();
+
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                        'type' => 'game pending error bonus',
+                    ]);
+
+                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                }
+                if ($gameHistoryItem->freespin) {
+                    $user->freespin += 1;
+                }
+            }
+            $user->save();
+            $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                $affiliateHistory->delete();
+            });
+            $gameHistoryItem->type = 'deleted';
+            $gameHistoryItem->finalAmount = 0;
+            $gameHistoryItem->save();
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
+            ];
+
+            event(new WalletChanged($message));
+
+            Log::error('Partida já iniciada. - ' . $user->email);
+        }
+    }
+
+    $gameHistory = $user->gameHistories->where('type', 'gaming');
+    if ($gameHistory) {
+        foreach ($gameHistory as $gameHistoryItem) {
+            $amount = ($gameHistoryItem->amount * 1);
+            if ($amount < 0) {
+                $amount = $amount * -1;
+            }
+            if ($gameHistoryItem->amountType !== 'bonus') {
+                WalletTransaction::create([
+                    'userId' => $user->id,
+                    'oldValue' => $user->wallet,
+                    'newValue' => $user->wallet + $amount,
+                    'type' => 'game gaming error wallet',
+                ]);
+                $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+            } else {
+                $bonus = $user->bonusCampaings->where('status', 'active')->first();
+                if ($bonus && !$gameHistoryItem->freespin) {
+                    $bonus->amountMovement -= $amount;
+                    $bonus->save();
+
+                    BonusWalletChange::create([
+                        'bonusCampaignId' => $bonus->id,
+                        'amountOld' => $user->bonusWallet,
+                        'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+                        'type' => 'game gaming error bonus',
+                    ]);
+
+                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+                }
+                if ($gameHistoryItem->freespin) {
+                    $user->freespin += 1;
+                }
+            }
+
+            $user->save();
+            $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                $affiliateHistory->delete();
+            });
+
+            $gameHistoryItem->type = 'deleted';
+            $gameHistoryItem->finalAmount = 0;
+            $gameHistoryItem->save();
+
+            $message = [
+                "id" => $user->id,
+                "wallet" => $user->wallet * 1,
+                "bonus" => $user->bonusWallet * 1,
+            ];
+
+            event(new WalletChanged($message));
+
+            Log::error('Partida já iniciada. - ' . $user->email);
+        }
+    }
+
+    $message = [
+        "id" => $user->id,
+        "wallet" => $user->wallet * 1,
+        "bonus" => $user->bonusWallet * 1,
+    ];
+
+    event(new WalletChanged($message));
+
     $userIdLogado = Auth::id();
 
     $rankedUsers = [];
@@ -49,11 +175,11 @@ Route::get('/', function () {
     $usuarioLogadoInserido = false;
 
     $rankings = GameHistory::select(['userId', 'distance'])
-    ->where('type', 'win')
-    ->whereMonth('created_at', Carbon::now()->month)
-    ->orderBy('distance', 'desc')
-    ->limit(1000)
-    ->get();
+        ->where('type', 'win')
+        ->whereMonth('created_at', Carbon::now()->month)
+        ->orderBy('distance', 'desc')
+        ->limit(1000)
+        ->get();
 
     foreach ($rankings as $ranking) {
         if (count($rankedUsers) === 10) {
@@ -103,7 +229,6 @@ Route::get('/', function () {
             'distancia' => $distance ? $distance->distance : 0,
         ];
         $ids[] = $userLogado->id;
-
     }
     $wallet = 0;
     if (Auth::check()) {
@@ -194,10 +319,10 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
     Route::get('/movimentacao', [ProfileController::class, 'userWithdrawsAndDeposits'])->name('user.movimentacao');
     Route::get('/saque', [WithdrawController::class, 'indexUser'])->name('user.saque');
     Route::post('/saque', [WithdrawController::class, 'store'])->name('user.saque.store');
-    
+
     Route::get('/roleta', [LookRoulleteController::class, 'userRollete'])->name('user.roleta');
     Route::post('/recolher-recompensa', [LookRoulleteController::class, 'getRoulleteReward'])->name('user.recompensa.roleta');
-    
+
     Route::get('/deposito', [DepositController::class, 'index'])->name('user.deposito');
     Route::post('/deposito', [DepositController::class, 'store'])->name('user.deposito.store');
     Route::patch('/deposito', [DepositController::class, 'update'])->name('user.deposito.update');
