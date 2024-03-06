@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 class WithdrawService
 {
-    public function createWithdraw(User $user, $amount)
+    public function createWithdraw(User $user, $amount): array
     {
         try {
             $onlyWallet = false;
@@ -152,7 +152,10 @@ class WithdrawService
             ];
         } catch (Exception $e) {
             Log::error("Erro ao criar Withdraw: " . $e->getMessage());
-            return false;
+            return [
+                'success' => 'error',
+                'message' => 'Saque não pode realizado.',
+            ];
         }
     }
 
