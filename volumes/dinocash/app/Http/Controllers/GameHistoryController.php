@@ -95,7 +95,8 @@ class GameHistoryController extends Controller
                         $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
                             $affiliateHistory->delete();
                         });
-                        $gameHistoryItem->type = 'deleled';
+                        $gameHistoryItem->type = 'deleted';
+                        $gameHistoryItem->finalAmount = 0;
                         $gameHistoryItem->save();
                         $message = [
                             "id" => $user->id,
@@ -150,7 +151,8 @@ class GameHistoryController extends Controller
                         $affiliateHistory->delete();
                     });
 
-                    $gameHistoryItem->type = 'deleled';
+                    $gameHistoryItem->type = 'deleted';
+                    $gameHistoryItem->finalAmount = 0;
                     $gameHistoryItem->save();
 
                     $message = [
@@ -378,7 +380,13 @@ class GameHistoryController extends Controller
                 }
 
                 $user->save();
-                $gameHistoryItem->type = 'deleled';
+
+                $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+                    $affiliateHistory->delete();
+                });
+                
+                $gameHistoryItem->type = 'deleted';
+                $gameHistoryItem->finalAmount = 0;
                 $gameHistoryItem->save();
                 return response()->json([
                     'status' => 'error',
