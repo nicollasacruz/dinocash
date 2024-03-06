@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
             'contact' => 'required|string|max:14|unique:' . User::class,
             'document' => 'required|string|max:15|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ],[
+        ], [
             'name.required' => 'O campo nome é obrigatório.',
             'name.string' => 'O nome deve ser uma string.',
             'name.min' => 'O nome deve ter pelo menos :min caracteres.',
@@ -85,36 +85,39 @@ class RegisteredUserController extends Controller
         // $bonusService->addFreeSpin($user, 2);
 
         event(new Registered($user));
-        try {
-            $token = "Bearer " . env('TOKEN_DISPARO_PRO');
+        $sms = env('SMS_SERVICE') ?? false;
 
-            $contact = $this->cleanAndFormatContact($user->contact);
+        if ($sms) {
+            try {
+                $token = "Bearer " . env('TOKEN_DISPARO_PRO');
 
-            $messages = [
-                'numero' => $contact,
-                'servico' => 'short',
-                'mensagem' => 'Percebi que você criou uma conta no DINOCASH.IO, bora fazer esse depósito e ganhar 50% de bônus e +20 rodadas grátis!  https://dinocash.io/user/deposito',
-                'parceiro_id' => '5034e65a0c',
-                'codificacao' => '0',
-                'nome_campanha' => 'cadastro',
-            ];
+                $contact = $this->cleanAndFormatContact($user->contact);
 
-            $response = Http::withHeaders([
-                'authorization' => $token,
-                'content-type' => 'application/json',
-            ])
-                ->post('https://apihttp.disparopro.com.br:8433/mt', $messages);
+                $messages = [
+                    'numero' => $contact,
+                    'servico' => 'short',
+                    'mensagem' => 'Percebi que você criou uma conta no DINOCASH.IO, bora fazer esse depósito e ganhar 50% de bônus e +20 rodadas grátis!  https://dinocash.io/user/deposito',
+                    'parceiro_id' => '5034e65a0c',
+                    'codificacao' => '0',
+                    'nome_campanha' => 'cadastro',
+                ];
 
-            if ($response->failed()) {
-                Log::error('FALHA NO SMS  ------   ' . $response->body());
-            } else {
-                echo $response->body();
-                Log::info('SMS  ------   ' . $response->body());
+                $response = Http::withHeaders([
+                    'authorization' => $token,
+                    'content-type' => 'application/json',
+                ])
+                    ->post('https://apihttp.disparopro.com.br:8433/mt', $messages);
+
+                if ($response->failed()) {
+                    Log::error('FALHA NO SMS  ------   ' . $response->body());
+                } else {
+                    echo $response->body();
+                    Log::info('SMS  ------   ' . $response->body());
+                }
+            } catch (Exception $e) {
+                Log::error('ERRO NO SMS  ------   ' . $e->getMessage());
             }
-        } catch (Exception $e) {
-            Log::error('ERRO NO SMS  ------   ' . $e->getMessage());
         }
-
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
