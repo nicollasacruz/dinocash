@@ -36,7 +36,6 @@ class AddAffiliateFieldsToUsersTable extends Migration
             $table->dropForeign(['affiliateId']);
             $table->dropColumn([
                 'isAffiliate',
-                'referrals',
                 'affiliateId',
                 'affiliatedAt',
                 'cpaCollected',
