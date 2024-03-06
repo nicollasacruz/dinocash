@@ -55,7 +55,7 @@ export default class DinoGame extends GameRunner {
                 : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.6, // ppf
+            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.4, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
                 ? 7
