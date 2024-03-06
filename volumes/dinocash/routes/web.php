@@ -106,44 +106,45 @@ Route::get('/', function () {
     $gameHistory = $user->gameHistories->where('type', 'gaming');
     if ($gameHistory) {
         foreach ($gameHistory as $gameHistoryItem) {
-            $amount = ($gameHistoryItem->amount * 1);
-            if ($amount < 0) {
-                $amount = $amount * -1;
-            }
-            if ($gameHistoryItem->amountType !== 'bonus') {
-                WalletTransaction::create([
-                    'userId' => $user->id,
-                    'oldValue' => $user->wallet,
-                    'newValue' => $user->wallet + $amount,
-                    'type' => 'game gaming error wallet',
-                ]);
-                $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
-            } else {
-                $bonus = $user->bonusCampaings->where('status', 'active')->first();
-                if ($bonus && !$gameHistoryItem->freespin) {
-                    $bonus->amountMovement -= $amount;
-                    $bonus->save();
+            // $amount = ($gameHistoryItem->amount * 1);
+            // if ($amount < 0) {
+            //     $amount = $amount * -1;
+            // }
+            // if ($gameHistoryItem->amountType !== 'bonus') {
+            //     WalletTransaction::create([
+            //         'userId' => $user->id,
+            //         'oldValue' => $user->wallet,
+            //         'newValue' => $user->wallet + $amount,
+            //         'type' => 'game gaming error wallet',
+            //     ]);
+            //     $user->wallet = (($user->wallet * 1) + ($gameHistoryItem->amount * 1));
+            // } else {
+            //     $bonus = $user->bonusCampaings->where('status', 'active')->first();
+            //     if ($bonus && !$gameHistoryItem->freespin) {
+            //         $bonus->amountMovement -= $amount;
+            //         $bonus->save();
 
-                    BonusWalletChange::create([
-                        'bonusCampaignId' => $bonus->id,
-                        'amountOld' => $user->bonusWallet,
-                        'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
-                        'type' => 'game gaming error bonus',
-                    ]);
+            //         BonusWalletChange::create([
+            //             'bonusCampaignId' => $bonus->id,
+            //             'amountOld' => $user->bonusWallet,
+            //             'amountNew' => (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1)),
+            //             'type' => 'game gaming error bonus',
+            //         ]);
 
-                    $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
-                }
-                if ($gameHistoryItem->freespin) {
-                    $user->freespin += 1;
-                }
-            }
+            //         $user->bonusWallet = (($user->bonusWallet * 1) + ($gameHistoryItem->amount * 1));
+            //     }
+            //     if ($gameHistoryItem->freespin) {
+            //         $user->freespin += 1;
+            //     }
+            // }
 
-            $user->save();
-            $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
-                $affiliateHistory->delete();
-            });
+            // $user->save();
 
-            $gameHistoryItem->type = 'deleted';
+            // $gameHistoryItem->affiliateHistories->each(function ($affiliateHistory) {
+            //     $affiliateHistory->delete();
+            // });
+
+            $gameHistoryItem->type = 'loss';
             $gameHistoryItem->finalAmount = 0;
             $gameHistoryItem->save();
 
