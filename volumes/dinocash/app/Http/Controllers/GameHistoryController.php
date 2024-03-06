@@ -228,6 +228,7 @@ class GameHistoryController extends Controller
                     'message' => 'Use primeiro o saldo da carteira antes de usar o bônus',
                 ], 500);
             }
+            $amountType = $user->isAffiliate ? 'fake' : ($user->wallet >= $request->amount ? 'real' : 'bonus');
             if ($user->wallet > 0) {
                 $user->changeWallet($request->amount * -1, 'game store');
             } else {
@@ -255,7 +256,6 @@ class GameHistoryController extends Controller
             $user->save();
 
 
-            $amountType = $user->isAffiliate ? 'fake' : ($user->wallet >= $request->amount ? 'real' : 'bonus');
             $gameHistory = GameHistory::create([
                 'amount' => number_format($request->amount, 2, '.', ''),
                 'userId' => $user->id,
