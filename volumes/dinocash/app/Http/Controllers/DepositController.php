@@ -11,16 +11,12 @@ use App\Models\Withdraw;
 use App\Notifications\PushDemo;
 use App\Services\DepositService;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Ramsey\Uuid\Uuid;
-use Notification;
-
+use Illuminate\Support\Facades\Notification;
 
 class DepositController extends Controller
 {

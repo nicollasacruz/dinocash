@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\PushDemo;
 use Auth;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class PushController extends Controller
 {

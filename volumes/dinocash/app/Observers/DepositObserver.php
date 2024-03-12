@@ -10,7 +10,7 @@ use App\Services\AffiliateInvoiceService;
 use App\Services\BonusService;
 use Exception;
 use Log;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class DepositObserver
 {

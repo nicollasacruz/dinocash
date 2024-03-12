@@ -9,7 +9,7 @@ use App\Services\AffiliateInvoiceService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\PushCPA;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class AjustAffiliatesCpa extends Command
 {
