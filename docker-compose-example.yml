@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  dinocash_web_fun:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./volumes/dinocash:/var/www/html:rw
+    container_name: dinocash_web_fun
+    environment:
+      - VIRTUAL_HOST=dinocash.fun
+      - LETSENCRYPT_HOST=dinocash.fun
+      - LETSENCRYPT_EMAIL=nicollasacruz@gmail.com
+      - VIRTUAL_PORT=8099
+    depends_on:
+      - php_dino_fun
+    networks:
+      - rede_dino_fun
+      - reverse-proxy
+
+  php_dino_fun:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./volumes/dinocash:/var/www/html:rw
+    networks:
+      - rede_dino_fun
+      - database
+
+  redis_dino_fun:
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - rede_dino_fun
+
+  memcached_fun:
+    image: memcached:latest
+    restart: unless-stopped
+    networks:
+      - rede_dino_fun
+
+networks:
+  rede_dino_fun:
+    external: true
+  reverse-proxy:
+    external: true
+    name: reverse-proxy
+  database:
+    external: true
