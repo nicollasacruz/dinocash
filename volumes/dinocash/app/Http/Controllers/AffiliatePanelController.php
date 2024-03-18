@@ -70,7 +70,7 @@ class AffiliatePanelController extends Controller
             'profitCPATotal' => $profitCPATotal,
             'profitSubCPATotal' => $profitSubCPATotal,
             'countCPA' => $countCPA,
-            'affiliateLink' => $user->invitation_link,
+            'affiliateLink' => env('APP_URL') . "/ref/" . $user->invitation_link,
             'walletAffiliate' => $user->walletAffiliate,
             'revShare' => $user->revShare,
             'CPA' => $user->CPA,
