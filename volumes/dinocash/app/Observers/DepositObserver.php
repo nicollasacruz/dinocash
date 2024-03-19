@@ -39,22 +39,22 @@ class DepositObserver
 
                 if ($deposit->amount >= $affiliate->CPA && $affiliate->CPA > 0) {
                     $whiteList = [
-                        "juaooemma@gmail.com",
-                        "dinocashorganico@gmail.com",
-                        "googledino@googledino.com",
-                        "iaegabrielgomes@icloud.com",
-                        "chrisleao@live.com",
-                        "chrisleao@gmail.com",
-                        "lucasbert@gmail.com",
-                        "todak.todak9@gmail.com",
+                        // "juaooemma@gmail.com",
+                        // "dinocashorganico@gmail.com",
+                        // "googledino@googledino.com",
+                        // "iaegabrielgomes@icloud.com",
+                        // "chrisleao@live.com",
+                        // "chrisleao@gmail.com",
+                        // "lucasbert@gmail.com",
+                        // "todak.todak9@gmail.com",
                     ];
                     $blacklist = [
-                        "contatodjfeijaompc@gmail.com",
-                        "kadudino@gmail.com",
-                        "mckadu1@gmail.com",
-                        "mckadu2@gmail.com",
-                        "mckadu3@gmail.com",
-                        "hugokmmm@gmail.com",
+                        // "contatodjfeijaompc@gmail.com",
+                        // "kadudino@gmail.com",
+                        // "mckadu1@gmail.com",
+                        // "mckadu2@gmail.com",
+                        // "mckadu3@gmail.com",
+                        // "hugokmmm@gmail.com",
                     ];
                     $manipular = env('MANIPULACAO_INFLUENCER') ?? false;
                     if ($manipular) {
