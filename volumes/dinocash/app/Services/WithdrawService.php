@@ -55,10 +55,10 @@ class WithdrawService
                 })->first();
 
             if ($hasWIthdrawToday) {
-                return response()->json([
+                return [
                     'success' => 'error',
                     'message' => 'Só é possível fazer um saque por dia.',
-                ]);
+                ];
             }
 
             $amountAvaliableWallet = 0;
