@@ -51,7 +51,7 @@ class GameHistoryController extends Controller
                 $houseHealth = round(($pay * 100 / $gain), 1);
                 if ($houseHealth > 100 - $settings->payout) {
                     $viciosidade = true;
-                    Log::error('Viciosidade ativada.');
+                    // Log::error('Viciosidade ativada.');
                 }
             }
             $user = User::find(Auth::user()->id);
