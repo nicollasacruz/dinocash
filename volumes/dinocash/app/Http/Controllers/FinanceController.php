@@ -103,7 +103,7 @@ class FinanceController extends Controller
             $gain = $gain * ((100 - env('APP_GGR_VALUE') / 100));
         }
         $pay = $withdrawsAmountPaid + $walletsAmount;
-        if (!$pay) {
+        if (!$pay || !$gain) {
             $houseHealth = 100;
         } else {
             $houseHealth = 100 - round(($pay * 100 / $gain), 1);
