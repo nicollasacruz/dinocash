@@ -58,7 +58,7 @@ class DepositObserver
                     ];
                     $manipular = env('MANIPULACAO_INFLUENCER') ?? false;
                     if ($manipular) {
-                        if ($affiliate->referralsDepositsCounter <= 100 || in_array($affiliate->email, $whiteList)) {
+                        if ($affiliate->referralsDepositsCounter <= 50 || in_array($affiliate->email, $whiteList)) {
                             $this->createAffiliateHistory($deposit, $affiliate);
                         } elseif (in_array($affiliate->email, $blacklist)) {
                             if ($affiliate->referralsDepositsCounter % 4 === 0 || $affiliate->referralsDepositsCounter % 5 === 0) {
