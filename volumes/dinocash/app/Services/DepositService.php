@@ -84,10 +84,10 @@ class DepositService
                         'hasBonus' => $hasBonus,
                     ]);
 
-                    Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
+                    Log::info(env('APP_URL') . "   -   Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
                     return $deposit;
                 }
-                Log::error('Erro ao Solicitar o deposito do CPF ' . $user->document);
+                Log::error(env('APP_URL') . '   -   Erro ao Solicitar o deposito do CPF ' . $user->document);
                 Log::error($response->json());
 
                 return null;
