@@ -6,3 +6,4 @@ volumes/dinocash/_ide_helper.php
 .vscode/*
 volumes/dinocash/*.lock
 .DS_Store
+volumes/dinocash/storage/logs/laravel.log

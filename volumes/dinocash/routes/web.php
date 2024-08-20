@@ -138,6 +138,7 @@ Route::get('language/{language}', function ($language) {
 })->name('language');
 
 //     JOGAR
+Route::get('/demo', [GameHistoryController::class, 'demo'])->name('user.demo');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/jogar', [GameHistoryController::class, 'play'])->name('user.play');
     Route::post('/jogar', [GameHistoryController::class, 'store'])->name('user.play.store');

@@ -63,6 +63,10 @@ export default class DinoGame extends GameRunner {
                 ? 10
                 : randInteger(7, 9), // fpa
         };
+        if (location.pathname !== "/demo") {
+            this.defaultSettings.scoreIncreaseRate = 4;
+            this.defaultSettings.bgSpeed = 5;
+        }
         this.state = {
             settings: { ...this.defaultSettings },
             birds: [],
@@ -367,7 +371,11 @@ export default class DinoGame extends GameRunner {
     resetGame() {
         const text = document.getElementById("info-text");
         text.style.display = "none";
-        this.getAmount();
+        if (location.pathname !== "/demo") {
+            this.getAmount();
+        } else {
+            this.amount = 15;
+        }
         if (this.state.dino) {
             this.state.dino.reset();
         } else {

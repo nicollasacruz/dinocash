@@ -187,6 +187,21 @@ class GameHistoryController extends Controller
         }
     }
 
+    public function demo(Request $request)
+    {
+        try {
+            return Inertia::render('User/PlayDemo', [
+                "isAffiliate" => true,
+                "isDemo" => true,
+                "viciosidade" => false,
+                "walletUser" => 0,
+                "maxAmmount" => 0
+            ]);
+        } catch (Exception $e) {
+            Log::error('STORE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
+        }
+    }
+
     public function store(Request $request)
     {
         try {
