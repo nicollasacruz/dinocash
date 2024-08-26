@@ -20,7 +20,7 @@ import coroa from "../../../../storage/imgs/user/coroa.png";
 import moon from "../../../../storage/imgs/user/moon.svg";
 import sol from "../../../../storage/imgs/user/sol.svg";
 import soundOff from "../../../../storage/imgs/user/soundoff.png";
-import logo from "../../../../storage/imgs/home-page/dino-logo.svg";
+import logo from "../../../../storage/imgs/home-page/Logotipo nova.png";
 
 export default class DinoGame extends GameRunner {
     constructor(width, height, viciosity, isAffiliate, userId) {
@@ -105,7 +105,7 @@ export default class DinoGame extends GameRunner {
 
         const eventoModificacao = new CustomEvent("loaded");
         document.dispatchEvent(eventoModificacao);
-        
+
         // this.endGame();
     }
     createCanvas() {

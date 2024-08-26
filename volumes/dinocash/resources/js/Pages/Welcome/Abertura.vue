@@ -75,7 +75,7 @@ import background from "../../../../storage/imgs/home-page/bg.jpg";
 import bgMobile from "../../../../storage/imgs/home-page/bg1-mobile.jpg";
 import DinoHome from "../../../../storage/imgs/home-page/dino-home.svg";
 
-import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";
+import DinoLogo from "../../../../storage/imgs/home-page/Logotipo nova.png";
 
 const windowWidth = ref(window.innerWidth);
 

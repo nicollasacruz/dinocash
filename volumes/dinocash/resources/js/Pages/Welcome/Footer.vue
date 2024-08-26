@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";
+import DinoLogo from "../../../../storage/imgs/home-page/Logotipo nova.png";
 import cashlab from "../../../../storage/imgs/home-page/logo-cashlab.svg";
 
 </script>

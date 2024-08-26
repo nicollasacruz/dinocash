@@ -6,7 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import Background1 from "../../../../storage/imgs/home-page/home-bg1.jpg";
-import DinoLogo from "../../../../storage/imgs/home-page/dino-logo.svg";
+import DinoLogo from "../../../../storage/imgs/home-page/Logotipo nova.png";
 
 const form = useForm({
     name: "",

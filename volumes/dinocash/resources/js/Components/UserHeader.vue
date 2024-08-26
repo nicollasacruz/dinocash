@@ -81,7 +81,7 @@ import {
     ChevronDownIcon,
     WalletIcon,
 } from "@heroicons/vue/24/solid";
-import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
+import DinoLogo from "../../../storage/imgs/home-page/Logotipo nova.png";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
 import { computed } from "vue";
 import { ref } from "vue";

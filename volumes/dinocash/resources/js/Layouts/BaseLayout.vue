@@ -1,7 +1,7 @@
 <script setup>
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import { Link } from "@inertiajs/vue3";
-import DinoLogo from "../../../storage/imgs/home-page/dino-logo.svg";
+import DinoLogo from "../../../storage/imgs/home-page/Logotipo nova.png";
 import Background1 from "../../../storage/imgs/user/bg-login.jpg";
 import BackgroundMobile from "../../../storage/imgs/home-page/home-bg1-mobile.jpg";
 import UserHeader from "@/Components/UserHeader.vue";
