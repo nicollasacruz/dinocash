@@ -16,153 +16,45 @@ use Illuminate\Support\Facades\Notification;
 
 class DepositService
 {
-    public function createDeposit(User $user, $amount, bool $hasBonus)
+    /**
+    * @param User $user
+    * @param $amount
+    * @param bool $hasBonus
+    * @var Setting $settings
+    * @var SuitPayService $suitPayService
+    * @return Deposit|null
+    */
+    public function createDeposit(User $user, $amount, bool $hasBonus): ?Deposit
     {
         try {
             if (!$user->document) {
                 Log::error("Usuario não tem documento");
             }
 
-            $uuid = Uuid::uuid4()->toString();
-            if (env('PAYMENT_SERVICE') == 'SUITPAY') {
-                $body = [
-                    'requestNumber' => $uuid,
-                    'dueDate' => now()->addHours(2),
-                    'amount' => $amount,
-                    'callbackUrl' => env('APP_URL') . '/callback',
-                    'client' => [
-                        'name' => $user->name,
-                        'document' => $user->document,
-                        'phoneNumber' => $user->contact,
-                        'email' => $user->email,
-                    ]
-                ];
-                if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
-                    $body['split'] = [
-                        'username' => 'dinocash',
-                        'percentageSplit' => env('APP_GGR_VALUE'),
-                    ];
-                }
-                $response = Http::withHeaders([
-                    'ci' => env('SUITPAY_CI'),
-                    'cs' => env('SUITPAY_CS'),
-                ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
 
-                if ($response->json('response') && $response->json('response') === 'INVALID_DOCUMENT') {
-                    $body = [
-                        'requestNumber' => $uuid,
-                        'dueDate' => now()->addHours(2),
-                        'amount' => $amount,
-                        'callbackUrl' => env('APP_URL') . '/callback',
-                        'client' => [
-                            'name' => $user->name,
-                            'document' => '09884555605',
-                            'phoneNumber' => $user->contact,
-                            'email' => $user->email,
-                        ]
-                    ];
-                    if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
-                        $body['split'] = [
-                            'username' => 'dinocash',
-                            'percentageSplit' => env('APP_GGR_VALUE'),
-                        ];
-                    }
-                    $response = Http::withHeaders([
-                        'ci' => env('SUITPAY_CI'),
-                        'cs' => env('SUITPAY_CS'),
-                    ])->post(env('SUITPAY_URL') . 'gateway/request-qrcode', $body);
-                }
-                $result = $response->json('paymentCode');
-                if ($result) {
-                    $deposit = Deposit::create([
-                        'userId' => $user->id,
-                        'amount' => $amount,
-                        'transactionId' => $uuid,
-                        'externalId' => $response->json('idTransaction'),
-                        'type' => 'pending',
-                        'paymentCode' => $result,
-                        'hasBonus' => $hasBonus,
-                    ]);
-
-                    Log::info(env('APP_URL') . "   -   Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
-                    return $deposit;
-                }
-                Log::error(env('APP_URL') . '   -   Erro ao Solicitar o deposito do CPF ' . $user->document);
-                Log::error($response->json());
-
-                return null;
-            } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
-
-                $response = Http::withHeaders([
-                    'Authorization' => 'Basic ' . base64_encode(env('EZZEBANK_CI') . ':' . env('EZZEBANK_CS'))
-                ])
-                    ->asForm()
-                    ->post(env('EZZEBANK_URL') . 'oauth/token', [
-                        'grant_type' => 'client_credentials',
-                    ]);
-
-                if ($response->successful()) {
-                    $accessToken = $response->json('access_token');
-                } else {
-                    $errorMessage = $response->body();
-
-                    Log::error($errorMessage . '  -   Erro no Login Ezzebank');
-                    return null;
-                }
-
-                if ($accessToken) {
-                    $document = $user->document;
-                    // Remove todos os caracteres não numéricos
-                    $document = preg_replace("/[^0-9]/", "", $document);
-
-                    $response = Http::withToken($accessToken)
-                        ->get(env('EZZEBANK_URL') . 'services/cpf?docNumber=' . $document);
-
-                    if ($response->successful()) {
-                        $responseData = $response->json('Status');
-                        $status = $responseData['Message'];
-                    } else {
-                        $errorMessage = $response->body();
-
-                        Log::error($errorMessage . '  -   Erro no check CPF Ezzebank      -     ' . $document);
-                        $document = '09884555605';
-                    }
-
-                    $response = Http::withToken($accessToken)
-                        ->post(env('EZZEBANK_URL') . 'pix/qrcode', [
-                            'amount' => $amount,
-                            'payerQuestion' => 'Pagamento referente produto/serviço',
-                            'external_id' => $uuid,
-                            'payer' => [
-                                'name' => $user->name ?? $user->email,
-                                'document' => $document,
-                            ],
-                        ]);
-
-                    if ($response->successful()) {
-                        $qrCode = $response->json('emvqrcps');
-
-                        $deposit = Deposit::create([
-                            'userId' => $user->id,
-                            'amount' => $amount,
-                            'transactionId' => $response->json('transactionId'),
-                            'externalId' => $response->json('external_id'),
-                            'type' => 'pending',
-                            'paymentCode' => $qrCode,
-                            'hasBonus' => $hasBonus,
-                        ]);
-
-                        Log::info("Deposito criado com sucesso! Id: {$deposit->id} | Valor: {$deposit->amount} | Status: {$deposit->type}");
-                        return $deposit;
-                    } else {
-                        $errorMessage = $response->body();
-
-                        Log::error($errorMessage . '  -   Erro no Gerar QrCode Ezzebank do usuario   -  ' . $user->email);
-
-                    }
-                }
+            $data = [
+                'uuid' => Uuid::uuid4()->toString(),
+                'user' => $user,
+                'amount' => $amount,
+                'type' => 'pending',
+                'hasBonus' => $hasBonus,
+            ];
+            $settings = Setting::first();
+            if ($settings->payment_service == 'SUITPAY') {
+                return SuitPayService::createDeposit($data);
             }
+            elseif ($settings->payment_service == 'EZZEBANK') {
+
+                return EzzebankService::createDeposit($data);
+
+            }
+            elseif ($settings->payment_service == 'BSPAY') {
+                return BsPayService::createDeposit($data);
+            }
+            Log::error("Serviço de pagamento não encontrado");
+            return null;
         } catch (Exception $e) {
+
             Log::error(env('APP_URL') . "  -  Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
             return null;
         }

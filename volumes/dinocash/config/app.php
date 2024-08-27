@@ -17,7 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Dinocash | Lucre com a gente'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -176,6 +176,10 @@ return [
         App\Providers\WithdrawServiceProvider::class,
         App\Providers\WithdrawAffiliateServiceProvider::class,
         App\Providers\InvoiceServiceProvider::class,
+        App\Providers\CashTimeServiceProvider::class,
+        App\Providers\EzzebankServiceProvider::class,
+        App\Providers\SuitPayServiceProvider::class,
+        App\Providers\BsPayServiceProvider::class
     ])->toArray(),
 
     /*
