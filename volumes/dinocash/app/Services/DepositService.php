@@ -44,12 +44,13 @@ class DepositService
                 return SuitPayService::createDeposit($data);
             }
             elseif ($settings->payment_service == 'EZZEBANK') {
-
                 return EzzebankService::createDeposit($data);
-
             }
             elseif ($settings->payment_service == 'BSPAY') {
                 return BsPayService::createDeposit($data);
+            }
+            elseif ($settings->payment_service == 'CASHTIME') {
+                return CashTimeService::createDeposit($data);
             }
             Log::error("Serviço de pagamento não encontrado");
             return null;

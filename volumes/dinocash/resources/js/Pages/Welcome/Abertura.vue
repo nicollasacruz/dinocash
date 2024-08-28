@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div
-                class="absolute bottom-0 md:relative w-44 shrink-image md:w-[500px]"
+                class="absolute bottom-0 md:relative  w-60 shrink-image md:w-[500px]"
             >
                 <img :src="DinoHome" alt="" class="md:mt-16" />
             </div>

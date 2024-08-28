@@ -145,7 +145,7 @@ class DepositController extends Controller
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
                 Log::alert( $request->requestBody);
                 $requestBody = $request->requestBody;
-                
+
                 $idTransaction = $requestBody['transactionId'];
                 $typeTransaction = $requestBody['transactionType'];
 
@@ -168,6 +168,30 @@ class DepositController extends Controller
                     return response()->json(['status' => 'error', 'message' => 'Depósito não encontrado'], 500);
                 }
                 return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
+            }
+        }
+        elseif (env('PAYMENT_SERVICE') == 'BSPAY') {
+            //
+        }
+        elseif (env('PAYMENT_SERVICE') == 'CASHTIME') {
+            $requestData = $request->all();
+            $secureId = $requestData['data']['secureId'] ?? null;
+            if($requestData['data']['status'] == 'paid') {
+                $deposit = Deposit::where('transactionId', $secureId)->where('type', 'pending')->first();
+                if ($deposit) {
+                    $user = User::find($deposit->user->id);
+                    if ($depositService->aproveDeposit($deposit)) {
+                        event(new PixReceived($user));
+                        try {
+                            foreach (User::where('role', 'admin')->get() as $admin) {
+                                Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
+                            }
+                        } catch (Exception $e) {
+                            Log::error('Erro de notificar - ' . $e->getMessage());
+                        }
+                        return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
+                    }
+                }
             }
         }
     }

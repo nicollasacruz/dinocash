@@ -17,7 +17,7 @@
         </div>
         <div class="flex flex-col-reverse lg:flex-row">
             <div class="flex-1 justify-center flex w-full pt-5">
-                <img :src="dinoJogar" class="shrink-image w-44 lg:w-96 absolute bottom-0 " />
+                <img :src="dinoJogar" class="shrink-image w-80 lg:w-96 absolute bottom-0 " />
             </div>
             <div class="flex-1">
                 <div
