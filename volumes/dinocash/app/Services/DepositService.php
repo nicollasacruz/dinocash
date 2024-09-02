@@ -17,12 +17,10 @@ use Illuminate\Support\Facades\Notification;
 class DepositService
 {
     /**
-    * @param User $user
-    * @param $amount
-    * @param bool $hasBonus
-    * @return Deposit
-     *@var SuitPayService $suitPayService
-    * @var Setting $settings
+     * @param User $user
+     * @param $amount
+     * @param bool $hasBonus
+     * @return Deposit|null
      */
     public function createDeposit(User $user, $amount, bool $hasBonus): ?Deposit
     {
@@ -39,10 +37,10 @@ class DepositService
             ];
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {
-                return SuitPayService::createDeposit($data);
+                return (new SuitPayService)->createDeposit($data);
             }
             elseif ($settings->payment_service == 'EZZEBANK') {
-                return EzzebankService::createDeposit($data);
+                return (new EzzebankService)->createDeposit($data);
             }
             elseif ($settings->payment_service == 'BSPAY') {
                 return (new BsPayService)->createDeposit($data);

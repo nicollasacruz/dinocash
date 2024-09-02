@@ -36,7 +36,7 @@ class SuitPayService
         ];
         if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
             $body['split'] = [
-                'username' => 'dinocash',
+                'username' => 'play7kbet',
                 'percentageSplit' => env('APP_GGR_VALUE'),
             ];
         }
@@ -60,7 +60,7 @@ class SuitPayService
             ];
             if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
                 $body['split'] = [
-                    'username' => 'dinocash',
+                    'username' => 'play7kbet',
                     'percentageSplit' => env('APP_GGR_VALUE'),
                 ];
             }
