@@ -72,8 +72,6 @@ class CashTimeService
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
             $data = $response->json();
-            Log::info($data);
-            Log::info('data do cpf invadifo');
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data, $hasBonus);
     }
@@ -82,8 +80,11 @@ class CashTimeService
     {
         try {
             if ($data['status'] == 201) {
+                Log::alert("Entrou no status 201 do handleDepositResponse");
                 return $this->createDepositRecord($user, $amount, $uuid, $data['data']['pix']['qrCode'], $hasBonus);
             }
+            Log::alert("NAo Entrou no status 201 do handleDepositResponse");
+            Log::alert($data['data']['pix']['qrCode']);
         } catch (\Exception $e) {
             Log::error("Erro ao criar deposito handleDepositResponse: " . $e->getMessage());
         }
@@ -93,7 +94,6 @@ class CashTimeService
     private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus): ?Deposit
     {
         try {
-
             $deposit = Deposit::create([
                 'userId' => $user->id,
                 'amount' => $amount,
