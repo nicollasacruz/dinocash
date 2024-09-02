@@ -30,8 +30,6 @@ class DepositService
             if (!$user->document) {
                 Log::error("Usuario não tem documento");
             }
-
-
             $data = [
                 'uuid' => Uuid::uuid4()->toString(),
                 'user' => $user,
@@ -50,6 +48,7 @@ class DepositService
                 return BsPayService::createDeposit($data);
             }
             elseif ($settings->payment_service == 'CASHTIME') {
+                echo "chegou aqui no cashtime";
                 return CashTimeService::createDeposit($data);
             }
             Log::error("Serviço de pagamento não encontrado");

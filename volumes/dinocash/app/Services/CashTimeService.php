@@ -17,6 +17,7 @@ class CashTimeService
     public function createDeposit(array $data): ?Deposit
     {
         $setting = Setting::first();
+        echo "chegou aqui no cashtime deposit service";
 
         $authValue = base64_encode(env('SECRETKEY_CASHTIME') . ':x');
         $endpoint = env('ENDPOINT_CASHTIME') . '/v1/transactions';
