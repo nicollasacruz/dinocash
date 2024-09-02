@@ -86,19 +86,25 @@ class CashTimeService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus): Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus): ?Deposit
     {
-        $deposit = Deposit::create([
-            'userId' => $user->id,
-            'amount' => $amount,
-            'transactionId' => $uuid,
-            'externalId' => $uuid,
-            'type' => 'pending',
-            'paymentCode' => $qrCode,
-            'hasBonus' => $hasBonus,
-        ]);
+        try {
 
-        Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
-        return $deposit;
+            $deposit = Deposit::create([
+                'userId' => $user->id,
+                'amount' => $amount,
+                'transactionId' => $uuid,
+                'externalId' => $uuid,
+                'type' => 'pending',
+                'paymentCode' => $qrCode,
+                'hasBonus' => $hasBonus,
+            ]);
+
+            Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
+            return $deposit;
+        } catch (\Exception $e) {
+            Log::error("Erro ao criar deposito: " . $e->getMessage());
+            return null;
+        }
     }
 }
