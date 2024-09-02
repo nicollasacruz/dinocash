@@ -78,10 +78,11 @@ class CashTimeService
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
     {
         Log::error($data);
+        Log::alert("Entrou no handleDepositResponse");
         try {
-            if ($data['status'] == 201) {
+            if ($data['pix']['qrCode']) {
                 Log::alert("Entrou no status 201 do handleDepositResponse");
-                return $this->createDepositRecord($user, $amount, $uuid, $data['data']['pix']['qrCode'], $hasBonus);
+                return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['qrCode'], $hasBonus);
             }
             Log::alert("NAo Entrou no status 201 do handleDepositResponse");
             Log::alert($data['data']['pix']['qrCode']);
