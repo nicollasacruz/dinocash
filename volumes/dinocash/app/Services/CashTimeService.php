@@ -26,7 +26,7 @@ class CashTimeService
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
 
-        $cpf = preg_replace('/\D/', '', $user->cpf);
+        $cpf = preg_replace('/\D/', '', $user->document);
 
         $body = [
             'customer' => [
