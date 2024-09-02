@@ -80,8 +80,12 @@ class CashTimeService
 
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
     {
-        if ($data['status'] == 201) {
-            return $this->createDepositRecord($user, $amount, $uuid, $data['data']['pix']['qrCode'], $hasBonus);
+        try {
+            if ($data['status'] == 201) {
+                return $this->createDepositRecord($user, $amount, $uuid, $data['data']['pix']['qrCode'], $hasBonus);
+            }
+        } catch (\Exception $e) {
+            Log::error("Erro ao criar deposito handleDepositResponse: " . $e->getMessage());
         }
         return null;
     }
@@ -103,7 +107,7 @@ class CashTimeService
             Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
             return $deposit;
         } catch (\Exception $e) {
-            Log::error("Erro ao criar deposito: " . $e->getMessage());
+            Log::error("Erro ao criar deposito  createDepositRecord   -: " . $e->getMessage());
             return null;
         }
     }
