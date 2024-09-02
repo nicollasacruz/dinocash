@@ -14,7 +14,7 @@
                 <br class="sm:hidden" />
                 2024 Powered by: CashLab
             </div>
-            <!-- <div class="text-white mt-3">contato@dinocash.io</div> -->
+            <!-- <div class="text-white mt-3">contato@dinofeliz.io</div> -->
         </div>
         <img
             :src="cashlab"

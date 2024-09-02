@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1>Termos de Uso e Política de Privacidade - Dinocash</h1>
+    <h1>Termos de Uso e Política de Privacidade - Dinofeliz</h1>
     <span>
 Última atualização: 10/11/2023
 <br>
@@ -8,11 +8,11 @@
 
 <br><br>A equipe do jogo ("nós" ou "Empresa") está comprometida em proteger a sua privacidade. Ao acessar ou usar o Jogo, você concorda com os termos desta política de privacidade.
 <br>1.1. Conta do Usuário e Pagamentos:
-<br>1.1.1. Para acessar o Jogo, você deve criar uma conta de usuário e concordar em fazer um depósito financeiro como condição de entrada. O valor do depósito minimo é determinado pela Dinocash e pode ser alterado a qualquer momento.
+<br>1.1.1. Para acessar o Jogo, você deve criar uma conta de usuário e concordar em fazer um depósito financeiro como condição de entrada. O valor do depósito minimo é determinado pela Dinofeliz e pode ser alterado a qualquer momento.
 
 <br>1.1.2. Você é responsável por garantir que as informações da sua conta sejam precisas e atualizadas. Não compartilhe sua conta com terceiros.
 
-<br>1.1.3. Todos os pagamentos são finais e não reembolsáveis, a menos que especificado de outra forma pela Dinocash.
+<br>1.1.3. Todos os pagamentos são finais e não reembolsáveis, a menos que especificado de outra forma pela Dinofeliz.
 
 <br><br>1.2. Uso do Jogo:
 <br>1.2.1. Você concorda em usar o Jogo apenas para fins de entretenimento e em conformidade com todas as leis e regulamentos aplicáveis.
@@ -21,26 +21,26 @@
 
 <br>1.2.3. Você deve movimentar um minimo de 2 vezes o seu depósito para sacar o valor, pois o mesmo é feito dessa forma para não ocorrer nenhum tipo de lavagem de dinheiro atravéz da plataforma.
 
-<br>1.2.4. A Dinocash reserva o direito de suspender ou encerrar sua conta a seu critério se você violar estes Termos.
+<br>1.2.4. A Dinofeliz reserva o direito de suspender ou encerrar sua conta a seu critério se você violar estes Termos.
 
 <br><br>1.3. Propriedade Intelectual:
-<br>1.3.1. Todos os direitos autorais, marcas registradas e outros direitos de propriedade intelectual relacionados ao Jogo são de propriedade exclusiva da Dinocash.
+<br>1.3.1. Todos os direitos autorais, marcas registradas e outros direitos de propriedade intelectual relacionados ao Jogo são de propriedade exclusiva da Dinofeliz.
 
-<br>1.3.2. Você não tem permissão para copiar, distribuir, transmitir, exibir, vender ou usar qualquer conteúdo do Jogo sem autorização prévia por escrito da Dinocash.
+<br>1.3.2. Você não tem permissão para copiar, distribuir, transmitir, exibir, vender ou usar qualquer conteúdo do Jogo sem autorização prévia por escrito da Dinofeliz.
 
 <br><br>1.4. Responsabilidade:
-<br>1.4.1. A Dinocash não se responsabiliza por perdas ou danos causados pela sua participação no Jogo, incluindo perda de depósitos.
+<br>1.4.1. A Dinofeliz não se responsabiliza por perdas ou danos causados pela sua participação no Jogo, incluindo perda de depósitos.
 
 <br>1.4.2. Você concorda em jogar o Jogo por sua própria conta e risco, reconhecendo que o resultado do Jogo é determinado pelo acaso.
 
 <br><br>1.5. Alterações nos Termos:
-<br>1.5.1. A Dinocash reserva o direito de modificar ou atualizar estes Termos a qualquer momento. As alterações serão comunicadas a você por meio do site ou por outros meios apropriados.
+<br>1.5.1. A Dinofeliz reserva o direito de modificar ou atualizar estes Termos a qualquer momento. As alterações serão comunicadas a você por meio do site ou por outros meios apropriados.
 
 <br><br>1.6. Encerramento da Conta:
-<br>1.6.1. A Dinocash pode encerrar sua conta a qualquer momento, por qualquer motivo, com ou sem aviso prévio, especialmente se for identificada a existência de mais de uma conta vinculada ao mesmo usuário.
+<br>1.6.1. A Dinofeliz pode encerrar sua conta a qualquer momento, por qualquer motivo, com ou sem aviso prévio, especialmente se for identificada a existência de mais de uma conta vinculada ao mesmo usuário.
 
 <br><br>1.7. Disposições Gerais:
-<br>1.7.1. Estes Termos constituem o acordo completo entre você e a Dinocash em relação ao Jogo.
+<br>1.7.1. Estes Termos constituem o acordo completo entre você e a Dinofeliz em relação ao Jogo.
 
 <br><br>Ao acessar o Jogo, você confirma que leu, entendeu e concorda com estes Termos de Uso.
 
@@ -98,11 +98,11 @@
 
 <br>R$25,00 é a aposta máxima permitida ao jogar com dinheiro de bônus. Se, após a análise do jogo, descobrir que um jogador violou esta condição, seus bônus e ganhos serão perdidos.
 
-<br>A gestão de dinocash.io reserva-se o direito de anular quaisquer bónus e / ou ganhos obtidos por comportamento fraudulento conforme descrito acima.
+<br>A gestão de dinofeliz.io reserva-se o direito de anular quaisquer bónus e / ou ganhos obtidos por comportamento fraudulento conforme descrito acima.
 
-<br>A administração da dinocash.io tem o direito de atualizar essas regras a qualquer momento.
+<br>A administração da dinofeliz.io tem o direito de atualizar essas regras a qualquer momento.
 
-<br>Seu dinheiro real será usado antes do seu dinheiro de bônus ao fazer apostas em nossos jogos. A sua aposta pode incluir dinheiro real e dinheiro de bónus se a sua aposta exceder o seu saldo em dinheiro real.    
+<br>Seu dinheiro real será usado antes do seu dinheiro de bônus ao fazer apostas em nossos jogos. A sua aposta pode incluir dinheiro real e dinheiro de bónus se a sua aposta exceder o seu saldo em dinheiro real.
 
 <br><br>Ao continuar a usar o Jogo você concorda com esta política de privacidade e com o processamento das suas informações pessoais de acordo com os termos aqui descritos.
 </span>

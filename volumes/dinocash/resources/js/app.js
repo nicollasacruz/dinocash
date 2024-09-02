@@ -10,7 +10,7 @@ import VueTheMask from 'vue-the-mask';
 import money from 'v-money3'
 import CanvasJSChart from '@canvasjs/vue-charts';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Dinocash';
+const appName = import.meta.env.VITE_APP_NAME || 'Dinofeliz';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
