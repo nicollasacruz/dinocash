@@ -74,13 +74,13 @@ class CashTimeService
             Log::info($data);
             Log::info('data do cpf invadifo');
         }
-        return $this->handleDepositResponse($user, $amount, $uuid, $data);
+        return $this->handleDepositResponse($user, $amount, $uuid, $data, $hasBonus);
     }
 
-    private function handleDepositResponse($user, $amount, $uuid, $data): ?Deposit
+    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
     {
         if ($data['status'] == 201) {
-            return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['qrCode']);
+            return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['qrCode'], $hasBonus);
         }
         return null;
     }
