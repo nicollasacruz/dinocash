@@ -56,10 +56,7 @@ class CashTimeService
             'Authorization' => 'Basic ' . $authValue,
         ])->post($endpoint, $body);
 
-        $data = $response->json();
-
-        Log::info($response->body());
-        Log::info('Response from CashTime');
+        $data = $response->body();
 
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
@@ -71,13 +68,14 @@ class CashTimeService
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
-            $data = $response->json();
+            $data = $response->body();
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data, $hasBonus);
     }
 
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
     {
+        Log::error($data);
         try {
             if ($data['status'] == 201) {
                 Log::alert("Entrou no status 201 do handleDepositResponse");
