@@ -50,7 +50,9 @@ class DepositService
             elseif ($settings->payment_service == 'CASHTIME') {
                 return (new CashTimeService())->createDeposit($data);
             }
+
             Log::error("Serviço de pagamento não encontrado");
+
             return null;
         } catch (Exception $e) {
 

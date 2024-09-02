@@ -59,6 +59,7 @@ class CashTimeService
         $data = $response->json();
 
         Log::info($response->body());
+        Log::info('Response from CashTime');
 
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
@@ -80,7 +81,7 @@ class CashTimeService
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
     {
         if ($data['status'] == 201) {
-            return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['qrCode'], $hasBonus);
+            return $this->createDepositRecord($user, $amount, $uuid, $data['data']['pix']['qrCode'], $hasBonus);
         }
         return null;
     }
