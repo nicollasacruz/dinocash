@@ -57,7 +57,9 @@ class CashTimeService
         ])->post($endpoint, $body);
 
         $data = $response->json();
+
         Log::info($response->body());
+
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
                 "number" => '09884555605',
@@ -69,7 +71,8 @@ class CashTimeService
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
             $data = $response->json();
-
+            Log::info($data);
+            Log::info('data do cpf invadifo');
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data);
     }
