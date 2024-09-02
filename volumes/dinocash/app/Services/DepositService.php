@@ -48,7 +48,6 @@ class DepositService
                 return BsPayService::createDeposit($data);
             }
             elseif ($settings->payment_service == 'CASHTIME') {
-                echo "chegou aqui no cashtime";
                 return CashTimeService::createDeposit($data);
             }
             Log::error("Serviço de pagamento não encontrado");
