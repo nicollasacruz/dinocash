@@ -56,7 +56,9 @@ class CashTimeService
             'Authorization' => 'Basic ' . $authValue,
         ])->post($endpoint, $body);
 
-        $data = $response->body();
+        $data = $response->json();
+
+
 
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
@@ -68,7 +70,7 @@ class CashTimeService
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
-            $data = $response->body();
+            $data = $response->json();
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data, $hasBonus);
     }
