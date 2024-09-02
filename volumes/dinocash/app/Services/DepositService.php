@@ -20,10 +20,10 @@ class DepositService
     * @param User $user
     * @param $amount
     * @param bool $hasBonus
+    * @return Deposit
+     *@var SuitPayService $suitPayService
     * @var Setting $settings
-    * @var SuitPayService $suitPayService
-    * @return Deposit|null
-    */
+     */
     public function createDeposit(User $user, $amount, bool $hasBonus): ?Deposit
     {
         try {
@@ -45,10 +45,10 @@ class DepositService
                 return EzzebankService::createDeposit($data);
             }
             elseif ($settings->payment_service == 'BSPAY') {
-                return BsPayService::createDeposit($data);
+                return (new BsPayService)->createDeposit($data);
             }
             elseif ($settings->payment_service == 'CASHTIME') {
-                return CashTimeService::createDeposit($data);
+                return (new CashTimeService())->createDeposit($data);
             }
             Log::error("Serviço de pagamento não encontrado");
             return null;

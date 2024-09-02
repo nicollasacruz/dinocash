@@ -16,7 +16,6 @@ class CashTimeService
 
     public function createDeposit(array $data): ?Deposit
     {
-        echo "chegou aqui no cashtime deposit service";
         $setting = Setting::first();
 
         $authValue = base64_encode(env('SECRETKEY_CASHTIME') . ':x');
@@ -58,7 +57,7 @@ class CashTimeService
         ])->post($endpoint, $body);
 
         $data = $response->json();
-        var_dump($data);
+        Log::info($response->body());
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
                 "number" => '09884555605',
