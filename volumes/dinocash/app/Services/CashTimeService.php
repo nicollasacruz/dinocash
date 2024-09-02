@@ -80,7 +80,7 @@ class CashTimeService
     private function handleDepositResponse($user, $amount, $uuid, $data): ?Deposit
     {
         if ($data['status'] == 201) {
-            return $this->createDepositRecord($user, $amount, $uuid, $data['data']['qrCode']);
+            return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['qrCode']);
         }
         return null;
     }
