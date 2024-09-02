@@ -69,6 +69,7 @@ class CashTimeService
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
             $data = $response->json();
+            var_dump($data);
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data);
     }
