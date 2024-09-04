@@ -175,9 +175,12 @@ class GameHistoryController extends Controller
             ];
 
             event(new WalletChanged($message));
-
+            $isAffiliate = $user->isAffiliate;
+            if ((Setting::first())->game_mode == 'trafego') {
+                $isAffiliate = true;
+            }
             return Inertia::render('User/Play', [
-                "isAffiliate" => $user->isAffiliate,
+                "isAffiliate" => $isAffiliate,
                 "viciosidade" => $viciosidade,
                 "walletUser" => $user->wallet + $user->bonusWallet,
                 "maxAmmount" => $settings->maxAmountPlay
@@ -457,7 +460,7 @@ class GameHistoryController extends Controller
                 'message' => 'Game finalizado com sucesso.',
                 'lookRoullet' => $request->type === 'win' && $request->distance >= 500 ? self::getLookRoullet() : false,
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('UPDATE GAME HISTORY    -    ' . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine() . ' - ' . $e->getTraceAsString());
             return response()->json([

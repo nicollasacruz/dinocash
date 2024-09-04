@@ -66,13 +66,12 @@ import Loading from "../../Components/Loading.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { number } from "yup";
-import { usePage } from "@inertiajs/vue3";
-import BaseModal from "@/Components/BaseModal.vue";
-import BaseInput from "@/Components/BaseInput.vue";
-const { minWithdraw, maxWithdraw, walletUser } = defineProps([
+import {router, usePage} from "@inertiajs/vue3";
+const { minWithdraw, maxWithdraw, walletUser, gameMode } = defineProps([
     "minWithdraw",
     "maxWithdraw",
     "walletUser",
+    "gameMode"
 ]);
 
 const page = usePage();
@@ -109,6 +108,13 @@ window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
     totalWallet.value = e.message.wallet + e.message.bonus;
 });
 
+async function openTax() {
+
+    console.log("Abrir modal de taxa");
+    router.get("/taxa");
+
+
+}
 async function withdraw() {
     try {
         loading.value = true;
@@ -152,6 +158,8 @@ async function withdraw() {
     } finally {
         amount.value = 0.0;
         loading.value = false;
+
+        await openTax();
     }
 }
 

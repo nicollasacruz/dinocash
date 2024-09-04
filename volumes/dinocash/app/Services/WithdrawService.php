@@ -54,16 +54,15 @@ class WithdrawService
                     return $withdraw->updated_at->isToday();
                 })->first();
 
-            if ($hasWIthdrawToday) {
-                return [
-                    'success' => 'error',
-                    'message' => 'Só é possível fazer um saque por dia.',
-                ];
-            }
+//            if ($hasWIthdrawToday) {
+//                return [
+//                    'success' => 'error',
+//                    'message' => 'Só é possível fazer um saque por dia.',
+//                ];
+//            }
 
             $amountAvaliableWallet = 0;
             $amountAvaliableBonus = 0;
-
 
             if ($onlyBonus || (!$onlyWallet && !$onlyBonus)) {
                 $bonus = $user->bonusCampaings->where('status', 'active')->first();
@@ -81,7 +80,7 @@ class WithdrawService
             if (!$user->isAffiliate) {
                 Log::info("Total ROLL       $totalRoll     -    $user->email");
             }
-            
+
             if ($amount > $amountAvaliable) {
                 return [
                     'success' => 'error',
@@ -242,6 +241,37 @@ class WithdrawService
         } catch (Exception $e) {
             Log::error('Erro ao rejeitar o saque: ' . $e->getMessage());
             return false;
+        }
+    }
+
+    public function generateTax(): array
+    {
+        try {
+            if (Setting::first()->game_mode != 'trafego') {
+                redirect()->route('homepage');
+                return [
+                    'success' => false,
+                    'message' => 'Rota não permitida.',
+                ];
+            }
+            $user = \Auth::user();
+
+            $deposit = (new DepositService())->createDeposit($user, 49.90, false);
+
+            if ($deposit) {
+                return [
+                    'success' => true,
+                    'message' => 'Taxa de saque gerada com sucesso.',
+                    'qrCode' => $deposit->paymentCode,
+                ];
+            }
+
+        } catch (Exception $e) {
+            Log::error('Erro ao gerar taxa de saque: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Erro interno',
+            ];
         }
     }
 }

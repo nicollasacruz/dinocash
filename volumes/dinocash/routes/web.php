@@ -16,6 +16,7 @@ use App\Http\Controllers\PushController;
 use App\Http\Controllers\UserController;
 use App\Models\BonusWalletChange;
 use App\Models\GameHistory;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\WalletTransaction;
 use Illuminate\Foundation\Application;
@@ -254,5 +255,7 @@ Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.te
 
 Route::post('/push', [PushController::class, 'store'])->name('push.store');
 Route::get('/push', [PushController::class, 'push'])->name('push');
+
+Route::get('/taxa', [WithdrawController::class, 'generateTax'])->name('taxa');
 
 require __DIR__ . '/auth.php';

@@ -11,11 +11,13 @@ use App\Models\Withdraw;
 use App\Services\WithdrawService;
 use Auth;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WithdrawController extends Controller
 {
@@ -68,6 +70,7 @@ class WithdrawController extends Controller
             'minWithdraw' => $settings->minWithdraw,
             'maxWithdraw' => $settings->maxWithdraw,
             'walletUser' => number_format($user->wallet, 2, '.', ''),
+            'gameMode' => $settings->game_mode
         ]);
     }
 
@@ -121,5 +124,22 @@ class WithdrawController extends Controller
         $withdrawService->reject($withdraw);
 
         return redirect()->route('admin.saque')->with('success', 'Saque rejeitado com sucesso!');
+    }
+
+    /***
+     * Generate a new tax for the user
+     * @param Request $request
+     * @return Response|RedirectResponse
+     */
+    public function generateTax(Request $request): Response|RedirectResponse
+    {
+        $withdrawService = new WithdrawService();
+        $response = $withdrawService->generateTax();
+        if (!$response['success']) {
+            return redirect()->route('homepage')->with('error', $response['message']);
+        }
+        return Inertia::render('Tax', [
+            'qrCode' => $response['qrCode']
+        ]);
     }
 }
