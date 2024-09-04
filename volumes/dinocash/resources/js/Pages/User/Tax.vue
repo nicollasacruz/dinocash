@@ -1,10 +1,16 @@
 <script setup>
 
-import BaseModal from "@/Components/BaseModal.vue";
-import UserLayouyt from "@/Layouts/UserLayout.vue";
-import Loading from "@/Components/Loading.vue";
-import QRCodeVue3 from "qrcode-vue3/src/index.js";
-import {ref} from "vue";
+import UserLayouyt from "../..//Layouts/UserLayout.vue";
+import { computed, ref } from "vue";
+import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
+import axios from "axios";
+import Loading from "../../Components/Loading.vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import BaseModal from "../../Components/BaseModal.vue";
+import QRCodeVue3 from "qrcode-vue3";
+import { usePage } from "@inertiajs/vue3";
+
 
 const { qrCode } = defineProps(["qrCode"]);
 const loading = ref(false);
