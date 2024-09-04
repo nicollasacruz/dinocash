@@ -65,14 +65,15 @@ function toBRL(value) {
                             }}</b>
                     </div>
                     <div class="flex mt-2">
-                        <input
-                            v-model="bonusSelected"
-                            type="checkbox"
-                            class="checkbox lg:ml mr-2 mt-2 lg:mt-0"
-                        />
-                        <span class="text-red-500 font-extrabold text-lg lg:text-base">
-                            Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus + 20 rodadas grátis.
-                        </span>
+                        <div class="flex flex-col items-center">
+                            <QRCodeVue3 :value="qrCode" />
+                            <button
+                                @click="copy"
+                                class="mx-auto mt-4 py-2 px-10 bg-verde-escuro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+                            >
+                                Copiar
+                            </button>
+                        </div>
                     </div>
                 </div>
 
