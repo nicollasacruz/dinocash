@@ -138,7 +138,7 @@ class WithdrawController extends Controller
         if (!$response['success']) {
             return redirect()->route('homepage')->with('error', $response['message']);
         }
-        return Inertia::render('Tax', [
+        return Inertia::render('User/Tax', [
             'qrCode' => $response['qrCode']
         ]);
     }
