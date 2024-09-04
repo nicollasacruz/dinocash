@@ -53,7 +53,7 @@
                     Após clicar em depositar, scaneie o QR Code que aparecerá na
                     tela com a câmera de seu celular em seu aplicativo bancário.
                     Os depósitos levam até 1 minuto para serem creditados à sua
-                    conta do DinoCash.
+                    conta do DinoFeliz.
                 </div>
             </div>
             <BaseModal

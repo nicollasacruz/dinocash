@@ -34,7 +34,7 @@
                     class="md:text-lg max-h-[60%] text-right mb-2 w-96 md:max-w-md md:mt-5 2xl:text-2xl"
                 >
                     <div>
-                        Jogue DinoCash e ganhe recompensas exclusivas, são
+                        Jogue DinoFeliz e ganhe recompensas exclusivas, são
                         vários prêmios que você poderá adquirir somente jogando
                         ou depositando!
                     </div>
@@ -47,7 +47,7 @@
                     </div>
                     <div>
                         Não fique de fora e não perca a chance de lucrar e muito
-                        com DinoCash, tudo depende apenas da sua habilidade,
+                        com DinoFeliz, tudo depende apenas da sua habilidade,
                         nada de sorte!
                     </div>
                 </div>

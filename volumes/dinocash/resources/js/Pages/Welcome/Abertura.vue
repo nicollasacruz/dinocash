@@ -29,7 +29,7 @@
                 </div>
                 <div class="md:text-lg 2xl:text-2xl">
                     Seja bem-vindo(a) ao
-                    <b class="text-verde">DinoCash Oficial!</b><br />
+                    <b class="text-verde">DinoFeliz Oficial!</b><br />
                     O jogo que você não precisa <br class="hidden" />
                     contar com a sua <br class="hidden lg:block" />
                     sorte,

@@ -10,7 +10,7 @@
                 <a :href="route('terms')">Leia nossos termos de uso!</a>
             </div>
             <div class="text-white text-md md:text-lg">
-                Todos os direitos reservados a DinoCash -
+                Todos os direitos reservados a DinoFeliz -
                 <br class="sm:hidden" />
                 2024 Powered by: CashLab
             </div>
