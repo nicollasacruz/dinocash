@@ -16,6 +16,28 @@ const { qrCode } = defineProps(["qrCode"]);
 const loading = ref(false);
 const modal = ref(false);
 
+const userId = computed(() => page.props.auth.user.id);
+const userIdref = ref(userId);
+// @ts-ignore
+window.Echo.channel("pixReceived" + userIdref.value).listen(
+    "PixReceived",
+    (e) => {
+        modal.value = false;
+        qrCode.value = "";
+        toast.success("Deposito realizado com sucesso!");
+    }
+);
+
+function copy() {
+    navigator.clipboard.writeText(qrCode.value);
+    toast.success("Copiado!");
+}
+function toBRL(value) {
+    return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    }).format(value);
+}
 </script>
 
 <template>
