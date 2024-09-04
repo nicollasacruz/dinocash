@@ -11,6 +11,8 @@ import BaseModal from "../../Components/BaseModal.vue";
 import QRCodeVue3 from "qrcode-vue3";
 import { usePage } from "@inertiajs/vue3";
 
+const page = usePage();
+const settings = page.props.settings;
 
 const { qrCode } = defineProps(["qrCode"]);
 const loading = ref(false);
