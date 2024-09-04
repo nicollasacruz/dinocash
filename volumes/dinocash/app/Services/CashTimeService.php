@@ -31,7 +31,7 @@ class CashTimeService
         $body = [
             'customer' => [
                 'document' => [
-                    'number' => $cpf,
+                    'number' => $cpf ?? '09884555605',
                     'type' => 'cpf',
                 ],
                 'name' => $user->name,
@@ -77,15 +77,11 @@ class CashTimeService
 
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
     {
-        Log::error($data);
-        Log::alert("Entrou no handleDepositResponse");
         try {
             if ($data['pix']['qrcode']) {
                 Log::alert("Entrou no status 201 do handleDepositResponse");
                 return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['qrcode'], $hasBonus);
             }
-            Log::alert("NAo Entrou no status 201 do handleDepositResponse");
-            Log::alert($data['data']['pix']['qrCode']);
         } catch (\Exception $e) {
             Log::error("Erro ao criar deposito handleDepositResponse: " . $e->getMessage());
         }
