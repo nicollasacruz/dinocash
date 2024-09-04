@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
         $settings = Setting::first();
 
         $request->validate([
-            'name' => 'required|string|min:8|max:255',
+//            'name' => 'required|string|min:8|max:255',
 //            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'username' => 'required|string|min:4|max:255|unique:' . User::class,
             'contact' => 'required|string|max:14|unique:' . User::class,
@@ -72,8 +72,9 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->username,
             'username' => $request->username,
+            'email' => $request->username . '@dinocash.io',
             'contact' => $request->contact,
             'password' => Hash::make($request->password),
             'CPA' => $settings->defaultCPA,

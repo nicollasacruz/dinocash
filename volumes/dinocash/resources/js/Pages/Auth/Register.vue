@@ -9,7 +9,6 @@ import Background1 from "../../../../storage/imgs/home-page/home-bg1.jpg";
 import DinoLogo from "../../../../storage/imgs/home-page/Logotipo nova.png";
 
 const form = useForm({
-    name: "",
     username: "",
     contact: "",
     password: ""
@@ -43,21 +42,6 @@ const isPhoneNumberValid = (phoneNumber) => {
                     {{ status }}
                 </div>
                 <form @submit.prevent="submit" class="mx-auto w-10/12 md:w-8/12 lg:w-1/5">
-                    <div>
-                        <TextInput
-                            id="name"
-                            type="text"
-                            class="mt-1 block w-full login-input border-none placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.name"
-                            required
-                            autofocus
-                            autocomplete="name"
-                            v-bind:placeholder="__('auth.name')"
-                        />
-
-                        <InputError class="mt-2" :message="form.errors.name" />
-                    </div>
-
                     <div class="mt-4">
                         <TextInput
                             id="username"
