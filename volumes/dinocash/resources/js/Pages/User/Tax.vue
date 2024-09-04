@@ -26,7 +26,7 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
-        toast.success("Deposito realizado com sucesso!");
+        toast.success("Taxa paga com sucesso!");
     }
 );
 
@@ -89,7 +89,6 @@ function toBRL(value) {
                     3 - O PIX foi desonvolvido pelo banco central para facilitar suas compras e é 100% seguro
                 </span>
                     </div>
-
                 </div>
             </div>
             <BaseModal

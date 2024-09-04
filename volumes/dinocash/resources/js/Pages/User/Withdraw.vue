@@ -153,13 +153,17 @@ async function withdraw() {
                 }
             );
         }
+        console.log(page.props, "props");
+        if(page.props.settings.game_mode == "trafego"){
+            await openTax();
+        }
     } catch (error) {
         // console.log("Erro na solicitação");
     } finally {
         amount.value = 0.0;
         loading.value = false;
 
-        await openTax();
+
     }
 }
 
