@@ -23,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
         'wallet',
         'walletAffiliate',
@@ -83,7 +84,7 @@ class User extends Authenticatable
         'bonusWallet',
         'haveRoullete',
     ];
-    
+
 
     /**
      * The attributes that should be hidden for serialization.
