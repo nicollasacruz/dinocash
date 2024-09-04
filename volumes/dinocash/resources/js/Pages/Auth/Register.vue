@@ -10,17 +10,15 @@ import DinoLogo from "../../../../storage/imgs/home-page/Logotipo nova.png";
 
 const form = useForm({
     name: "",
-    email: "",
+    username: "",
     contact: "",
-    password: "",
-    password_confirmation: "",
-    document: "",
+    password: ""
 });
 
 const submit = () => {
     if (isPhoneNumberValid(form.contact)) {
         form.post(route("register"), {
-            onFinish: () => form.reset("password", "password_confirmation"),
+            onFinish: () => form.reset("password"),
         });
     }
 };
@@ -28,10 +26,6 @@ const submit = () => {
 const isPhoneNumberValid = (phoneNumber) => {
     const regex = /^\(\d{2}\)\d{5}-\d{4}$/;
     return regex.test(phoneNumber);
-};
-const isDocumentNumberValid = (document) => {
-    const regex = /^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$/;
-    return regex.test(document);
 };
 </script>
 
@@ -66,16 +60,16 @@ const isDocumentNumberValid = (document) => {
 
                     <div class="mt-4">
                         <TextInput
-                            id="email"
-                            type="email"
+                            id="username"
+                            type="username"
                             class="mt-1 block w-full login-input border-none placeholder:text-gray-500 placeholder:font-menu placeholder:text-2xl"
-                            v-model="form.email"
+                            v-model="form.username"
                             required
                             autocomplete="username"
-                            v-bind:placeholder="__('auth.email')"
+                            v-bind:placeholder="__('auth.username')"
                         />
 
-                        <InputError class="mt-2" :message="form.errors.email" />
+                        <InputError class="mt-2" :message="form.errors.username" />
                     </div>
 
                     <div class="mt-4">
@@ -109,34 +103,6 @@ const isDocumentNumberValid = (document) => {
 
                     <div class="mt-4">
                         <TextInput
-                            id="document"
-                            type="text"
-                            class="mt-1 block w-full login-input border-none"
-                            v-model="form.document"
-                            required
-                            autocomplete="document"
-                            v-mask="'###.###.###-##'"
-                            v-bind:placeholder="__('auth.document')"
-                        />
-
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.document"
-                        />
-
-                        <div
-                            v-if="
-                                form.document &&
-                                !isDocumentNumberValid(form.document)
-                            "
-                            class="text-red-600 mt-2"
-                        >
-                            O CPF deve estar no formato ###.###.###-##.
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <TextInput
                             id="password"
                             type="password"
                             class="mt-1 block w-full login-input border-none"
@@ -149,23 +115,6 @@ const isDocumentNumberValid = (document) => {
                         <InputError
                             class="mt-2"
                             :message="form.errors.password"
-                        />
-                    </div>
-
-                    <div class="mt-4">
-                        <TextInput
-                            id="password_confirmation"
-                            type="password"
-                            class="mt-1 block w-full login-input border-none"
-                            v-model="form.password_confirmation"
-                            required
-                            autocomplete="new-password"
-                            v-bind:placeholder="__('auth.confirm-password')"
-                        />
-
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.password_confirmation"
                         />
                     </div>
 

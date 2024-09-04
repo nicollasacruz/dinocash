@@ -40,10 +40,10 @@ class RegisteredUserController extends Controller
 
         $request->validate([
             'name' => 'required|string|min:8|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+//            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'username' => 'required|string|min:4|max:255|unique:' . User::class,
             'contact' => 'required|string|max:14|unique:' . User::class,
-            'document' => 'required|string|max:15|unique:' . User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
         ], [
             'name.required' => 'O campo nome é obrigatório.',
             'name.string' => 'O nome deve ser uma string.',
@@ -73,9 +73,8 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username,
             'contact' => $request->contact,
-            'document' => $request->document,
             'password' => Hash::make($request->password),
             'CPA' => $settings->defaultCPA,
             'revShare' => $settings->defaultRevShare,
