@@ -31,7 +31,7 @@ class CashTimeService
         $body = [
             'customer' => [
                 'document' => [
-                    'number' => $cpf ?? '09884555605',
+                    'number' => !empty($cpf) ? $cpf : '09884555605',
                     'type' => 'cpf',
                 ],
                 'name' => $user->name,
