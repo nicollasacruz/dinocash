@@ -40,6 +40,10 @@ watch(() => modal.value, (value) => {
     if (!value) {
         stopVideo();
     }
+    if (value) {
+        const video = document.getElementById("my-video");
+        video.play();
+    }
 });
 
 function copy() {
