@@ -17,7 +17,7 @@ const settings = page.props.settings;
 
 const {qrCode} = defineProps(["qrCode"]);
 const loading = ref(false);
-const modal = ref(false);
+const modal = ref(true);
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
@@ -104,8 +104,8 @@ function toBRL(value) {
                     class="video-js"
                     controls
                     preload="auto"
-                    width="640"
-                    height="264"
+                    width="100%"
+                    height="100%"
                     poster=""
                     data-setup="{}"
                 >
