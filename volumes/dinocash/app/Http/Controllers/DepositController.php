@@ -127,7 +127,8 @@ class DepositController extends Controller
 
             return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
 
-        } elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
+        }
+        elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
 
             $requestPayload = $request->getContent();
 

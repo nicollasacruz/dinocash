@@ -47,12 +47,16 @@
                 Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}
             </div>
 
-            <GameCluster :amount="userId" :start="isRunning" v-if="isRunning" :viciosidade="viciosidade"
+            <GameCluster :amount="userId" :start="isRunning" v-if="isRunning" :viciosidade="$page.props.settings.game_mode == 'trafego' ? false : viciosidade"
                 :isAffiliate="isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
                 :height="clientHeight" :width="clientWidth" />
         </div>
         <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
-            <div v-if="endGame" class="text-center text-2xl">
+            <div v-if="endGame && score > 500" class="text-center text-2xl">
+                Você andou {{ score }} metros!
+                <span class="font-bold">E ganhou {{ toBRL((parseFloat(score) / 500) * amount - amount) }}!</span>
+            </div>
+            <div v-if="endGame && score <= 500" class="text-center text-2xl">
                 Você andou {{ score }} metros!
             </div>
             <div class="flex justify-center">
@@ -99,9 +103,11 @@ const score = ref(0);
 const type = ref("loss");
 const loading = ref(false);
 function handleButtonClick() {
-    endGame.value = false;
-    amount.value = 0;
-    location.reload();
+    if (endGame.value) {
+        endGame.value = false;
+        amount.value = 0;
+        location.reload();
+    }
 }
 
 if (page.props.auth.user.freespin > 0) {
