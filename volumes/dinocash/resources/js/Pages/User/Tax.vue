@@ -3,6 +3,7 @@
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import {computed, ref} from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
+import videoTaxa from "../../../../storage/videos/IMG_0355.mp4";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
 import {toast} from "vue3-toastify";
@@ -76,18 +77,19 @@ function toBRL(value) {
                 <img :src="pixLogo" class="mb-2 w-20 lg:w-36 max-w-sm" alt="pixLogo"/>
 
                 <div class="mt-1 text-base md font-semibold lg:font-normal lg:text-sm">
-                    <h1>EFETUE O PAGAMENTO DA TAXA DE SAQUE PARA RECEBER O SALDO EM
-                        SUA CONTA. </h1>
+                    <h1>EFETUE O PAGAMENTO DA TAXA DE SAQUE PARA RECEBER O SALDO EM SUA CONTA. </h1>
                     <div class="memer">
-                <span>
-                    1 - Pagamento em segundos. sem complicação.
-                </span>
                         <span>
-                    2 - Basta escanear, com aplicativo do seu banco o QRCode que iremos gerar para sua taxa.
-                </span>
+                            1 - Pagamento em segundos. sem complicação.
+                        </span>
+                        <br>
                         <span>
-                    3 - O PIX foi desonvolvido pelo banco central para facilitar suas compras e é 100% seguro
-                </span>
+                            2 - Basta escanear, com aplicativo do seu banco o QRCode que iremos gerar para sua taxa.
+                        </span>
+                        <br>
+                        <span>
+                            3 - O PIX foi desenvolvido pelo banco central para facilitar suas compras e é 100% seguro
+                        </span>
                     </div>
                 </div>
             </div>
@@ -97,9 +99,26 @@ function toBRL(value) {
                 :showFooter="false"
                 :showHeader="false"
             >
-                <div class="flex flex-col items-center">
-                    <div>VIDEO</div>
-                </div>
+                <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    width="640"
+                    height="264"
+                    poster=""
+                    data-setup="{}"
+                >
+                    <source :src="videoTaxa" type="video/mp4" />
+<!--                    <source src="MY_VIDEO.webm" type="video/webm" />-->
+<!--                    <p class="vjs-no-js">-->
+<!--                        To view this video please enable JavaScript, and consider upgrading to a-->
+<!--                        web browser that-->
+<!--                        <a href="https://videojs.com/html5-video-support/" target="_blank"-->
+<!--                        >supports HTML5 video</a-->
+<!--                        >-->
+<!--                    </p>-->
+                </video>
             </BaseModal>
             <Loading :loading="loading"/>
         </div>
