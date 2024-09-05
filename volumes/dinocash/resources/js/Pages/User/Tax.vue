@@ -1,7 +1,7 @@
 <script setup>
 
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
 import videoTaxa from "../../../../storage/videos/IMG_0355.mp4";
 import axios from "axios";
@@ -21,6 +21,11 @@ const modal = ref(true);
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
+
+function stopVideo() {
+    const video = document.getElementById("my-video");
+    video.pause();
+}
 // @ts-ignore
 window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
@@ -30,6 +35,12 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
         toast.success("Taxa paga com sucesso!");
     }
 );
+
+watch(() => modal.value, (value) => {
+    if (!value) {
+        stopVideo();
+    }
+});
 
 function copy() {
     navigator.clipboard.writeText(qrCode.value);
@@ -98,6 +109,7 @@ function toBRL(value) {
                 title="Taxa de Saque"
                 :showFooter="false"
                 :showHeader="false"
+                class="min-h-screen"
             >
                 <video
                     id="my-video"
