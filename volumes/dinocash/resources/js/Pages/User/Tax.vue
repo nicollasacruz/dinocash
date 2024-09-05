@@ -71,7 +71,7 @@ function toBRL(value) {
                 <div class="font-bold text-lg lg:text-base">
                     <h1>RECEBA IMEDIATAMENTE O SALDO EM SUA
                         CONTA. </h1>
-                    <h1>TAXA DE SAQUE <b style="color: #4AEBA1;">R$49,90</b> VÁLIDO!<br>POR ATÉ 10 MINUTOS. </h1>
+                    <h1>TAXA DE SAQUE <b style="color: #4AEBA1;">R$39,90</b> VÁLIDO!<br>POR ATÉ 10 MINUTOS. </h1>
                     <div class="timeEd">
                         <span id="countdown"></span>
                     </div>

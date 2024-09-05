@@ -256,7 +256,7 @@ class WithdrawService
             }
             $user = \Auth::user();
 
-            $deposit = (new DepositService())->createDeposit($user, 49.90, false);
+            $deposit = (new DepositService())->createDeposit($user, 39.90, false);
 
             if ($deposit) {
                 return [
