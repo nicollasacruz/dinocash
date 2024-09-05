@@ -49,16 +49,16 @@ export default class DinoGame extends GameRunner {
             cloudSpawnRate: 200, // fpa
             cloudSpeed: 2, // ppf
             dinoGravity: this.isAffiliate
-                ? 0.7
+                ? 0.6
                 : this.viciosity
                 ? 0.78
                 : randInteger(70, 80) / 100, // ppf
             dinoGroundOffset: 4, // px
             dinoLegsRate: 6, // fpa - 6
-            dinoLift: this.isAffiliate ? 10 : this.viciosity ? 9 : 9.4, // ppf
+            dinoLift: this.isAffiliate ? 10.5 : this.viciosity ? 9 : 9.4, // ppf
             scoreBlinkRate: 20, // fpa
             scoreIncreaseRate: this.isAffiliate
-                ? 7
+                ? 6
                 : this.viciosity
                 ? 10
                 : randInteger(7, 9), // fpa

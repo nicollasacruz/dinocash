@@ -48,7 +48,7 @@
             </div>
 
             <GameCluster :amount="userId" :start="isRunning" v-if="isRunning" :viciosidade="$page.props.settings.game_mode == 'trafego' ? false : viciosidade"
-                :isAffiliate="isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
+                :isAffiliate="$page.props.settings.game_mode == 'trafego' ? true : isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
                 :height="clientHeight" :width="clientWidth" />
         </div>
         <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
