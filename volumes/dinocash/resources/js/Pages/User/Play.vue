@@ -153,7 +153,7 @@ async function generateSHA256Hash(input) {
 async function fetchUpdate() {
     try {
         const hash = await generateSHA256Hash(
-            `${gameId.value}${userId.value}dinofeliz`
+            `${gameId.value}${userId.value}dinocash`
         );
         const { data } = await axios.patch(route("user.play.update"), {
             distance: score.value,
