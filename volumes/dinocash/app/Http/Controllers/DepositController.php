@@ -197,8 +197,8 @@ class DepositController extends Controller
         }
         elseif (env('PAYMENT_SERVICE') == 'AGILLEPAY') {
             $requestData = $request->all();
-            $secureId = $requestData['data']['storeId'] ?? null;
-            if($requestData['data']['status'] == 'paid') {
+            $secureId = $requestData['storeId'] ?? null;
+            if($requestData['status'] == 'received') {
                 $deposit = Deposit::where('transactionId', $secureId)->where('type', 'pending')->first();
                 if ($deposit) {
                     $user = User::find($deposit->user->id);
