@@ -42,7 +42,6 @@ class DepositController extends Controller
         ]);
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -196,5 +195,27 @@ class DepositController extends Controller
                 }
             }
         }
+        elseif (env('PAYMENT_SERVICE') == 'AGILLEPAY') {
+            $requestData = $request->all();
+            $secureId = $requestData['data']['storeId'] ?? null;
+            if($requestData['data']['status'] == 'paid') {
+                $deposit = Deposit::where('transactionId', $secureId)->where('type', 'pending')->first();
+                if ($deposit) {
+                    $user = User::find($deposit->user->id);
+                    if ($depositService->aproveDeposit($deposit)) {
+                        event(new PixReceived($user));
+                        try {
+                            foreach (User::where('role', 'admin')->get() as $admin) {
+                                Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));
+                            }
+                        } catch (Exception $e) {
+                            Log::error('Erro de notificar - ' . $e->getMessage());
+                        }
+                        return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
+                    }
+                }
+            }
+        }
+        return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
     }
 }

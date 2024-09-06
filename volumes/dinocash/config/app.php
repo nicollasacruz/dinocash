@@ -179,7 +179,8 @@ return [
         App\Providers\CashTimeServiceProvider::class,
         App\Providers\EzzebankServiceProvider::class,
         App\Providers\SuitPayServiceProvider::class,
-        App\Providers\BsPayServiceProvider::class
+        App\Providers\BsPayServiceProvider::class,
+        App\Providers\AgillePayServiceProvider::class
     ])->toArray(),
 
     /*
