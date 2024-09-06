@@ -48,10 +48,13 @@ class DepositService
             elseif ($settings->payment_service == 'CASHTIME') {
                 return (new CashTimeService())->createDeposit($data);
             }
-
-            Log::error("Serviço de pagamento não encontrado");
-
-            return null;
+            elseif ($settings->payment_service == 'AGILLEPAY') {
+                return (new AgillePayService)->createDeposit($data);
+            }
+            else {
+                Log::error("Serviço de pagamento não encontrado");
+                return null;
+            }
         } catch (Exception $e) {
 
             Log::error(env('APP_URL') . "  -  Erro ao criar Deposito: " . $e->getMessage() . ' - ' . $e->getFile() . ' - ' . $e->getLine());
