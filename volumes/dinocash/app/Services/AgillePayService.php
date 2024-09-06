@@ -56,7 +56,8 @@ class AgillePayService
         ])->post($endpoint, $body);
 
         $data = $response->json();
-
+        Log::info("Response AgillePay: ");
+        Log::info($data);
         return $this->handleDepositResponse($user, $amount, $data['storeId'], $data, $hasBonus);
     }
 
