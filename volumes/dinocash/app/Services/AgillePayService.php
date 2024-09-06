@@ -57,19 +57,6 @@ class AgillePayService
 
         $data = $response->json();
 
-        if($data['status'] == 400 && $data['message']){
-            $body['customer']['document'] = [
-                "number" => '09884555605',
-                "type" => 'cpf',
-            ];
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'x-authorization-key' => $secret,
-                'x-store-key' => $public,
-            ])->post($endpoint, $body);
-            $data = $response->json();
-        }
         return $this->handleDepositResponse($user, $amount, $data['storeId'], $data, $hasBonus);
     }
 
