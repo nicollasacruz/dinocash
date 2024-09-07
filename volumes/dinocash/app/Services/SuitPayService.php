@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class SuitPayService
 {
-
     public function __construct()
     {
     }
@@ -21,7 +20,7 @@ class SuitPayService
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
         $setting = Setting::first();
-
+        Log::info($setting->suitpay_url . 'gateway/request-qrcode');
         $body = [
             'requestNumber' => $data['uuid'],
             'dueDate' => now()->addHours(2),
