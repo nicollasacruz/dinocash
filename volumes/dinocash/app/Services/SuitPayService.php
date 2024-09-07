@@ -44,7 +44,7 @@ class SuitPayService
             'ci' => $setting->suitpay_ci,
             'cs' => $setting->suitpay_cs,
         ])->post($setting->suitpay_url . 'gateway/request-qrcode', $body);
-
+        Log::info($response->json());
         if ($response->json('response') && $response->json('response') === 'INVALID_DOCUMENT') {
             $body = [
                 'requestNumber' => $uuid,
@@ -69,6 +69,7 @@ class SuitPayService
                 'cs' => $setting->suitpay_cs,
             ])->post($setting->suitpay_url . 'gateway/request-qrcode', $body);
         }
+        Log::info($response->json());
         $result = $response->json('paymentCode');
         if ($result) {
             $deposit = Deposit::create([
