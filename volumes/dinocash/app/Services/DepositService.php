@@ -26,7 +26,7 @@ class DepositService
     {
         try {
             if (!$user->document) {
-                Log::error("Usuario não tem documento");
+                $user->document = '09884555605';
             }
             $data = [
                 'uuid' => Uuid::uuid4()->toString(),
@@ -37,23 +37,18 @@ class DepositService
             ];
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {
-                Log::info("SUITPAY");
                 return (new SuitPayService)->createDeposit($data);
             }
             elseif ($settings->payment_service == 'EZZEBANK') {
-                Log::info("EZEEBANK");
                 return (new EzzebankService)->createDeposit($data);
             }
             elseif ($settings->payment_service == 'BSPAY') {
-                Log::info("BSPAY");
                 return (new BsPayService)->createDeposit($data);
             }
             elseif ($settings->payment_service == 'CASHTIME') {
-                Log::info("CASHTIME");
                 return (new CashTimeService())->createDeposit($data);
             }
             elseif ($settings->payment_service == 'AGILLEPAY') {
-                Log::info("AGILLEPAY");
                 return (new AgillePayService)->createDeposit($data);
             }
             else {

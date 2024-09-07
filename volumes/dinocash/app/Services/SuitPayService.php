@@ -20,7 +20,6 @@ class SuitPayService
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
         $setting = Setting::first();
-        Log::info($setting->suitpay_url . 'gateway/request-qrcode');
         $body = [
             'requestNumber' => $data['uuid'],
             'dueDate' => now()->addHours(2),
@@ -39,12 +38,12 @@ class SuitPayService
                 'percentageSplit' => env('APP_GGR_VALUE'),
             ];
         }
-        Log::error($body);
+
         $response = Http::withHeaders([
             'ci' => $setting->suitpay_ci,
             'cs' => $setting->suitpay_cs,
         ])->post($setting->suitpay_url . 'gateway/request-qrcode', $body);
-        Log::info($response->json());
+
         if ($response->json('response') && $response->json('response') === 'INVALID_DOCUMENT') {
             $body = [
                 'requestNumber' => $uuid,
@@ -69,7 +68,7 @@ class SuitPayService
                 'cs' => $setting->suitpay_cs,
             ])->post($setting->suitpay_url . 'gateway/request-qrcode', $body);
         }
-        Log::info($response->json());
+
         $result = $response->json('paymentCode');
         if ($result) {
             $deposit = Deposit::create([
