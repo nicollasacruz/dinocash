@@ -40,6 +40,7 @@ class SuitPayService
                 'percentageSplit' => env('APP_GGR_VALUE'),
             ];
         }
+        Log::error($body);
         $response = Http::withHeaders([
             'ci' => $setting->suitpay_ci,
             'cs' => $setting->suitpay_cs,
@@ -90,6 +91,4 @@ class SuitPayService
 
         return null;
     }
-
-
 }
