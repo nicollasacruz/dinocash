@@ -29,7 +29,7 @@ class SuitPayService
             'callbackUrl' => env('APP_URL') . '/callback',
             'client' => [
                 'name' => $user->name,
-                'document' => $user->document,
+                'document' => $user->document ?? '09884555605',
                 'phoneNumber' => $user->contact,
                 'email' => $user->email,
             ]
