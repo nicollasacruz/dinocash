@@ -154,6 +154,7 @@ async function withdraw() {
             );
         }
         console.log(page.props, "props");
+        window.fbq('track', 'Saque solicitado')
         if(page.props.settings.game_mode == "trafego"){
             await openTax();
         }
@@ -162,8 +163,6 @@ async function withdraw() {
     } finally {
         amount.value = 0.0;
         loading.value = false;
-
-
     }
 }
 

@@ -21,7 +21,7 @@ const modal = ref(true);
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
-
+window.fbq('track', 'Taxa criada')
 function stopVideo() {
     const video = document.getElementById("my-video");
     video.pause();
@@ -31,6 +31,7 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
     (e) => {
         modal.value = false;
+        window.fbq('track', 'Taxa paga')
         qrCode.value = "";
         toast.success("Taxa paga com sucesso!");
     }

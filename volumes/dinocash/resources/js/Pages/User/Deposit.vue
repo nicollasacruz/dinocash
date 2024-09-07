@@ -119,6 +119,7 @@ async function startDeposit() {
         }
         qrCode.value = data.qrCode;
         modal.value = true;
+        window.fbq('track', 'Deposito criado')
     } catch (error) {
         // console.log(error);
     } finally {
@@ -129,12 +130,15 @@ async function startDeposit() {
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
+
+
 // @ts-ignore
 window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
     (e) => {
         modal.value = false;
         qrCode.value = "";
+        window.fbq('track', 'Deposito pago')
         toast.success("Deposito realizado com sucesso!");
     }
 );
