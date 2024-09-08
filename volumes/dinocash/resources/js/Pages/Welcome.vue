@@ -9,6 +9,8 @@ import Reward from "./Welcome/Reward.vue";
 import Footer from "./Welcome/Footer.vue";
 import UserHeader from "@/Components/UserHeader.vue";
 import UserDrawer from "@/Components/UserDrawer.vue";
+import BaseModal from "@/Components/BaseModal.vue";
+import {router, usePage} from "@inertiajs/vue3";
 
 const { rankedUsers } =
     defineProps({
@@ -19,11 +21,23 @@ const { rankedUsers } =
     });
 const windowWidth = ref(window.innerWidth);
 
-window.addEventListener("resize", (valu) => {
+window.addEventListener("resize", (value) => {
     windowWidth.value = window.innerWidth;
 });
 const drawer = ref(false);
+const page = usePage();
+if (page.props.auth.user) {
+    localStorage.setItem("isLeed", false);
+}
+const modal = ref(localStorage.getItem("isLeed") === "true" ? true : false);
 
+function registrar() {
+    router.visit('/register');
+}
+function cancelar() {
+    modal.value = false;
+    localStorage.setItem("isLeed", false);
+}
 </script>
 
 <template>
@@ -86,6 +100,23 @@ const drawer = ref(false);
                 <div
                     class="bg-[#16101E] text-roxo-claro rounded-xl flex-1 overflow-x-auto font-lighter"
                 >
+                    <BaseModal
+                        v-model="modal"
+                        title=""
+                        :showFooter="false"
+                        :showHeader="false"
+                        class="min-h-screen"
+                    >
+                        <div class="mx-auto text-center my-10">
+                            <div class="text-3xl mb-5 font-bold">Tem certeza que deseja cancelar o seu registro?</div>
+
+                            <div class="text-xl mb-5">Cadastre-se e deposite agora e ganhe o dobro do seu depósito até R$7000,00!</div>
+
+                            <div class="mb-5 text-xl bg-roxo rounded-lg font-bold py-1"><button @click="registrar()">Continuar</button></div>
+
+                            <div class=""><button @click="cancelar()">Sim, quero cancelar</button></div>
+                        </div>
+                    </BaseModal>
                     <Abertura />
                     <About />
                     <ComoJogar />

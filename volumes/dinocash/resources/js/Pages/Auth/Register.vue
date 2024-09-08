@@ -54,7 +54,7 @@ const isPhoneNumberValid = (phoneNumber) => {
                             v-model="form.username"
                             required
                             autocomplete="username"
-                            v-bind:placeholder="__('auth.username')"
+                            placeholder="Nome de usuário"
                         />
 
                         <InputError class="mt-2" :message="form.errors.username" />

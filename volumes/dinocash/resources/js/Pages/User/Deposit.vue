@@ -31,12 +31,12 @@
                     v-model="amount"
                 />
                 <div class="max-w-xs grid grid-cols-3 w-full gap-2 font-extrabold text-white">
-                    <button class="grid btn bg-roxo border-2" @click="amount=10">R$10</button>
-                    <button class="grid btn bg-roxo border-2" @click="amount=20">R$20</button>
-                    <button class="grid btn bg-roxo border-2" @click="amount=50">R$50</button>
-                    <button class="grid btn bg-roxo border-2" @click="amount=100">R$100</button>
-                    <button class="grid btn bg-roxo border-2" @click="amount=250">R$250</button>
-                    <button class="grid btn bg-roxo border-2" @click="amount=500">R$500</button>
+                    <span class="grid"><button class="btn bg-roxo border-2 border-verde" @click="amount=20">R$20</button></span>
+                    <span class="grid relative"><span class="absolute p-[3px] bg-yellow-500 top-0 right-0 rounded-tr-lg rounded-bl-lg text-xs uppercase text-white">HOT</span><button class="btn bg-roxo border-2 border-verde" @click="amount=50">R$50</button></span>
+                    <span class="grid"><button class="btn bg-roxo border-2 border-verde" @click="amount=100">R$100</button></span>
+                    <span class="grid relative"><span class="absolute p-[3px] bg-yellow-500 top-0 right-0 rounded-tr-lg rounded-bl-lg text-xs uppercase text-white">HOT</span><button class="btn bg-roxo border-2 border-verde" @click="amount=250">R$250</button></span>
+                    <span class="grid"><button class="btn bg-roxo border-2 border-verde" @click="amount=500">R$500</button></span>
+                    <span class="grid relative"><span class="absolute p-[2.5px] bg-yellow-500 top-0 right-0 rounded-tr-lg rounded-bl-lg text-xs uppercase text-white">HOT</span><button class="btn bg-roxo border-2 border-verde" @click="amount=1000">R$1.000</button></span>
                 </div>
 
                 <div class="font-bold text-lg lg:text-base">
