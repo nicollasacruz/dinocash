@@ -165,8 +165,8 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
-        // window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
-        // toast.success("Deposito realizado com sucesso!");
+        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
+        toast.success("Deposito realizado com sucesso!");
     }
 );
 

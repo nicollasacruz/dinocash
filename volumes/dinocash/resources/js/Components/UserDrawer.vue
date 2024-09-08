@@ -122,11 +122,4 @@ function toBRL(value) {
 function checkAfiliate() {
     if (page.props.auth.user.isAffiliate) router.get(route("afiliado.index"));
 }
-window.Echo.channel("pixReceived" + userIdref.value).listen(
-    "PixReceived",
-    (e) => {
-        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
-        toast.success("Deposito realizado com sucesso!");
-    }
-);
 </script>
