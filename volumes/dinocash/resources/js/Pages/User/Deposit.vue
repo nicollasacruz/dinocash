@@ -17,10 +17,10 @@
                         stroke-width="2"
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span class="font-menu font-bold text-roxo">Dobramos o seu deposito em até R$ 7000,00!</span>
+                <span class="font-menu font-bold text-roxo">Dobramos o seu deposito em até R$7000,00!</span>
                     <FlipCountDown class=""/>
                 <div class="">
-                    <button class="btn btn-sm bg-roxo text-white" @click="bonusSelected = true">Quero o bônus!</button>
+                    <button class="btn btn-sm bg-roxo text-white uppercase" @click="bonusSelected = true">Quero o bônus!</button>
                 </div>
             </div>
             <div class="flex-col flex gap-y-4 text-base">

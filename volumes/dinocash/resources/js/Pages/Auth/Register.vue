@@ -20,6 +20,7 @@ const submit = () => {
             onFinish: () => form.reset("password"),
             onSuccess: () => {
                 window.fbq('track', 'Conta criada')
+                localStorage.setItem('isLeed', false);
             }
         });
     }

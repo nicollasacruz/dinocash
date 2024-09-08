@@ -3,6 +3,8 @@ function gerarNumeroAleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+localStorage.setItem('isLeed', true);
+
 const numeroAleatorio = gerarNumeroAleatorio(20000, 25000);
 
 </script>
