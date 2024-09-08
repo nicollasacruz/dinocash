@@ -17,7 +17,7 @@ const numeroAleatorio = gerarNumeroAleatorio(20000, 25000);
                     SALDO:
                 </div>
                 <div class="numbersaldo">
-                    R$10,00
+                    R$100,00
                 </div>
             </div>
             <div class="text-01">
