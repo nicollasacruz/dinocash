@@ -230,7 +230,7 @@ Route::middleware(['auth', 'verified'])->prefix('user')->group(function () {
         }
         return response()->json([
             'userId' => $user->id,
-            'amount' => $amount ? (float) $amount->amount : 0,
+            'amount' => $amount ? (float)$amount->amount : 0,
         ]);
     })->name('user.lastGame');
 });
@@ -256,6 +256,20 @@ Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.te
 Route::post('/push', [PushController::class, 'store'])->name('push.store');
 Route::get('/push', [PushController::class, 'push'])->name('push');
 
-Route::get('/taxa', [WithdrawController::class, 'generateTax'])->name('taxa');
+Route::get('/taxa', [WithdrawController::class, 'generateTax'])->middleware('auth')->name('taxa');
+
+Route::get('/bonusDemo', function () {
+    if (Setting::first()->game_mode == 'trafego') {
+        return Inertia::render('User/PreSellDemo');
+    }
+    return Redirect::route('homepage');
+})->name('bonus.demo');
+
+Route::get('criarConta', function () {
+    if (Setting::first()->game_mode == 'trafego') {
+        return Inertia::render('User/PreSellRegistro');
+    }
+    return Redirect::route('homepage');
+})->name('bonus.register');
 
 require __DIR__ . '/auth.php';

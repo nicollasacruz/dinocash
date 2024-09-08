@@ -29,14 +29,14 @@
             </div>
             <!-- <div class="flex flex-col md:flex-row justify-start my-5">
                 <input type="text" class="max-w-lg mr-3 user-input" placeholder="Digite o valor da aposta" v-model="amount"
-                    @input="formatAmount" v-if="page.props.auth.user.freespin * 1 == 0" /> 
+                    @input="formatAmount" v-if="page.props.auth.user.freespin * 1 == 0" />
                 <button class="user-button mt-4 md:mt-0 mx-auto" @click="startGame" :disabled="loading || !amount">
                     <div v-if="loading">
                         <span class="loading loading-spinner loading-sm"></span>
                     </div>
                     <div v-else>Jogar</div>
                 </button>
-                
+
                 <span v-if="page.props.auth.user.freespin" class="ml-2 text-lg text-red-500 font-bold my-auto">Você tem {{
                     page.props.auth.user.freespin }} rodadas
                     grátis!</span>
@@ -89,7 +89,7 @@ const finishGame = ref(false);
 // const user = computed(() => page.props.auth.user.id);
 // const userId = toRef(user, "userId");
 
-const amount = ref(15);
+const amount = ref(50);
 const isRunning = ref(false);
 const gameId = ref(0);
 const endGame = ref(false);
@@ -105,7 +105,7 @@ startGame();
 function handleButtonClick() {
     endGame.value = false;
     amount.value = 0;
-    location.reload();
+    router.visit("/criarConta");
 }
 
 // if (page.props.auth.user.freespin > 0) {
