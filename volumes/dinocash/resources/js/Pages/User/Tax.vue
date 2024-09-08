@@ -3,7 +3,7 @@
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import {computed, ref, watch} from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
-import videoTaxa from "../../../../storage/videos/IMG_0451.MP4";
+import videoTaxa from "../../../../storage/videos/IMG_0451.mp4";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
 import {toast} from "vue3-toastify";
