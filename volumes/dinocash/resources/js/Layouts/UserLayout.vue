@@ -14,9 +14,6 @@ const userIdref = ref(userId);
 const totalWallet = ref(page.props.auth.user.wallet * 1 + page.props.auth.user.bonusWallet)
 const wallet = ref(page.props.auth.user.wallet * 1);
 
-window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
-    totalWallet.value = e.message.wallet;
-});
 const drawer = ref(false);
 </script>
 
