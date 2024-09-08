@@ -31,7 +31,7 @@
                     v-model="amount"
                 />
                 <div class="max-w-xs grid grid-cols-3 w-full gap-2 font-extrabold text-white">
-                    <span class="grid"><button class="btn bg-roxo border-2 border-verde" @click="amount=20">R$20</button></span>
+                    <span class="grid"><button class="btn bg-roxo border-2 border-verde" @click="amount=minDeposit">R${{minDeposit}}</button></span>
                     <span class="grid relative"><span class="absolute p-[3px] bg-yellow-500 top-0 right-0 rounded-tr-lg rounded-bl-lg text-xs uppercase text-white">HOT</span><button class="btn bg-roxo border-2 border-verde" @click="amount=50">R$50</button></span>
                     <span class="grid"><button class="btn bg-roxo border-2 border-verde" @click="amount=100">R$100</button></span>
                     <span class="grid relative"><span class="absolute p-[3px] bg-yellow-500 top-0 right-0 rounded-tr-lg rounded-bl-lg text-xs uppercase text-white">HOT</span><button class="btn bg-roxo border-2 border-verde" @click="amount=250">R$250</button></span>
@@ -165,8 +165,8 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
-        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
-        toast.success("Deposito realizado com sucesso!");
+        // window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
+        // toast.success("Deposito realizado com sucesso!");
     }
 );
 

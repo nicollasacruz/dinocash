@@ -72,6 +72,7 @@ import person from "../../../storage/imgs/user/icons/person.svg";
 import deposit from "../../../storage/imgs/user/icons/deposit.svg";
 import leave from "../../../storage/imgs/user/icons/leave.svg";
 import { router } from "@inertiajs/vue3";
+import {toast} from "vue3-toastify";
 
 const emit = defineEmits(["close"]);
 const page = usePage();
@@ -121,4 +122,11 @@ function toBRL(value) {
 function checkAfiliate() {
     if (page.props.auth.user.isAffiliate) router.get(route("afiliado.index"));
 }
+window.Echo.channel("pixReceived" + userIdref.value).listen(
+    "PixReceived",
+    (e) => {
+        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
+        toast.success("Deposito realizado com sucesso!");
+    }
+);
 </script>

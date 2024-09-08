@@ -30,4 +30,13 @@ class PixReceived implements ShouldBroadcast
         // Log::info("USER NO EVENTO   ___    " . $this->user);
         return ['pixReceived' . $this->user->id];
     }
+
+//    public function broadcastWith()
+//    {
+//        return [
+//            'user' => $this->user,
+//            'walletValue' => $this->user->wallet,
+//            'bonusValue' => $this->user->wallet,
+//        ];
+//    }
 }
