@@ -5,6 +5,24 @@
             <div class="text-5xl mb-7 text-verde font-extrabold font-menu">
                 Depositar
             </div>
+            <div role="alert" class="alert bg-verde mb-5">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    class="stroke-info h-6 w-6 shrink-0">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-menu font-bold text-roxo">Dobramos o seu deposito em até R$ 7000,00!</span>
+                    <FlipCountDown class=""/>
+                <div class="">
+                    <button class="btn btn-sm bg-roxo text-white" @click="bonusSelected = true">Quero o bônus!</button>
+                </div>
+            </div>
             <div class="flex-col flex gap-y-4 text-base">
                 <input
                     type="number"
@@ -12,6 +30,14 @@
                     placeholder="Digite o valor da aposta"
                     v-model="amount"
                 />
+                <div class="max-w-xs grid grid-cols-3 w-full gap-2 font-extrabold text-white">
+                    <button class="grid btn bg-roxo border-2" @click="amount=10">R$10</button>
+                    <button class="grid btn bg-roxo border-2" @click="amount=20">R$20</button>
+                    <button class="grid btn bg-roxo border-2" @click="amount=50">R$50</button>
+                    <button class="grid btn bg-roxo border-2" @click="amount=100">R$100</button>
+                    <button class="grid btn bg-roxo border-2" @click="amount=250">R$250</button>
+                    <button class="grid btn bg-roxo border-2" @click="amount=500">R$500</button>
+                </div>
 
                 <div class="font-bold text-lg lg:text-base">
                     <div>
@@ -33,7 +59,7 @@
                             class="checkbox lg:ml mr-2 mt-2 lg:mt-0"
                         />
                         <span class="text-red-500 font-extrabold text-lg lg:text-base">
-                            Quero ganhar {{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }} de bônus + 20 rodadas grátis.
+                            Quero ganhar <span class="text-verde text-2xl">{{ toBRL(amount * (settings.bonusPercent / 100) > settings.maxDepositBonusValue ? settings.maxDepositBonusValue : amount * (settings.bonusPercent / 100)) }}</span> de bônus + 20 rodadas grátis.
                         </span>
                     </div>
                 </div>
@@ -88,6 +114,7 @@ import "vue3-toastify/dist/index.css";
 import BaseModal from "../../Components/BaseModal.vue";
 import QRCodeVue3 from "qrcode-vue3";
 import { usePage } from "@inertiajs/vue3";
+import FlipCountDown from "../../Components/FlipCountDown.vue";
 
 const { minDeposit, maxDeposit } = defineProps(["minDeposit", "maxDeposit"]);
 const amount = ref(0);
