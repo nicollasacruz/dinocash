@@ -50,7 +50,7 @@ class DepositController extends Controller
         $userId = Auth::user()->id;
         $user = User::find($userId);
         $hasBonus = $request->hasBonus ?? false;
-        $utm = $request->utm ?? '';
+        $utm = $request->utmData ?? '';
 
         $deposit = $depositService->createDeposit($user, $request->amount, $hasBonus, $utm);
         if ($deposit) {

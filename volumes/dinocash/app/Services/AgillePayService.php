@@ -23,7 +23,7 @@ class AgillePayService
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
         $isTax = $data['isTax'];
-        $utm = $data['utmData'];
+        $utm = $data['utmData'] ?? [];
 
         $cpf = preg_replace('/\D/', '', $user->document);
 
@@ -76,7 +76,7 @@ class AgillePayService
         return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax, $utm);
     }
 
-    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, $utm): ?Deposit
+    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array $utm): ?Deposit
     {
         try {
             if ($data['pix']['payload']) {
@@ -89,9 +89,10 @@ class AgillePayService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, $utm): ?Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, array $utm): ?Deposit
     {
         try {
+            Log::error($utm);
             $deposit = Deposit::create([
                 'userId' => $user->id,
                 'amount' => $amount,
@@ -102,7 +103,7 @@ class AgillePayService
                 'hasBonus' => $hasBonus,
                 'isTax' => $isTax,
             ]);
-            if ($utm) {
+            if (!empty($utm)) {
                 $bodyNemo = [
                     "name" => 'Deposito',
                     'transactionId' => $deposit->transactionId,
@@ -110,11 +111,11 @@ class AgillePayService
                     'grossValue' => $deposit->amount,
                     'status' => $deposit->type,
                     'paymentType' => 'pix',
-                    'utm_source' => $utm['utm_source'] ?? '',
-                    'utm_medium' => $utm['utm_medium'] ?? '',
-                    'utm_campaign' => $utm['utm_campaign'] ?? '',
-                    'utm_content' => $utm['utm_content'] ?? '',
-                    'utm_term' => $utm['utm_term'] ?? '',
+                    'utm_source' => $utm['source'] ?? '',
+                    'utm_medium' => $utm['medium'] ?? '',
+                    'utm_campaign' => $utm['campaign'] ?? '',
+                    'utm_content' => $utm['content'] ?? '',
+                    'utm_term' => $utm['term'] ?? '',
                     'customerName' => $user->name,
                     'customerEmail' => $user->email,
                     'customerPhone' => $user->contact,
@@ -124,10 +125,6 @@ class AgillePayService
                     'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
                     'content-type' => 'application/json',
                 ])->post('https://developers.nemu.com.br/api/v1/sales', $bodyNemo);
-                Log::info('Nemoooooo');
-                Log::info($response->json());
-                Log::info(json_encode($bodyNemo));
-
             }
 
             Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
@@ -138,44 +135,3 @@ class AgillePayService
         }
     }
 }
-
-//curl --location 'https://api.agillypay.digital/v1/transactions' \
-//--header 'x-authorization-key: sk_live_ZHI8JiCcjUniMD6U93ttL/7mDpNXrxoI38tTDv22dfX96G6IClDDVkA53T5+X2QukYAh+gx/ArbGTpz4t9qF6+Ga2BiTeaXULKib9Dpyoqugwh+XPNctksr+IJPQkgYyRSkktSnG++BnwT6ehfFQI5BWzng1scPhINlRSd3LFKw=' \
-//--header 'x-store-key: pk_live_UJdmoeEKeyX1RoV955iNA1PGc6Yeux7lNiMKy+iXZcQsSkaRUtv7dnRqCJzWZXTmxLNY1oeGoTi0XxSI8ivEgw==' \
-//--header 'Accept: */*' \
-//--header 'Content-Type: application/json' \
-//--data-raw '{
-//  "postbackUrl": "https://dinofeliz.com/callback",
-//  "paymentMethod": "pix",
-//  "customer": {
-//    "name": "nick",
-//    "email": "nicollas@gmail.com",
-//    "phone": "+5522997370522",
-//    "document": {
-//      "number": "15620106705",
-//      "type": "cpf"
-//    }
-//  },
-//  "shipping": {
-//    "fee": 0,
-//    "address": {
-//      "street": "string",
-//      "streetNumber": "string",
-//      "complement": "string",
-//      "zipCode": "string",
-//      "neighborhood": "string",
-//      "city": "string",
-//      "state": "string",
-//      "country": "string"
-//    }
-//  },
-//  "items": [
-//    {
-//      "tangible": false,
-//      "title": "SnakeDepositoTeste",
-//      "description": "SnakeDepositoteste2",
-//      "unitPrice": 50000,
-//      "quantity": 1
-//    }
-//  ]
-//}'

@@ -36,8 +36,10 @@ class DepositService
                 'type' => 'pending',
                 'hasBonus' => $hasBonus,
                 'isTax' => $isTax,
-                'utmData' => $utm
+                'utmData' => json_decode($utm, true)
             ];
+            Log::info($data);
+            Log::info('UTM TESTE novo');
 
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {
