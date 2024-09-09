@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class PixReceived implements ShouldBroadcast
 {
@@ -25,18 +26,9 @@ class PixReceived implements ShouldBroadcast
     }
 
 
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        // Log::info("USER NO EVENTO   ___    " . $this->user);
+         Log::info("USER NO EVENTO   ___    " . $this->user);
         return ['pixReceived' . $this->user->id];
     }
-
-//    public function broadcastWith()
-//    {
-//        return [
-//            'user' => $this->user,
-//            'walletValue' => $this->user->wallet,
-//            'bonusValue' => $this->user->wallet,
-//        ];
-//    }
 }

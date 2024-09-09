@@ -157,8 +157,6 @@ async function startDeposit() {
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
-
-
 // @ts-ignore
 window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
