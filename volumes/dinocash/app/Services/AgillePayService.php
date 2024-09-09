@@ -23,7 +23,7 @@ class AgillePayService
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
         $isTax = $data['isTax'];
-        $utm = $data['utm'];
+        $utm = $data['utmData'];
 
         $cpf = preg_replace('/\D/', '', $user->document);
 
