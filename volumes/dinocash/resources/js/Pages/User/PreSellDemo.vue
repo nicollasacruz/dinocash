@@ -25,8 +25,10 @@ function getUrlParams() {
         sessionStorage.setItem('utmData', JSON.stringify(utmData));
     }
 }
+if (window.location.host === 'dinofeliz.com') {
 
-getUrlParams();
+    getUrlParams();
+}
 
 </script>
 
