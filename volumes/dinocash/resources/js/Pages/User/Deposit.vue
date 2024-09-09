@@ -161,8 +161,6 @@ const userIdref = ref(userId);
 window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
     (e) => {
-        console.log("Entrou aqui no Pix");
-        console.log(e);
         modal.value = false;
         qrCode.value = "";
         window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
