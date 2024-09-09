@@ -516,11 +516,11 @@ export default class DinoGame extends GameRunner {
             state.score.value++;
             state.level = Math.floor(state.score.value / 100);
             const button = document.querySelector("button");
-            const isWinner = this.state.score.value >= 500;
+            const isWinner = this.state.score.value > 120; // /200
             button.textContent = `${
-                isWinner ? "Recolher Lucro" : "Recolher Prejuizo"
+                this.state.score.value >= 120 ? "Recolher Lucro" : "Recolher Prejuizo"
             }: R$${(
-                (parseFloat(this.state.score.value) / 200) * this.amount -
+                (parseFloat(this.state.score.value) / 120) * this.amount -
                 this.amount
             ).toFixed(2)}`;
             if (state.level !== oldLevel) {
@@ -645,7 +645,7 @@ export default class DinoGame extends GameRunner {
         if (state.score.value < 500) {
             this.canvasCtx.fillStyle = "#f7f7f7";
             this.canvasCtx.fillRect(0, 0, this.width, this.height);
-        } else if (state.score.value === 500) {
+        } else if (state.score.value === 120) { // / 120
             playSound("trovao");
             const buttonContainer = document.getElementById("buttonContainer");
             const finishButton = this.createFinishButton(true);
@@ -657,7 +657,7 @@ export default class DinoGame extends GameRunner {
             this.animate({
                 content: this,
             });
-        } else if (state.score.value === 1000) {
+        } else if (state.score.value === 500) {
             playSound("trovao");
             this.animate({
                 content: this,

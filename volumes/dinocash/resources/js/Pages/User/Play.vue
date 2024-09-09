@@ -53,7 +53,7 @@
         </div>
         <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
             <div v-if="endGame && type == 'win'" class="text-center text-2xl">
-                <div >Você ganhou <span class="font-bold font-menu text-verde text-3xl">{{ toBRL((parseFloat(score) / 200) * amount - amount) }}</span>!</div>
+                <div >Você ganhou <span class="font-bold font-menu text-verde text-3xl">{{ toBRL((parseFloat(score) / 120) * amount - amount) }}</span>!</div>
                 <div>E andou {{ score }} metros!</div>
             </div>
             <div v-else class="text-center text-2xl">
