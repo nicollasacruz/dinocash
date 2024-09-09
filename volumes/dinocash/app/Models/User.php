@@ -42,7 +42,6 @@ class User extends Authenticatable
         'cpaCollectedAt',
         'invitation_link',
         'referralsCounter',
-        // 'referralsDepositsCounter',
         'CPA',
         'revSub',
         'revSubFake',
@@ -51,38 +50,7 @@ class User extends Authenticatable
         'bannedAt',
         'bonusWallet',
         'haveRoullete',
-    ];
-
-    protected $visible = [
-        'id',
-        'name',
-        'email',
-        'wallet',
-        'walletAffiliate',
-        'freespin',
-        'contact',
-        'document',
-        'role',
-        'email_verified_at',
-        'created_at',
-        'updated_at',
-        'isAffiliate',
-        'isExpert',
-        'affiliateId',
-        'affiliatedAt',
-        'cpaCollected',
-        'cpaCollectedAt',
-        'invitation_link',
-        'referralsCounter',
-        'referralsDepositsCounter',
-        'CPA',
-        'revSub',
-        'revSubFake',
-        'cpaSub',
-        'revShare',
-        'bannedAt',
-        'bonusWallet',
-        'haveRoullete',
+        'username'
     ];
 
 

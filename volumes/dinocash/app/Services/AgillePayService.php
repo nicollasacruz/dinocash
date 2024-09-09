@@ -74,7 +74,7 @@ class AgillePayService
         $data = $response->json();
         Log::info("Response AgillePay: ");
         Log::info($data);
-        return $this->handleDepositResponse($user, $amount, $data['storeId'], $data, $hasBonus, $isTax);
+        return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax);
     }
 
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax): ?Deposit
