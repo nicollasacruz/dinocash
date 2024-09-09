@@ -19,11 +19,13 @@ class AgillePayService
         $endpoint = env('ENDPOINT_AGILLEPAY') . '/v1/transactions';
 
         $user = $data['user'];
+        $user->email = str_replace(' ', '', $user->email);
+        $user->save();
         $amount = $data['amount'];
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
         $isTax = $data['isTax'];
-        $utm = $data['utmData'] ?? [];
+        $utm = $data['utmData'] ?? null;
 
         $cpf = preg_replace('/\D/', '', $user->document);
 
@@ -34,7 +36,7 @@ class AgillePayService
                     'type' => 'cpf',
                 ],
                 'name' => $user->name,
-                'email' => 'snakebet001' . $user->id . '@gmail.com',
+                'email' => str_replace(' ', '', $user->email),
                 'phone' => $user->contact,
             ],
             'externalCode' => $uuid,
@@ -76,7 +78,7 @@ class AgillePayService
         return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax, $utm);
     }
 
-    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array|int $utm): ?Deposit
+    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array|null $utm): ?Deposit
     {
         try {
             if ($data['pix']['payload']) {
@@ -89,7 +91,7 @@ class AgillePayService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, array|int $utm): ?Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, array|null $utm): ?Deposit
     {
         try {
             Log::error($utm);
@@ -109,7 +111,7 @@ class AgillePayService
                     'transactionId' => $deposit->transactionId,
                     'netValue' => $deposit->amount - 1 - ($deposit->amount * 0.03),
                     'grossValue' => $deposit->amount,
-                    'status' => $deposit->type,
+                    'status' => 'waiting_payment',
                     'quantity' => 1,
                     'paymentType' => 'pix',
                     'utm_source' => $utm['source'] ?? '',
@@ -118,7 +120,7 @@ class AgillePayService
                     'utm_content' => $utm['content'] ?? '',
                     'utm_term' => $utm['term'] ?? '',
                     'customerName' => $user->name,
-                    'customerEmail' => $user->email,
+                    'customerEmail' => fake()->email,
                     'customerPhone' => $user->contact,
                     'date' => $deposit->updated_at
                 ];
