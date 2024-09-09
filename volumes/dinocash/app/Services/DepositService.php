@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\PixReceived;
 use App\Models\BonusCampaign;
 use App\Models\BonusWalletChange;
 use App\Models\Deposit;
@@ -69,12 +70,13 @@ class DepositService
             $bonusService = new BonusService();
             $user = User::find($deposit->user->id);
             $amount = $deposit->amount;
-
+            Log::alert('Deposito status: ' . $deposit->type);
             $deposit->type = 'paid';
             $deposit->save();
             // $user->changeWallet($amount);
             // $user->save();
-
+            event(new PixReceived($user));
+            Log::alert('Deposito status atualizado: ' . $deposit->type);
             $bonusService->createBonusDeposit($deposit);
 
             try {

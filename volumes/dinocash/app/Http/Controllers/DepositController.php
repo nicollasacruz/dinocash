@@ -203,7 +203,7 @@ class DepositController extends Controller
                 if ($deposit) {
                     $user = User::find($deposit->user->id);
                     if ($depositService->aproveDeposit($deposit)) {
-                        event(new PixReceived($user));
+
                         try {
                             foreach (User::where('role', 'admin')->get() as $admin) {
                                 Notification::send($admin, new PushDemo('R$ ' . number_format(floatval($deposit->amount), 2, ',', '.')));

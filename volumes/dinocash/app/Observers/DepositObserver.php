@@ -18,7 +18,6 @@ class DepositObserver
     {
         if ($deposit->isDirty('type') && $deposit->type === 'paid' && $deposit->getOriginal('type') === 'pending') {
             $this->processPaidDeposit($deposit);
-            Log::info("DepositObserver - Deposito aprovado : " . number_format($deposit->amount, 2, '.', '') . " - " . $deposit->user->email . ".");
         }
     }
 
@@ -82,6 +81,7 @@ class DepositObserver
                     }
                 }
             }
+            Log::info("DepositObserver - Deposito aprovado : " . number_format($deposit->amount, 2, '.', '') . " - " . $deposit->user->email . ".");
         } catch (Exception $e) {
             Log::error("Error processPaidDeposit - CPA {$user->affiliate->email}  -   {$e->getMessage()}");
         }
