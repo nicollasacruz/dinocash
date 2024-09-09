@@ -137,8 +137,10 @@ async function startDeposit() {
             toast.error("Valor maximo para depósito é : " + toBRL(maxDeposit));
             return;
         }
+        const utm = localStorage.getItem('utmData');
         const { data } = await axios.post(route("user.deposito.store"), {
             amount: amount.value,
+            utmData: utm
         });
         if (data.status === "error") {
             toast.error(data.message);

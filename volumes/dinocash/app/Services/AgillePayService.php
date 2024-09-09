@@ -23,6 +23,7 @@ class AgillePayService
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
         $isTax = $data['isTax'];
+        $utm = $data['utm'];
 
         $cpf = preg_replace('/\D/', '', $user->document);
 
@@ -72,17 +73,15 @@ class AgillePayService
         ])->post($endpoint, $body);
 
         $data = $response->json();
-        Log::info("Response AgillePay: ");
-        Log::info($data);
-        return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax);
+        return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax, $utm);
     }
 
-    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax): ?Deposit
+    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, $utm): ?Deposit
     {
         try {
             if ($data['pix']['payload']) {
                 Log::alert("Entrou no status 201 do handleDepositResponse");
-                return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['payload'], $hasBonus, $isTax);
+                return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['payload'], $hasBonus, $isTax, $utm);
             }
         } catch (\Exception $e) {
             Log::error("Erro ao criar deposito handleDepositResponse: " . $e->getMessage());
@@ -90,7 +89,7 @@ class AgillePayService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax): ?Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, $utm): ?Deposit
     {
         try {
             $deposit = Deposit::create([
@@ -103,6 +102,27 @@ class AgillePayService
                 'hasBonus' => $hasBonus,
                 'isTax' => $isTax,
             ]);
+            $bodyNemo = [
+                "name" => 'Deposito',
+                'transactionId' => $deposit->transactionId,
+                'netValue' => $deposit->amount - 1 - ($deposit->amount * 0.03),
+                'grossValue' => $deposit->amount,
+                'status' => $deposit->type,
+                'paymentType' => 'pix',
+                'utm_source' => $utm['utm_source'] ?? '',
+                'utm_medium' => $utm['utm_medium'] ?? '',
+                'utm_campaign' => $utm['utm_campaign'] ?? '',
+                'utm_content' => $utm['utm_content'] ?? '',
+                'utm_term' => $utm['utm_term'] ?? '',
+                'customerName' => $user->name,
+                'customerEmail' => $user->email,
+                'customerPhone' => $user->contact,
+                'date' => $deposit->updated_at
+            ];
+            $response = Http::withHeaders([
+                'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
+                'content-type' => 'application/json',
+            ])->post('https://developers.nemu.com.br/api/v1', $bodyNemo);
 
             Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
             return $deposit;

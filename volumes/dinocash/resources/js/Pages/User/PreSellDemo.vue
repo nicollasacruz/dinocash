@@ -4,6 +4,30 @@ function gerarNumeroAleatorio(min, max) {
 }
 
 const numeroAleatorio = gerarNumeroAleatorio(20000, 25000);
+
+function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const utm_source = params.get('utm_source');
+    const utm_campaign = params.get('utm_campaign');
+    const utm_medium = params.get('utm_medium');
+    const utm_content = params.get('utm_content');
+
+    if (utm_source && utm_campaign && utm_medium && utm_content) {
+        const utmData = {
+            source: utm_source,
+            campaign: utm_campaign,
+            medium: utm_medium,
+            content: utm_content
+        };
+
+        // Armazenar no localStorage e sessionStorage
+        localStorage.setItem('utmData', JSON.stringify(utmData));
+        sessionStorage.setItem('utmData', JSON.stringify(utmData));
+    }
+}
+
+getUrlParams();
+
 </script>
 
 <template>

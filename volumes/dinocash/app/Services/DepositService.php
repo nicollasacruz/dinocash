@@ -23,7 +23,7 @@ class DepositService
      * @param bool $hasBonus
      * @return Deposit|null
      */
-    public function createDeposit(User $user, $amount, bool $hasBonus, $isTax=null): ?Deposit
+    public function createDeposit(User $user, $amount, bool $hasBonus, $utm, $isTax=null): ?Deposit
     {
         try {
             if (!$user->document) {
@@ -36,6 +36,7 @@ class DepositService
                 'type' => 'pending',
                 'hasBonus' => $hasBonus,
                 'isTax' => $isTax,
+                'utmData' => $utm
             ];
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {
@@ -87,6 +88,7 @@ class DepositService
                     User::where('role', 'admin')->each(function ($user) use ($deposit, $ggr) {
                         Notification::send($user, new PushDemoGGR('R$ ' . number_format(floatval($deposit->amount * $ggr), 2, ',', '.')));
                     });
+
                 }
             } catch (Exception $e) {
                 Log::error('Erro de notificar - ' . $e->getMessage());
