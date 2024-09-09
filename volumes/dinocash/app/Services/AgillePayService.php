@@ -110,6 +110,7 @@ class AgillePayService
                     'netValue' => $deposit->amount - 1 - ($deposit->amount * 0.03),
                     'grossValue' => $deposit->amount,
                     'status' => $deposit->type,
+                    'quantity' => 1,
                     'paymentType' => 'pix',
                     'utm_source' => $utm['source'] ?? '',
                     'utm_medium' => $utm['medium'] ?? '',
