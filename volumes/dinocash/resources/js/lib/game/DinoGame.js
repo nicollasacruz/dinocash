@@ -520,7 +520,7 @@ export default class DinoGame extends GameRunner {
             button.textContent = `${
                 isWinner ? "Recolher Lucro" : "Recolher Prejuizo"
             }: R$${(
-                (parseFloat(this.state.score.value) / 500) * this.amount -
+                (parseFloat(this.state.score.value) / 200) * this.amount -
                 this.amount
             ).toFixed(2)}`;
             if (state.level !== oldLevel) {

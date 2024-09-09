@@ -422,12 +422,11 @@ class GameHistoryController extends Controller
                     'message' => 'Partida zerada.',
                 ]);
             }
-
             $finalAmount = $gameHistoryItem->amount * -1;
             if ($request->type === 'win') {
-                $finalAmount = (($gameHistoryItem->amount / 500) * $request->distance);
+                $finalAmount = (($gameHistoryItem->amount / 200) * $request->distance);
                 if ($gameHistoryItem->amountType !== 'bonus') {
-                    $user->changeWallet((($gameHistoryItem->amount / 500) * $request->distance), 'game win');
+                    $user->changeWallet((($gameHistoryItem->amount / 200) * $request->distance), 'game win');
                 } else {
                     $bonus = $user->bonusCampaings->where('status', 'active')->first();
                     BonusWalletChange::create([
