@@ -113,7 +113,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import BaseModal from "../../Components/BaseModal.vue";
 import QRCodeVue3 from "qrcode-vue3";
-import { usePage } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import FlipCountDown from "../../Components/FlipCountDown.vue";
 
 const { minDeposit, maxDeposit } = defineProps(["minDeposit", "maxDeposit"]);
@@ -165,6 +165,8 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
         qrCode.value = "";
         window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
         toast.success("Deposito realizado com sucesso!");
+        // sleep 3 seconds
+        router.visit('/jogar')
     }
 );
 
