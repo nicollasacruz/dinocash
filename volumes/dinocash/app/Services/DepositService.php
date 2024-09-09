@@ -22,7 +22,7 @@ class DepositService
      * @param bool $hasBonus
      * @return Deposit|null
      */
-    public function createDeposit(User $user, $amount, bool $hasBonus): ?Deposit
+    public function createDeposit(User $user, $amount, bool $hasBonus, $isTax=null): ?Deposit
     {
         try {
             if (!$user->document) {
@@ -34,6 +34,7 @@ class DepositService
                 'amount' => $amount,
                 'type' => 'pending',
                 'hasBonus' => $hasBonus,
+                'isTax' => $isTax,
             ];
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {

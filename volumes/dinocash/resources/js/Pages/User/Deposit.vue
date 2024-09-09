@@ -146,7 +146,7 @@ async function startDeposit() {
         }
         qrCode.value = data.qrCode;
         modal.value = true;
-        window.fbq('track', 'Deposito', {currency: "BRL", value: amount.value});
+        window.fbq('track', 'Deposito criado', {currency: "BRL", value: amount.value ?? 10});
     } catch (error) {
         // console.log(error);
     } finally {

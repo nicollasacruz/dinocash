@@ -22,6 +22,7 @@ class AgillePayService
         $amount = $data['amount'];
         $uuid = $data['uuid'];
         $hasBonus = $data['hasBonus'];
+        $isTax = $data['isTax'];
 
         $cpf = preg_replace('/\D/', '', $user->document);
 
@@ -73,15 +74,15 @@ class AgillePayService
         $data = $response->json();
         Log::info("Response AgillePay: ");
         Log::info($data);
-        return $this->handleDepositResponse($user, $amount, $data['storeId'], $data, $hasBonus);
+        return $this->handleDepositResponse($user, $amount, $data['storeId'], $data, $hasBonus, $isTax);
     }
 
-    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus): ?Deposit
+    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax): ?Deposit
     {
         try {
             if ($data['pix']['payload']) {
                 Log::alert("Entrou no status 201 do handleDepositResponse");
-                return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['payload'], $hasBonus);
+                return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['payload'], $hasBonus, $isTax);
             }
         } catch (\Exception $e) {
             Log::error("Erro ao criar deposito handleDepositResponse: " . $e->getMessage());
@@ -89,7 +90,7 @@ class AgillePayService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus): ?Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax): ?Deposit
     {
         try {
             $deposit = Deposit::create([
@@ -100,6 +101,7 @@ class AgillePayService
                 'type' => 'pending',
                 'paymentCode' => $qrCode,
                 'hasBonus' => $hasBonus,
+                'isTax' => $isTax,
             ]);
 
             Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
