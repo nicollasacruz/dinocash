@@ -57,7 +57,7 @@
 <!-- Facebook Pixel Code -->
 <script>
 
-    if(window.location.host === 'https://dinofeliz.com') {
+    if(window.location.host === 'dinofeliz.com') {
         console.log('entrou no pixel');
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return;
