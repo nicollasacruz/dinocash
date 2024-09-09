@@ -146,7 +146,7 @@ async function startDeposit() {
         }
         qrCode.value = data.qrCode;
         modal.value = true;
-        window.fbq('track', 'Deposito criado', {currency: "BRL", value: amount.value ?? 10});
+        window.fbq('trackCustom', 'Deposito criado', {currency: "BRL", value: amount.value ?? 10});
     } catch (error) {
         // console.log(error);
     } finally {
@@ -163,6 +163,8 @@ const userIdref = ref(userId);
 window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
     (e) => {
+        console.log("Entrou aqui no Pix");
+        console.log(e);
         modal.value = false;
         qrCode.value = "";
         window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
