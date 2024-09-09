@@ -76,7 +76,7 @@ class AgillePayService
         return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax, $utm);
     }
 
-    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array $utm): ?Deposit
+    private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array|int $utm): ?Deposit
     {
         try {
             if ($data['pix']['payload']) {
@@ -89,7 +89,7 @@ class AgillePayService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, array $utm): ?Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, array|int $utm): ?Deposit
     {
         try {
             Log::error($utm);
