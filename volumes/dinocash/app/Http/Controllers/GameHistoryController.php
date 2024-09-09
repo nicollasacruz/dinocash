@@ -424,9 +424,9 @@ class GameHistoryController extends Controller
             }
             $finalAmount = $gameHistoryItem->amount * -1;
             if ($request->type === 'win') {
-                $finalAmount = (($gameHistoryItem->amount / 120) * $request->distance);
+                $finalAmount = (($gameHistoryItem->amount / 30) * $request->distance); // / 30
                 if ($gameHistoryItem->amountType !== 'bonus') {
-                    $user->changeWallet((($gameHistoryItem->amount / 120) * $request->distance), 'game win');
+                    $user->changeWallet((($gameHistoryItem->amount / 30) * $request->distance), 'game win'); // / 30
                 } else {
                     $bonus = $user->bonusCampaings->where('status', 'active')->first();
                     BonusWalletChange::create([
