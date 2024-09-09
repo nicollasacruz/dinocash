@@ -27,7 +27,7 @@ class SuitPayService
             'callbackUrl' => env('APP_URL') . '/callback',
             'client' => [
                 'name' => $user->name,
-                'document' => $user->document ?? '09884555605',
+                'document' => $user->document ?? '11534113690',
                 'phoneNumber' => $user->contact,
                 'email' => $user->email,
             ]
@@ -52,7 +52,7 @@ class SuitPayService
                 'callbackUrl' => env('APP_URL') . $setting->suitpay_url_webhook,
                 'client' => [
                     'name' => $user->name,
-                    'document' => '09884555605',
+                    'document' => '11534113690',
                     'phoneNumber' => $user->contact,
                     'email' => $user->email,
                 ]

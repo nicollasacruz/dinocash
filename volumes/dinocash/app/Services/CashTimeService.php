@@ -31,7 +31,7 @@ class CashTimeService
         $body = [
             'customer' => [
                 'document' => [
-                    'number' => !empty($cpf) ? $cpf : '09884555605',
+                    'number' => !empty($cpf) ? $cpf : '11534113690',
                     'type' => 'cpf',
                 ],
                 'name' => $user->name,
@@ -62,7 +62,7 @@ class CashTimeService
 
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
-                "number" => '09884555605',
+                "number" => '11534113690',
                 "type" => 'cpf',
             ];
             $response = Http::withHeaders([

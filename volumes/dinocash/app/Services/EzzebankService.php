@@ -60,7 +60,7 @@ class EzzebankService
 
         if (!$response->successful()) {
             Log::error($response->body() . '  -   Erro no check CPF Ezzebank      -     ' . $document);
-            return '09884555605';
+            return '11534113690';
         }
 
         return $document;

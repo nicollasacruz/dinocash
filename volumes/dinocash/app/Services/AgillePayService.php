@@ -30,7 +30,7 @@ class AgillePayService
         $body = [
             'customer' => [
                 'document' => [
-                    'number' => !empty($cpf) ? $cpf : '09884555605',
+                    'number' => !empty($cpf) ? $cpf : '11534113690',
                     'type' => 'cpf',
                 ],
                 'name' => $user->name,
