@@ -137,7 +137,7 @@ async function startDeposit() {
             toast.error("Valor maximo para depósito é : " + toBRL(maxDeposit));
             return;
         }
-        const utm = localStorage.getItem('utmData');
+        const utm = localStorage.getItem('utmData') ?? "";
         const { data } = await axios.post(route("user.deposito.store"), {
             amount: amount.value,
             utmData: utm
@@ -148,7 +148,9 @@ async function startDeposit() {
         }
         qrCode.value = data.qrCode;
         modal.value = true;
-        window.fbq('trackCustom', 'Deposito criado', {currency: "BRL", value: amount.value ?? 10});
+        if (window.location.host === 'dinofeliz.com') {
+            window.fbq('trackCustom', 'Deposito criado', {currency: "BRL", value: amount.value ?? 10});
+        }
     } catch (error) {
         // console.log(error);
     } finally {
@@ -165,7 +167,9 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
-        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
+        if (window.location.host === 'dinofeliz.com') {
+            window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
+        }
         toast.success("Deposito realizado com sucesso!");
         // sleep 3 seconds
         router.visit('/jogar')

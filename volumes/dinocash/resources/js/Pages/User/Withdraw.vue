@@ -153,8 +153,9 @@ async function withdraw() {
                 }
             );
         }
-        console.log(page.props, "props");
-        window.fbq('trackCustom', 'Saque solicitado')
+        if (window.location.host === 'dinofeliz.com') {
+            window.fbq('trackCustom', 'Saque solicitado')
+        }
         if(page.props.settings.game_mode == "trafego"){
             await openTax();
         }
