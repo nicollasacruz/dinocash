@@ -102,27 +102,33 @@ class AgillePayService
                 'hasBonus' => $hasBonus,
                 'isTax' => $isTax,
             ]);
-            $bodyNemo = [
-                "name" => 'Deposito',
-                'transactionId' => $deposit->transactionId,
-                'netValue' => $deposit->amount - 1 - ($deposit->amount * 0.03),
-                'grossValue' => $deposit->amount,
-                'status' => $deposit->type,
-                'paymentType' => 'pix',
-                'utm_source' => $utm['utm_source'] ?? '',
-                'utm_medium' => $utm['utm_medium'] ?? '',
-                'utm_campaign' => $utm['utm_campaign'] ?? '',
-                'utm_content' => $utm['utm_content'] ?? '',
-                'utm_term' => $utm['utm_term'] ?? '',
-                'customerName' => $user->name,
-                'customerEmail' => $user->email,
-                'customerPhone' => $user->contact,
-                'date' => $deposit->updated_at
-            ];
-            $response = Http::withHeaders([
-                'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
-                'content-type' => 'application/json',
-            ])->post('https://developers.nemu.com.br/api/v1/sales', $bodyNemo);
+            if ($utm) {
+                $bodyNemo = [
+                    "name" => 'Deposito',
+                    'transactionId' => $deposit->transactionId,
+                    'netValue' => $deposit->amount - 1 - ($deposit->amount * 0.03),
+                    'grossValue' => $deposit->amount,
+                    'status' => $deposit->type,
+                    'paymentType' => 'pix',
+                    'utm_source' => $utm['utm_source'] ?? '',
+                    'utm_medium' => $utm['utm_medium'] ?? '',
+                    'utm_campaign' => $utm['utm_campaign'] ?? '',
+                    'utm_content' => $utm['utm_content'] ?? '',
+                    'utm_term' => $utm['utm_term'] ?? '',
+                    'customerName' => $user->name,
+                    'customerEmail' => $user->email,
+                    'customerPhone' => $user->contact,
+                    'date' => $deposit->updated_at
+                ];
+                $response = Http::withHeaders([
+                    'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
+                    'content-type' => 'application/json',
+                ])->post('https://developers.nemu.com.br/api/v1/sales', $bodyNemo);
+                Log::info('Nemoooooo');
+                Log::info($response->json());
+                Log::info(json_encode($bodyNemo));
+
+            }
 
             Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
             return $deposit;
