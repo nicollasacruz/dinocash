@@ -38,6 +38,8 @@ class DepositService
                 'isTax' => $isTax,
                 'utmData' => $utm
             ];
+            dump('utm Data');
+            dump($utm);
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {
                 return (new SuitPayService)->createDeposit($data);
