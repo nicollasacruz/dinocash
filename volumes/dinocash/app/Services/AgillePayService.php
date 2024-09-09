@@ -122,7 +122,7 @@ class AgillePayService
             $response = Http::withHeaders([
                 'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
                 'content-type' => 'application/json',
-            ])->post('https://developers.nemu.com.br/api/v1', $bodyNemo);
+            ])->post('https://developers.nemu.com.br/api/v1/sales', $bodyNemo);
 
             Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type");
             return $deposit;
