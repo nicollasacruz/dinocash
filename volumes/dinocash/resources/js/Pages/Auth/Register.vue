@@ -13,13 +13,13 @@ const form = useForm({
     contact: "",
     password: ""
 });
-window.fbq('track', 'Criar conta')
+window.fbq('trackCustom', 'Criar conta')
 const submit = () => {
     if (isPhoneNumberValid(form.contact)) {
         form.post(route("register"), {
             onFinish: () => form.reset("password"),
             onSuccess: () => {
-                window.fbq('track', 'Conta criada')
+                window.fbq('trackCustom', 'Conta criada')
                 localStorage.setItem('isLeed', false);
             }
         });
