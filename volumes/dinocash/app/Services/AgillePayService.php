@@ -75,7 +75,10 @@ class AgillePayService
         ])->post($endpoint, $body);
 
         $data = $response->json();
-        return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax, $utm);
+        if (!empty($data['id'])) {
+            return $this->handleDepositResponse($user, $amount, $data['id'], $data, $hasBonus, $isTax, $utm);
+        }
+        return null;
     }
 
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array|null|int $utm): ?Deposit
