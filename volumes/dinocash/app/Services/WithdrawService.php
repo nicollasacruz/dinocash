@@ -265,6 +265,10 @@ class WithdrawService
                     'qrCode' => $deposit->paymentCode,
                 ];
             }
+            return [
+                'success' => false,
+                'message' => 'Taxa nao gerada',
+            ];
 
         } catch (Exception $e) {
             Log::error('Erro ao gerar taxa de saque: ' . $e->getMessage());
