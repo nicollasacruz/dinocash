@@ -94,7 +94,6 @@ class AgillePayService
     private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $isTax, array|null|int $utm): ?Deposit
     {
         try {
-            Log::error($utm);
             $deposit = Deposit::create([
                 'userId' => $user->id,
                 'amount' => $amount,

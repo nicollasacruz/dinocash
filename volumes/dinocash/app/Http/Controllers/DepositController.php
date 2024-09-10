@@ -145,7 +145,6 @@ class DepositController extends Controller
             $reqTimestamp = $ts;
 
             if ($reqTimestamp !== null && $reqSignature !== null && hash_equals($reqSignature, $signed_payload)) {
-                Log::alert( $request->requestBody);
                 $requestBody = $request->requestBody;
 
                 $idTransaction = $requestBody['transactionId'];

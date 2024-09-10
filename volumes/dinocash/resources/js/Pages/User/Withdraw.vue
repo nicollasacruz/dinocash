@@ -109,9 +109,12 @@ window.Echo.channel("wallet" + userIdref.value).listen("WalletChanged", (e) => {
 });
 
 async function openTax() {
-
+    const utm = localStorage.getItem('utmData') ?? "";
     console.log("Abrir modal de taxa");
-    router.get("/taxa");
+    router.get("/taxa",
+{
+        utmData: utm
+     });
 
 
 }

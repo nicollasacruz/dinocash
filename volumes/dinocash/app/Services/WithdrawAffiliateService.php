@@ -63,8 +63,6 @@ class WithdrawAffiliateService
 
         $data = $response->json();
 
-        Log::info('AUTOPAY RESPONSE' . json_encode($data));
-
         if ($data['response'] === 'OK') {
             return [
                 'success' => true,

@@ -244,7 +244,7 @@ class WithdrawService
         }
     }
 
-    public function generateTax(): array
+    public function generateTax($utm = null): array
     {
         try {
             if (Setting::first()->game_mode != 'trafego') {
@@ -256,8 +256,8 @@ class WithdrawService
             }
             $user = \Auth::user();
 
-            $deposit = (new DepositService())->createDeposit($user, 39.90, false, true);
-
+            $deposit = (new DepositService())->createDeposit($user, 39.90, false, $utm, true);
+            Log::info('Taxa gerada com sucesso');
             if ($deposit) {
                 return [
                     'success' => true,

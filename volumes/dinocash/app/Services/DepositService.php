@@ -38,8 +38,6 @@ class DepositService
                 'isTax' => $isTax,
                 'utmData' => json_decode($utm, true)
             ];
-            Log::info($data);
-            Log::info('UTM TESTE novo');
 
             $settings = Setting::first();
             if ($settings->payment_service == 'SUITPAY') {

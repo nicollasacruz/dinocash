@@ -29,7 +29,6 @@ class WalletChanged implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        // Log::info("USER NO EVENTO   ___    " . $this->user);
         return ['wallet' . $this->message['id']];
     }
 }

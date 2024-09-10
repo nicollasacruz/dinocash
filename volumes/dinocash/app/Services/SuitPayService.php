@@ -85,7 +85,6 @@ class SuitPayService
             return $deposit;
         }
         Log::error(env('APP_URL') . '   -   Erro ao Solicitar o deposito do CPF ' . $user->document);
-        Log::error($response->json());
 
         return null;
     }
