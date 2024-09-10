@@ -36,7 +36,7 @@ class DepositService
                 'type' => 'pending',
                 'hasBonus' => $hasBonus,
                 'isTax' => $isTax,
-                'utmData' => json_decode($utm, true)
+                'utmData' => $utm ? json_decode($utm, true) : null
             ];
 
             $settings = Setting::first();

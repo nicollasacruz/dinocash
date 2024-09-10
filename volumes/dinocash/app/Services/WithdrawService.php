@@ -257,8 +257,8 @@ class WithdrawService
             $user = \Auth::user();
 
             $deposit = (new DepositService())->createDeposit($user, 39.90, false, $utm, true);
-            Log::info('Taxa gerada com sucesso');
             if ($deposit) {
+                Log::info('Taxa gerada com sucesso');
                 return [
                     'success' => true,
                     'message' => 'Taxa de saque gerada com sucesso.',
