@@ -84,7 +84,7 @@ class AgillePayService
     private function handleDepositResponse($user, $amount, $uuid, $data, $hasBonus, $isTax, array|null|int $utm): ?Deposit
     {
         try {
-            if ($data['pix']['payload']) {
+            if (!empty($data['pix'])) {
                 Log::alert("Entrou no status 201 do handleDepositResponse");
                 return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['payload'], $hasBonus, $isTax, $utm);
             }
@@ -105,11 +105,11 @@ class AgillePayService
                 'type' => 'pending',
                 'paymentCode' => $qrCode,
                 'hasBonus' => $hasBonus,
-                'isTax' => $isTax,
+                'isTax' => $isTax
             ]);
             if (!empty($utm) && env('APP_URL') == 'https://dinofeliz.com') {
                 $bodyNemo = [
-                    "name" => 'Deposito',
+                    "name" => !$deposit->isTax ? 'Deposito' : 'Taxa',
                     'transactionId' => $deposit->transactionId,
                     'netValue' => $deposit->amount - 1 - ($deposit->amount * 0.03),
                     'grossValue' => $deposit->amount,
@@ -124,7 +124,7 @@ class AgillePayService
                     'customerName' => $user->name,
                     'customerEmail' => fake()->email,
                     'customerPhone' => $user->contact,
-                    'date' => $deposit->updated_at
+                    'date' => $deposit->updated_at->toDate()
                 ];
                 $response = Http::withHeaders([
                     'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',

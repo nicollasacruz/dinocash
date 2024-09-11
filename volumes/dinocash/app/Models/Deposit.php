@@ -23,6 +23,7 @@ class Deposit extends Model
         'hasBonus',
         'approvedAt',
         'externalId',
+        'isTax'
     ];
 
     protected $guarded = [];
