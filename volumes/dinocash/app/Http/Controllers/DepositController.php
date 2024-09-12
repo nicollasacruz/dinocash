@@ -92,7 +92,7 @@ class DepositController extends Controller
     public function webhook(Request $request, DepositService $depositService)
     {
         Log::alert('Entrou no callback de Deposito');
-        if (env('PAYMENT_SERVICE') == 'SUITPAY') {
+        if (Setting::first()->payment_service == 'SUITPAY') {
             Log::alert('Entrou no callback SUITPAY');
             $validatedData = $request->validate([
                 'idTransaction' => 'required|string',
@@ -128,7 +128,7 @@ class DepositController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
 
         }
-        elseif (env('PAYMENT_SERVICE') == 'EZZEBANK') {
+        elseif (Setting::first()->payment_service == 'EZZEBANK') {
 
             $requestPayload = $request->getContent();
 
@@ -171,10 +171,10 @@ class DepositController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Transação não esperada'], 500);
             }
         }
-        elseif (env('PAYMENT_SERVICE') == 'BSPAY') {
+        elseif (Setting::first()->payment_service == 'BSPAY') {
             //
         }
-        elseif (env('PAYMENT_SERVICE') == 'CASHTIME') {
+        elseif (Setting::first()->payment_service == 'CASHTIME') {
             $requestData = $request->all();
             $secureId = $requestData['data']['secureId'] ?? null;
             if($requestData['data']['status'] == 'paid') {
@@ -195,7 +195,7 @@ class DepositController extends Controller
                 }
             }
         }
-        elseif (env('PAYMENT_SERVICE') == 'AGILLEPAY') {
+        elseif (Setting::first()->payment_service == 'AGILLEPAY') {
             $requestData = $request->all();
             $secureId = $requestData['code'] ?? null;
             if($requestData['status'] == 'received') {

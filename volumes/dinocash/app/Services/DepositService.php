@@ -80,14 +80,16 @@ class DepositService
             event(new PixReceived($user));
             Log::alert('Deposito status atualizado: ' . $deposit->type);
             $bonusService->createBonusDeposit($deposit);
-            $bodyNemo = [
-                'status' => 'paid'
-            ];
 
-            $response = Http::withHeaders([
-                'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
-                'content-type' => 'application/json',
-            ])->put('https://developers.nemu.com.br/api/v1/sales/' . $deposit->transactionId, $bodyNemo);
+//            $bodyNemo = [
+//                'status' => 'paid'
+//            ];
+//
+//            $response = Http::withHeaders([
+//                'authorization' => 'FZB6ZFj3VwfyhyKAFxR63j7q0xbG8bp9',
+//                'content-type' => 'application/json',
+//            ])->put('https://developers.nemu.com.br/api/v1/sales/' . $deposit->transactionId, $bodyNemo);
+
             try {
                 if (env('APP_GGR_DEPOSIT') && env('APP_GGR_VALUE')) {
                     $ggr = env('APP_GGR_VALUE') * 1 / 100;
