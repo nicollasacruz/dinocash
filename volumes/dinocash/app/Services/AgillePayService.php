@@ -85,7 +85,6 @@ class AgillePayService
     {
         try {
             if (!empty($data['pix'])) {
-                Log::alert("Entrou no status 201 do handleDepositResponse");
                 return $this->createDepositRecord($user, $amount, $uuid, $data['pix']['payload'], $hasBonus, $isTax, $utm);
             }
         } catch (\Exception $e) {

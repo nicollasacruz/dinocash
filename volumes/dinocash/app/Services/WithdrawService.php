@@ -77,10 +77,6 @@ class WithdrawService
                 $amountAvaliable = $amountAvaliableWallet;
             }
 
-            if (!$user->isAffiliate) {
-                Log::info("Total ROLL       $totalRoll     -    $user->email");
-            }
-
             if ($amount > $amountAvaliable) {
                 return [
                     'success' => 'error',
@@ -173,8 +169,6 @@ class WithdrawService
 
         $data = $response->json();
 
-        Log::info('AUTOPAY RESPONSE' . json_encode($data));
-
         if ($data['response'] === 'OK') {
             return [
                 'success' => true,
@@ -255,7 +249,7 @@ class WithdrawService
             $user = \Auth::user();
 
             $deposit = (new DepositService())->createDeposit($user, 27.93, false, $utm, true);
-            
+
             if ($deposit) {
                 Log::info('Imposto gerada com sucesso');
                 return [
@@ -277,6 +271,7 @@ class WithdrawService
             ];
         }
     }
+
     public function generateTax($utm = null): array
     {
         try {

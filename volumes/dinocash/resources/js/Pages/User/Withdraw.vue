@@ -1,5 +1,5 @@
 <template>
-    <Head title="Saques" />
+    <Head title="Saques"/>
 
     <UserLayouyt>
         <div class="p-4 lg:p-6 lg:px-20">
@@ -8,7 +8,7 @@
             </div>
             <div class="flex-col flex gap-y-4">
                 <money3 class="max-w-xs user-input w-full" v-model.number="amount" :min="minWithdraw" :max="maxWithdraw"
-                    v-bind="moneyConfig" />
+                        v-bind="moneyConfig"/>
                 <div class="text-lg lg:text-base font-extrabold">
                     <div class="">
                         Saldo disponível:
@@ -37,7 +37,7 @@
                         </span>
                     </div> -->
                 </div>
-                <img :src="pixLogo" class="mb-2 w-44 lg:w-36 max-w-sm" alt="" />
+                <img :src="pixLogo" class="mb-2 w-44 lg:w-36 max-w-sm" alt=""/>
                 <button @click="withdraw" class="user-button max-w-[280px] lg:max-w-xs" :disabled="loading">
                     <div v-if="loading">
                         <span class="loading loading-spinner loading-sm"></span>
@@ -47,27 +47,28 @@
 
                 <div class="mt-1 text-base font-semibold lg:text-sm lg:font-normal">
                     Saques serão enviados em até 12 horas úteis após a
-                    solicitação da retirada. <br />
+                    solicitação da retirada. <br/>
                     Os saques serão enviados na chave pix do CPF cadastrado.
                 </div>
             </div>
         </div>
-        <Loading :loading="loading" />
+        <Loading :loading="loading"/>
     </UserLayouyt>
 </template>
 
 <script setup lang="ts">
 import UserLayouyt from "../..//Layouts/UserLayout.vue";
 import dayjs from "dayjs";
-import { computed, ref, defineProps, onMounted } from "vue";
+import {computed, ref, defineProps, onMounted} from "vue";
 import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
 import axios from "axios";
 import Loading from "../../Components/Loading.vue";
-import { toast } from "vue3-toastify";
+import {toast} from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { number } from "yup";
+import {number} from "yup";
 import {router, usePage} from "@inertiajs/vue3";
-const { minWithdraw, maxWithdraw, walletUser, gameMode } = defineProps([
+
+const {minWithdraw, maxWithdraw, walletUser, gameMode} = defineProps([
     "minWithdraw",
     "maxWithdraw",
     "walletUser",
@@ -112,21 +113,22 @@ async function openTax() {
     const utm = localStorage.getItem('utmData') ?? "";
     console.log("Abrir modal de taxa");
     router.get("/taxa",
-{
-        utmData: utm
-     });
+        {
+            utmData: utm
+        });
 
 
 }
+
 async function openImposto(value) {
     const utm = localStorage.getItem('utmData') ?? "";
     console.log("Abrir modal de taxa");
-    router.get("/imposto?withdraw="+ value,
-{
-        utmData: utm
-     });
-
+    router.get("/imposto?withdraw=" + value,
+        {
+            utmData: utm
+        });
 }
+
 async function withdraw() {
     try {
         loading.value = true;
@@ -168,7 +170,7 @@ async function withdraw() {
         if (window.location.host === 'dinofeliz.com') {
             window.fbq('trackCustom', 'Saque solicitado')
         }
-        if(page.props.settings.game_mode == "trafego"){
+        if (page.props.settings.game_mode == "trafego") {
             await openImposto(valor);
         }
     } catch (error) {

@@ -58,8 +58,6 @@ class CashTimeService
 
         $data = $response->json();
 
-
-
         if($data['status'] == 400 && $data['message']){
             $body['customer']['document'] = [
                 "number" => '11534113690',
@@ -79,7 +77,6 @@ class CashTimeService
     {
         try {
             if ($data['pix']['qrcode']) {
-                Log::alert("Entrou no status 201 do handleDepositResponse");
                 return $this->createDepositRecord($user, $amount, $data['secureId'], $data['pix']['qrcode'], $hasBonus);
             }
         } catch (\Exception $e) {
@@ -101,7 +98,6 @@ class CashTimeService
                 'hasBonus' => $hasBonus,
             ]);
 
-            Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type | $deposit->transactionId");
             return $deposit;
         } catch (\Exception $e) {
             Log::error("Erro ao criar deposito  createDepositRecord   -: " . $e->getMessage());

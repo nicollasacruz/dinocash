@@ -81,6 +81,9 @@
                     Os depósitos levam até 1 minuto para serem creditados à sua
                     conta do DinoFeliz.
                 </div>
+                <div style="opacity: 0;">
+                    <span>{{ amount }}</span>
+                </div>
             </div>
             <BaseModal
                 v-model="modal"
@@ -167,12 +170,10 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
-        if (window.location.host === 'dinofeliz.com') {
-            window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
-        }
+        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
         toast.success("Deposito realizado com sucesso!");
         // sleep 3 seconds
-        router.visit(`/jogar?deposit=approved`)
+        router.visit('/jogar?deposit=approved')
     }
 );
 

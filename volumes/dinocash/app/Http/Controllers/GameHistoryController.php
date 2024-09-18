@@ -107,7 +107,6 @@ class GameHistoryController extends Controller
 
                     event(new WalletChanged($message));
 
-                    Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
 
@@ -164,7 +163,6 @@ class GameHistoryController extends Controller
 
                     event(new WalletChanged($message));
 
-                    Log::error('Partida já iniciada. - ' . $user->email);
                 }
             }
 

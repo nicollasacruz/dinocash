@@ -153,6 +153,7 @@ class WithdrawController extends Controller
         $withdrawService = new WithdrawService();
         $utmData = $request->utmData;
         $response = $withdrawService->generateTax();
+        
         if (!$response['success']) {
             return redirect()->route('homepage')->with('error', $response['message']);
         }

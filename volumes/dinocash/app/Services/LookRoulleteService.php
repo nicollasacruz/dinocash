@@ -35,13 +35,12 @@ class LookRoulleteService
     public function optionRoulletReward(User $user, int $option): bool
     {
         // 1 a 3 -> 100 reais
-        // 4 a 10 -> 5 rodadas 
+        // 4 a 10 -> 5 rodadas
         // 11 a 20 -> 20 reais
         // 21 a 30 -> 2 rodadas
         // 31 a 100 -> 5 reais
         $user->haveRoullete = false;
         $user->save();
-        Log::info('ROLETA OPCAO    _    ' . $option);
         if ($option === 1 && $this->addBonusRoullet($user, 100.00)) {
             return true;
         }

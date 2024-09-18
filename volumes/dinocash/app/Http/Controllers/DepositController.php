@@ -54,6 +54,7 @@ class DepositController extends Controller
 
         $deposit = $depositService->createDeposit($user, $request->amount, $hasBonus, $utm);
         if ($deposit) {
+            Log::info("Deposito criado com sucesso! Id: $deposit->id | Valor: $deposit->amount | Status: $deposit->type | $deposit->transactionId");
             return response()->json([
                 'status' => 'success',
                 'message' => 'Deposito gerado com sucesso.',
@@ -91,9 +92,7 @@ class DepositController extends Controller
 
     public function webhook(Request $request, DepositService $depositService)
     {
-        Log::alert('Entrou no callback de Deposito');
         if (Setting::first()->payment_service == 'SUITPAY') {
-            Log::alert('Entrou no callback SUITPAY');
             $validatedData = $request->validate([
                 'idTransaction' => 'required|string',
                 'typeTransaction' => 'required|in:BOLETO,PIX,CARD,PIX_CASHOUT',
@@ -177,15 +176,15 @@ class DepositController extends Controller
         elseif (Setting::first()->payment_service == 'CASHTIME') {
             $requestData = $request->all();
             $secureId = $requestData['data']['secureId'] ?? null;
-         
+
             if($requestData['data']['status'] == 'paid') {
                 $deposit = Deposit::where('transactionId', $secureId)->where('type', 'pending')->first();
                 if ($deposit) {
 
                     $user = User::find($deposit->user->id);
-                  
+
                     if ($depositService->aproveDeposit($deposit)) {
-                 
+
                         event(new PixReceived($user));
                         try {
                             foreach (User::where('role', 'admin')->get() as $admin) {
@@ -194,7 +193,6 @@ class DepositController extends Controller
                         } catch (Exception $e) {
                             Log::error('Erro de notificar - ' . $e->getMessage());
                         }
-                        Log::alert('DEPOSITO APROVADO2');
                         return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
                     }
                 }
