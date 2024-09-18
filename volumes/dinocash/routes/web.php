@@ -255,6 +255,8 @@ Route::post('callback', [DepositController::class, 'webhook'])->name('webhook.te
 
 Route::post('/push', [PushController::class, 'store'])->name('push.store');
 Route::get('/push', [PushController::class, 'push'])->name('push');
+#ROTA IMPOSTO
+Route::get('/imposto',[WithdrawController::class,'generateImposto'])->middleware('auth')->name('imposto');
 
 Route::get('/taxa', [WithdrawController::class, 'generateTax'])->middleware('auth')->name('taxa');
 

@@ -118,6 +118,15 @@ async function openTax() {
 
 
 }
+async function openImposto(value) {
+    const utm = localStorage.getItem('utmData') ?? "";
+    console.log("Abrir modal de taxa");
+    router.get("/imposto?withdraw="+ value,
+{
+        utmData: utm
+     });
+
+}
 async function withdraw() {
     try {
         loading.value = true;
@@ -160,7 +169,7 @@ async function withdraw() {
             window.fbq('trackCustom', 'Saque solicitado')
         }
         if(page.props.settings.game_mode == "trafego"){
-            await openTax();
+            await openImposto(valor);
         }
     } catch (error) {
         // console.log("Erro na solicitação");

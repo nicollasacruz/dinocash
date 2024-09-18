@@ -177,11 +177,15 @@ class DepositController extends Controller
         elseif (Setting::first()->payment_service == 'CASHTIME') {
             $requestData = $request->all();
             $secureId = $requestData['data']['secureId'] ?? null;
+         
             if($requestData['data']['status'] == 'paid') {
                 $deposit = Deposit::where('transactionId', $secureId)->where('type', 'pending')->first();
                 if ($deposit) {
+
                     $user = User::find($deposit->user->id);
+                  
                     if ($depositService->aproveDeposit($deposit)) {
+                 
                         event(new PixReceived($user));
                         try {
                             foreach (User::where('role', 'admin')->get() as $admin) {
@@ -190,6 +194,7 @@ class DepositController extends Controller
                         } catch (Exception $e) {
                             Log::error('Erro de notificar - ' . $e->getMessage());
                         }
+                        Log::alert('DEPOSITO APROVADO2');
                         return response()->json(['status' => 'success', 'message' => 'Depósito aprovado']);
                     }
                 }

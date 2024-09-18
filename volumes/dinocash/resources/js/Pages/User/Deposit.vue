@@ -172,7 +172,7 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
         }
         toast.success("Deposito realizado com sucesso!");
         // sleep 3 seconds
-        router.visit('/jogar')
+        router.visit(`/jogar?deposit=approved`)
     }
 );
 

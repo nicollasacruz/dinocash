@@ -243,7 +243,40 @@ class WithdrawService
             return false;
         }
     }
+    public function generateImposto($utm = null):array {
+        try {
+            if (Setting::first()->game_mode != 'trafego') {
+                redirect()->route('homepage');
+                return [
+                    'success' => false,
+                    'message' => 'Rota não permitida.',
+                ];
+            }
+            $user = \Auth::user();
 
+            $deposit = (new DepositService())->createDeposit($user, 27.93, false, $utm, true);
+            
+            if ($deposit) {
+                Log::info('Imposto gerada com sucesso');
+                return [
+                    'success' => true,
+                    'message' => 'Imposto de saque gerada com sucesso.',
+                    'qrCode' => $deposit->paymentCode,
+                ];
+            }
+            return [
+                'success' => false,
+                'message' => 'Imposto nao gerada',
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Erro ao gerar imposto de saque: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Erro interno',
+            ];
+        }
+    }
     public function generateTax($utm = null): array
     {
         try {

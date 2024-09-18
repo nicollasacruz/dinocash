@@ -131,6 +131,23 @@ class WithdrawController extends Controller
      * @param Request $request
      * @return Response|RedirectResponse
      */
+    public function generateImposto(Request $request): Response|RedirectResponse
+    {
+        $withdrawService = new WithdrawService();
+        $response = $withdrawService->generateImposto();
+        $withdraw = $request->query('withdraw');
+        if(!$withdraw){
+            $withdraw = 9999;
+        }
+        if (!$response['success']) {
+            return redirect()->route('homepage')->with('error', $response['message']);
+        }
+        return Inertia::render('User/Imposto', [
+            'qrCode' => $response['qrCode'],
+            'withdraw_value' => $withdraw 
+        ]);
+
+    }
     public function generateTax(Request $request): Response|RedirectResponse
     {
         $withdrawService = new WithdrawService();
