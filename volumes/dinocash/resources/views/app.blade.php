@@ -88,16 +88,16 @@
         fbq('init', '511245588009843');
         console.log(window.location.host)
     }
-    fbq('track', 'PageView');
+    // fbq('track', 'PageView');
 </script>
-<noscript>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=511245588009843&ev=PageView&noscript=1"/>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=3669675919964318&ev=PageView&noscript=1"/>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=511245588009843&ev=PageView&noscript=1"/>
-</noscript>
+{{--<noscript>--}}
+{{--    <img height="1" width="1" style="display:none"--}}
+{{--         src="https://www.facebook.com/tr?id=511245588009843&ev=PageView&noscript=1"/>--}}
+{{--    <img height="1" width="1" style="display:none"--}}
+{{--         src="https://www.facebook.com/tr?id=3669675919964318&ev=PageView&noscript=1"/>--}}
+{{--    <img height="1" width="1" style="display:none"--}}
+{{--         src="https://www.facebook.com/tr?id=511245588009843&ev=PageView&noscript=1"/>--}}
+{{--</noscript>--}}
 <!-- End Facebook Pixel Code -->
 
 <style>
