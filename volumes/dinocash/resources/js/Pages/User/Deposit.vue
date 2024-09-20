@@ -168,10 +168,19 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
+        setTimeout(() => {
+            if (typeof window.fbq !== 'undefined') {
+                console.log('entrou no evento')
+                window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value ?? 20});
+            }
+        }, 500); // Aguarde meio segundo para garantir que o Pixel foi carregado.
+
         window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value ?? 20});
+
         toast.success("Deposito realizado com sucesso!");
         // sleep 3 seconds
-        router.visit('/jogar?deposit=approved')
+        router.visit('/jogar')
+        // router.visit('/jogar?deposit=approved')
     }
 );
 
