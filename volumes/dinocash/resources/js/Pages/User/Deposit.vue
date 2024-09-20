@@ -151,9 +151,7 @@ async function startDeposit() {
         }
         qrCode.value = data.qrCode;
         modal.value = true;
-        if (window.location.host === 'dinofeliz.com') {
-            window.fbq('trackCustom', 'Deposito criado', {currency: "BRL", value: amount.value ?? 10});
-        }
+        window.fbq('track', 'InitiateCheckout');
     } catch (error) {
         // console.log(error);
     } finally {
@@ -170,7 +168,7 @@ window.Echo.channel("pixReceived" + userIdref.value).listen(
     (e) => {
         modal.value = false;
         qrCode.value = "";
-        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value});
+        window.fbq('track', 'Purchase', {currency: "BRL", value: amount.value ?? 20});
         toast.success("Deposito realizado com sucesso!");
         // sleep 3 seconds
         router.visit('/jogar?deposit=approved')

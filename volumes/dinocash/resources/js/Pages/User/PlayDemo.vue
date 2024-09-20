@@ -101,7 +101,7 @@ const type = ref("loss");
 const loading = ref(false);
 
 startGame();
-
+window.fbq('track', 'Lead');
 function handleButtonClick() {
     endGame.value = false;
     amount.value = 0;

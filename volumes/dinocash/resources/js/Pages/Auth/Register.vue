@@ -13,17 +13,17 @@ const form = useForm({
     contact: "",
     password: ""
 });
-if (window.location.host === 'dinofeliz.com') {
-    window.fbq('trackCustom', 'Criar conta')
-}
+
+window.fbq('track', 'Lead');
+
 const submit = () => {
     if (isPhoneNumberValid(form.contact)) {
         form.post(route("register"), {
             onFinish: () => form.reset("password"),
             onSuccess: () => {
-                if (window.location.host === 'dinofeliz.com') {
-                    window.fbq('trackCustom', 'Conta criada')
-                }
+
+                window.fbq('track', 'CompleteRegistration')
+
                 localStorage.setItem('isLeed', false);
             }
         });
