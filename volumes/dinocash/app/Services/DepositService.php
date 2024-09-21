@@ -23,7 +23,7 @@ class DepositService
      * @param bool $hasBonus
      * @return Deposit|null
      */
-    public function createDeposit(User $user, $amount, bool $hasBonus, $utm, $isTax=null): ?Deposit
+    public function createDeposit(User $user, $amount, bool $hasBonus, $utm, $isTax=false): ?Deposit
     {
         try {
             if (!$user->document) {

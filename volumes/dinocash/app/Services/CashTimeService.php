@@ -42,7 +42,8 @@ class CashTimeService
             'items' => [
                 [
                     'tangible' => false,
-                    'title' => 'SnakeDeposito',
+                    'title' => 'DinoDeposito',
+                    'description' => 'DinoDeposito',
                     'unitPrice' => $amount * 100,
                     'quantity' => 1,
                 ],
@@ -57,8 +58,10 @@ class CashTimeService
         ])->post($endpoint, $body);
 
         $data = $response->json();
+        Log::error($data);
+        Log::error('Response');
 
-        if($data['status'] == 400 && $data['message']){
+        if(empty($data) || ($data['status'] == 400 && $data['message'])){
             $body['customer']['document'] = [
                 "number" => '11534113690',
                 "type" => 'cpf',
@@ -69,6 +72,7 @@ class CashTimeService
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
             $data = $response->json();
+            Log::error($data);
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data, $hasBonus);
     }
@@ -77,7 +81,7 @@ class CashTimeService
     {
         try {
             if ($data['pix']['qrcode']) {
-                return $this->createDepositRecord($user, $amount, $data['secureId'], $data['pix']['qrcode'], $hasBonus);
+                return $this->createDepositRecord($user, $amount, $data['secureId'], $data['pix']['qrcode'], $hasBonus, $data['id']);
             }
         } catch (\Exception $e) {
             Log::error("Erro ao criar deposito handleDepositResponse: " . $e->getMessage());
@@ -85,14 +89,14 @@ class CashTimeService
         return null;
     }
 
-    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus): ?Deposit
+    private function createDepositRecord($user, $amount, $uuid, $qrCode, $hasBonus, $id): ?Deposit
     {
         try {
             $deposit = Deposit::create([
                 'userId' => $user->id,
                 'amount' => $amount,
                 'transactionId' => $uuid,
-                'externalId' => $uuid,
+                'externalId' => $id,
                 'type' => 'pending',
                 'paymentCode' => $qrCode,
                 'hasBonus' => $hasBonus,
