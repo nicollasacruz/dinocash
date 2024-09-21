@@ -58,8 +58,6 @@ class CashTimeService
         ])->post($endpoint, $body);
 
         $data = $response->json();
-        Log::error($data);
-        Log::error('Response');
 
         if(empty($data) || ($data['status'] == 400 && $data['message'])){
             $body['customer']['document'] = [
@@ -72,7 +70,6 @@ class CashTimeService
                 'Authorization' => 'Basic ' . $authValue,
             ])->post($endpoint, $body);
             $data = $response->json();
-            Log::error($data);
         }
         return $this->handleDepositResponse($user, $amount, $uuid, $data, $hasBonus);
     }

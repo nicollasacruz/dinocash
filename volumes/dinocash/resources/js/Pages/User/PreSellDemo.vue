@@ -66,7 +66,7 @@ if (window.location.host === 'dinofeliz.com') {
                 </div>
             </div>
             <div class="text-04">
-                <div>
+                <div class="text-black">
                     Jogadores Online : <b id="spanumber">{{ numeroAleatorio }}</b>
                 </div>
             </div>

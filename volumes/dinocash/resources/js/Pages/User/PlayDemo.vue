@@ -2,71 +2,38 @@
     <Head title="Jogar Demo" />
 
     <!-- <UserLayout v-slot=""> -->
+
         <div class="p-4 lg:px-20 h-full" id="root">
-            <div class="text-4xl font-extrabold text-verde font-menu my-4">
-                Como jogar
-            </div>
-            <div class="text-lg sm:text-lg lg:text-[1rem] mb-1">
-                <div class="lg:hidden">
-                    - Para iniciar o game aperte em qualquer lugar da tela.
-                </div>
-                <div class="lg:hidden">
-                    - Para pular os cactos, clique com o dedo sobre a tela.
-                </div>
 
-                <div>- Para iniciar o game aperte a barra de espaço.</div>
-                <div class="hidden lg:block">
-                    - Para pular os cactos utilize a barra de espaço ou <br />
-                    seta para cima em seu teclado
-                </div>
-
-                <div class="mt-3 text-sm hidden lg:block">
-                    O seu lucro será contabilizado após andar no mínimo <br />
-                    500 metros, a onde a tela ficará a noite. Você pode <br />
-                    encerrar a sua aposta a qualquer momento clicando <br />
-                    no botão de saque que ficará no topo do jogo.
-                </div>
-            </div>
-            <!-- <div class="flex flex-col md:flex-row justify-start my-5">
-                <input type="text" class="max-w-lg mr-3 user-input" placeholder="Digite o valor da aposta" v-model="amount"
-                    @input="formatAmount" v-if="page.props.auth.user.freespin * 1 == 0" />
-                <button class="user-button mt-4 md:mt-0 mx-auto" @click="startGame" :disabled="loading || !amount">
-                    <div v-if="loading">
-                        <span class="loading loading-spinner loading-sm"></span>
-                    </div>
-                    <div v-else>Jogar</div>
-                </button>
-
-                <span v-if="page.props.auth.user.freespin" class="ml-2 text-lg text-red-500 font-bold my-auto">Você tem {{
-                    page.props.auth.user.freespin }} rodadas
-                    grátis!</span>
-            </div>
-            <div class="text-sm">
-                Aposta mínima: {{ toBRL($page.props.settings.minAmountPlay) }}
-            </div>
-            <div class="text-sm pb-3">
-                Aposta máxima: {{ toBRL($page.props.settings.maxAmountPlay) }}
-            </div> -->
-
-            <GameCluster :amount="amount" :start="isRunning" v-if="isRunning" :viciosidade="viciosidade"
-                :isAffiliate="isAffiliate" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
+            <GameCluster :amount="amount" :start="isRunning" v-if="isRunning" :viciosidade="false"
+                :isAffiliate="true" @end-game="handleEndGame" @finish-game="handleFinishGame" :active="isRunning"
                 :height="clientHeight" :width="clientWidth" />
-        </div>
-        <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame">
+    </div>
+    <div class="fundoTela w-screen h-screen" id="fundoTela">
+        <BaseModal v-if="endGame || finishGame" :score="score" v-model="endGame" class="">
             <div v-if="endGame" class="text-center text-2xl">
-                Você andou {{ score }} metros!
+                <div class="font-bold uppercase">Parabéns!</div>
+                <div class="rounded-full bg-gray-800 py-1 my-1 font-bold font-menu"> LUCRO DE <span class="font-bold font-menu text-verde text-2xl">{{ toBRL(((parseFloat(score) / 50) * 15) - 15) }}</span></div>
+                <div >Você conseguiu <span class="font-bold font-menu text-verde text-3xl">{{ toBRL(((parseFloat(score) / 50) * 15) - 15) }}</span> com nossa rodada grátis! </div>
+                <div>Para continuar basta clicar no botão abaixo.</div>
             </div>
             <div class="flex justify-center">
                 <button v-if="endGame"
-                    class="mx-auto mt-5 py-2 px-10 bg-verde rounded-lg font-menu md:text-3xl text-roxo-fundo boxShadow border-gray-800 border-4 border-b-[10px]"
+                    class="mx-auto mt-5 py-2 px-10 bg-roxo rounded-lg font-menu font-bold md:text-3xl text-white boxShadow border-gray-800 border-4 border-b-[10px]"
                     @click="handleButtonClick()">
-                    OK
+                    Cique Aqui
                 </button>
             </div>
         </BaseModal>
-    <!-- </UserLayout> -->
-</template>
+    </div>
 
+</template>
+<style scoped>
+.fundoTela {
+    background-image: url("../../../../storage/imgs/bg-login.jpg");
+    display: none;
+}
+</style>
 <script setup lang="ts">
 import { Head, router } from "@inertiajs/vue3";
 import UserLayout from "../..//Layouts/UserLayout.vue";
@@ -268,9 +235,11 @@ const handleEndGame = (pontuation) => {
     isRunning.value = false;
     endGame.value = true;
     score.value = pontuation;
-    type.value = "loss";
+    type.value = "win";
     const div = document.getElementById("root") as HTMLDivElement;
-    div.style.display = "block";
+    const fundo = document.getElementById("fundoTela");
+    fundo.style.display = "block";
+    div.style.display = "none";
     // fetchUpdate();
 };
 
@@ -280,7 +249,9 @@ const handleFinishGame = (pontuation) => {
     score.value = pontuation;
     type.value = "win";
     const div = document.getElementById("root") as HTMLDivElement;
-    div.style.display = "block";
+    div.style.display = "none";
+    const fundo = document.getElementById("fundoTela");
+    fundo.style.display = "block";
     // fetchUpdate();
 };
 

@@ -33,7 +33,7 @@ const numeroAleatorio = gerarNumeroAleatorio(20000, 25000);
                 </div>
             </div>
             <div class="text-04">
-                <div>
+                <div class="text-black">
                     Jogadores Online : <b id="spanumber">{{ numeroAleatorio }}</b>
                 </div>
             </div>
