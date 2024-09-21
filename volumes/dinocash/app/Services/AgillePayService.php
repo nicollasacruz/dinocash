@@ -45,8 +45,8 @@ class AgillePayService
             'items' => [
                 [
                     'tangible' => false,
-                    'title' => 'SnakeDeposito',
-                    'description' => 'SnakeDeposito',
+                    'title' => 'DinoDeposito',
+                    'description' => 'DinoDeposito',
                     'unitPrice' => $amount * 100,
                     'quantity' => 1,
                 ],
